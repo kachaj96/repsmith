@@ -1,5 +1,5 @@
 /* Repsmith service worker: app shell offline, network-first for the shell so updates arrive. */
-const CACHE = 'repsmith-v0.5.4';
+const CACHE = 'repsmith-v0.5.5';
 const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'data/exercises.json', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
 
@@ -15,7 +15,8 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin === location.origin) {
     // network first, cache fallback: new versions show up on next open, offline still works
-    e.respondWith(fetch(req).then(res => {
+    // cache: 'no-cache' revalidates with the server, so a new upload is picked up on the next open
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then(res => {
       const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); return res;
     }).catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match('index.html'))));
   } else if (url.hostname.endsWith('fonts.googleapis.com') || url.hostname.endsWith('fonts.gstatic.com')) {

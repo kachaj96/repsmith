@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.5.4';
+const VERSION = '0.5.5';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -1467,7 +1467,14 @@ async function boot() {
   if (S.active) S.view = 'workout';
   render();
   if ('serviceWorker' in navigator && location.protocol === 'https:' && !window.REPSMITH_DATA) {
-    try { navigator.serviceWorker.register('sw.js'); } catch (e) {}
+    try {
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
+        reg.update().catch(() => {});
+        // new version installed while the app is open: reload once so it takes effect
+        let reloaded = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => { if (reloaded || S.active) return; reloaded = true; location.reload(); });
+      }).catch(() => {});
+    } catch (e) {}
   }
   if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch (e) {} }
 }
