@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.5.2';
+const VERSION = '0.5.4';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -83,7 +83,7 @@ const STR = {
     h_calf: 'W najszerszym miejscu łydki, na stojąco.', h_bf: 'Z wagi z pomiarem składu ciała. Zawsze ta sama waga i pora.',
     tapHint: 'Stuknij wykres, żeby zobaczyć wartość.',
     repeatWorkout: 'Powtórz trening', repeatHint: 'Te same ćwiczenia i serie, wyniki z tego treningu jako podpowiedź.', finishCurrentFirst: 'Najpierw zakończ albo odrzuć trwający trening.',
-    repeatOfLbl: 'Powtórzenie treningu z', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński',
+    repeatOfLbl: 'Powtórzenie treningu z', restOver: 'Koniec przerwy', sounds: 'Dźwięki timera (odliczanie 5–1 i koniec przerwy)', on: 'Włączone', off: 'Wyłączone', movement: 'Ruch', muscleGroup: 'Partia (główna)', clearFilters: 'Wyczyść filtry', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński',
     rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS).\n\nZ niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
@@ -162,7 +162,7 @@ const STR = {
     h_calf: 'At the widest point of the calf, standing.', h_bf: 'From a body composition scale. Same scale, same time of day.',
     tapHint: 'Tap the chart to see a value.',
     repeatWorkout: 'Repeat workout', repeatHint: 'Same exercises and sets, this workout\'s results as hints.', finishCurrentFirst: 'Finish or discard the workout in progress first.',
-    repeatOfLbl: 'Repeat of the workout from', author: 'Author', madeBy: 'Made by Adrian Drożdżyński',
+    repeatOfLbl: 'Repeat of the workout from', restOver: 'Rest over', sounds: 'Timer sounds (5–1 countdown and end of rest)', on: 'On', off: 'Off', movement: 'Movement', muscleGroup: 'Muscle (main)', clearFilters: 'Clear filters', author: 'Author', madeBy: 'Made by Adrian Drożdżyński',
     rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS).\n\nThe app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
@@ -498,60 +498,71 @@ function weekCount() {
 /* ---------- rest timer ---------- */
 let audioCtx = null;
 function ensureAudio() { try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) { audioCtx = null; } }
+function tone(freq, start, dur, vol) {
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.type = 'sine'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination);
+  const t0 = audioCtx.currentTime + start;
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.start(t0); o.stop(t0 + dur + 0.02);
+}
+const soundOn = () => S.settings.sound !== false;
+/* short soft tick for 5..1 s left */
+function tick() { if (!audioCtx || !soundOn()) return; try { tone(660, 0, 0.09, 0.18); } catch (e) {} }
+/* end of rest: two rising tones + vibration */
 function beep() {
   try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
-  if (!audioCtx) return;
-  try {
-    [0, 0.25].forEach(off => {
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-      o.frequency.value = 880; o.connect(g); g.connect(audioCtx.destination);
-      g.gain.setValueAtTime(0.0001, audioCtx.currentTime + off);
-      g.gain.exponentialRampToValueAtTime(0.3, audioCtx.currentTime + off + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + off + 0.18);
-      o.start(audioCtx.currentTime + off); o.stop(audioCtx.currentTime + off + 0.2);
-    });
-  } catch (e) {}
+  if (!audioCtx || !soundOn()) return;
+  try { tone(880, 0, 0.18, 0.3); tone(1175, 0.2, 0.28, 0.3); } catch (e) {}
 }
-function startTimer(sec) { S.timer = { endAt: now() + sec * 1000, total: sec, fired: false }; renderTimer(); }
+function startTimer(sec) { S.timer = { endAt: now() + sec * 1000, total: sec, fired: false, lastTick: null }; clearTimeout(S._timerHide); renderTimer(); }
 function adjustTimer(d) {
   if (!S.timer) return;
+  if (S.timer.fired) { if (d > 0) startTimer(d); return; } // after the end, +15 s starts a fresh 15 s
   S.timer.endAt += d * 1000; S.timer.total = Math.max(1, S.timer.total + d);
-  if (S.timer.endAt - now() > 0) S.timer.fired = false;
+  if (S.timer.endAt <= now()) S.timer.endAt = now();
+  S.timer.lastTick = null;
   renderTimer();
 }
-function stopTimer() { S.timer = null; renderTimer(); }
+function stopTimer() { clearTimeout(S._timerHide); S.timer = null; renderTimer(); }
 function renderTimer() {
   let el = $('#timer');
   if (!S.timer || S.view !== 'workout') { if (el) el.remove(); return; }
   if (!el) { el = document.createElement('div'); el.id = 'timer'; el.className = 'timer'; document.body.appendChild(el); }
-  const left = (S.timer.endAt - now()) / 1000;
-  const over = left <= 0;
-  const pct = over ? 100 : Math.min(100, (1 - left / S.timer.total) * 100);
+  const left = Math.max(0, (S.timer.endAt - now()) / 1000);
+  const done = left <= 0;
+  const pct = done ? 100 : Math.min(100, (1 - left / S.timer.total) * 100);
   if (!el.firstChild) {
-    el.innerHTML = `<div class="timer-inner"><div class="timer-row"><div><div class="eyebrow small">${esc(t('restTimer'))}</div><div class="big" id="tbig"></div></div>
+    el.innerHTML = `<div class="timer-inner"><div class="timer-row"><div><div class="eyebrow small" id="tlbl"></div><div class="big" id="tbig"></div></div>
       <div class="btns"><button class="btn" data-a="timer-adj" data-v="-15">−15 s</button><button class="btn" data-a="timer-adj" data-v="15">+15 s</button><button class="btn" data-a="timer-skip">${esc(t('skip'))}</button></div></div>
       <div class="bar"><i id="tbar"></i></div></div>`;
   }
-  const big = $('#tbig');
-  big.textContent = over ? '+' + fmtClock(-left) : fmtClock(left);
-  big.classList.toggle('over', over);
+  const secs = Math.ceil(left);
+  $('#tlbl').textContent = done ? t('restOver') : t('restTimer');
+  $('#tbig').textContent = fmtClock(secs);
+  $('#tbig').classList.toggle('over', done || secs <= 5);
   $('#tbar').style.width = pct + '%';
-  if (over && !S.timer.fired) { S.timer.fired = true; beep(); }
+  if (!done && secs <= 5 && secs >= 1 && S.timer.lastTick !== secs) { S.timer.lastTick = secs; tick(); }
+  if (done && !S.timer.fired) {
+    S.timer.fired = true; beep();
+    clearTimeout(S._timerHide); S._timerHide = setTimeout(() => { if (S.timer && S.timer.fired) stopTimer(); }, 4000);
+  }
 }
 setInterval(() => {
-  if (S.timer) renderTimer();
+  if (S.timer && !S.timer.fired) renderTimer();
   const c = $('#wclock'); if (c && S.active) c.textContent = fmtDur(now() - S.active.startedAt);
-}, 1000);
+}, 250);
 
 /* ---------- navigation ---------- */
-function go(view, arg) { S.view = view; S.viewArg = arg ?? null; S.sheet = null; render(); window.scrollTo(0, 0); }
+function go(view, arg) { S.view = view; S.viewArg = arg ?? null; S.sheet = null; S._navAnim = true; render(); window.scrollTo(0, 0); }
 function openSheet(sheet) { S.sheet = sheet; renderSheet(); }
 function closeSheet() { S.sheet = null; renderSheet(); }
 function toast(msg) {
   S.toast = msg; let el = $('#toast');
   if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
-  el.textContent = msg; el.hidden = false;
-  clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; }, 2200);
+  el.textContent = msg; el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; el.classList.remove('show'); }, 2200);
 }
 
 /* ---------- render: shell ---------- */
@@ -570,6 +581,8 @@ function render() {
     default: html = vToday();
   }
   app.innerHTML = html + (S.view === 'workout' ? '' : nav());
+  if (S._navAnim && app.firstElementChild) app.firstElementChild.classList.add('enter');
+  S._navAnim = false; S._justDone = null;
   renderTimer();
   renderSheet();
   if (S.view === 'library') { const i = $('#libq'); if (i && S._libFocus) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
@@ -674,7 +687,7 @@ function setGrid(it) {
     if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
     else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
-    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.done ? 'done' : ''}">
+    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
       <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
       <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
@@ -744,26 +757,33 @@ function vSession() {
 }
 
 /* ---------- view: library ---------- */
-function filteredExercises(q, pat) {
+function filteredExercises(q, pat, mus) {
   const qq = (q || '').trim().toLowerCase();
   return [...S.ex.values()].filter(isVisible)
     .filter(e => !pat || (pat === '__custom' ? e.custom : e.pattern === pat))
+    .filter(e => !mus || e.primary.includes(mus))
     .filter(e => !qq || [e.name_pl, e.name_en].some(n => (n || '').toLowerCase().includes(qq)) || e.primary.some(m => muscleName(m).toLowerCase().includes(qq)))
     .sort((a, b) => exName(a.id).localeCompare(exName(b.id), S.settings.lang));
 }
 function exRows(list, action, extra = '') {
   return list.map(e => `<button class="list-btn row" data-a="${action}" data-v="${esc(e.id)}" ${extra}><span class="grow"><span class="name">${esc(exName(e.id))}</span><br><span class="meta">${esc(e.primary.map(muscleName).join(', '))} · ${esc(equipName(e.equipment))}</span></span>${S.notes[e.id] && S.notes[e.id].text ? `<span class="tag">${esc(t('note'))}</span>` : ''}</button>`).join('');
 }
-function patternChips(cur, action) {
-  const pats = Object.keys(S.data.patterns);
-  return `<div class="chips"><button class="chip ${!cur ? 'on' : ''}" data-a="${action}" data-v="">${esc(t('all'))}</button>${S.customExercises.some(isVisible) ? `<button class="chip ${cur === '__custom' ? 'on' : ''}" data-a="${action}" data-v="__custom">${esc(t('custom'))}</button>` : ''}${pats.map(p => `<button class="chip ${cur === p ? 'on' : ''}" data-a="${action}" data-v="${p}">${esc(patternName(p))}</button>`).join('')}</div>`;
+/* movement pattern + main muscle filters, combinable with search */
+function filterBar(st, pre) {
+  const pats = Object.keys(S.data.patterns).sort((a, b) => patternName(a).localeCompare(patternName(b), S.settings.lang));
+  const mus = Object.keys(S.data.muscles).sort((a, b) => muscleName(a).localeCompare(muscleName(b), S.settings.lang));
+  const n = filteredExercises(st.q, st.pat, st.mus).length;
+  return `<div class="filters"><div class="grid2">
+    <div><label for="${pre}-pat">${esc(t('movement'))}</label><select id="${pre}-pat" data-f="${pre}-pat"><option value="">${esc(t('all'))}</option>${S.customExercises.some(isVisible) ? `<option value="__custom" ${st.pat === '__custom' ? 'selected' : ''}>${esc(t('custom'))}</option>` : ''}${pats.map(p => `<option value="${p}" ${st.pat === p ? 'selected' : ''}>${esc(patternName(p))}</option>`).join('')}</select></div>
+    <div><label for="${pre}-mus">${esc(t('muscleGroup'))}</label><select id="${pre}-mus" data-f="${pre}-mus"><option value="">${esc(t('all'))}</option>${mus.map(m => `<option value="${m}" ${st.mus === m ? 'selected' : ''}>${esc(muscleName(m))}</option>`).join('')}</select></div></div>
+    <div class="filter-meta"><span id="${pre}-count">${esc(t('exercisesN', n))}</span>${st.pat || st.mus || st.q ? `<button class="btn small ghost" data-a="${pre}-clear">${esc(t('clearFilters'))}</button>` : ''}</div></div>`;
 }
 function vLibrary() {
-  const st = S.lib || (S.lib = { q: '', pat: '' });
-  const list = filteredExercises(st.q, st.pat);
+  const st = S.lib || (S.lib = { q: '', pat: '', mus: '' });
+  const list = filteredExercises(st.q, st.pat, st.mus);
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('library'))}</h1>
     <div><label for="libq" class="sr">${esc(t('search'))}</label><input id="libq" type="search" data-f="lib-q" placeholder="${esc(t('search'))}" value="${esc(st.q)}" autocomplete="off"></div>
-    ${patternChips(st.pat, 'lib-pat')}
+    ${filterBar(st, 'lib')}
     <button class="btn block" data-a="custom-new">${esc(t('addCustom'))}</button>
     <div class="card" id="liblist">${exRows(list, 'ex-detail')}</div></main>`;
 }
@@ -952,6 +972,7 @@ function readMeasure() {
 function renderSheet() {
   let el = $('#sheet');
   if (!S.sheet) { if (el) el.remove(); document.body.style.overflow = ''; return; }
+  const fresh = !el;
   if (!el) { el = document.createElement('div'); el.id = 'sheet'; document.body.appendChild(el); }
   const sh = S.sheet;
   let body = '';
@@ -961,8 +982,8 @@ function renderSheet() {
   } else if (sh.type === 'picker') {
     const q = sh.q || '';
     body = `${head(t('addExercise'))}<input id="pickq" type="search" data-f="pick-q" placeholder="${esc(t('search'))}" value="${esc(q)}" autocomplete="off" aria-label="${esc(t('search'))}">
-      ${patternChips(sh.pat || '', 'pick-pat')}
-      <div class="card" id="picklist">${exRows(filteredExercises(q, sh.pat), 'pick')}</div>`;
+      ${filterBar({ q, pat: sh.pat || '', mus: sh.mus || '' }, 'pick')}
+      <div class="card" id="picklist">${exRows(filteredExercises(q, sh.pat, sh.mus), 'pick')}</div>`;
   } else if (sh.type === 'item') {
     const it = sh.item;
     const isTop = it.scheme === 'topback';
@@ -1049,6 +1070,7 @@ function renderSheet() {
     const st = S.settings;
     body = `${head(t('settings'))}
       <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
+      <div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
       <div class="grid2">${fld('st-restC', t('defaultRestC'), st.restC)}${fld('st-restI', t('defaultRestI'), st.restI)}${fld('st-increment', t('increment'), fmtN(st.increment))}${fld('st-backoffPct', t('defaultBackoff'), st.backoffPct)}</div>
       <h2 style="font-size:20px;margin-top:6px">${esc(t('backup'))}</h2><div class="muted small">${esc(t('backupInfo'))}</div>
       ${window.REPSMITH_DATA ? '' : `<button class="btn block" data-a="export">${esc(t('exportBtn'))}</button>`}
@@ -1057,7 +1079,7 @@ function renderSheet() {
       <label class="btn block" for="importfile" style="margin:0;color:var(--text);font-size:16px">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
       <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
-  el.innerHTML = `<div class="scrim" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
+  el.innerHTML = `<div class="scrim ${fresh ? 'enter' : ''}" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
   document.body.style.overflow = 'hidden';
   if (sh.type === 'picker' && sh._focus) { const i = $('#pickq'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
 }
@@ -1148,8 +1170,8 @@ const A = {
     else if (tg.kind === 'swap') { doSwap(tg.itemId, id); }
     else if (tg.kind === 'progress') { S.prog.tab = 'strength'; S.prog.exId = id; closeSheet(); render(); }
   },
-  'pick-pat': el => { S.sheet.pat = el.dataset.v; S.sheet._focus = false; renderSheet(); },
-  'lib-pat': el => { S.lib.pat = el.dataset.v; S._libFocus = false; render(); },
+  'pick-clear': () => { S.sheet.pat = ''; S.sheet.mus = ''; S.sheet.q = ''; renderSheet(); },
+  'lib-clear': () => { S.lib = { q: '', pat: '', mus: '' }; render(); },
 
   /* workout */
   'session-add-ex': () => openSheet({ type: 'picker', target: { kind: 'session' } }),
@@ -1161,7 +1183,7 @@ const A = {
       row.querySelectorAll('input').forEach(inp => { if (inp.dataset.k !== 'rpe' && inp.value === '' && inp.placeholder) { s[inp.dataset.k] = inp.placeholder.replace(',', '.'); } });
       s.done = true; s.doneAt = now();
       if (s.rpe !== '' && s.rpe != null) { const q = normRpe(s.rpe); s.rpe = q == null ? '' : String(q); }
-      s.pr = detectPR(it.exId, s);
+      s.pr = detectPR(it.exId, s); S._justDone = s.id;
       if (s.pr.length) toast(`${t('prNew')}: ${prLabel(s.pr)}`);
       ensureAudio();
       startTimer(it.rest || S.settings.restI);
@@ -1310,6 +1332,7 @@ const A = {
   },
 
   /* settings */
+  sound: el => { readSettingsFields(); S.settings.sound = el.dataset.v === '1'; persist('settings'); renderSheet(); if (S.settings.sound) { ensureAudio(); tick(); } },
   lang: el => { readSettingsFields(); S.settings.lang = el.dataset.v; document.documentElement.lang = S.settings.lang; persist('settings'); render(); },
   export: () => {
     readSettingsFields();
@@ -1395,9 +1418,15 @@ document.addEventListener('input', ev => {
     const s = it.sets.find(x => x.id === el.dataset.s); s[el.dataset.k] = el.value.replace(',', '.');
     clearTimeout(S._saveT); S._saveT = setTimeout(saveActive, 400);
   } else if (f === 'lib-q') {
-    S.lib.q = el.value; const l = $('#liblist'); if (l) l.innerHTML = exRows(filteredExercises(S.lib.q, S.lib.pat), 'ex-detail');
+    S.lib.q = el.value; const list = filteredExercises(S.lib.q, S.lib.pat, S.lib.mus); const l = $('#liblist'); if (l) l.innerHTML = exRows(list, 'ex-detail');
+    const c = $('#lib-count'); if (c) c.textContent = t('exercisesN', list.length);
   } else if (f === 'pick-q') {
-    S.sheet.q = el.value; const l = $('#picklist'); if (l) l.innerHTML = exRows(filteredExercises(S.sheet.q, S.sheet.pat), 'pick');
+    S.sheet.q = el.value; const list = filteredExercises(S.sheet.q, S.sheet.pat, S.sheet.mus); const l = $('#picklist'); if (l) l.innerHTML = exRows(list, 'pick');
+    const c = $('#pick-count'); if (c) c.textContent = t('exercisesN', list.length);
+  } else if (f === 'lib-pat' || f === 'lib-mus') {
+    S.lib[f.slice(4)] = el.value; render();
+  } else if (f === 'pick-pat' || f === 'pick-mus') {
+    S.sheet[f.slice(5)] = el.value; renderSheet();
   } else if (f === 'plan-name') {
     const tp = S.templates.find(x => x.id === S.viewArg); tp.name = el.value; tp.updatedAt = now(); clearTimeout(S._tT); S._tT = setTimeout(saveTemplates, 400);
   } else if (f === 'day-name') {

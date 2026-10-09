@@ -1,4 +1,6 @@
-# Repsmith v0.1
+# Repsmith v0.5.4
+
+Autor: Adrian Drożdżyński
 
 Dziennik treningowy jako PWA. Działa offline, dane trzyma lokalnie na telefonie (IndexedDB), bez kont i serwera.
 
@@ -18,9 +20,17 @@ Dziennik treningowy jako PWA. Działa offline, dane trzyma lokalnie na telefonie
 
 Ten sam link wysyłasz znajomym.
 
+## Instalacja na iPhonie
+
+1. Otwórz link w **Safari** (na iOS 16.4+ działa też Chrome).
+2. Przycisk **Udostępnij** → **Dodaj do ekranu początkowego**.
+3. Uruchamiaj zawsze z ikony na ekranie, nie z przeglądarki. Dane aplikacji z ikony nie są czyszczone automatycznie, dane strony otwieranej w Safari mogą zniknąć po kilku tygodniach nieużywania.
+
+Ograniczenia iOS: brak wibracji na koniec przerwy, dźwięki timera nie grają przy wyciszonym telefonie (przełącznik z boku) ani przy zablokowanym ekranie.
+
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.1.1`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.5.5`).
 
 ## Dane
 
