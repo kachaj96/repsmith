@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.4.0';
+const VERSION = '0.5.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -62,6 +62,26 @@ const STR = {
     prHint: 'PR liczy się względem wszystkich wcześniejszych serii tego ćwiczenia. e1RM z tabeli RPE Tuchscherera (1–12 powt.).',
     rpeHints: { 10: 'Maks. Nic w zapasie', 9.5: 'Może 1 powt. więcej, ciężaru już nie', 9: '1 powtórzenie w zapasie', 8.5: '1–2 powtórzenia w zapasie', 8: '2 powtórzenia w zapasie', 7.5: '2–3 powtórzenia w zapasie', 7: '3 powtórzenia w zapasie, szybko', 6.5: '3–4 powtórzenia w zapasie', 6: '4+ powtórzeń w zapasie, lekko' },
     rpeHintEmpty: 'RPE to liczba powtórzeń, które zostały w zapasie. 10 = nic, 8 = dwa.', clear: 'Wyczyść',
+    progress: 'Postęp', strength: 'Siła', body: 'Ciało', firstTime: '1. raz · punkt odniesienia',
+    lastE1rm: 'Ostatni e1RM', bestE1rmShort: 'Najlepszy e1RM', change: 'Zmiana', since: 'od pierwszego',
+    e1rmChart: 'e1RM z każdego treningu', prList: 'Rekordy', prTimeline: 'Ostatnie rekordy',
+    weeklyVolume: 'Objętość tygodniowa', setsUnit: 'serii', thisWeekS: 'Ten tydzień', lastWeekS: 'Poprzedni',
+    volumeHint: 'Serie robocze: mięsień główny liczy się jako 1, pomocniczy jako 0,5. Seria jednorącz L+P to jedna seria.',
+    noStrength: 'Wykresy siły pojawią się po pierwszym zakończonym treningu.', otherExercise: 'Inne ćwiczenie',
+    noPrYet: 'Brak rekordów. Pierwszy trening z ćwiczeniem wyznacza punkt odniesienia, rekordy liczą się od drugiego.',
+    addMeasurement: 'Dodaj pomiar', editMeasurement: 'Edytuj pomiar', date: 'Data', measureHint: 'Mierz zawsze w tym samym miejscu i o tej samej porze. Taśma przylega, ale nie wciska skóry. Wypełnij tylko to, co mierzysz dziś.',
+    noBody: 'Tu zobaczysz masę ciała i obwody w czasie. Dodaj pierwszy pomiar, choćby samą wagę.',
+    weight: 'Masa ciała', avg7: 'Średnia 7 dni', vsPrev: 'od ostatniego', vs4w: '4 tyg.', vsStart: 'od startu',
+    measurement: 'Pomiar', measurements: 'Pomiary', sidesToggle: 'Mierz L i P osobno', oneSide: 'jedna strona',
+    measureEmpty: 'Wpisz co najmniej jedną wartość.', deleteMeasurement: 'Usuń pomiar', startNow: 'Start → teraz',
+    point: 'pomiar', bwMissing: 'Dodaj pomiar masy ciała w Postęp → Ciało, żeby liczyć rekordy w ćwiczeniach z masą ciała.',
+    m_weight: 'Masa ciała', m_chest: 'Klatka', m_waist: 'Talia', m_hips: 'Biodra', m_arm: 'Ramię', m_armL: 'Ramię L', m_armR: 'Ramię P',
+    m_thigh: 'Udo', m_thighL: 'Udo L', m_thighR: 'Udo P', m_calf: 'Łydka', m_bf: 'Tkanka tłuszczowa',
+    h_weight: 'Rano, na czczo, po toalecie, w tej samej bieliźnie.', h_chest: 'Na wysokości sutków, ręce luźno, na spokojnym wydechu.',
+    h_waist: 'Na wysokości pępka, na wydechu, bez wciągania brzucha.', h_hips: 'W najszerszym miejscu pośladków, stopy razem.',
+    h_arm: 'W najszerszym miejscu ramienia, ręka luźno wzdłuż tułowia.', h_thigh: 'W połowie między pachwiną a kolanem, noga rozluźniona.',
+    h_calf: 'W najszerszym miejscu łydki, na stojąco.', h_bf: 'Z wagi z pomiarem składu ciała. Zawsze ta sama waga i pora.',
+    tapHint: 'Stuknij wykres, żeby zobaczyć wartość.',
     rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS). Z niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
@@ -119,6 +139,26 @@ const STR = {
     prHint: 'A PR counts against every earlier set of this exercise. e1RM uses Tuchscherer’s RPE table (1–12 reps).',
     rpeHints: { 10: 'Max. Nothing left', 9.5: 'Maybe 1 more rep, but no more weight', 9: '1 rep left', 8.5: '1–2 reps left', 8: '2 reps left', 7.5: '2–3 reps left', 7: '3 reps left, bar moves fast', 6.5: '3–4 reps left', 6: '4+ reps left, easy' },
     rpeHintEmpty: 'RPE is how many reps you had left. 10 = none, 8 = two.', clear: 'Clear',
+    progress: 'Progress', strength: 'Strength', body: 'Body', firstTime: '1st time · baseline',
+    lastE1rm: 'Last e1RM', bestE1rmShort: 'Best e1RM', change: 'Change', since: 'since first',
+    e1rmChart: 'e1RM per workout', prList: 'Records', prTimeline: 'Latest records',
+    weeklyVolume: 'Weekly volume', setsUnit: 'sets', thisWeekS: 'This week', lastWeekS: 'Last week',
+    volumeHint: 'Working sets: main muscle counts as 1, supporting as 0.5. A one-arm L+R pair is one set.',
+    noStrength: 'Strength charts show up after your first finished workout.', otherExercise: 'Other exercise',
+    noPrYet: 'No records yet. The first workout with an exercise sets the baseline; records count from the second.',
+    addMeasurement: 'Add measurement', editMeasurement: 'Edit measurement', date: 'Date', measureHint: 'Always measure at the same spot and the same time of day. The tape sits flat without pressing in. Fill in only what you measure today.',
+    noBody: 'Body weight and measurements over time show up here. Add your first entry, even just your weight.',
+    weight: 'Body weight', avg7: '7-day average', vsPrev: 'since last', vs4w: '4 wk', vsStart: 'since start',
+    measurement: 'Measurement', measurements: 'Measurements', sidesToggle: 'Measure L and R separately', oneSide: 'one side',
+    measureEmpty: 'Enter at least one value.', deleteMeasurement: 'Delete measurement', startNow: 'Start → now',
+    point: 'entry', bwMissing: 'Add a body weight entry in Progress → Body to get records for bodyweight exercises.',
+    m_weight: 'Body weight', m_chest: 'Chest', m_waist: 'Waist', m_hips: 'Hips', m_arm: 'Arm', m_armL: 'Arm L', m_armR: 'Arm R',
+    m_thigh: 'Thigh', m_thighL: 'Thigh L', m_thighR: 'Thigh R', m_calf: 'Calf', m_bf: 'Body fat',
+    h_weight: 'Morning, fasted, after the bathroom, same clothing.', h_chest: 'At nipple height, arms relaxed, on a calm exhale.',
+    h_waist: 'At the navel, on the exhale, without sucking in.', h_hips: 'At the widest point of the glutes, feet together.',
+    h_arm: 'At the widest point of the upper arm, arm hanging relaxed.', h_thigh: 'Halfway between groin and knee, leg relaxed.',
+    h_calf: 'At the widest point of the calf, standing.', h_bf: 'From a body composition scale. Same scale, same time of day.',
+    tapHint: 'Tap the chart to see a value.',
     rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS). The app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
@@ -136,6 +176,7 @@ const I = {
   list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>',
   clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   dumbbell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-5"/></svg>',
   gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
   swap: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>',
@@ -190,13 +231,13 @@ const DB = {
     } catch (e) { /* keep in memory */ }
   },
 };
-const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active'];
+const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements'];
 const persist = (...keys) => Promise.all(keys.map(k => DB.set(k, clone(S[k]))));
 
 /* ---------- state ---------- */
 const S = {
-  settings: { lang: (navigator.language || 'pl').startsWith('pl') ? 'pl' : 'en', restC: 180, restI: 90, increment: 2.5, backoffPct: 90, activeTemplateId: null },
-  templates: [], sessions: [], notes: {}, customExercises: [], active: null,
+  settings: { lang: (navigator.language || 'pl').startsWith('pl') ? 'pl' : 'en', restC: 180, restI: 90, increment: 2.5, backoffPct: 90, activeTemplateId: null, sides: { arm: false, thigh: false } },
+  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [],
   data: null, ex: new Map(),
   view: 'today', viewArg: null, sheet: null, timer: null, toast: null,
 };
@@ -245,64 +286,111 @@ function rpePct(reps, rpe) {
   return RPE_TABLE[q][r - 1];
 }
 const e1rm = (w, r, rpe) => { const p = rpePct(r, rpe); return p ? w / (p / 100) : null; };
-/* best e1RM from the most recent finished workout with this exercise */
-function lastE1rm(exId, beforeTs) {
-  const ex = S.ex.get(exId);
-  const ses = S.sessions.filter(x => x.startedAt < beforeTs && x.items.some(i => i.exId === exId)).sort((a, b) => b.startedAt - a.startedAt)[0];
-  if (!ses) return null;
+/* body weight: latest measurement on or before a moment */
+function bodyweightAt(ts) {
   let best = null;
-  for (const it of ses.items) if (it.exId === exId) for (const x of it.sets) {
-    if (!x.done || !prEligible(ex, x)) continue;
-    const e = e1rm(num(x.weight), num(x.reps), x.rpe); if (e && (!best || e > best)) best = e;
-  }
-  return best;
+  for (const m of S.measurements) if (num(m.weight) > 0 && m.date <= ts && (!best || m.date > best.date)) best = m;
+  return best ? num(best.weight) : null;
 }
+const sessionBw = ses => (ses && ses.bw != null ? ses.bw : ses ? bodyweightAt(ses.startedAt) : null);
 const NO_PR = new Set(['assisted-pull-up']); // assistance weight: lower is harder
-function prEligible(ex, set) {
-  return ex && ex.logging === 'W' && !NO_PR.has(ex.id) && set.kind !== 'warmup' && num(set.weight) > 0 && num(set.reps) > 0;
+const canPR = ex => !!ex && !NO_PR.has(ex.id) && (ex.logging === 'W' || ex.logging === 'BWX');
+/* the load that counts: plate weight, or body weight + added weight */
+function loadOf(ex, set, bw) {
+  if (!ex) return null;
+  if (ex.logging === 'W') { const w = num(set.weight); return w > 0 ? w : null; }
+  if (ex.logging === 'BWX') { if (!(bw > 0)) return null; const l = bw + (num(set.weight) || 0); return l > 0 ? l : null; }
+  return null;
 }
-function priorSets(exId, beforeTs, skipSetId) {
+function prEligible(ex, set, bw) { return canPR(ex) && set.kind !== 'warmup' && loadOf(ex, set, bw) > 0 && num(set.reps) > 0; }
+/* eligible sets of an exercise, oldest first: [{load, reps, rpe, set, at, sesId}] */
+function entriesFor(exId, opts = {}) {
+  const ex = S.ex.get(exId); const out = [];
+  const add = (ses, active) => {
+    const bw = active ? S.active.bw : sessionBw(ses);
+    for (const it of ses.items) if (it.exId === exId) for (const x of it.sets) {
+      if (!x.done || !prEligible(ex, x, bw)) continue;
+      out.push({ load: loadOf(ex, x, bw), reps: num(x.reps), rpe: x.rpe, set: x, at: x.doneAt || ses.startedAt, sesAt: ses.startedAt, sesId: ses.id, bw });
+    }
+  };
+  for (const ses of S.sessions) add(ses, false);
+  if (opts.withActive && S.active) add(S.active, true);
+  return out.sort((a, b) => a.sesAt - b.sesAt || a.at - b.at);
+}
+function prTypes(cur, prev) {
   const out = [];
-  for (const ses of S.sessions) {
-    if (ses.startedAt >= beforeTs) continue;
-    for (const it of ses.items) if (it.exId === exId) for (const x of it.sets) if (x.done) out.push(x);
-  }
-  if (S.active && S.active.startedAt <= beforeTs) {
-    for (const it of S.active.items) if (it.exId === exId) for (const x of it.sets) if (x.done && x.id !== skipSetId && (x.doneAt || 0) < beforeTs) out.push(x);
-  }
+  if (!prev.length) return out;
+  const maxW = Math.max(...prev.map(x => x.load));
+  const maxV = Math.max(...prev.map(x => x.load * x.reps));
+  const eP = prev.map(x => e1rm(x.load, x.reps, x.rpe)).filter(Boolean);
+  const eNow = e1rm(cur.load, cur.reps, cur.rpe);
+  if (cur.load > maxW) out.push('w');
+  if (eNow && eP.length && eNow > Math.max(...eP) + 0.01) out.push('e');
+  if (cur.load * cur.reps > maxV) out.push('v');
   return out;
+}
+/* true when an earlier finished workout already has this exercise (first workout = baseline) */
+function hasHistory(exId, beforeTs) {
+  return S.sessions.some(ses => ses.startedAt < beforeTs && ses.items.some(it => it.exId === exId && it.sets.some(x => x.done)));
 }
 function detectPR(exId, set) {
   const ex = S.ex.get(exId);
-  if (!prEligible(ex, set)) return [];
-  // no PRs until the exercise has history from an earlier workout: first session only sets the baseline
-  const hasHistory = S.sessions.some(ses => ses.startedAt < (set.doneAt || now()) && ses.items.some(it => it.exId === exId && it.sets.some(x => x.done && prEligible(ex, x))));
-  if (!hasHistory) return [];
-  const prev = priorSets(exId, set.doneAt || now(), set.id).filter(x => prEligible(ex, x));
-  if (!prev.length) return [];
-  const w = num(set.weight), r = num(set.reps);
-  const maxW = Math.max(...prev.map(x => num(x.weight)));
-  const maxV = Math.max(...prev.map(x => num(x.weight) * num(x.reps)));
-  const eP = prev.map(x => e1rm(num(x.weight), num(x.reps), x.rpe)).filter(Boolean);
-  const eNow = e1rm(w, r, set.rpe);
-  const out = [];
-  if (w > maxW) out.push('w');
-  if (eNow && eP.length && eNow > Math.max(...eP) + 0.01) out.push('e');
-  if (w * r > maxV) out.push('v');
-  return out;
+  const bw = S.active ? S.active.bw : null;
+  if (!prEligible(ex, set, bw)) return [];
+  const startedAt = S.active ? S.active.startedAt : now();
+  const all = entriesFor(exId, { withActive: true });
+  const base = all.filter(e => e.sesAt < startedAt);
+  if (!base.length) return [];
+  const ts = set.doneAt || now();
+  const prev = all.filter(e => e.set.id !== set.id && (e.sesAt < startedAt || e.at < ts));
+  return prTypes({ load: loadOf(ex, set, bw), reps: num(set.reps), rpe: set.rpe }, prev);
+}
+/* every PR event of an exercise across history, recomputed with the current rules */
+function prEvents(exId) {
+  const all = entriesFor(exId);
+  if (!all.length) return [];
+  const firstSes = all[0].sesAt;
+  const ev = [];
+  all.forEach((e, i) => {
+    if (e.sesAt === firstSes) return;
+    const types = prTypes(e, all.slice(0, i));
+    if (types.length) ev.push({ ...e, exId, types });
+  });
+  return ev;
+}
+function allPrEvents() {
+  const ids = new Set(); S.sessions.forEach(s => s.items.forEach(i => ids.add(i.exId)));
+  return [...ids].flatMap(id => prEvents(id)).sort((a, b) => b.at - a.at);
+}
+/* best e1RM per finished workout: [{x: ts, y}] */
+function e1rmSeries(exId) {
+  const by = new Map();
+  for (const e of entriesFor(exId)) {
+    const v = e1rm(e.load, e.reps, e.rpe); if (!v) continue;
+    const cur = by.get(e.sesId);
+    if (!cur || v > cur.y) by.set(e.sesId, { x: e.sesAt, y: v });
+  }
+  return [...by.values()].sort((a, b) => a.x - b.x);
+}
+/* best e1RM from the most recent finished workout with this exercise */
+function lastE1rm(exId, beforeTs) {
+  const pts = e1rmSeries(exId).filter(p => p.x < beforeTs);
+  return pts.length ? pts[pts.length - 1].y : null;
 }
 const prLabel = codes => codes.map(c => t({ w: 'prW', e: 'prE', v: 'prV' }[c])).join(' · ');
 function recordsFor(exId) {
-  const ex = S.ex.get(exId);
   const best = { w: null, e: null, v: null };
-  const ses = [...S.sessions].sort((a, b) => a.startedAt - b.startedAt);
-  for (const s of ses) for (const it of s.items) if (it.exId === exId) for (const x of it.sets) {
-    if (!x.done || !prEligible(ex, x)) continue;
-    const w = num(x.weight), r = num(x.reps);
-    const cand = { w, e: e1rm(w, r, x.rpe), v: w * r };
-    for (const k of ['w', 'e', 'v']) if (cand[k] != null && (!best[k] || cand[k] > best[k].val)) best[k] = { val: cand[k], set: x, at: s.startedAt };
+  for (const x of entriesFor(exId)) {
+    const cand = { w: x.load, e: e1rm(x.load, x.reps, x.rpe), v: x.load * x.reps };
+    for (const k of ['w', 'e', 'v']) if (cand[k] != null && (!best[k] || cand[k] > best[k].val)) best[k] = { val: cand[k], set: x.set, at: x.sesAt, entry: x };
   }
   return best;
+}
+/* "load × reps @rpe" for an entry; bodyweight lifts show BW+added */
+function fmtEntry(ex, e) {
+  const r = `×${e.reps}${normRpe(e.rpe) ? ' @' + fmtN(normRpe(e.rpe)) : ''}`;
+  if (ex && ex.logging === 'BWX') { const a = num(e.set.weight) || 0; return `BW${a ? (a > 0 ? '+' : '') + fmtN(a) : ''}${r} (${fmtN(e.load)} kg)`; }
+  return `${fmtN(e.load)}${r}`;
 }
 function newSet(kind, side, target) { return { id: uid(), kind, side: side || null, weight: '', reps: '', rpe: '', time: '', dist: '', done: false, target: target || null }; }
 function pushSets(arr, ex, kind, count, target) {
@@ -341,7 +429,7 @@ function nextDay(tpl) {
 function startSession(tpl, day) {
   S.active = {
     id: uid(), name: day ? day.name : t('freeWorkout'), templateId: tpl ? tpl.id : null, dayId: day ? day.id : null,
-    startedAt: now(), endedAt: null, items: day ? day.items.map(sessionItemFromTemplate) : [],
+    startedAt: now(), endedAt: null, items: day ? day.items.map(sessionItemFromTemplate) : [], bw: bodyweightAt(now()),
   };
   persist('active');
   go('workout');
@@ -474,6 +562,7 @@ function render() {
     case 'history': html = vHistory(); break;
     case 'session': html = vSession(); break;
     case 'library': html = vLibrary(); break;
+    case 'progress': html = vProgress(); break;
     default: html = vToday();
   }
   app.innerHTML = html + (S.view === 'workout' ? '' : nav());
@@ -482,9 +571,9 @@ function render() {
   if (S.view === 'library') { const i = $('#libq'); if (i && S._libFocus) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
 }
 function nav() {
-  const tab = { today: 'today', plans: 'plans', plan: 'plans', history: 'history', session: 'history', library: 'library' }[S.view];
+  const tab = { today: 'today', plans: 'plans', plan: 'plans', history: 'history', session: 'history', library: 'library', progress: 'progress' }[S.view];
   const b = (v, icon, label) => `<button class="${tab === v ? 'on' : ''}" data-a="nav" data-v="${v}" aria-current="${tab === v ? 'page' : 'false'}">${I[icon]}${esc(t(label))}</button>`;
-  return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'home', 'today')}${b('plans', 'list', 'plans')}${b('history', 'clock', 'history')}${b('library', 'dumbbell', 'library')}</div></nav>`;
+  return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'home', 'today')}${b('plans', 'list', 'plans')}${b('progress', 'chart', 'progress')}${b('history', 'clock', 'history')}${b('library', 'dumbbell', 'library')}</div></nav>`;
 }
 function topbar(right = '') {
   return `<div class="topbar"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${right}<button class="icon-btn" data-a="settings" aria-label="${esc(t('settings'))}">${I.gear}</button></div></div>`;
@@ -597,6 +686,7 @@ function vWorkout() {
     return `<section class="ex-card" aria-label="${esc(exName(it.exId))}">
       <div class="eyebrow small">${n + 1} / ${a.items.length}</div>
       <div class="ex-name-row"><div class="ex-name">${esc(exName(it.exId))}</div><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></div>
+      ${hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
       <div class="chips">
         <button class="chip" data-a="scheme-info" data-i="${it.id}">${esc(it.scheme === 'topback' ? t('topback') : t('straight'))} ${I.info}</button>
         <button class="chip" data-a="subs" data-i="${it.id}">${I.swap} ${esc(t('subs'))}</button>
@@ -671,6 +761,186 @@ function vLibrary() {
     <div class="card" id="liblist">${exRows(list, 'ex-detail')}</div></main>`;
 }
 
+
+/* ---------- charts (single y-axis, thin marks, tap for value) ---------- */
+const CHARTS = {};
+function niceRange(lo, hi) {
+  if (lo === hi) { lo -= 1; hi += 1; }
+  const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
+  const step = Math.pow(10, Math.floor(Math.log10(hi - lo))) / 2;
+  return [Math.floor(lo / step) * step, Math.ceil(hi / step) * step];
+}
+function lineChart(id, { dots = [], line = [], unit = '', legend = null, connect = false }) {
+  const all = [...dots, ...line];
+  if (!all.length) return '';
+  const W = 340, H = 170, L = 44, R = 12, T = 12, B = 26;
+  const xs = all.map(p => p.x), ys = all.map(p => p.y);
+  let x0 = Math.min(...xs), x1 = Math.max(...xs); if (x0 === x1) { x0 -= 864e5; x1 += 864e5; }
+  const [y0, y1] = niceRange(Math.min(...ys), Math.max(...ys));
+  const X = x => L + (x - x0) / (x1 - x0) * (W - L - R), Y = y => T + (1 - (y - y0) / (y1 - y0)) * (H - T - B);
+  const ticks = [y0, (y0 + y1) / 2, y1];
+  const dfmt = ts => fmtDate(ts, { day: 'numeric', month: 'short' });
+  const grid = ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="cg"/><text x="${L - 6}" y="${(Y(v) + 4).toFixed(1)}" class="ct" text-anchor="end">${esc(fmtN(Math.round(v * 10) / 10))}</text>`).join('');
+  const path = pts => pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.x).toFixed(1)} ${Y(p.y).toFixed(1)}`).join(' ');
+  const lineSvg = line.length > 1 ? `<path d="${path(line)}" class="cl"/>` : connect && dots.length > 1 ? `<path d="${path(dots)}" class="cl"/>` : '';
+  const dotsSvg = dots.map((p, i) => `<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${i === dots.length - 1 && !line.length ? 5 : 3.5}" class="${line.length ? 'cd2' : 'cd'}"/>`).join('');
+  const lastL = line.length ? line[line.length - 1] : null;
+  const endSvg = lastL ? `<circle cx="${X(lastL.x).toFixed(1)}" cy="${Y(lastL.y).toFixed(1)}" r="5" class="cd"/>` : '';
+  const main = line.length ? line : dots;
+  CHARTS[id] = { pts: main, alt: line.length ? dots : null, X, Y, unit, W };
+  const xl = `<text x="${L}" y="${H - 6}" class="ct">${esc(dfmt(x0 + (Math.min(...xs) === Math.max(...xs) ? 864e5 : 0)))}</text><text x="${W - R}" y="${H - 6}" class="ct" text-anchor="end">${esc(dfmt(Math.max(...xs)))}</text>`;
+  const leg = legend ? `<div class="legend">${legend.map(l => `<span><i class="${l.cls}"></i>${esc(l.label)}</span>`).join('')}</div>` : '';
+  return `<figure class="chart">${leg}<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(legend ? legend.map(l => l.label).join(', ') : unit)}" data-a="chart-tap" data-v="${id}">
+    ${grid}${xl}${lineSvg}${dotsSvg}${endSvg}<line id="${id}-cur" class="cc" x1="0" x2="0" y1="${T}" y2="${H - B}" visibility="hidden"/></svg>
+    <figcaption class="tip" id="${id}-tip">${esc(t('tapHint'))}</figcaption></figure>`;
+}
+function chartTap(svg, ev) {
+  const c = CHARTS[svg.dataset.v]; if (!c || !c.pts.length) return;
+  const r = svg.getBoundingClientRect();
+  const x = (ev.clientX - r.left) / r.width * c.W;
+  let best = c.pts[0]; for (const p of c.pts) if (Math.abs(c.X(p.x) - x) < Math.abs(c.X(best.x) - x)) best = p;
+  const cur = $('#' + svg.dataset.v + '-cur');
+  if (cur) { cur.setAttribute('x1', c.X(best.x)); cur.setAttribute('x2', c.X(best.x)); cur.setAttribute('visibility', 'visible'); }
+  const tip = $('#' + svg.dataset.v + '-tip');
+  let txt = `${fmtDate(best.x, { day: 'numeric', month: 'short', year: 'numeric' })} · ${fmtN(Math.round(best.y * 10) / 10)} ${c.unit}`;
+  if (c.alt) { const a = c.alt.find(p => p.x === best.x); if (a) txt += ` · ${t('point')}: ${fmtN(a.y)} ${c.unit}`; }
+  if (best.label) txt += ` · ${best.label}`;
+  if (tip) tip.textContent = txt;
+}
+
+/* ---------- view: progress ---------- */
+function weekStart(ts) { const d = new Date(ts); const day = (d.getDay() + 6) % 7; d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - day); return d.getTime(); }
+function weeklyVolume(ws) {
+  const we = ws + 7 * 864e5, vol = {};
+  for (const s of S.sessions) {
+    if (s.startedAt < ws || s.startedAt >= we) continue;
+    for (const it of s.items) {
+      const ex = S.ex.get(it.exId); if (!ex) continue;
+      const n = it.sets.filter(x => x.done && x.kind !== 'warmup' && x.side !== 'R').length;
+      if (!n) continue;
+      ex.primary.forEach(m => { vol[m] = (vol[m] || 0) + n; });
+      ex.secondary.forEach(m => { vol[m] = (vol[m] || 0) + n * 0.5; });
+    }
+  }
+  return Object.entries(vol).sort((a, b) => b[1] - a[1]);
+}
+function progressExercises() {
+  const cnt = new Map();
+  for (const s of S.sessions) for (const it of s.items) {
+    const ex = S.ex.get(it.exId);
+    if (canPR(ex) && entriesFor(it.exId).length) cnt.set(it.exId, (cnt.get(it.exId) || 0) + 1);
+  }
+  return [...cnt.entries()].sort((a, b) => b[1] - a[1]).map(x => x[0]);
+}
+function vProgress() {
+  const pg = S.prog || (S.prog = { tab: 'strength', exId: null, week: 0, metric: 'weight' });
+  const seg = `<div class="seg" role="tablist"><button role="tab" aria-selected="${pg.tab === 'strength'}" class="${pg.tab === 'strength' ? 'on' : ''}" data-a="prog-tab" data-v="strength">${esc(t('strength'))}</button><button role="tab" aria-selected="${pg.tab === 'body'}" class="${pg.tab === 'body' ? 'on' : ''}" data-a="prog-tab" data-v="body">${esc(t('body'))}</button></div>`;
+  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('progress'))}</h1>${seg}${pg.tab === 'body' ? vBody() : vStrength()}</main>`;
+}
+function vStrength() {
+  const pg = S.prog;
+  if (!S.sessions.length) return `<div class="empty">${esc(t('noStrength'))}</div>`;
+  const exs = progressExercises();
+  if (!pg.exId || !exs.includes(pg.exId)) pg.exId = pg.exId && S.ex.get(pg.exId) && entriesFor(pg.exId).length ? pg.exId : exs[0] || null;
+  const L_ = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
+  let exBlock = '';
+  if (pg.exId) {
+    const ex = S.ex.get(pg.exId);
+    const series = e1rmSeries(pg.exId);
+    const best = series.length ? Math.max(...series.map(p => p.y)) : null;
+    const last = series.length ? series[series.length - 1].y : null;
+    const delta = series.length > 1 ? last - series[0].y : null;
+    const evs = prEvents(pg.exId).slice().reverse();
+    const chips = exs.slice(0, 8).map(id => `<button class="chip ${id === pg.exId ? 'on' : ''}" data-a="prog-ex" data-v="${esc(id)}">${esc(exName(id))}</button>`).join('');
+    exBlock = `
+      <div class="chips">${chips}<button class="chip" data-a="prog-ex-pick">${esc(t('otherExercise'))}</button></div>
+      <h2>${esc(exName(pg.exId))}</h2>
+      ${series.length ? `<div class="stat-row"><div class="stat"><div class="v">${esc(fmtN(Math.round(last * 10) / 10))}</div><div class="k">${esc(t('lastE1rm'))} kg</div></div><div class="stat"><div class="v">${esc(fmtN(Math.round(best * 10) / 10))}</div><div class="k">${esc(t('bestE1rmShort'))} kg</div></div><div class="stat"><div class="v">${delta == null ? '–' : (delta >= 0 ? '+' : '−') + esc(fmtN(Math.abs(Math.round(delta * 10) / 10)))}</div><div class="k">${esc(t('change'))} kg</div></div></div>
+      <div><label>${esc(t('e1rmChart'))}</label>${lineChart('c-e1rm', { dots: series, unit: 'kg', connect: true })}</div>` : ''}
+      ${ex.logging === 'BWX' && !S.measurements.some(m => num(m.weight) > 0) ? `<div class="muted small">${esc(t('bwMissing'))}</div>` : ''}
+      <div><label>${esc(t('prList'))}</label>${evs.length ? `<div class="card">${evs.slice(0, 20).map(e => `<div class="row"><span class="grow"><span class="name">${esc(fmtEntry(ex, e))}</span><br><span class="meta">${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></div>`).join('')}</div>` : `<div class="muted small">${esc(t('noPrYet'))}</div>`}</div>`;
+  }
+  const ws = weekStart(now()) - pg.week * 7 * 864e5;
+  const vol = weeklyVolume(ws);
+  const maxV = vol.length ? Math.max(...vol.map(v => v[1])) : 1;
+  const volBlock = `<div><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2>${esc(t('weeklyVolume'))}</h2>
+      <div class="chips"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('thisWeekS'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('lastWeekS'))}</button></div></div>
+    ${vol.length ? `<div class="vol">${vol.map(([m, v]) => `<div class="vol-row"><span class="vm">${esc(muscleName(m))}</span><span class="vb"><i style="width:${(v / maxV * 100).toFixed(1)}%"></i></span><span class="vv">${esc(fmtN(v))}</span></div>`).join('')}</div>` : `<div class="muted small">–</div>`}
+    <div class="muted small" style="margin-top:6px">${esc(t('volumeHint'))}</div></div>`;
+  const tl = allPrEvents().slice(0, 15);
+  const tlBlock = tl.length ? `<div><h2>${esc(t('prTimeline'))}</h2><div class="card">${tl.map(e => `<button class="list-btn row" data-a="prog-ex" data-v="${esc(e.exId)}"><span class="grow"><span class="name">${esc(exName(e.exId))}</span><br><span class="meta">${esc(fmtEntry(S.ex.get(e.exId), e))} · ${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></button>`).join('')}</div></div>` : '';
+  return exBlock + volBlock + tlBlock;
+}
+
+/* ---------- body measurements ---------- */
+const MFIELDS = ['weight', 'chest', 'waist', 'hips', 'arm', 'thigh', 'calf', 'bf'];
+const SIDED = { arm: ['armL', 'armR'], thigh: ['thighL', 'thighR'] };
+const mUnit = k => (k === 'weight' ? 'kg' : k === 'bf' ? '%' : 'cm');
+function metricKeys() {
+  const keys = [];
+  for (const f of MFIELDS) {
+    for (const k of [f, ...(SIDED[f] || [])]) if (S.measurements.some(m => num(m[k]) > 0)) keys.push(k);
+  }
+  return keys;
+}
+const metricSeries = k => S.measurements.filter(m => num(m[k]) > 0).map(m => ({ x: m.date, y: num(m[k]) })).sort((a, b) => a.x - b.x);
+function movingAvg(pts, days = 7) {
+  return pts.map(p => { const w = pts.filter(q => q.x <= p.x && q.x > p.x - days * 864e5); return { x: p.x, y: w.reduce((a, b) => a + b.y, 0) / w.length }; });
+}
+function deltaAt(pts, ts) { const prior = pts.filter(p => p.x <= ts); return prior.length ? prior[prior.length - 1] : null; }
+const fmtDelta = (d, u) => (d == null ? '–' : `${d > 0 ? '+' : d < 0 ? '−' : '±'}${fmtN(Math.abs(Math.round(d * 10) / 10))} ${u}`);
+function vBody() {
+  const pg = S.prog;
+  const add = `<button class="btn primary block" data-a="m-new">${esc(t('addMeasurement'))}</button>`;
+  if (!S.measurements.length) return `${add}<div class="empty">${esc(t('noBody'))}</div>${sidesToggle()}`;
+  const keys = metricKeys();
+  if (!keys.includes(pg.metric)) pg.metric = keys[0];
+  let chart = '';
+  const pts = metricSeries(pg.metric);
+  if (pg.metric === 'weight') {
+    const ma = movingAvg(pts);
+    const last = pts[pts.length - 1], lastMa = ma[ma.length - 1];
+    const prev = pts.length > 1 ? pts[pts.length - 2] : null;
+    const w4 = deltaAt(pts, last.x - 28 * 864e5);
+    chart = `<div class="stat-row"><div class="stat"><div class="v">${esc(fmtN(last.y))}</div><div class="k">${esc(t('weight'))} kg</div></div><div class="stat"><div class="v">${esc(fmtN(Math.round(lastMa.y * 10) / 10))}</div><div class="k">${esc(t('avg7'))}</div></div><div class="stat"><div class="v small-v">${esc(fmtDelta(prev ? last.y - prev.y : null, ''))}</div><div class="k">${esc(t('vsPrev'))}</div></div></div>
+      <div class="muted small">${esc(t('vs4w'))}: ${esc(fmtDelta(w4 ? lastMa.y - movingAvg(pts).find(p => p.x === w4.x).y : null, 'kg'))} · ${esc(t('vsStart'))}: ${esc(fmtDelta(last.y - pts[0].y, 'kg'))}</div>
+      ${lineChart('c-body', { dots: pts, line: ma, unit: 'kg', legend: [{ cls: 'lg-dot', label: t('point') }, { cls: 'lg-line', label: t('avg7') }] })}`;
+  } else {
+    chart = lineChart('c-body', { dots: pts, unit: mUnit(pg.metric), connect: true });
+  }
+  const chips = keys.map(k => `<button class="chip ${k === pg.metric ? 'on' : ''}" data-a="m-metric" data-v="${k}">${esc(t('m_' + k))}</button>`).join('');
+  const summary = keys.filter(k => k !== 'weight').map(k => { const p = metricSeries(k); const a = p[0], z = p[p.length - 1]; return `<div class="row"><span class="grow"><span class="name">${esc(t('m_' + k))}</span><br><span class="meta">${esc(fmtN(a.y))} → ${esc(fmtN(z.y))} ${mUnit(k)}</span></span><span class="meta">${esc(fmtDelta(z.y - a.y, mUnit(k)))}</span></div>`; }).join('');
+  const hist = [...S.measurements].sort((a, b) => b.date - a.date).map(m => `<button class="list-btn row" data-a="m-edit" data-v="${m.id}"><span class="grow"><span class="name">${esc(fmtDate(m.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))}</span><br><span class="meta">${esc(keys.filter(k => num(m[k]) > 0).map(k => `${t('m_' + k)} ${fmtN(num(m[k]))}`).join(' · '))}</span></span></button>`).join('');
+  return `${add}<div class="chips">${chips}</div>${chart}
+    ${summary ? `<div><label>${esc(t('startNow'))}</label><div class="card">${summary}</div></div>` : ''}
+    <div><label>${esc(t('measurements'))}</label><div class="card">${hist}</div></div>${sidesToggle()}`;
+}
+function sidesToggle() {
+  const sd = S.settings.sides || {};
+  return `<div><label>${esc(t('sidesToggle'))}</label><div class="chips">${['arm', 'thigh'].map(f => `<button class="chip ${sd[f] ? 'on' : ''}" data-a="m-sides" data-v="${f}" aria-pressed="${!!sd[f]}">${esc(t('m_' + f))}: ${esc(sd[f] ? t('left') + ' + ' + t('right') : t('oneSide'))}</button>`).join('')}</div></div>`;
+}
+function measureSheet(sh) {
+  const m = sh.draft; const sd = S.settings.sides || {};
+  const d = new Date(m.date); const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const field = (k, f) => `<div><label for="m-${k}">${esc(t('m_' + k))} (${mUnit(f)})</label><input id="m-${k}" data-f="m" data-k="${k}" inputmode="decimal" value="${esc(m[k] ?? '')}"></div>`;
+  const rows = MFIELDS.map(f => {
+    const ins = SIDED[f] && sd[f] ? `<div class="grid2">${SIDED[f].map(k => field(k, f)).join('')}</div>` : field(f, f);
+    return `<div class="mfield">${ins}<div class="muted small">${esc(t('h_' + f))}</div></div>`;
+  }).join('');
+  return `<div class="sheet-head"><h2>${esc(sh.editId ? t('editMeasurement') : t('addMeasurement'))}</h2><button class="icon-btn" data-a="sheet-close" aria-label="${esc(t('close'))}">${I.x}</button></div>
+    <div class="muted small">${esc(t('measureHint'))}</div>
+    <div><label for="m-date">${esc(t('date'))}</label><input id="m-date" type="date" value="${iso}"></div>
+    ${rows}
+    ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+    <div class="btn-row">${sh.editId ? `<button class="btn danger" data-a="m-del">${esc(t('deleteMeasurement'))}</button>` : ''}<button class="btn primary" data-a="m-save">${esc(t('save'))}</button></div>`;
+}
+function readMeasure() {
+  const d = S.sheet.draft;
+  document.querySelectorAll('[data-f="m"]').forEach(e => { d[e.dataset.k] = e.value.replace(',', '.').trim(); });
+  const dv = ($('#m-date') || {}).value;
+  if (dv) { const [y, mo, da] = dv.split('-').map(Number); const old = new Date(d.date); d.date = new Date(y, mo - 1, da, old.getHours(), old.getMinutes()).getTime(); }
+}
+
 /* ---------- sheets ---------- */
 function renderSheet() {
   let el = $('#sheet');
@@ -695,12 +965,14 @@ function renderSheet() {
       <div class="grid3">
         ${isTop ? '' : fld('it-sets', t('sets'), it.sets)}
         ${fld('it-reps', targetLabel(it.exId), it.reps, 'text')}
-        ${fld('it-rpe', t('rpe'), it.rpe ?? '')}
+        <div><label>${esc(t('rpe'))}</label><button class="rpe-btn block-btn ${it.rpe ? '' : 'ph'}" data-a="item-rpe" aria-label="RPE">${it.rpe ? esc(fmtN(it.rpe)) : '–'}</button></div>
         ${fld('it-warmups', t('warmups'), it.warmups)}
         ${fld('it-rest', t('rest'), it.rest)}
       </div>
       ${isTop ? `<div class="grid3">${fld('it-backoffSets', t('backoffSets'), it.backoffSets)}${fld('it-backoffReps', logOf(it.exId) === 'W' || logOf(it.exId) === 'BWX' ? t('backoffReps') : targetLabel(it.exId), it.backoffReps, 'text')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct)}</div>` : ''}
       <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
+  } else if (sh.type === 'measure') {
+    body = measureSheet(sh);
   } else if (sh.type === 'rename') {
     body = `${head(t('rename'))}<div><label for="rn">${esc(t('workoutName'))}</label><input id="rn" value="${esc(sh.name)}" maxlength="60"></div><button class="btn primary block" data-a="rename-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'summary') {
@@ -747,7 +1019,7 @@ function renderSheet() {
       ${e.secondary.length ? `<div><label>${esc(t('secondary'))}</label>${e.secondary.map(m => `<span class="tag">${esc(muscleName(m))}</span>`).join('')}</div>` : ''}
       <div class="grid2"><div><label>${esc(t('pattern'))}</label>${esc(patternName(e.pattern))}</div><div><label>${esc(t('equipment'))}</label>${esc(equipName(e.equipment))}</div><div><label>${esc(t('type'))}</label>${esc(t(e.type))}${e.unilateral ? ' · L/P' : ''}</div><div><label>${esc(t('logging'))}</label>${esc(t('log' + e.logging))}</div></div>
       <button class="note-box ${n && n.text ? '' : 'empty'}" data-a="note" data-v="${esc(e.id)}"><span class="lbl">${esc(t('note'))}</span>${n && n.text ? esc(n.text) : esc(t('notePh'))}</button>
-      ${e.logging === 'W' && !NO_PR.has(e.id) ? recordsBlock(e.id) : ''}
+      ${canPR(e) ? recordsBlock(e.id) : ''}
       ${subs.length ? `<div><label>${esc(t('subs'))}</label>${subs.map(c => `<span class="tag">${esc(exName(c.id))}</span>`).join('')}</div>` : ''}
       ${e.custom ? `<div class="btn-row"><button class="btn" data-a="custom-edit" data-v="${esc(e.id)}">${esc(t('edit'))}</button><button class="btn danger" data-a="custom-del" data-v="${esc(e.id)}">${esc(t('deleteExercise'))}</button></div>` : ''}`;
   } else if (sh.type === 'custom') {
@@ -783,11 +1055,13 @@ function renderSheet() {
   if (sh.type === 'picker' && sh._focus) { const i = $('#pickq'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
 }
 function recordsBlock(exId) {
+  const ex = S.ex.get(exId);
   const b = recordsFor(exId);
-  if (!b.w) return `<div><label>${esc(t('records'))}</label><div class="muted small">${esc(t('noRecords'))}</div></div>`;
+  const bwNote = ex.logging === 'BWX' && !S.measurements.some(m => num(m.weight) > 0) ? `<div class="muted small">${esc(t('bwMissing'))}</div>` : '';
+  if (!b.w) return `<div><label>${esc(t('records'))}</label><div class="muted small">${esc(t('noRecords'))}</div>${bwNote}</div>`;
   const d = ts => fmtDate(ts, { day: 'numeric', month: 'short', year: 'numeric' });
-  const row = (lbl, val, x) => `<div class="row"><span class="grow"><span class="name">${esc(val)}</span><br><span class="meta">${esc(lbl)} · ${esc(fmtN(num(x.set.weight)))}×${esc(x.set.reps)}${normRpe(x.set.rpe) ? ' @' + esc(fmtN(normRpe(x.set.rpe))) : ''}</span></span><span class="meta">${esc(d(x.at))}</span></div>`;
-  return `<div><label>${esc(t('records'))}</label><div class="card">${row(t('bestWeight'), fmtN(b.w.val) + ' kg', b.w)}${b.e ? row(t('bestE1rm'), fmtN(Math.round(b.e.val * 10) / 10) + ' kg', b.e) : ''}${row(t('bestVol'), fmtN(Math.round(b.v.val)) + ' kg', b.v)}</div><div class="muted small" style="margin-top:6px">${esc(t('prHint'))}</div></div>`;
+  const row = (lbl, val, x) => `<div class="row"><span class="grow"><span class="name">${esc(val)}</span><br><span class="meta">${esc(lbl)} · ${esc(fmtEntry(ex, x.entry))}</span></span><span class="meta">${esc(d(x.at))}</span></div>`;
+  return `<div><label>${esc(t('records'))}</label><div class="card">${row(t('bestWeight'), fmtN(b.w.val) + ' kg', b.w)}${b.e ? row(t('bestE1rm'), fmtN(Math.round(b.e.val * 10) / 10) + ' kg', b.e) : ''}${row(t('bestVol'), fmtN(Math.round(b.v.val)) + ' kg', b.v)}</div><div class="muted small" style="margin-top:6px">${esc(t('prHint'))}</div>${bwNote}</div>`;
 }
 function fld(id, label, val, type = 'num') {
   return `<div><label for="${id}">${esc(label)}</label><input id="${id}" data-f="${id}" ${type === 'num' ? 'inputmode="decimal"' : ''} value="${esc(val ?? '')}"></div>`;
@@ -865,6 +1139,7 @@ const A = {
     if (tg.kind === 'day') { const [, d] = tplDay(tg.dayId); const it = defaultItem(id); d.items.push(it); saveTemplates(); render(); openSheet({ type: 'item', dayId: d.id, item: clone(it) }); }
     else if (tg.kind === 'session') { S.active.items.push(freeItem(id)); saveActive(); closeSheet(); render(); setTimeout(() => { const c = document.querySelectorAll('.ex-card'); c[c.length - 1]?.scrollIntoView({ block: 'start' }); }, 30); }
     else if (tg.kind === 'swap') { doSwap(tg.itemId, id); }
+    else if (tg.kind === 'progress') { S.prog.tab = 'strength'; S.prog.exId = id; closeSheet(); render(); }
   },
   'pick-pat': el => { S.sheet.pat = el.dataset.v; S.sheet._focus = false; renderSheet(); },
   'lib-pat': el => { S.lib.pat = el.dataset.v; S._libFocus = false; render(); },
@@ -894,9 +1169,32 @@ const A = {
     saveActive(); render();
   },
   'del-set': el => { const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId); it.sets.splice(-(ex && ex.unilateral ? 2 : 1)); saveActive(); render(); },
+  'prog-tab': el => { S.prog.tab = el.dataset.v; render(); },
+  'prog-ex': el => { S.prog.tab = 'strength'; S.prog.exId = el.dataset.v; render(); window.scrollTo(0, 0); },
+  'prog-ex-pick': () => openSheet({ type: 'picker', target: { kind: 'progress' } }),
+  'prog-week': el => { S.prog.week = +el.dataset.v; render(); },
+  'chart-tap': (el, ev) => chartTap(el, ev),
+  'm-metric': el => { S.prog.metric = el.dataset.v; render(); },
+  'm-sides': el => { const f = el.dataset.v; S.settings.sides = { ...(S.settings.sides || {}), [f]: !(S.settings.sides || {})[f] }; persist('settings'); render(); },
+  'm-new': () => openSheet({ type: 'measure', draft: { date: now() } }),
+  'm-edit': el => { const m = S.measurements.find(x => x.id === el.dataset.v); openSheet({ type: 'measure', editId: m.id, draft: clone(m) }); },
+  'm-save': () => {
+    readMeasure();
+    const d = S.sheet.draft; const keys = [...MFIELDS, ...Object.values(SIDED).flat()];
+    const rec = { id: S.sheet.editId || uid(), date: d.date };
+    let any = false;
+    for (const k of keys) { const v = num(d[k]); if (v > 0) { rec[k] = v; any = true; } }
+    if (!any) { S.sheet.err = t('measureEmpty'); renderSheet(); return; }
+    if (S.sheet.editId) S.measurements = S.measurements.map(x => (x.id === rec.id ? rec : x)); else S.measurements.push(rec);
+    if (num(rec.weight) > 0) S.prog.metric = 'weight';
+    persist('measurements'); closeSheet(); toast(t('saved')); render();
+  },
+  'm-del': () => { const id = S.sheet.editId; ask(t('deleteMeasurement') + '?', () => { S.measurements = S.measurements.filter(x => x.id !== id); persist('measurements'); render(); }, { danger: true, yes: t('delete') }); },
   'rpe-table': () => openSheet({ type: 'rpeTable' }),
+  'item-rpe': () => { readItemFields(); const back = S.sheet; openSheet({ type: 'rpe', mode: 'item', back, cur: normRpe(back.item.rpe) }); },
   'rpe-open': el => { const it = findItem(el.dataset.i); const s = it.sets.find(x => x.id === el.dataset.s); openSheet({ type: 'rpe', itemId: it.id, setId: s.id, cur: normRpe(s.rpe) }); },
   'rpe-set': el => {
+    if (S.sheet.mode === 'item') { const back = S.sheet.back; back.item.rpe = el.dataset.v === '' ? null : normRpe(el.dataset.v); openSheet(back); return; }
     const it = findItem(S.sheet.itemId); const s = it && it.sets.find(x => x.id === S.sheet.setId);
     if (s) { s.rpe = el.dataset.v; if (s.done) s.pr = detectPR(it.exId, s); saveActive(); }
     closeSheet(); render();
@@ -1048,7 +1346,7 @@ function readSettingsFields() {
 }
 function backupObj() {
   return { app: 'repsmith', schema: SCHEMA, version: VERSION, exportedAt: new Date().toISOString(),
-    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active };
+    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements };
 }
 async function importBackup(text) {
   let o;
@@ -1056,7 +1354,7 @@ async function importBackup(text) {
   if (!o || o.app !== 'repsmith' || !Array.isArray(o.sessions)) { toast(t('importErr')); return; }
   ask(t('importQ'), async () => {
     S.settings = { ...S.settings, ...o.settings }; S.templates = o.templates || []; S.sessions = o.sessions || [];
-    S.notes = o.notes || {}; S.customExercises = o.customExercises || []; S.active = o.active || null;
+    S.notes = o.notes || {}; S.customExercises = o.customExercises || []; S.active = o.active || null; S.measurements = o.measurements || [];
     await persist(...KEYS); rebuildExercises(); toast(t('imported')); go('today');
   }, { yes: t('confirm') });
 }
@@ -1068,6 +1366,7 @@ document.addEventListener('click', ev => {
   const fn = A[el.dataset.a];
   if (!fn) return;
   if (el.dataset.a === 'scrim') { if (ev.target === el) closeSheet(); return; }
+  if (el.dataset.a === 'chart-tap') { chartTap(el, ev); return; }
   fn(el, ev);
 });
 document.addEventListener('input', ev => {
@@ -1125,7 +1424,7 @@ async function boot() {
   }
   if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch (e) {} }
 }
-window.Repsmith = { S, A, substitutes, e1rm, rpePct };
+window.Repsmith = { S, A, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt };
 boot().catch(err => {
   const pl = (navigator.language || 'pl').startsWith('pl');
   const app = document.getElementById('app');

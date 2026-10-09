@@ -223,3 +223,32 @@ table.rpe td { background: color-mix(in srgb, var(--accent) calc(var(--h) * 38%)
 .rpe-opt .d { flex: 1; font-size: 15px; }
 .rpe-opt svg { width: 22px; height: 22px; }
 .rpe-opt.on { border-color: var(--accent); }
+
+/* v0.5 */
+.nav button { font-size: 11px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
+.seg button { min-height: 44px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-weight: 600; font-size: 15px; }
+.seg button.on { background: var(--field); color: var(--text); }
+.chart { margin: 0; background: var(--surface); border-radius: 16px; padding: 12px 10px 10px; }
+.chart svg { width: 100%; height: auto; display: block; cursor: crosshair; touch-action: manipulation; }
+.chart .cg { stroke: var(--line); stroke-width: 1; }
+.chart .ct { fill: var(--muted); font-size: 11px; font-family: var(--body); font-variant-numeric: tabular-nums; }
+.chart .cl { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart .cd { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.chart .cd2 { fill: var(--muted); stroke: var(--surface); stroke-width: 1.5; opacity: .8; }
+.chart .cc { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.chart .tip { font-size: 13px; color: var(--muted); padding: 6px 4px 0; font-variant-numeric: tabular-nums; min-height: 24px; }
+.legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); padding: 0 4px 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; }
+.legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.legend .lg-line { width: 16px; height: 2px; background: var(--accent); border-radius: 1px; }
+.vol { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.vol-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) 44px; gap: 10px; align-items: center; font-size: 14px; }
+.vol-row .vm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vol-row .vb { height: 10px; background: var(--field); border-radius: 5px; overflow: hidden; }
+.vol-row .vb i { display: block; height: 100%; background: var(--accent); border-radius: 0 4px 4px 0; }
+.vol-row .vv { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.stat .v.small-v { font-size: 20px; }
+.mfield { display: flex; flex-direction: column; gap: 4px; }
+.block-btn { width: 100%; }
