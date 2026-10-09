@@ -14,6 +14,10 @@ Na podstawie blueprintów Adriana: progresja, objętość, plany z kreatorem.
 - **Sygnały**: stagnacja, regres, zmęczenie, słabe samopoczucie, podejrzany rekord, puste serie. Dwa w tygodniu → propozycja deloadu (dla XL zejście planu niżej).
 - **Objętość**: ciężkie serie z ostatnich 7 dni, strefy 4 / 10 / 20, ostrzeżenia o za dużej liczbie serii na jednym treningu, licznik serii w edytorze planu.
 
+## v0.6.1 – zrobione
+- Serie łączone (pary, trisety, giant sety): w planie i w trakcie treningu. Menu "Seria łączona…" albo przytrzymanie ćwiczenia, potem dotknięcie kolejnych. Przerwa dopiero po rundzie, czas treningu liczony bez przerw w środku.
+- Poprawki układu: biblioteka planów (zawijanie tekstu), formularz serii kalibracyjnej.
+
 ## Teraz: v0.6.x – feedback od znajomych
 Wysłać aplikację znajomym z siłowni, zebrać uwagi. Feedback może zmienić priorytety.
 

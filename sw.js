@@ -1,5 +1,5 @@
 /* Repsmith service worker: app shell offline, network-first for the shell so updates arrive. */
-const CACHE = 'repsmith-v0.6.0';
+const CACHE = 'repsmith-v0.6.1';
 const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'bodymap.js', 'plans.js', 'coach.js', 'data/exercises.json', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
 

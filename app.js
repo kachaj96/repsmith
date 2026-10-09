@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.6.0';
+const VERSION = '0.6.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -195,7 +195,7 @@ Object.assign(STR.pl, {
   addonDropped: 'Blok dodatkowy pominięty: któraś partia przekroczyłaby 20 serii tygodniowo.', addonAdded: m => `Blok +${m} min dodany do dwóch treningów.`,
   effortLbl: 'Ocena wysiłku', effort_rir: 'RIR / RPE', effort_rir_cap: 'RPE max 8', effort_fixed: 'Ciężar z aplikacji',
   m4Title: 'Które ćwiczenia bolą? Usuń maksymalnie 2.', planCreated: 'Plan gotowy i ustawiony jako aktywny',
-  planLib: 'Biblioteka planów', pickPlanWizard: 'Dobierz plan', perWeek: n => `${n}× w tygodniu`,
+  planLib: 'Biblioteka planów', pickPlanWizard: 'Dobierz plan', perWeek: n => `${n}× w tygodniu`, supLink: 'Połącz z następnym', supUnlink: 'Rozłącz z serii łączonej', supPick: 'Wybierz ćwiczenia do połączenia', supTag: 'seria łączona', supHint: n => n < 2 ? 'Dotknij kolejnych ćwiczeń, które chcesz połączyć' : `Wybrane: ${n}. Dotknij kolejne lub połącz`, supDo: 'Połącz', supBtn: 'Seria łączona',
   forLbl: 'Dla kogo', designLbl: 'Jak działa', deloadPlanLbl: 'Bloki i deload', warningLbl: 'Uwaga', notesLbl: 'Dlaczego tak',
   seeDetails: 'Zobacz rozpiskę', hideDetails: 'Ukryj rozpiskę', allGoals: 'Wszystkie',
   heroTitle: 'Dobierz plan w 2 minuty', heroText: '12 krótkich pytań: cel, dni, czas, sprzęt. Dostajesz gotowy plan, a aplikacja prowadzi progresję za Ciebie.',
@@ -263,7 +263,7 @@ Object.assign(STR.en, {
   addonDropped: 'Add-on block skipped: a muscle would go above 20 weekly sets.', addonAdded: m => `+${m} min block added to two sessions.`,
   effortLbl: 'Effort rating', effort_rir: 'RIR / RPE', effort_rir_cap: 'RPE max 8', effort_fixed: 'App sets the load',
   m4Title: 'Which exercises hurt? Remove up to 2.', planCreated: 'Plan ready and set as active',
-  planLib: 'Plan library', pickPlanWizard: 'Find a plan', perWeek: n => `${n}× per week`,
+  planLib: 'Plan library', pickPlanWizard: 'Find a plan', perWeek: n => `${n}× per week`, supLink: 'Link with next', supUnlink: 'Remove from superset', supPick: 'Pick exercises to link', supTag: 'superset', supHint: n => n < 2 ? 'Tap the other exercises you want to link' : `Selected: ${n}. Tap more or link`, supDo: 'Link', supBtn: 'Superset',
   forLbl: 'Who it is for', designLbl: 'How it works', deloadPlanLbl: 'Blocks and deload', warningLbl: 'Warning', notesLbl: 'Why this',
   seeDetails: 'Show the plan', hideDetails: 'Hide the plan', allGoals: 'All',
   heroTitle: 'Find a plan in 2 minutes', heroText: '12 short questions: goal, days, time, equipment. You get a ready plan and the app runs the progression for you.',
@@ -313,6 +313,7 @@ const L = () => (S.settings.lang === 'en' ? 1 : 0);
 
 /* ---------- icons ---------- */
 const I = {
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>',
   list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>',
   clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
@@ -566,6 +567,7 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   const sig = `${method || ''}|${it.reps}|${it.scheme}`;
   const out = { id: uid(), exId: it.exId, scheme: it.scheme, rest: it.rest, backoffPct: it.backoffPct || S.settings.backoffPct, sets,
     method, kind, reps: it.reps, rpe, rpeMax: it.rpeMax ?? null, sig, tplItemId: it.id || null };
+  if (it.group) out.group = it.group;
   const cues = [...(mods.cues || [])];
   if (it.cue) cues.unshift(tx(it.cue));
   if (ctx.effort === 'rir_cap' && kind === 'main') cues.push(t('stopCue'));
@@ -865,13 +867,14 @@ function vPlan() {
         <div style="flex:1;min-width:0"><label for="dn-${d.id}">${esc(t('dayName'))}</label><input id="dn-${d.id}" data-f="day-name" data-d="${d.id}" value="${esc(d.name)}"></div>
         <button class="icon-btn" data-a="day-menu" data-d="${d.id}" aria-label="${esc(t('edit'))}">${I.more}</button>
       </div>
-      ${d.items.length ? d.items.map((it, ii) => `<div class="row"><button class="list-btn grow" style="padding:8px 0" data-a="edit-item" data-d="${d.id}" data-i="${it.id}"><span class="grow"><span class="name">${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it))} · ${it.rest} s${C.methodOf(it) ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
+      ${d.items.length ? d.items.map((it, ii) => { const g = groupInfo(d.items)[it.id]; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it))} · ${it.rest} s${C.methodOf(it) ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
         <button class="icon-btn" data-a="item-up" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('moveUp'))}" ${ii === 0 ? 'disabled' : ''}>${I.up}</button>
-        <button class="icon-btn" data-a="item-del" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('remove'))}">${I.x}</button></div>`).join('') : `<div class="muted small">${esc(t('planEmptyDay'))}</div>`}
+        <button class="icon-btn" data-a="item-link" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('supBtn'))}">${I.link}</button>
+        <button class="icon-btn" data-a="item-del" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('remove'))}">${I.x}</button></div>`; }).join('') : `<div class="muted small">${esc(t('planEmptyDay'))}</div>`}
       <button class="btn small" data-a="day-add-ex" data-d="${d.id}">${esc(t('addExercise'))}</button>
     </section>`).join('');
   const isActive = tp.id === S.settings.activeTemplateId;
-  return `<main class="screen"><div class="topbar"><button class="icon-btn" data-a="nav" data-v="plans" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('plans'))}</div><button class="icon-btn" data-a="plan-menu" aria-label="${esc(t('edit'))}">${I.more}</button></div>
+  return `<main class="screen">${linkBar()}<div class="topbar"><button class="icon-btn" data-a="nav" data-v="plans" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('plans'))}</div><button class="icon-btn" data-a="plan-menu" aria-label="${esc(t('edit'))}">${I.more}</button></div>
     <div><label for="pn">${esc(t('planName'))}</label><input id="pn" data-f="plan-name" value="${esc(tp.name)}"></div>
     ${isActive ? `<div><span class="tag p">${esc(t('active'))}</span></div>` : `<button class="btn block" data-a="plan-activate">${esc(t('setActive'))}</button>`}
     ${planCoachBlock(tp)}
@@ -933,15 +936,82 @@ function canCalib(it) {
   if (it.sets.some(s => s.kind === 'calib')) return false;
   return !S.calib.some(c => c.exId === it.exId && c.at > now() - 42 * 864e5);
 }
+
+/* ---------- supersets (v0.6.1) ---------- */
+function groupInfo(items) {
+  const out = {}; const order = [];
+  items.forEach(it => { if (it.group && !order.includes(it.group)) order.push(it.group); });
+  order.forEach((g, gi) => {
+    const mem = items.filter(x => x.group === g);
+    mem.forEach((x, k) => { out[x.id] = { g, pos: k, size: mem.length, label: String.fromCharCode(65 + gi) + (k + 1), first: k === 0, last: k === mem.length - 1 }; });
+  });
+  return out;
+}
+function normGroups(items) {
+  // runs of the same group must be contiguous; a run of one is no group
+  let i = 0;
+  const seen = new Set();
+  while (i < items.length) {
+    const g = items[i].group;
+    if (!g) { i++; continue; }
+    let j = i; while (j < items.length && items[j].group === g) j++;
+    if (seen.has(g)) { const ng = uid(); for (let k = i; k < j; k++) items[k].group = ng; }
+    seen.add(items[i].group);
+    if (j - i < 2) delete items[i].group;
+    i = j;
+  }
+}
+function linkItems(items, ids) {
+  const sel = new Set(ids);
+  items.forEach(x => { if (x.group && ids.includes(x.id)) items.forEach(y => { if (y.group === x.group) sel.add(y.id); }); });
+  const picked = items.filter(x => sel.has(x.id));
+  if (picked.length < 2) return;
+  const g = picked.find(x => x.group)?.group || uid();
+  const at = items.findIndex(x => sel.has(x.id));
+  const rest = items.filter(x => !sel.has(x.id));
+  picked.forEach(x => { x.group = g; });
+  rest.splice(at, 0, ...picked);
+  items.splice(0, items.length, ...rest);
+  normGroups(items);
+}
+function unlinkItem(items, id) {
+  const it = items.find(x => x.id === id); if (!it) return;
+  delete it.group; normGroups(items);
+}
+function groupMenu(items, it, afterSave) {
+  const i = items.indexOf(it); const nx = items[i + 1];
+  const opts = [];
+  if (nx && !(it.group && nx.group === it.group)) opts.push({ id: 'lnk', label: t('supLink') });
+  opts.push({ id: 'pick', label: t('supPick') });
+  if (it.group) opts.push({ id: 'unl', label: t('supUnlink') });
+  const where = S.view === 'workout' ? 'session' : 'plan';
+  const dayId = where === 'plan' ? (S.viewArg && S.templates.find(tp => tp.id === S.viewArg)?.days.find(d => d.items === items)?.id) : null;
+  openSheet({ type: 'menu', title: exName(it.exId), items: opts, handlers: {
+    lnk: () => { linkItems(items, [it.id, nx.id]); afterSave(); render(); },
+    pick: () => { S.link = { where, dayId, ids: [it.id] }; render(); },
+    unl: () => { unlinkItem(items, it.id); afterSave(); render(); } } });
+}
+function linkItemsOf() {
+  const L = S.link; if (!L) return null;
+  if (L.where === 'session') return S.active ? S.active.items : null;
+  const tp = S.templates.find(x => x.id === S.viewArg); const d = tp && tp.days.find(x => x.id === L.dayId);
+  return d ? d.items : null;
+}
+function linkBar() {
+  const L = S.link; if (!L) return '';
+  return `<div class="link-bar"><div class="grow">${esc(t('supHint', L.ids.length))}</div><button class="btn small primary" data-a="link-go" ${L.ids.length < 2 ? 'disabled' : ''}>${esc(t('supDo'))}</button><button class="btn small ghost" data-a="link-cancel">${esc(t('cancel'))}</button></div>`;
+}
 function vWorkout() {
   const a = S.active;
   if (!a) return vToday();
+  const gi = groupInfo(a.items); const L = S.link && S.link.where === 'session' ? S.link : null;
   const cards = a.items.map((it, n) => {
     const ex = S.ex.get(it.exId);
     const note = S.notes[it.exId];
-    return `<section class="ex-card" aria-label="${esc(exName(it.exId))}">
-      <div class="eyebrow small">${n + 1} / ${a.items.length}</div>
-      <div class="ex-name-row"><div class="ex-name">${esc(exName(it.exId))}</div><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></div>
+    const g = gi[it.id];
+    return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
+      <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}</div>
+      <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></div>
       ${hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
       ${sugLine(it)}
       ${it.cues && it.cues.length ? `<div class="cues">${it.cues.map(c => `<div>${esc(c)}</div>`).join('')}</div>` : ''}
@@ -956,7 +1026,7 @@ function vWorkout() {
       <div class="set-actions"><button class="btn small" data-a="add-set" data-i="${it.id}">${esc(t('addSet'))}</button>${it.sets.length ? `<button class="btn small ghost" data-a="del-set" data-i="${it.id}">${esc(t('removeSet'))}</button>` : ''}</div>
     </section>`;
   }).join('');
-  return `<main class="screen workout">
+  return `<main class="screen workout">${linkBar()}
     <div class="wk-head"><button class="icon-btn" data-a="nav" data-v="today" aria-label="${esc(t('back'))}">${I.down}</button>
       <div class="wk-title"><button class="t" data-a="rename" style="background:none;border:0;padding:0;max-width:100%" aria-label="${esc(t('rename'))}">${esc(a.name)} <span class="muted" aria-hidden="true">✎</span></button><div class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</div></div>
       <button class="btn small ghost" style="color:var(--accent)" data-a="finish">${esc(t('finish'))}</button></div>
@@ -1127,7 +1197,7 @@ function vPlanLib() {
   return `<main class="screen">${topbar()}<h1 class="mid">${esc(t('planLib'))}</h1>
     <button class="btn primary block" data-a="wiz-start">${esc(t('pickPlanWizard'))}</button>
     <div class="chips"><button class="chip ${!st.goal ? 'on' : ''}" data-a="plib-goal" data-v="">${esc(t('allGoals'))}</button>${goals.map(g => `<button class="chip ${st.goal === g ? 'on' : ''}" data-a="plib-goal" data-v="${g}">${esc(goalName(g))}</button>`).join('')}</div>
-    <div class="card">${list.map(p => { const ms = p.sessions.map(s => Math.round(C.sessionMinutes(s.items))); return `<button class="list-btn row" data-a="plib-open" data-v="${p.id}"><span class="grow"><span class="name">${esc(planName(p))}</span><br><span class="meta">${esc(t('perWeek', p.perWeek))} · ${esc(t('estMin', Math.min(...ms) === Math.max(...ms) ? ms[0] : Math.min(...ms) + '-' + Math.max(...ms)))}</span><br><span class="meta">${esc(tx(p.for))}</span></span></button>`; }).join('')}</div></main>`;
+    <div class="card">${list.map(p => { const ms = p.sessions.map(s => Math.round(C.sessionMinutes(s.items))); return `<button class="list-btn row" data-a="plib-open" data-v="${p.id}"><span class="grow"><span class="name">${esc(planName(p))}</span><span class="meta">${esc(t('perWeek', p.perWeek))} · ${esc(t('estMin', Math.min(...ms) === Math.max(...ms) ? ms[0] : Math.min(...ms) + '-' + Math.max(...ms)))}</span><span class="meta">${esc(tx(p.for))}</span></span></button>`; }).join('')}</div></main>`;
 }
 function vPlanPrev() {
   const plan = window.RepsmithCoach.planById(S.viewArg);
@@ -1454,7 +1524,7 @@ function renderSheet() {
       ${sh.res ? `<div class="info sel"><h3>${esc(t('calibRes', sh.res.err))}</h3><div>${esc(t('calib_' + sh.res.mode))}</div></div>
         ${S.active && S.active.templateId ? `<button class="btn primary block" data-a="calib-apply" data-v="${sh.res.mode}">${esc(t('calibApply', t('effort_' + sh.res.mode)))}</button>` : ''}
         <button class="btn block" data-a="sheet-close">${esc(t('close'))}</button>`
-      : `<div class="grid3">${fld('cw', t('calibW'), sh.w ?? '')}${fld('cg', t('calibGuess'), sh.g ?? '')}${fld('ct', t('calibTotal'), sh.tot ?? '')}</div>
+      : `<div class="grid3 calib">${fld('cw', t('calibW'), sh.w ?? '')}${fld('cg', t('calibGuess'), sh.g ?? '')}${fld('ct', t('calibTotal'), sh.tot ?? '')}</div>
         ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
         <button class="btn primary block" data-a="calib-save">${esc(t('calibSave'))}</button>`}`;
   } else if (sh.type === 'measure') {
@@ -1630,8 +1700,12 @@ const A = {
   },
   'day-add-ex': el => openSheet({ type: 'picker', target: { kind: 'day', dayId: el.dataset.d } }),
   'edit-item': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); openSheet({ type: 'item', dayId: d.id, item: clone(it) }); },
-  'item-up': el => { const [, d] = tplDay(el.dataset.d); const i = d.items.findIndex(x => x.id === el.dataset.i); if (i > 0) { const [x] = d.items.splice(i, 1); d.items.splice(i - 1, 0, x); saveTemplates(); render(); } },
-  'item-del': el => { const [, d] = tplDay(el.dataset.d); d.items = d.items.filter(x => x.id !== el.dataset.i); saveTemplates(); render(); },
+  'item-up': el => { const [, d] = tplDay(el.dataset.d); const i = d.items.findIndex(x => x.id === el.dataset.i); if (i > 0) { const [x] = d.items.splice(i, 1); d.items.splice(i - 1, 0, x); normGroups(d.items); saveTemplates(); render(); } },
+  'item-link': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); groupMenu(d.items, it, saveTemplates); },
+  'link-toggle': el => { const L = S.link; if (!L) return; const k = L.ids.indexOf(el.dataset.i); if (k >= 0) L.ids.splice(k, 1); else L.ids.push(el.dataset.i); render(); },
+  'link-cancel': () => { S.link = null; render(); },
+  'link-go': () => { const items = linkItemsOf(); const w = S.link && S.link.where; if (items) linkItems(items, S.link.ids); S.link = null; if (w === 'session') saveActive(); else saveTemplates(); render(); },
+  'item-del': el => { const [, d] = tplDay(el.dataset.d); d.items = d.items.filter(x => x.id !== el.dataset.i); normGroups(d.items); saveTemplates(); render(); },
   'item-scheme': el => { readItemFields(); S.sheet.item.scheme = el.dataset.v; renderSheet(); },
   'item-method': el => {
     readItemFields(); const it = S.sheet.item; const m = el.dataset.v;
@@ -1670,9 +1744,14 @@ const A = {
       s.pr = detectPR(it.exId, s); S._justDone = s.id;
       if (s.pr.length) toast(`${t('prNew')}: ${prLabel(s.pr)}`);
       ensureAudio();
-      startTimer(it.rest || S.settings.restI);
+      const items = S.active.items, ix = items.indexOf(it), sIdx = it.sets.indexOf(s);
+      const later = it.group ? items.slice(ix + 1).filter(x => x.group === it.group) : [];
+      const wait = later.some(x => x.sets.length > sIdx);
+      if (!wait) startTimer(it.rest || S.settings.restI);
+      else { const nx = later.find(x => x.sets.length > sIdx); S._focusNext = { i: nx.id, s: nx.sets[sIdx].id }; }
     } else { s.done = false; s.pr = []; }
     saveActive(); render();
+    if (S._focusNext) { const f = S._focusNext; S._focusNext = null; setTimeout(() => { const inp = document.querySelector(`input[data-f="set"][data-i="${f.i}"][data-s="${f.s}"]`); if (inp && !inp.value) { try { inp.focus({ preventScroll: false }); } catch (e) {} } }, 60); }
   },
   'add-set': el => {
     const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId);
@@ -1772,12 +1851,14 @@ const A = {
   'item-menu': el => {
     const it = findItem(el.dataset.i); const i = S.active.items.indexOf(it);
     openSheet({ type: 'menu', title: exName(it.exId), items: [
+      { id: 'grp', label: t('supBtn') + '…' },
       ...(i > 0 ? [{ id: 'up', label: t('moveUp') }] : []), ...(i < S.active.items.length - 1 ? [{ id: 'down', label: t('moveDown') }] : []),
       { id: 'del', label: t('remove'), danger: true }],
       handlers: {
-        up: () => { S.active.items.splice(i, 1); S.active.items.splice(i - 1, 0, it); saveActive(); render(); },
-        down: () => { S.active.items.splice(i, 1); S.active.items.splice(i + 1, 0, it); saveActive(); render(); },
-        del: () => { S.active.items = S.active.items.filter(x => x !== it); saveActive(); render(); },
+        grp: () => groupMenu(S.active.items, it, saveActive),
+        up: () => { S.active.items.splice(i, 1); S.active.items.splice(i - 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
+        down: () => { S.active.items.splice(i, 1); S.active.items.splice(i + 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
+        del: () => { S.active.items = S.active.items.filter(x => x !== it); normGroups(S.active.items); saveActive(); render(); },
       } });
   },
   'timer-adj': el => adjustTimer(+el.dataset.v),
@@ -2020,6 +2101,26 @@ async function importBackup(text) {
 }
 
 /* ---------- events ---------- */
+(function () {
+  let tm = null, sx = 0, sy = 0;
+  const clear = () => { clearTimeout(tm); tm = null; };
+  document.addEventListener('pointerdown', ev => {
+    S._swallow = 0;
+    const el = ev.target.closest('[data-lp]'); if (!el || S.link || ev.target.closest('.icon-btn')) return;
+    sx = ev.clientX; sy = ev.clientY; clear();
+    tm = setTimeout(() => {
+      tm = null; const items = S.view === 'workout' ? (S.active && S.active.items) : null;
+      const where = S.view === 'workout' ? 'session' : S.view === 'plan' ? 'plan' : null; if (!where) return;
+      S.link = { where, dayId: el.dataset.lpd || null, ids: [el.dataset.lp] }; S._swallow = Date.now();
+      try { navigator.vibrate && navigator.vibrate(30); } catch (e) {}
+      render();
+    }, 550);
+  });
+  document.addEventListener('pointermove', ev => { if (tm && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) clear(); });
+  ['pointerup', 'pointercancel', 'scroll'].forEach(n => document.addEventListener(n, clear, true));
+  document.addEventListener('contextmenu', ev => { if (ev.target.closest('[data-lp]')) ev.preventDefault(); });
+  document.addEventListener('click', ev => { if (S._swallow && Date.now() - S._swallow < 700) { ev.stopPropagation(); ev.preventDefault(); S._swallow = 0; } }, true);
+})();
 document.addEventListener('click', ev => {
   const el = ev.target.closest('[data-a]');
   if (!el) return;

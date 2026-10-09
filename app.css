@@ -346,3 +346,27 @@ table.rpe td { background: color-mix(in srgb, var(--accent) calc(var(--h) * 38%)
 .btn-row[style*="column"] > .btn { flex: none; }
 .rpe-list.feel .rpe-opt { flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 14px; }
 .rpe-list.feel .rpe-opt .n { width: auto; font-size: 22px; }
+
+/* v0.6.1: long text in list rows wraps, page never scrolls sideways */
+.list-btn.row .grow .meta { display: block; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
+.list-btn.row .grow .meta + .meta { margin-top: 2px; }
+.list-btn { min-width: 0; max-width: 100%; }
+.card, .info, .sub-opt, .opt { min-width: 0; overflow-wrap: anywhere; }
+main.screen { overflow-x: clip; }
+.chips { max-width: 100%; }
+
+/* calibration form: label left, input right, rows align */
+.grid3.calib { grid-template-columns: 1fr; gap: 10px; }
+.grid3.calib > div { display: grid; grid-template-columns: minmax(0,1fr) 110px; align-items: center; gap: 12px; }
+.grid3.calib label { margin: 0; font-size: 15px; }
+
+/* supersets */
+.ex-card.grp { border-left: 3px solid var(--accent); padding-left: 12px; margin-left: -2px; }
+.ex-card.grp:not(.g-first) { border-top-color: transparent; }
+.gtag { display: inline-block; font-weight: 700; color: var(--accent); }
+.row.grp { border-left: 3px solid var(--accent); padding-left: 10px; }
+.lsel { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.link-bar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--accent); border-radius: 14px; padding: 10px 12px; font-size: 14px; }
+[data-lp] { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.ex-name.lk { background: none; border: 0; padding: 0; text-align: left; color: inherit; font: inherit; }
+.ex-name[hidden] { display: none; }

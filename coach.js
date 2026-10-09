@@ -11,7 +11,11 @@ const CAPS = { t1: 60, t2: 75, t3: 90, t4: 120 };
 const TRIM_ALLOWANCE = 8;
 const GOAL_OF = { g_strength: 'Heavy', g_size: 'Size', g_both: 'Mix', g_new: 'Start', g_keep: 'Keep' };
 const nsets = e => (e.scheme === 'topback' ? 1 + (e.backoffSets || 0) : e.sets || 0);
-const sessionMinutes = items => (items.some(e => e.kind === 'main') ? 10 : 8) + items.reduce((a, e) => a + nsets(e) * (PER_SET[e.kind] || PER_SET.comp), 0);
+const sessionMinutes = items => (items.some(e => e.kind === 'main') ? 10 : 8) + items.reduce((a, e, i) => {
+  const per = PER_SET[e.kind] || PER_SET.comp;
+  const linked = e.group && items[i + 1] && items[i + 1].group === e.group; // no rest before the next exercise of a superset
+  return a + nsets(e) * (linked ? Math.max(1, per - Math.min(per - 1, (e.rest || 90) / 60)) : per);
+}, 0);
 const estMax = p => Math.max(...p.sessions.map(s => sessionMinutes(s.items)));
 const planById = id => DATA.plans.find(p => p.id === id) || null;
 
