@@ -2851,6 +2851,55 @@
    "type": "compound",
    "unilateral": false,
    "logging": "W"
+  },
+  {
+   "id": "split-squat",
+   "name_en": "Split Squat",
+   "name_pl": "Przysiad w wykroku",
+   "pattern": "SINGLE",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-hip-thrust",
+   "name_en": "Dumbbell Hip Thrust",
+   "name_pl": "Hip thrust z hantlem",
+   "pattern": "HIPEXT",
+   "primary": [
+    "GL"
+   ],
+   "secondary": [
+    "HAM"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "slider-leg-curl",
+   "name_en": "Slider Leg Curl",
+   "name_pl": "Uginanie nóg na ślizgach",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [
+    "GL"
+   ],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
   }
  ]
 }
