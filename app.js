@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.5.7';
+const VERSION = '0.5.8';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -199,6 +199,10 @@ const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now().
 const now = () => Date.now();
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const num = v => { if (v === '' || v == null) return null; const n = parseFloat(String(v).replace(',', '.')); return Number.isFinite(n) ? n : null; };
+// input hygiene: no spaces anywhere, reps are whole numbers, weights take at most one separator (',' or '.')
+const cleanInt = v => String(v).replace(/\D/g, '');
+const cleanDec = v => { const s = String(v).replace(/[^\d.,]/g, ''); const m = s.search(/[.,]/); return m < 0 ? s : s.slice(0, m + 1) + s.slice(m + 1).replace(/[.,]/g, ''); };
+const cleanField = (k, v) => k === 'reps' ? cleanInt(v) : cleanDec(v);
 const fmtN = n => (n == null ? '' : (Math.round(n * 100) / 100).toString().replace('.', S.settings.lang === 'pl' ? ',' : '.'));
 const roundTo = (w, step) => Math.round(w / step) * step;
 const fmtDur = ms => { const s = Math.max(0, Math.floor(ms / 1000)); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return h ? `${h}:${String(m).padStart(2, '0')}:${String(x).padStart(2, '0')}` : `${m}:${String(x).padStart(2, '0')}`; };
@@ -682,7 +686,7 @@ function setGrid(it) {
     const phRpe = s.target && s.target.rpe ? fmtN(s.target.rpe) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
     const kindLbl = { warmup: t('warmup'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff') }[s.kind];
     const side = s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '';
-    const f = (field, val, ph, cls = '') => `<input class="${cls}" inputmode="decimal" enterkeyhint="next" aria-label="${esc(field)}" data-f="set" data-i="${it.id}" data-s="${s.id}" data-k="${field}" value="${esc(val)}" placeholder="${esc(ph)}">`;
+    const f = (field, val, ph, cls = '') => `<input class="${cls}" inputmode="${field === 'reps' ? 'numeric' : 'decimal'}" autocomplete="off" enterkeyhint="next" aria-label="${esc(field)}" data-f="set" data-i="${it.id}" data-s="${s.id}" data-k="${field}" value="${esc(val)}" placeholder="${esc(ph)}">`;
     let a, b;
     if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
     else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
@@ -975,7 +979,7 @@ function measureSheet(sh) {
 }
 function readMeasure() {
   const d = S.sheet.draft;
-  document.querySelectorAll('[data-f="m"]').forEach(e => { d[e.dataset.k] = e.value.replace(',', '.').trim(); });
+  document.querySelectorAll('[data-f="m"]').forEach(e => { d[e.dataset.k] = cleanDec(e.value).replace(',', '.'); });
   const dv = ($('#m-date') || {}).value;
   if (dv) { const [y, mo, da] = dv.split('-').map(Number); const old = new Date(d.date); d.date = new Date(y, mo - 1, da, old.getHours(), old.getMinutes()).getTime(); }
 }
@@ -1443,9 +1447,12 @@ document.addEventListener('click', ev => {
 document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
+  if (f === 'm') { const cv = cleanDec(el.value); if (cv !== el.value) el.value = cv; return; }
   if (f === 'set') {
     const it = findItem(el.dataset.i); if (!it) return;
-    const s = it.sets.find(x => x.id === el.dataset.s); s[el.dataset.k] = el.value.replace(',', '.');
+    const s = it.sets.find(x => x.id === el.dataset.s);
+    const cv = cleanField(el.dataset.k, el.value); if (cv !== el.value) el.value = cv;
+    s[el.dataset.k] = cv.replace(',', '.');
     clearTimeout(S._saveT); S._saveT = setTimeout(saveActive, 400);
   } else if (f === 'lib-q') {
     S.lib.q = el.value; const list = filteredExercises(S.lib.q, S.lib.pat, S.lib.mus); const l = $('#liblist'); if (l) l.innerHTML = exRows(list, 'ex-detail');
