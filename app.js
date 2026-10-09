@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.1.0';
+const VERSION = '0.3.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -51,6 +51,18 @@ const STR = {
     lastDone: 'Ostatnio', never: 'jeszcze nie', version: 'Wersja', dataLocal: 'Dane zapisane lokalnie',
     storageOff: 'Zapis w pamięci przeglądarki jest niedostępny. Dane znikną po zamknięciu.',
     bodyweight: 'masa ciała', exampleNote: '',
+    targetDist: 'Dystans (m)', targetTime: 'Czas (s)', rename: 'Zmień nazwę', workoutName: 'Nazwa treningu',
+    summary: 'Podsumowanie', difficulty: 'Jak ciężko było? (1–10)', difficultyShort: 'Ciężkość',
+    summaryNote: 'Notatka do treningu', summaryNotePh: 'Jak poszło, samopoczucie, sen, co poprawić następnym razem.',
+    saveWorkout: 'Zapisz trening', unchecked: n => `Niezaznaczone serie (${n}) nie zapiszą się.`,
+    prW: 'ciężar', prE: 'e1RM', prV: 'objętość serii', records: 'Rekordy', prNew: 'Nowy rekord',
+    bestWeight: 'Najcięższa seria', bestE1rm: 'Najlepszy e1RM', bestVol: 'Największa objętość serii',
+    noRecords: 'Rekordy pojawią się po pierwszym treningu z tym ćwiczeniem.', editSummary: 'Edytuj podsumowanie',
+    noPlansYet: 'Nie masz jeszcze żadnego planu. Utwórz pierwszy i dodaj do niego dni treningowe.',
+    prHint: 'PR liczy się względem wszystkich wcześniejszych serii tego ćwiczenia. e1RM z tabeli RPE Tuchscherera (1–12 powt.).',
+    rpeHints: { 10: 'maks, nic w zapasie', 9.5: 'może 1 powt. więcej, ciężaru już nie', 9: '1 powt. w zapasie', 8.5: '1–2 powt. w zapasie', 8: '2 powt. w zapasie', 7.5: '2–3 powt. w zapasie', 7: '3 powt. w zapasie, szybki ciężar', 6.5: '3–4 powt. w zapasie', low: '4+ powt. w zapasie, lekko' },
+    rpeHintEmpty: 'RPE = ile powtórzeń zostało w zapasie. 10 = nic, 8 = dwa.',
+    rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS). Z niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
     today: 'Today', plans: 'Plans', history: 'History', library: 'Exercises',
@@ -96,6 +108,18 @@ const STR = {
     lastDone: 'Last', never: 'not yet', version: 'Version', dataLocal: 'Data stored locally',
     storageOff: 'Browser storage is unavailable. Data will be lost when you close the app.',
     bodyweight: 'bodyweight', exampleNote: '',
+    targetDist: 'Distance (m)', targetTime: 'Time (s)', rename: 'Rename', workoutName: 'Workout name',
+    summary: 'Summary', difficulty: 'How hard was it? (1–10)', difficultyShort: 'Difficulty',
+    summaryNote: 'Workout note', summaryNotePh: 'How it went, energy, sleep, what to change next time.',
+    saveWorkout: 'Save workout', unchecked: n => `Unchecked sets (${n}) will not be saved.`,
+    prW: 'weight', prE: 'e1RM', prV: 'set volume', records: 'Records', prNew: 'New record',
+    bestWeight: 'Heaviest set', bestE1rm: 'Best e1RM', bestVol: 'Biggest set volume',
+    noRecords: 'Records show up after your first workout with this exercise.', editSummary: 'Edit summary',
+    noPlansYet: 'No plans yet. Create your first one and add training days to it.',
+    prHint: 'A PR counts against every earlier set of this exercise. e1RM uses Tuchscherer’s RPE table (1–12 reps).',
+    rpeHints: { 10: 'max, nothing left', 9.5: 'maybe 1 more rep, no more weight', 9: '1 rep left', 8.5: '1–2 reps left', 8: '2 reps left', 7.5: '2–3 reps left', 7: '3 reps left, bar moves fast', 6.5: '3–4 reps left', low: '4+ reps left, easy' },
+    rpeHintEmpty: 'RPE = reps left in the tank. 10 = none, 8 = two.',
+    rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS). The app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
 function plural(n, one, few, many) {
@@ -192,7 +216,93 @@ const isVisible = e => !e.hidden;
 function defaultItem(exId) {
   const e = S.ex.get(exId);
   const compound = e && e.type === 'compound';
-  return { id: uid(), exId, scheme: 'straight', warmups: 0, sets: 3, reps: compound ? '6-8' : '10-12', rpe: compound ? 8 : 9, backoffSets: 2, backoffReps: '', backoffPct: S.settings.backoffPct, rest: compound ? S.settings.restC : S.settings.restI };
+  const log = e ? e.logging : 'W';
+  const reps = log === 'T' ? '30' : log === 'WD' ? '30' : compound ? '6-8' : '10-12';
+  return { id: uid(), exId, scheme: 'straight', warmups: 0, sets: 3, reps, rpe: log === 'T' || log === 'WD' ? null : compound ? 8 : 9, backoffSets: 2, backoffReps: '', backoffPct: S.settings.backoffPct, rest: compound ? S.settings.restC : S.settings.restI };
+}
+const logOf = exId => (S.ex.get(exId) || { logging: 'W' }).logging;
+const targetLabel = exId => ({ T: t('targetTime'), WD: t('targetDist') }[logOf(exId)] || t('repsTarget'));
+const targetUnit = exId => ({ T: ' s', WD: ' m' }[logOf(exId)] || '');
+
+/* ---------- personal records ---------- */
+/* Mike Tuchscherer (RTS) RPE table: % of 1RM, rows RPE 10..6.5, columns 1..12 reps */
+const RPE_TABLE = {
+  10:  [100, 95.5, 92.2, 89.2, 86.3, 83.7, 81.1, 78.6, 76.2, 73.9, 70.7, 68.0],
+  9.5: [97.8, 93.9, 90.7, 87.8, 85.0, 82.4, 79.9, 77.4, 75.1, 72.3, 69.4, 66.7],
+  9:   [95.5, 92.2, 89.2, 86.3, 83.7, 81.1, 78.6, 76.2, 73.9, 70.7, 68.0, 65.3],
+  8.5: [93.9, 90.7, 87.8, 85.0, 82.4, 79.9, 77.4, 75.1, 72.3, 69.4, 66.7, 64.0],
+  8:   [92.2, 89.2, 86.3, 83.7, 81.1, 78.6, 76.2, 73.9, 70.7, 68.0, 65.3, 62.6],
+  7.5: [90.7, 87.8, 85.0, 82.4, 79.9, 77.4, 75.1, 72.3, 69.4, 66.7, 64.0, 61.3],
+  7:   [89.2, 86.3, 83.7, 81.1, 78.6, 76.2, 73.9, 70.7, 68.0, 65.3, 62.6, 59.9],
+  6.5: [87.8, 85.0, 82.4, 79.9, 77.4, 75.1, 72.3, 69.4, 66.7, 64.0, 61.3, 58.6],
+};
+const normRpe = v => { const n = num(v); if (n == null || n < 1 || n > 10) return null; return Math.round(n * 2) / 2; };
+/* % of 1RM; missing RPE = 10, RPE under 6.5 = 6.5; null outside 1-12 reps */
+function rpePct(reps, rpe) {
+  const r = Math.round(num(reps));
+  if (!(r >= 1 && r <= 12)) return null;
+  let q = normRpe(rpe); if (q == null) q = 10; if (q < 6.5) q = 6.5;
+  return RPE_TABLE[q][r - 1];
+}
+const e1rm = (w, r, rpe) => { const p = rpePct(r, rpe); return p ? w / (p / 100) : null; };
+/* best e1RM from the most recent finished workout with this exercise */
+function lastE1rm(exId, beforeTs) {
+  const ex = S.ex.get(exId);
+  const ses = S.sessions.filter(x => x.startedAt < beforeTs && x.items.some(i => i.exId === exId)).sort((a, b) => b.startedAt - a.startedAt)[0];
+  if (!ses) return null;
+  let best = null;
+  for (const it of ses.items) if (it.exId === exId) for (const x of it.sets) {
+    if (!x.done || !prEligible(ex, x)) continue;
+    const e = e1rm(num(x.weight), num(x.reps), x.rpe); if (e && (!best || e > best)) best = e;
+  }
+  return best;
+}
+const NO_PR = new Set(['assisted-pull-up']); // assistance weight: lower is harder
+function prEligible(ex, set) {
+  return ex && ex.logging === 'W' && !NO_PR.has(ex.id) && set.kind !== 'warmup' && num(set.weight) > 0 && num(set.reps) > 0;
+}
+function priorSets(exId, beforeTs, skipSetId) {
+  const out = [];
+  for (const ses of S.sessions) {
+    if (ses.startedAt >= beforeTs) continue;
+    for (const it of ses.items) if (it.exId === exId) for (const x of it.sets) if (x.done) out.push(x);
+  }
+  if (S.active && S.active.startedAt <= beforeTs) {
+    for (const it of S.active.items) if (it.exId === exId) for (const x of it.sets) if (x.done && x.id !== skipSetId && (x.doneAt || 0) < beforeTs) out.push(x);
+  }
+  return out;
+}
+function detectPR(exId, set) {
+  const ex = S.ex.get(exId);
+  if (!prEligible(ex, set)) return [];
+  // no PRs until the exercise has history from an earlier workout: first session only sets the baseline
+  const hasHistory = S.sessions.some(ses => ses.startedAt < (set.doneAt || now()) && ses.items.some(it => it.exId === exId && it.sets.some(x => x.done && prEligible(ex, x))));
+  if (!hasHistory) return [];
+  const prev = priorSets(exId, set.doneAt || now(), set.id).filter(x => prEligible(ex, x));
+  if (!prev.length) return [];
+  const w = num(set.weight), r = num(set.reps);
+  const maxW = Math.max(...prev.map(x => num(x.weight)));
+  const maxV = Math.max(...prev.map(x => num(x.weight) * num(x.reps)));
+  const eP = prev.map(x => e1rm(num(x.weight), num(x.reps), x.rpe)).filter(Boolean);
+  const eNow = e1rm(w, r, set.rpe);
+  const out = [];
+  if (w > maxW) out.push('w');
+  if (eNow && eP.length && eNow > Math.max(...eP) + 0.01) out.push('e');
+  if (w * r > maxV) out.push('v');
+  return out;
+}
+const prLabel = codes => codes.map(c => t({ w: 'prW', e: 'prE', v: 'prV' }[c])).join(' · ');
+function recordsFor(exId) {
+  const ex = S.ex.get(exId);
+  const best = { w: null, e: null, v: null };
+  const ses = [...S.sessions].sort((a, b) => a.startedAt - b.startedAt);
+  for (const s of ses) for (const it of s.items) if (it.exId === exId) for (const x of it.sets) {
+    if (!x.done || !prEligible(ex, x)) continue;
+    const w = num(x.weight), r = num(x.reps);
+    const cand = { w, e: e1rm(w, r, x.rpe), v: w * r };
+    for (const k of ['w', 'e', 'v']) if (cand[k] != null && (!best[k] || cand[k] > best[k].val)) best[k] = { val: cand[k], set: x, at: s.startedAt };
+  }
+  return best;
 }
 function newSet(kind, side, target) { return { id: uid(), kind, side: side || null, weight: '', reps: '', rpe: '', time: '', dist: '', done: false, target: target || null }; }
 function pushSets(arr, ex, kind, count, target) {
@@ -409,15 +519,16 @@ function vToday() {
   return `<main class="screen">${topbar()}${resumeBanner()}${main}${week}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
 }
 function schemeShort(it) {
-  if (it.scheme === 'topback') return `top ${it.reps}${it.rpe ? ' @' + fmtN(it.rpe) : ''} + ${it.backoffSets}×${it.backoffReps || it.reps}`;
-  return `${it.sets} × ${it.reps}${it.rpe ? ' @' + fmtN(it.rpe) : ''}`;
+  const u = targetUnit(it.exId);
+  if (it.scheme === 'topback') return `top ${it.reps}${u}${it.rpe ? ' @' + fmtN(it.rpe) : ''} + ${it.backoffSets}×${it.backoffReps || it.reps}${u}`;
+  return `${it.sets} × ${it.reps}${u}${it.rpe ? ' @' + fmtN(it.rpe) : ''}`;
 }
 
 /* ---------- view: plans ---------- */
 function vPlans() {
   const list = S.templates.map(tp => `<button class="list-btn row" data-a="open-plan" data-v="${tp.id}"><span class="grow"><span class="name">${esc(tp.name)}</span><br><span class="meta">${tp.days.length} × ${esc(t('day').toLowerCase())}</span></span>${tp.id === S.settings.activeTemplateId ? `<span class="tag p">${esc(t('active'))}</span>` : ''}</button>`).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('plans'))}</h1>
-    ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noPlanText'))}</div>`}
+    ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noPlansYet'))}</div>`}
     <button class="btn primary block" data-a="new-plan">${esc(t('newPlan'))}</button></main>`;
 }
 function vPlan() {
@@ -452,21 +563,26 @@ function setGrid(it) {
   const c2 = log === 'T' ? t('time') : log === 'BWX' ? t('plusKg') : t('kg');
   const c3 = log === 'T' ? '' : log === 'WD' ? t('dist') : t('reps');
   const topDone = it.sets.find(s => s.kind === 'top' && s.done && num(s.weight));
+  const lastE = log === 'W' ? lastE1rm(it.exId, S.active.startedAt) : null;
   const rows = it.sets.map((s, idx) => {
     const p = matchPrev(prevItem, it, idx);
     let phW = p ? fmtN(num(p.weight)) : '';
-    let phR = p ? (p.reps || '') : (s.target && s.target.reps ? String(s.target.reps).split('-')[0] : '');
+    const tgt = s.target && s.target.reps ? String(s.target.reps).split('-')[0] : '';
+    if (lastE && s.kind !== 'warmup' && s.kind !== 'backoff' && s.target && normRpe(s.target.rpe) && rpePct(tgt, s.target.rpe)) {
+      phW = fmtN(roundTo(lastE * rpePct(tgt, s.target.rpe) / 100, S.settings.increment));
+    }
+    let phR = p ? (p.reps || '') : tgt;
     if (s.kind === 'backoff' && topDone) phW = fmtN(roundTo(num(topDone.weight) * (it.backoffPct || 90) / 100, S.settings.increment));
     const phRpe = s.target && s.target.rpe ? fmtN(s.target.rpe) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
     const kindLbl = { warmup: t('warmup'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff') }[s.kind];
     const side = s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '';
     const f = (field, val, ph, cls = '') => `<input class="${cls}" inputmode="decimal" enterkeyhint="next" aria-label="${esc(field)}" data-f="set" data-i="${it.id}" data-s="${s.id}" data-k="${field}" value="${esc(val)}" placeholder="${esc(ph)}">`;
     let a, b;
-    if (log === 'T') { a = f('time', s.time, p ? p.time || '' : ''); b = '<span></span>'; }
-    else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : ''); }
+    if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
+    else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
     return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.done ? 'done' : ''}">
-      <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}</span>
+      <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
       <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}${f('rpe', s.rpe, phRpe, 'rpe')}
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
@@ -493,7 +609,7 @@ function vWorkout() {
   }).join('');
   return `<main class="screen workout">
     <div class="wk-head"><button class="icon-btn" data-a="nav" data-v="today" aria-label="${esc(t('back'))}">${I.down}</button>
-      <div class="wk-title"><div class="t">${esc(a.name)}</div><div class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</div></div>
+      <div class="wk-title"><button class="t" data-a="rename" style="background:none;border:0;padding:0;max-width:100%" aria-label="${esc(t('rename'))}">${esc(a.name)} <span class="muted" aria-hidden="true">✎</span></button><div class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</div></div>
       <button class="btn small ghost" style="color:var(--accent)" data-a="finish">${esc(t('finish'))}</button></div>
     ${cards || `<div class="empty">${esc(t('addExercise'))}</div>`}
     <div class="workout-foot"><button class="btn block" data-a="session-add-ex">${esc(t('addExercise'))}</button>
@@ -506,7 +622,8 @@ function vWorkout() {
 function vHistory() {
   const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(s => {
     const st = sessionStats(s);
-    return `<button class="list-btn row" data-a="open-session" data-v="${s.id}"><span class="grow"><span class="name">${esc(s.name)}</span><br><span class="meta">${esc(fmtDate(s.startedAt, { weekday: 'short', day: 'numeric', month: 'short' }))} · ${esc(fmtDur(s.endedAt - s.startedAt))} · ${st.sets} ${esc(t('setsDone').toLowerCase())}</span></span><span class="meta">${st.vol ? st.vol.toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'pl-PL') + ' kg' : ''}</span></button>`;
+    const prs = s.items.reduce((n, it) => n + it.sets.filter(x => x.pr && x.pr.length).length, 0);
+    return `<button class="list-btn row" data-a="open-session" data-v="${s.id}"><span class="grow"><span class="name">${esc(s.name)}</span><br><span class="meta">${esc(fmtDate(s.startedAt, { weekday: 'short', day: 'numeric', month: 'short' }))} · ${esc(fmtDur(s.endedAt - s.startedAt))} · ${st.sets} ${esc(t('setsDone').toLowerCase())}${prs ? ` · <span class="pr-badge">PR ${prs}</span>` : ''}</span></span>${s.difficulty ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${s.difficulty}/10">${s.difficulty}<small>/10</small></span>` : ''}</button>`;
   }).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`}</main>`;
 }
@@ -516,13 +633,16 @@ function vSession() {
   const st = sessionStats(s);
   const items = s.items.map(it => {
     const ex = S.ex.get(it.exId);
-    const sets = it.sets.filter(x => x.done).map(x => `<span class="tag ${x.kind === 'top' ? 'p' : ''}">${esc(fmtSet(x, ex))}${x.side ? ' ' + esc(x.side === 'L' ? t('left') : t('right')) : ''}${num(x.rpe) ? ' @' + fmtN(num(x.rpe)) : ''}</span>`).join('');
-    return `<div class="row" style="flex-direction:column;align-items:flex-start;padding:10px 0;gap:4px"><span class="name">${esc(exName(it.exId))}</span><div>${sets || '<span class="muted small">–</span>'}</div></div>`;
+    const sets = it.sets.filter(x => x.done).map(x => `<span class="tag ${x.kind === 'top' ? 'p' : ''}">${esc(fmtSet(x, ex))}${x.side ? ' ' + esc(x.side === 'L' ? t('left') : t('right')) : ''}${num(x.rpe) ? ' @' + fmtN(num(x.rpe)) : ''}${x.pr && x.pr.length ? ` <span class="pr-badge" title="${esc(prLabel(x.pr))}">PR</span>` : ''}</span>`).join('');
+    const prNote = it.sets.filter(x => x.pr && x.pr.length).map(x => `${fmtSet(x, ex)}: ${prLabel(x.pr)}`).join(' · ');
+    return `<div class="row" style="flex-direction:column;align-items:flex-start;padding:10px 0;gap:4px"><span class="name">${esc(exName(it.exId))}</span><div>${sets || '<span class="muted small">–</span>'}</div>${prNote ? `<div class="small" style="color:var(--accent)">PR · ${esc(prNote)}</div>` : ''}</div>`;
   }).join('');
   return `<main class="screen"><div class="topbar"><button class="icon-btn" data-a="nav" data-v="history" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(fmtDate(s.startedAt))}</div><span style="width:44px"></span></div>
     <h1 class="mid">${esc(s.name)}</h1>
     <div class="stat-row"><div class="stat"><div class="v">${esc(fmtDur(s.endedAt - s.startedAt))}</div><div class="k">${esc(t('duration'))}</div></div><div class="stat"><div class="v">${st.sets}</div><div class="k">${esc(t('setsDone'))}</div></div><div class="stat"><div class="v">${st.vol.toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'pl-PL')}</div><div class="k">${esc(t('volume'))} kg</div></div></div>
+    ${s.difficulty || s.note ? `<div class="info">${s.difficulty ? `<div style="display:flex;align-items:baseline;gap:10px"><span class="diff-badge">${s.difficulty}<small>/10</small></span><span class="muted small">${esc(t('difficultyShort'))}</span></div>` : ''}${s.note ? `<div style="white-space:pre-wrap">${esc(s.note)}</div>` : ''}</div>` : ''}
     <div class="card">${items}</div>
+    <button class="btn block" data-a="summary-edit" data-v="${s.id}">${esc(t('editSummary'))}</button>
     <button class="btn danger block" data-a="session-del" data-v="${s.id}">${esc(t('deleteSession'))}</button></main>`;
 }
 
@@ -574,15 +694,29 @@ function renderSheet() {
       <div class="info"><h3>${esc(isTop ? t('topback') : t('straight'))}</h3><div>${esc(isTop ? t('topbackInfo') : t('straightInfo'))}</div></div>
       <div class="grid3">
         ${isTop ? '' : fld('it-sets', t('sets'), it.sets)}
-        ${fld('it-reps', t('repsTarget'), it.reps, 'text')}
+        ${fld('it-reps', targetLabel(it.exId), it.reps, 'text')}
         ${fld('it-rpe', t('rpe'), it.rpe ?? '')}
         ${fld('it-warmups', t('warmups'), it.warmups)}
         ${fld('it-rest', t('rest'), it.rest)}
       </div>
-      ${isTop ? `<div class="grid3">${fld('it-backoffSets', t('backoffSets'), it.backoffSets)}${fld('it-backoffReps', t('backoffReps'), it.backoffReps, 'text')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct)}</div>` : ''}
+      ${isTop ? `<div class="grid3">${fld('it-backoffSets', t('backoffSets'), it.backoffSets)}${fld('it-backoffReps', logOf(it.exId) === 'W' || logOf(it.exId) === 'BWX' ? t('backoffReps') : targetLabel(it.exId), it.backoffReps, 'text')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct)}</div>` : ''}
       <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
+  } else if (sh.type === 'rename') {
+    body = `${head(t('rename'))}<div><label for="rn">${esc(t('workoutName'))}</label><input id="rn" value="${esc(sh.name)}" maxlength="60"></div><button class="btn primary block" data-a="rename-save">${esc(t('save'))}</button>`;
+  } else if (sh.type === 'summary') {
+    body = `${head(sh.mode === 'finish' ? t('finishWorkout') : t('editSummary'))}
+      <div><label for="sum-name">${esc(t('workoutName'))}</label><input id="sum-name" value="${esc(sh.name)}" maxlength="60"></div>
+      <div><label>${esc(t('difficulty'))}</label><div class="diff" role="group" aria-label="${esc(t('difficulty'))}">${Array.from({ length: 10 }, (_, i) => i + 1).map(v => `<button class="${sh.difficulty === v ? 'on' : ''}" data-a="diff-pick" data-v="${v}" aria-pressed="${sh.difficulty === v}">${v}</button>`).join('')}</div></div>
+      <div><label for="sum-note">${esc(t('summaryNote'))}</label><textarea id="sum-note" rows="3" placeholder="${esc(t('summaryNotePh'))}">${esc(sh.note)}</textarea></div>
+      ${sh.left ? `<div class="muted small">${esc(t('unchecked', sh.left))}</div>` : ''}
+      <button class="btn primary block" data-a="summary-save">${esc(sh.mode === 'finish' ? t('saveWorkout') : t('save'))}</button>`;
   } else if (sh.type === 'schemeInfo') {
-    body = `${head(t('whySchemes'))}<div class="info ${sh.cur === 'straight' ? 'sel' : ''}"><h3>${esc(t('straight'))}</h3><div>${esc(t('straightInfo'))}</div></div><div class="info ${sh.cur === 'topback' ? 'sel' : ''}"><h3>${esc(t('topback'))}</h3><div>${esc(t('topbackInfo'))}</div></div>`;
+    body = `${head(t('whySchemes'))}<div class="info ${sh.cur === 'straight' ? 'sel' : ''}"><h3>${esc(t('straight'))}</h3><div>${esc(t('straightInfo'))}</div></div><div class="info ${sh.cur === 'topback' ? 'sel' : ''}"><h3>${esc(t('topback'))}</h3><div>${esc(t('topbackInfo'))}</div></div><button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>`;
+  } else if (sh.type === 'rpeTable') {
+    const rows = Object.keys(RPE_TABLE).map(Number).sort((a, b) => b - a);
+    body = `${head(t('rpeTable'))}<div class="muted small">${esc(t('rpeTableInfo'))}</div>
+      <div class="rpe-wrap"><table class="rpe"><thead><tr><th scope="col">RPE</th>${Array.from({ length: 12 }, (_, i) => `<th scope="col">${i + 1}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(r => `<tr><th scope="row">${fmtN(r)}</th>${RPE_TABLE[r].map(v => `<td style="--h:${((v - 58) / 42).toFixed(2)}">${fmtN(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
   } else if (sh.type === 'subs') {
     const it = S.active && S.active.items.find(x => x.id === sh.itemId);
     const opts = it ? substitutes(it.exId) : [];
@@ -607,6 +741,7 @@ function renderSheet() {
       ${e.secondary.length ? `<div><label>${esc(t('secondary'))}</label>${e.secondary.map(m => `<span class="tag">${esc(muscleName(m))}</span>`).join('')}</div>` : ''}
       <div class="grid2"><div><label>${esc(t('pattern'))}</label>${esc(patternName(e.pattern))}</div><div><label>${esc(t('equipment'))}</label>${esc(equipName(e.equipment))}</div><div><label>${esc(t('type'))}</label>${esc(t(e.type))}${e.unilateral ? ' · L/P' : ''}</div><div><label>${esc(t('logging'))}</label>${esc(t('log' + e.logging))}</div></div>
       <button class="note-box ${n && n.text ? '' : 'empty'}" data-a="note" data-v="${esc(e.id)}"><span class="lbl">${esc(t('note'))}</span>${n && n.text ? esc(n.text) : esc(t('notePh'))}</button>
+      ${e.logging === 'W' && !NO_PR.has(e.id) ? recordsBlock(e.id) : ''}
       ${subs.length ? `<div><label>${esc(t('subs'))}</label>${subs.map(c => `<span class="tag">${esc(exName(c.id))}</span>`).join('')}</div>` : ''}
       ${e.custom ? `<div class="btn-row"><button class="btn" data-a="custom-edit" data-v="${esc(e.id)}">${esc(t('edit'))}</button><button class="btn danger" data-a="custom-del" data-v="${esc(e.id)}">${esc(t('deleteExercise'))}</button></div>` : ''}`;
   } else if (sh.type === 'custom') {
@@ -631,14 +766,22 @@ function renderSheet() {
       <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
       <div class="grid2">${fld('st-restC', t('defaultRestC'), st.restC)}${fld('st-restI', t('defaultRestI'), st.restI)}${fld('st-increment', t('increment'), fmtN(st.increment))}${fld('st-backoffPct', t('defaultBackoff'), st.backoffPct)}</div>
       <h2 style="font-size:20px;margin-top:6px">${esc(t('backup'))}</h2><div class="muted small">${esc(t('backupInfo'))}</div>
-      <button class="btn block" data-a="export">${esc(t('exportBtn'))}</button>
+      ${window.REPSMITH_DATA ? '' : `<button class="btn block" data-a="export">${esc(t('exportBtn'))}</button>`}
       <button class="btn block" data-a="export-copy">${esc(t('copyBtn'))}</button>
+      <button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>
       <label class="btn block" for="importfile" style="margin:0;color:var(--text);font-size:16px">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
       <div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div>`;
   }
   el.innerHTML = `<div class="scrim" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
   document.body.style.overflow = 'hidden';
   if (sh.type === 'picker' && sh._focus) { const i = $('#pickq'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
+}
+function recordsBlock(exId) {
+  const b = recordsFor(exId);
+  if (!b.w) return `<div><label>${esc(t('records'))}</label><div class="muted small">${esc(t('noRecords'))}</div></div>`;
+  const d = ts => fmtDate(ts, { day: 'numeric', month: 'short', year: 'numeric' });
+  const row = (lbl, val, x) => `<div class="row"><span class="grow"><span class="name">${esc(val)}</span><br><span class="meta">${esc(lbl)} · ${esc(fmtN(num(x.set.weight)))}×${esc(x.set.reps)}${normRpe(x.set.rpe) ? ' @' + esc(fmtN(normRpe(x.set.rpe))) : ''}</span></span><span class="meta">${esc(d(x.at))}</span></div>`;
+  return `<div><label>${esc(t('records'))}</label><div class="card">${row(t('bestWeight'), fmtN(b.w.val) + ' kg', b.w)}${b.e ? row(t('bestE1rm'), fmtN(Math.round(b.e.val * 10) / 10) + ' kg', b.e) : ''}${row(t('bestVol'), fmtN(Math.round(b.v.val)) + ' kg', b.v)}</div><div class="muted small" style="margin-top:6px">${esc(t('prHint'))}</div></div>`;
 }
 function fld(id, label, val, type = 'num') {
   return `<div><label for="${id}">${esc(label)}</label><input id="${id}" data-f="${id}" ${type === 'num' ? 'inputmode="decimal"' : ''} value="${esc(val ?? '')}"></div>`;
@@ -729,9 +872,12 @@ const A = {
       // take placeholders as values when fields are empty
       row.querySelectorAll('input').forEach(inp => { if (inp.dataset.k !== 'rpe' && inp.value === '' && inp.placeholder) { s[inp.dataset.k] = inp.placeholder.replace(',', '.'); } });
       s.done = true; s.doneAt = now();
+      if (s.rpe !== '' && s.rpe != null) { const q = normRpe(s.rpe); s.rpe = q == null ? '' : String(q); }
+      s.pr = detectPR(it.exId, s);
+      if (s.pr.length) toast(`${t('prNew')}: ${prLabel(s.pr)}`);
       ensureAudio();
       startTimer(it.rest || S.settings.restI);
-    } else { s.done = false; }
+    } else { s.done = false; s.pr = []; }
     saveActive(); render();
   },
   'add-set': el => {
@@ -742,6 +888,7 @@ const A = {
     saveActive(); render();
   },
   'del-set': el => { const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId); it.sets.splice(-(ex && ex.unilateral ? 2 : 1)); saveActive(); render(); },
+  'rpe-table': () => openSheet({ type: 'rpeTable' }),
   'scheme-info': el => { const it = findItem(el.dataset.i); openSheet({ type: 'schemeInfo', cur: it.scheme }); },
   subs: el => openSheet({ type: 'subs', itemId: el.dataset.i }),
   'do-sub': el => doSwap(S.sheet.itemId, el.dataset.v),
@@ -764,16 +911,30 @@ const A = {
   'timer-skip': () => stopTimer(),
   finish: () => {
     const left = S.active.items.reduce((n, it) => n + it.sets.filter(s => !s.done).length, 0);
-    ask(t('finishQ', left), () => {
+    openSheet({ type: 'summary', mode: 'finish', left, name: S.active.name, difficulty: S.active.difficulty || null, note: S.active.note || '' });
+  },
+  rename: () => openSheet({ type: 'rename', name: S.active.name }),
+  'rename-save': () => { const v = $('#rn').value.trim(); if (v) { S.active.name = v; saveActive(); } closeSheet(); render(); },
+  'diff-pick': el => { readSummaryFields(); S.sheet.difficulty = +el.dataset.v === S.sheet.difficulty ? null : +el.dataset.v; renderSheet(); },
+  'summary-save': () => {
+    readSummaryFields();
+    const sh = S.sheet;
+    if (sh.mode === 'finish') {
       const s = clone(S.active); s.endedAt = now();
+      s.name = sh.name || s.name; s.difficulty = sh.difficulty; s.note = sh.note;
       s.items = s.items.map(it => ({ ...it, sets: it.sets.filter(x => x.done) })).filter(it => it.sets.length);
       if (s.items.length) S.sessions.push(s);
       S.active = null; S.timer = null;
       persist('sessions', 'active');
       toast(t('workoutSaved'));
       go(s.items.length ? 'session' : 'today', s.id);
-    }, { yes: t('finish') });
+    } else {
+      const s = S.sessions.find(x => x.id === sh.sessionId);
+      s.name = sh.name || s.name; s.difficulty = sh.difficulty; s.note = sh.note;
+      persist('sessions'); closeSheet(); render();
+    }
   },
+  'summary-edit': el => { const s = S.sessions.find(x => x.id === el.dataset.v); openSheet({ type: 'summary', mode: 'edit', sessionId: s.id, name: s.name, difficulty: s.difficulty || null, note: s.note || '' }); },
   discard: () => ask(t('discardQ'), () => { S.active = null; S.timer = null; persist('active'); go('today'); }, { danger: true, yes: t('discard') }),
 
   note: el => openSheet({ type: 'note', exId: el.dataset.v, back: S.sheet }),
@@ -843,6 +1004,11 @@ function doSwap(itemId, newExId) {
   kinds.forEach(k => pushSets(it.sets, ex, k.kind, 1, k.target));
   saveActive(); closeSheet(); render();
 }
+function readSummaryFields() {
+  const sh = S.sheet; if (!sh || sh.type !== 'summary') return;
+  const n = $('#sum-name'), no = $('#sum-note');
+  if (n) sh.name = n.value.trim(); if (no) sh.note = no.value.trim();
+}
 function readItemFields() {
   const it = S.sheet.item; const g = id => { const e = $('#' + id); return e ? e.value : undefined; };
   const n = (id, dflt) => { const v = g(id); if (v === undefined) return dflt; const x = num(v); return x == null ? dflt : x; };
@@ -883,6 +1049,23 @@ async function importBackup(text) {
   }, { yes: t('confirm') });
 }
 
+/* ---------- RPE hint under the set row while typing ---------- */
+function rpeHintText(v) {
+  const h = (STR[S.settings.lang] || STR.pl).rpeHints;
+  const q = normRpe(v);
+  if (q == null) return t('rpeHintEmpty');
+  const txt = q >= 6.5 ? h[q] : h.low;
+  return `RPE ${fmtN(q)} · ${txt}`;
+}
+function showRpeHint(inp) {
+  const row = inp.closest('.set'); if (!row) return;
+  let h = row.nextElementSibling;
+  if (!h || !h.classList.contains('rpe-hint')) { h = document.createElement('div'); h.className = 'rpe-hint'; h.setAttribute('aria-live', 'polite'); row.after(h); }
+  h.textContent = rpeHintText(inp.value);
+}
+document.addEventListener('focusin', ev => { if (ev.target.matches('.set input[data-k=rpe]')) showRpeHint(ev.target); });
+document.addEventListener('focusout', ev => { if (ev.target.matches('.set input[data-k=rpe]')) { const n = ev.target.closest('.set')?.nextElementSibling; if (n && n.classList.contains('rpe-hint')) n.remove(); } });
+
 /* ---------- events ---------- */
 document.addEventListener('click', ev => {
   const el = ev.target.closest('[data-a]');
@@ -898,6 +1081,7 @@ document.addEventListener('input', ev => {
   if (f === 'set') {
     const it = findItem(el.dataset.i); if (!it) return;
     const s = it.sets.find(x => x.id === el.dataset.s); s[el.dataset.k] = el.value.replace(',', '.');
+    if (el.dataset.k === 'rpe') showRpeHint(el);
     clearTimeout(S._saveT); S._saveT = setTimeout(saveActive, 400);
   } else if (f === 'lib-q') {
     S.lib.q = el.value; const l = $('#liblist'); if (l) l.innerHTML = exRows(filteredExercises(S.lib.q, S.lib.pat), 'ex-detail');
@@ -927,7 +1111,9 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 /* ---------- boot ---------- */
 async function loadData() {
   if (window.REPSMITH_DATA) return window.REPSMITH_DATA;
-  const r = await fetch('data/exercises.json'); return r.json();
+  const r = await fetch('data/exercises.json');
+  if (!r.ok) throw new Error(`data/exercises.json: HTTP ${r.status}`);
+  return r.json();
 }
 async function boot() {
   const [data] = await Promise.all([loadData(), DB.open()]);
@@ -945,6 +1131,12 @@ async function boot() {
   }
   if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch (e) {} }
 }
-window.Repsmith = { S, A, substitutes };
-boot();
+window.Repsmith = { S, A, substitutes, e1rm, rpePct };
+boot().catch(err => {
+  const pl = (navigator.language || 'pl').startsWith('pl');
+  const app = document.getElementById('app');
+  if (app) app.innerHTML = `<main class="screen"><div class="eyebrow">Repsmith</div><h1 class="mid">${pl ? 'Nie udało się uruchomić' : 'Could not start'}</h1>
+    <p class="sub">${pl ? 'Brakuje pliku z bazą ćwiczeń <b>data/exercises.json</b> albo nie da się go wczytać. Sprawdź, czy w repozytorium jest folder <b>data</b> z tym plikiem oraz folder <b>icons</b>.' : 'The exercise file <b>data/exercises.json</b> is missing or cannot be read. Check that the repository has a <b>data</b> folder with this file and an <b>icons</b> folder.'}</p>
+    <p class="muted small">${esc(String(err && err.message || err))}</p></main>`;
+});
 })();
