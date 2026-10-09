@@ -1,4 +1,4 @@
-# Repsmith v0.5.5
+# Repsmith v0.5.7
 
 Autor: Adrian Drożdżyński
 
@@ -30,7 +30,7 @@ Ograniczenia iOS: brak wibracji na koniec przerwy, dźwięki timera nie grają p
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.5.6`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.5.8`).
 
 ## Sprawdzenie wersji
 
@@ -45,4 +45,5 @@ Ustawienia → na dole numer wersji. Jeśli po aktualizacji widać starą: zamkn
 
 - `data/exercises.json` – baza 156 ćwiczeń (nazwy PL/EN, wzorzec ruchu, mięśnie główne i pomocnicze, sprzęt, typ, jednostronne, sposób rejestracji).
 - `app.js` – cała logika, bez frameworków i bez kroku budowania.
+- `bodymap.js` – sylwetka mięśni z [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter), licencja MIT, © 2022 ELABBASSI Hicham (pełna treść w `LICENSES.md`).
 - Format kopii: `{ app: "repsmith", schema: 1, settings, templates, sessions, notes, customExercises, active }`.

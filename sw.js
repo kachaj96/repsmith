@@ -1,6 +1,6 @@
 /* Repsmith service worker: app shell offline, network-first for the shell so updates arrive. */
-const CACHE = 'repsmith-v0.5.5';
-const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'data/exercises.json', 'manifest.webmanifest',
+const CACHE = 'repsmith-v0.5.7';
+const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'bodymap.js', 'data/exercises.json', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
 
 self.addEventListener('install', e => {

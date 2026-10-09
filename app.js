@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.5.5';
+const VERSION = '0.5.7';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -83,7 +83,7 @@ const STR = {
     h_calf: 'W najszerszym miejscu łydki, na stojąco.', h_bf: 'Z wagi z pomiarem składu ciała. Zawsze ta sama waga i pora.',
     tapHint: 'Stuknij wykres, żeby zobaczyć wartość.',
     repeatWorkout: 'Powtórz trening', repeatHint: 'Te same ćwiczenia i serie, wyniki z tego treningu jako podpowiedź.', finishCurrentFirst: 'Najpierw zakończ albo odrzuć trwający trening.',
-    repeatOfLbl: 'Powtórzenie treningu z', restOver: 'Koniec przerwy', sounds: 'Dźwięki timera (odliczanie 5–1 i koniec przerwy)', on: 'Włączone', off: 'Wyłączone', movement: 'Ruch', muscleGroup: 'Partia (główna)', clearFilters: 'Wyczyść filtry', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński',
+    repeatOfLbl: 'Powtórzenie treningu z', restOver: 'Koniec przerwy', sounds: 'Dźwięki timera (odliczanie 5–1 i koniec przerwy)', on: 'Włączone', off: 'Wyłączone', front: 'Przód', back: 'Tył', showBody: 'Pokaż sylwetkę', hideBody: 'Ukryj sylwetkę', fewerSets: 'mniej serii', moreSets: 'więcej serii', tapMuscle: 'Stuknij mięsień, żeby zobaczyć liczbę serii.', movement: 'Ruch', muscleGroup: 'Partia (główna)', clearFilters: 'Wyczyść filtry', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński', bodyCredit: 'Sylwetka mięśni: react-native-body-highlighter (ELABBASSI Hicham, licencja MIT)',
     rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS).\n\nZ niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
@@ -162,7 +162,7 @@ const STR = {
     h_calf: 'At the widest point of the calf, standing.', h_bf: 'From a body composition scale. Same scale, same time of day.',
     tapHint: 'Tap the chart to see a value.',
     repeatWorkout: 'Repeat workout', repeatHint: 'Same exercises and sets, this workout\'s results as hints.', finishCurrentFirst: 'Finish or discard the workout in progress first.',
-    repeatOfLbl: 'Repeat of the workout from', restOver: 'Rest over', sounds: 'Timer sounds (5–1 countdown and end of rest)', on: 'On', off: 'Off', movement: 'Movement', muscleGroup: 'Muscle (main)', clearFilters: 'Clear filters', author: 'Author', madeBy: 'Made by Adrian Drożdżyński',
+    repeatOfLbl: 'Repeat of the workout from', restOver: 'Rest over', sounds: 'Timer sounds (5–1 countdown and end of rest)', on: 'On', off: 'Off', front: 'Front', back: 'Back', showBody: 'Show body', hideBody: 'Hide body', fewerSets: 'fewer sets', moreSets: 'more sets', tapMuscle: 'Tap a muscle to see its sets.', movement: 'Movement', muscleGroup: 'Muscle (main)', clearFilters: 'Clear filters', author: 'Author', madeBy: 'Made by Adrian Drożdżyński', bodyCredit: 'Muscle figure: react-native-body-highlighter (ELABBASSI Hicham, MIT License)',
     rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS).\n\nThe app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
@@ -768,6 +768,15 @@ function filteredExercises(q, pat, mus) {
 function exRows(list, action, extra = '') {
   return list.map(e => `<button class="list-btn row" data-a="${action}" data-v="${esc(e.id)}" ${extra}><span class="grow"><span class="name">${esc(exName(e.id))}</span><br><span class="meta">${esc(e.primary.map(muscleName).join(', '))} · ${esc(equipName(e.equipment))}</span></span>${S.notes[e.id] && S.notes[e.id].text ? `<span class="tag">${esc(t('note'))}</span>` : ''}</button>`).join('');
 }
+/* body map wrapper: front/back silhouette with Repsmith labels */
+function bm(opts, extraCls = '') {
+  if (!window.RepsmithBodyMap) return '';
+  return `<div class="bm-wrap ${extraCls}">${window.RepsmithBodyMap({ ...opts, labels: [t('front'), t('back')], names: muscleName })}</div>`;
+}
+function bodyToggle(where) {
+  const on = S.settings.showBody !== false;
+  return `<button class="chip" data-a="bm-toggle" aria-pressed="${on}">${esc(on ? t('hideBody') : t('showBody'))}</button>`;
+}
 /* movement pattern + main muscle filters, combinable with search */
 function filterBar(st, pre) {
   const pats = Object.keys(S.data.patterns).sort((a, b) => patternName(a).localeCompare(patternName(b), S.settings.lang));
@@ -783,6 +792,8 @@ function vLibrary() {
   const list = filteredExercises(st.q, st.pat, st.mus);
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('library'))}</h1>
     <div><label for="libq" class="sr">${esc(t('search'))}</label><input id="libq" type="search" data-f="lib-q" placeholder="${esc(t('search'))}" value="${esc(st.q)}" autocomplete="off"></div>
+    <div class="chips">${bodyToggle()}</div>
+    ${S.settings.showBody !== false ? bm({ sel: st.mus, interactive: true, aria: t('muscleGroup') }) : ''}
     ${filterBar(st, 'lib')}
     <button class="btn block" data-a="custom-new">${esc(t('addCustom'))}</button>
     <div class="card" id="liblist">${exRows(list, 'ex-detail')}</div></main>`;
@@ -892,6 +903,7 @@ function vStrength() {
   const maxV = vol.length ? Math.max(...vol.map(v => v[1])) : 1;
   const volBlock = `<div><h2>${esc(t('weeklyVolume'))}</h2>
       <div class="chips" style="margin-top:10px"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('thisWeekS'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('lastWeekS'))}</button></div>
+    ${vol.length ? bm({ heat: Object.fromEntries(vol.map(([m, v]) => [m, v / maxV])), interactive: true, aria: t('weeklyVolume') }) + `<div class="bm-legend"><span><i style="background:var(--bm-h1)"></i>${esc(t('fewerSets'))}</span><span><i style="background:var(--bm-h4)"></i>${esc(t('moreSets'))}</span></div><div class="tip muted small" id="bm-tip" style="text-align:center;min-height:20px">${esc(t('tapMuscle'))}</div>` : ''}
     ${vol.length ? `<div class="vol">${vol.map(([m, v]) => `<div class="vol-row"><span class="vm">${esc(muscleName(m))}</span><span class="vb"><i style="width:${(v / maxV * 100).toFixed(1)}%"></i></span><span class="vv">${esc(fmtN(v))}</span></div>`).join('')}</div>` : `<div class="muted small">–</div>`}
     <div class="muted small" style="margin-top:6px">${esc(t('volumeHint'))}</div></div>`;
   const tl = allPrEvents().slice(0, 15);
@@ -982,6 +994,8 @@ function renderSheet() {
   } else if (sh.type === 'picker') {
     const q = sh.q || '';
     body = `${head(t('addExercise'))}<input id="pickq" type="search" data-f="pick-q" placeholder="${esc(t('search'))}" value="${esc(q)}" autocomplete="off" aria-label="${esc(t('search'))}">
+      <div class="chips">${bodyToggle()}</div>
+      ${S.settings.showBody !== false ? bm({ sel: sh.mus || '', interactive: true, aria: t('muscleGroup') }, 'compact') : ''}
       ${filterBar({ q, pat: sh.pat || '', mus: sh.mus || '' }, 'pick')}
       <div class="card" id="picklist">${exRows(filteredExercises(q, sh.pat, sh.mus), 'pick')}</div>`;
   } else if (sh.type === 'item') {
@@ -1043,10 +1057,12 @@ function renderSheet() {
     const subs = substitutes(sh.exId, 3);
     body = `${head(exName(sh.exId))}
       <div class="muted small">${esc(L() ? e.name_pl : e.name_en)}</div>
+      ${bm({ prim: e.primary, sec: e.secondary, aria: e.primary.map(muscleName).join(', ') }, 'compact')}
+      <div class="bm-legend"><span><i style="background:var(--accent)"></i>${esc(t('primary'))}</span><span><i style="background:var(--bm-sec)"></i>${esc(t('secondary'))}</span></div>
       <div><label>${esc(t('primary'))}</label>${e.primary.map(m => `<span class="tag p">${esc(muscleName(m))}</span>`).join('')}</div>
       ${e.secondary.length ? `<div><label>${esc(t('secondary'))}</label>${e.secondary.map(m => `<span class="tag">${esc(muscleName(m))}</span>`).join('')}</div>` : ''}
       <div class="grid2"><div><label>${esc(t('pattern'))}</label>${esc(patternName(e.pattern))}</div><div><label>${esc(t('equipment'))}</label>${esc(equipName(e.equipment))}</div><div><label>${esc(t('type'))}</label>${esc(t(e.type))}${e.unilateral ? ' · L/P' : ''}</div><div><label>${esc(t('logging'))}</label>${esc(t('log' + e.logging))}</div></div>
-      <button class="note-box ${n && n.text ? '' : 'empty'}" data-a="note" data-v="${esc(e.id)}"><span class="lbl">${esc(t('note'))}</span>${n && n.text ? esc(n.text) : esc(t('notePh'))}</button>
+      <button class="note-box ${n && n.text ? '' : 'empty'}" data-a="note" data-v="${esc(e.id)}">${n && n.text ? `<span class="lbl">${esc(t('note'))}</span>${esc(n.text)}` : `<span class="lbl">+ ${esc(t('note'))}</span>`}</button>
       ${canPR(e) ? recordsBlock(e.id) : ''}
       ${subs.length ? `<div><label>${esc(t('subs'))}</label>${subs.map(c => `<span class="tag">${esc(exName(c.id))}</span>`).join('')}</div>` : ''}
       ${e.custom ? `<div class="btn-row"><button class="btn" data-a="custom-edit" data-v="${esc(e.id)}">${esc(t('edit'))}</button><button class="btn danger" data-a="custom-del" data-v="${esc(e.id)}">${esc(t('deleteExercise'))}</button></div>` : ''}`;
@@ -1077,7 +1093,7 @@ function renderSheet() {
       <button class="btn block" data-a="export-copy">${esc(t('copyBtn'))}</button>
       <button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>
       <label class="btn block" for="importfile" style="margin:0;color:var(--text);font-size:16px">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
-      <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
+      <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('bodyCredit'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
   el.innerHTML = `<div class="scrim ${fresh ? 'enter' : ''}" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
   document.body.style.overflow = 'hidden';
@@ -1203,6 +1219,20 @@ const A = {
   'prog-ex-pick': () => openSheet({ type: 'picker', target: { kind: 'progress' } }),
   'prog-week': el => { S.prog.week = +el.dataset.v; render(); },
   'chart-tap': (el, ev) => chartTap(el, ev),
+  'bm-toggle': () => { S.settings.showBody = S.settings.showBody === false; persist('settings'); if (S.sheet && S.sheet.type === 'picker') renderSheet(); else render(); },
+  'bm-pick': el => {
+    const m = el.dataset.v;
+    if (S.sheet && S.sheet.type === 'picker') { S.sheet.mus = S.sheet.mus === m ? '' : m; renderSheet(); return; }
+    if (S.view === 'library') { S.lib.mus = S.lib.mus === m ? '' : m; render(); return; }
+    if (S.view === 'progress') {
+      const ws = weekStart(now()) - S.prog.week * 7 * 864e5;
+      const v = (weeklyVolume(ws).find(x => x[0] === m) || [m, 0])[1];
+      const word = S.settings.lang === 'en' ? (v === 1 ? 'set' : 'sets') : (Number.isInteger(v) ? plural(v, 'seria', 'serie', 'serii') : 'serii');
+      const tip = $('#bm-tip'); if (tip) tip.textContent = `${muscleName(m)} · ${fmtN(v)} ${word}`;
+      document.querySelectorAll('.bodymap .bm-m.pick').forEach(x => x.classList.remove('pick'));
+      document.querySelectorAll(`.bodymap .bm-m[data-m="${m}"]`).forEach(x => x.classList.add('pick'));
+    }
+  },
   'm-metric': el => { S.prog.metric = el.dataset.v; render(); },
   'm-sides': el => { const f = el.dataset.v; S.settings.sides = { ...(S.settings.sides || {}), [f]: !(S.settings.sides || {})[f] }; persist('settings'); render(); },
   'm-new': () => openSheet({ type: 'measure', draft: { date: now() } }),
