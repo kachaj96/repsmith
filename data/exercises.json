@@ -1,0 +1,2856 @@
+{
+ "muscles": {
+  "CH": [
+   "klatka piersiowa",
+   "chest"
+  ],
+  "FD": [
+   "przednie aktony barków",
+   "front delts"
+  ],
+  "SD": [
+   "boczne aktony barków",
+   "side delts"
+  ],
+  "RD": [
+   "tylne aktony barków",
+   "rear delts"
+  ],
+  "TRI": [
+   "triceps",
+   "triceps"
+  ],
+  "BI": [
+   "biceps",
+   "biceps"
+  ],
+  "BR": [
+   "mięsień ramienny",
+   "brachialis"
+  ],
+  "FA": [
+   "przedramiona",
+   "forearms"
+  ],
+  "LAT": [
+   "najszersze grzbietu",
+   "lats"
+  ],
+  "UB": [
+   "górna część pleców",
+   "upper back"
+  ],
+  "TRP": [
+   "kaptury",
+   "traps"
+  ],
+  "LB": [
+   "prostowniki grzbietu",
+   "lower back"
+  ],
+  "ABS": [
+   "brzuch",
+   "abs"
+  ],
+  "OBL": [
+   "skośne brzucha",
+   "obliques"
+  ],
+  "Q": [
+   "czworogłowe uda",
+   "quads"
+  ],
+  "HAM": [
+   "dwugłowe uda",
+   "hamstrings"
+  ],
+  "GL": [
+   "pośladki",
+   "glutes"
+  ],
+  "ADD": [
+   "przywodziciele",
+   "adductors"
+  ],
+  "ABD": [
+   "odwodziciele bioder",
+   "hip abductors"
+  ],
+  "CALF": [
+   "łydki",
+   "calves"
+  ],
+  "HF": [
+   "zginacze bioder",
+   "hip flexors"
+  ]
+ },
+ "patterns": {
+  "HPUSH": [
+   "wypychanie poziome",
+   "horizontal push"
+  ],
+  "VPUSH": [
+   "wypychanie pionowe",
+   "vertical push"
+  ],
+  "VPULL": [
+   "przyciąganie pionowe",
+   "vertical pull"
+  ],
+  "HPULL": [
+   "przyciąganie poziome",
+   "horizontal pull"
+  ],
+  "SQUAT": [
+   "przysiad",
+   "squat"
+  ],
+  "HINGE": [
+   "zawias biodrowy",
+   "hinge"
+  ],
+  "SINGLE": [
+   "jednonóż",
+   "single leg"
+  ],
+  "KEXT": [
+   "prostowanie kolan",
+   "knee extension"
+  ],
+  "KFLEX": [
+   "uginanie kolan",
+   "knee flexion"
+  ],
+  "HIPEXT": [
+   "wyprost biodra",
+   "hip extension"
+  ],
+  "FLY": [
+   "rozpiętki",
+   "chest fly"
+  ],
+  "LATRAISE": [
+   "wznosy bokiem",
+   "lateral raise"
+  ],
+  "REARDELT": [
+   "tylne aktony",
+   "rear delt"
+  ],
+  "FRONTRAISE": [
+   "wznosy przodem",
+   "front raise"
+  ],
+  "CURL": [
+   "uginanie ramion",
+   "elbow flexion"
+  ],
+  "TRIEXT": [
+   "prostowanie ramion",
+   "elbow extension"
+  ],
+  "SHRUG": [
+   "szrugsy",
+   "shrug"
+  ],
+  "CALF": [
+   "łydki",
+   "calf raise"
+  ],
+  "HIPADD": [
+   "przywodzenie bioder",
+   "hip adduction"
+  ],
+  "HIPABD": [
+   "odwodzenie bioder",
+   "hip abduction"
+  ],
+  "CORE": [
+   "brzuch: zgięcie",
+   "trunk flexion"
+  ],
+  "STAB": [
+   "brzuch: stabilizacja",
+   "anti-movement"
+  ],
+  "GRIP": [
+   "chwyt i przedramiona",
+   "grip"
+  ],
+  "CARRY": [
+   "noszenie",
+   "carry"
+  ]
+ },
+ "equipment": {
+  "BB": [
+   "sztanga",
+   "barbell"
+  ],
+  "DB": [
+   "hantle",
+   "dumbbell"
+  ],
+  "CAB": [
+   "wyciąg",
+   "cable"
+  ],
+  "MACH": [
+   "maszyna",
+   "machine"
+  ],
+  "SMITH": [
+   "maszyna Smitha",
+   "smith machine"
+  ],
+  "KB": [
+   "kettlebell",
+   "kettlebell"
+  ],
+  "BW": [
+   "masa ciała",
+   "bodyweight"
+  ],
+  "EZ": [
+   "gryf łamany",
+   "EZ bar"
+  ],
+  "TRAP": [
+   "trap bar",
+   "trap bar"
+  ],
+  "TBAR": [
+   "T-bar",
+   "T-bar"
+  ],
+  "BAR": [
+   "drążek",
+   "pull-up bar"
+  ],
+  "DIP": [
+   "poręcze",
+   "dip bars"
+  ],
+  "WHEEL": [
+   "kółko do brzucha",
+   "ab wheel"
+  ],
+  "LM": [
+   "landmine",
+   "landmine"
+  ]
+ },
+ "logging": {
+  "W": "kg × powt.",
+  "BWX": "masa ciała ± kg × powt.",
+  "T": "czas",
+  "WD": "kg × dystans/czas"
+ },
+ "exercises": [
+  {
+   "id": "bench-press",
+   "name_en": "Bench Press",
+   "name_pl": "Wyciskanie sztangi na ławce płaskiej",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "paused-bench-press",
+   "name_en": "Paused Bench Press",
+   "name_pl": "Wyciskanie sztangi z pauzą",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "close-grip-bench-press",
+   "name_en": "Close-Grip Bench Press",
+   "name_pl": "Wyciskanie sztangi wąskim chwytem",
+   "pattern": "HPUSH",
+   "primary": [
+    "TRI",
+    "CH"
+   ],
+   "secondary": [
+    "FD"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "incline-bench-press",
+   "name_en": "Incline Bench Press",
+   "name_pl": "Wyciskanie sztangi na ławce skośnej",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH",
+    "FD"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-bench-press",
+   "name_en": "Dumbbell Bench Press",
+   "name_pl": "Wyciskanie hantli na ławce płaskiej",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "incline-dumbbell-press",
+   "name_en": "Incline Dumbbell Press",
+   "name_pl": "Wyciskanie hantli na ławce skośnej",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH",
+    "FD"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "smith-machine-bench-press",
+   "name_en": "Smith Machine Bench Press",
+   "name_pl": "Wyciskanie na ławce płaskiej w maszynie Smitha",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI"
+   ],
+   "equipment": "SMITH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "smith-machine-incline-press",
+   "name_en": "Smith Machine Incline Press",
+   "name_pl": "Wyciskanie na ławce skośnej w maszynie Smitha",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH",
+    "FD"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "SMITH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "machine-chest-press",
+   "name_en": "Machine Chest Press",
+   "name_pl": "Wyciskanie na maszynie siedząc",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "incline-machine-press",
+   "name_en": "Incline Machine Press",
+   "name_pl": "Wyciskanie skośne na maszynie",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH",
+    "FD"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "push-up",
+   "name_en": "Push-Up",
+   "name_pl": "Pompki",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI",
+    "ABS"
+   ],
+   "equipment": "BW",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "dip",
+   "name_en": "Dip",
+   "name_pl": "Pompki na poręczach (dipy)",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH",
+    "TRI"
+   ],
+   "secondary": [
+    "FD"
+   ],
+   "equipment": "DIP",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "cable-fly",
+   "name_en": "Cable Fly",
+   "name_pl": "Rozpiętki na wyciągu",
+   "pattern": "FLY",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "low-to-high-cable-fly",
+   "name_en": "Low-To-High Cable Fly",
+   "name_pl": "Rozpiętki na wyciągu z dołu do góry",
+   "pattern": "FLY",
+   "primary": [
+    "CH",
+    "FD"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "pec-deck",
+   "name_en": "Pec Deck",
+   "name_pl": "Rozpiętki na maszynie (butterfly)",
+   "pattern": "FLY",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-fly",
+   "name_en": "Dumbbell Fly",
+   "name_pl": "Rozpiętki z hantlami",
+   "pattern": "FLY",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "overhead-press",
+   "name_en": "Overhead Press",
+   "name_pl": "Wyciskanie żołnierskie (OHP)",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD",
+    "TRI",
+    "UB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "seated-dumbbell-shoulder-press",
+   "name_en": "Seated Dumbbell Shoulder Press",
+   "name_pl": "Wyciskanie hantli nad głowę siedząc",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD",
+    "TRI"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "machine-shoulder-press",
+   "name_en": "Machine Shoulder Press",
+   "name_pl": "Wyciskanie nad głowę na maszynie",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD",
+    "TRI"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "smith-machine-shoulder-press",
+   "name_en": "Smith Machine Shoulder Press",
+   "name_pl": "Wyciskanie nad głowę w maszynie Smitha",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD",
+    "TRI"
+   ],
+   "equipment": "SMITH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "arnold-press",
+   "name_en": "Arnold Press",
+   "name_pl": "Wyciskanie Arnolda",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD",
+    "SD"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-lateral-raise",
+   "name_en": "Dumbbell Lateral Raise",
+   "name_pl": "Wznosy hantli bokiem",
+   "pattern": "LATRAISE",
+   "primary": [
+    "SD"
+   ],
+   "secondary": [
+    "TRP"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cable-lateral-raise",
+   "name_en": "Cable Lateral Raise",
+   "name_pl": "Wznosy bokiem na wyciągu jednorącz",
+   "pattern": "LATRAISE",
+   "primary": [
+    "SD"
+   ],
+   "secondary": [
+    "TRP"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "machine-lateral-raise",
+   "name_en": "Machine Lateral Raise",
+   "name_pl": "Wznosy bokiem na maszynie",
+   "pattern": "LATRAISE",
+   "primary": [
+    "SD"
+   ],
+   "secondary": [
+    "TRP"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "upright-row",
+   "name_en": "Upright Row",
+   "name_pl": "Podciąganie gryfu wzdłuż tułowia",
+   "pattern": "LATRAISE",
+   "primary": [
+    "SD",
+    "TRP"
+   ],
+   "secondary": [
+    "FD",
+    "BI"
+   ],
+   "equipment": "EZ",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-front-raise",
+   "name_en": "Dumbbell Front Raise",
+   "name_pl": "Wznosy hantli przodem",
+   "pattern": "FRONTRAISE",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "reverse-pec-deck",
+   "name_en": "Reverse Pec Deck",
+   "name_pl": "Odwrotne rozpiętki na maszynie",
+   "pattern": "REARDELT",
+   "primary": [
+    "RD"
+   ],
+   "secondary": [
+    "UB"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cable-rear-delt-fly",
+   "name_en": "Cable Rear Delt Fly",
+   "name_pl": "Odwrotne rozpiętki na wyciągu",
+   "pattern": "REARDELT",
+   "primary": [
+    "RD"
+   ],
+   "secondary": [
+    "UB"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "bent-over-dumbbell-reverse-fly",
+   "name_en": "Bent-Over Dumbbell Reverse Fly",
+   "name_pl": "Odwrotne rozpiętki z hantlami w opadzie",
+   "pattern": "REARDELT",
+   "primary": [
+    "RD"
+   ],
+   "secondary": [
+    "UB"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "face-pull",
+   "name_en": "Face Pull",
+   "name_pl": "Face pull (przyciąganie liny do twarzy)",
+   "pattern": "REARDELT",
+   "primary": [
+    "RD",
+    "UB"
+   ],
+   "secondary": [
+    "TRP"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "pull-up",
+   "name_en": "Pull-Up",
+   "name_pl": "Podciąganie nachwytem",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "UB",
+    "BR"
+   ],
+   "equipment": "BAR",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "chin-up",
+   "name_en": "Chin-Up",
+   "name_pl": "Podciąganie podchwytem",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT",
+    "BI"
+   ],
+   "secondary": [
+    "UB",
+    "BR"
+   ],
+   "equipment": "BAR",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "assisted-pull-up",
+   "name_en": "Assisted Pull-Up",
+   "name_pl": "Podciąganie z asystą na maszynie",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "UB"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "lat-pulldown",
+   "name_en": "Lat Pulldown",
+   "name_pl": "Ściąganie drążka wyciągu górnego",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "UB"
+   ],
+   "equipment": "CAB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "close-grip-lat-pulldown",
+   "name_en": "Close-Grip Lat Pulldown",
+   "name_pl": "Ściąganie wyciągu górnego wąskim chwytem neutralnym",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "UB",
+    "BR"
+   ],
+   "equipment": "CAB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-lat-pulldown",
+   "name_en": "One-Arm Lat Pulldown",
+   "name_pl": "Ściąganie wyciągu górnego jednorącz",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "BI"
+   ],
+   "equipment": "CAB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "high-to-low-lat-row",
+   "name_en": "High-To-Low Lat Row",
+   "name_pl": "Wiosłowanie z góry do dołu jednorącz",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "UB",
+    "BI"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "straight-arm-pulldown",
+   "name_en": "Straight-Arm Pulldown",
+   "name_pl": "Ściąganie wyciągu prostymi rękami",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "barbell-row",
+   "name_en": "Barbell Row",
+   "name_pl": "Wiosłowanie sztangą w opadzie",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD",
+    "LB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "pendlay-row",
+   "name_en": "Pendlay Row",
+   "name_pl": "Wiosłowanie Pendlaya",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD",
+    "LB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-row",
+   "name_en": "Dumbbell Row",
+   "name_pl": "Wiosłowanie hantlem jednorącz",
+   "pattern": "HPULL",
+   "primary": [
+    "LAT",
+    "UB"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "chest-supported-dumbbell-row",
+   "name_en": "Chest-Supported Dumbbell Row",
+   "name_pl": "Wiosłowanie hantlami z podparciem klatki",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "t-bar-row",
+   "name_en": "T-Bar Row",
+   "name_pl": "Wiosłowanie T-bar",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD",
+    "LB"
+   ],
+   "equipment": "TBAR",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "chest-supported-t-bar-row",
+   "name_en": "Chest-Supported T-Bar Row",
+   "name_pl": "Wiosłowanie T-bar z podparciem klatki",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "TBAR",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "seal-row",
+   "name_en": "Seal Row",
+   "name_pl": "Wiosłowanie leżąc na ławce (seal row)",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "seated-cable-row",
+   "name_en": "Seated Cable Row",
+   "name_pl": "Wiosłowanie na wyciągu dolnym siedząc",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "CAB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "wide-grip-cable-row",
+   "name_en": "Wide-Grip Cable Row",
+   "name_pl": "Wiosłowanie na wyciągu szerokim chwytem",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "RD"
+   ],
+   "secondary": [
+    "LAT",
+    "BI"
+   ],
+   "equipment": "CAB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-cable-row",
+   "name_en": "One-Arm Cable Row",
+   "name_pl": "Wiosłowanie na wyciągu jednorącz",
+   "pattern": "HPULL",
+   "primary": [
+    "LAT",
+    "UB"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "CAB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "machine-row",
+   "name_en": "Machine Row",
+   "name_pl": "Wiosłowanie na maszynie z podparciem klatki",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "inverted-row",
+   "name_en": "Inverted Row",
+   "name_pl": "Wiosłowanie australijskie",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "BW",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "barbell-shrug",
+   "name_en": "Barbell Shrug",
+   "name_pl": "Szrugsy ze sztangą",
+   "pattern": "SHRUG",
+   "primary": [
+    "TRP"
+   ],
+   "secondary": [
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-shrug",
+   "name_en": "Dumbbell Shrug",
+   "name_pl": "Szrugsy z hantlami",
+   "pattern": "SHRUG",
+   "primary": [
+    "TRP"
+   ],
+   "secondary": [
+    "FA"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "squat",
+   "name_en": "Squat",
+   "name_pl": "Przysiad ze sztangą",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD",
+    "LB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "low-bar-squat",
+   "name_en": "Low-Bar Squat",
+   "name_pl": "Przysiad ze sztangą low bar",
+   "pattern": "SQUAT",
+   "primary": [
+    "GL",
+    "Q",
+    "ADD"
+   ],
+   "secondary": [
+    "HAM",
+    "LB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "paused-squat",
+   "name_en": "Paused Squat",
+   "name_pl": "Przysiad z pauzą",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD",
+    "LB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "front-squat",
+   "name_en": "Front Squat",
+   "name_pl": "Przysiad przedni",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [
+    "GL",
+    "UB",
+    "ABS"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "smith-machine-squat",
+   "name_en": "Smith Machine Squat",
+   "name_pl": "Przysiad w maszynie Smitha",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "SMITH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "hack-squat",
+   "name_en": "Hack Squat",
+   "name_pl": "Hack przysiad na maszynie",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [
+    "GL",
+    "ADD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "pendulum-squat",
+   "name_en": "Pendulum Squat",
+   "name_pl": "Przysiad na maszynie wahadłowej",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [
+    "GL",
+    "ADD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "belt-squat",
+   "name_en": "Belt Squat",
+   "name_pl": "Przysiad z pasem (belt squat)",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "leg-press",
+   "name_en": "Leg Press",
+   "name_pl": "Wypychanie nogami na suwnicy",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "goblet-squat",
+   "name_en": "Goblet Squat",
+   "name_pl": "Przysiad goblet",
+   "pattern": "SQUAT",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD",
+    "ABS"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "bulgarian-split-squat",
+   "name_en": "Bulgarian Split Squat",
+   "name_pl": "Przysiad bułgarski",
+   "pattern": "SINGLE",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "walking-lunge",
+   "name_en": "Walking Lunge",
+   "name_pl": "Wykroki chodzone",
+   "pattern": "SINGLE",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD",
+    "HAM"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "reverse-lunge",
+   "name_en": "Reverse Lunge",
+   "name_pl": "Wykroki w tył",
+   "pattern": "SINGLE",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "step-up",
+   "name_en": "Step-Up",
+   "name_pl": "Wejścia na skrzynię",
+   "pattern": "SINGLE",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "HAM"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "deadlift",
+   "name_en": "Deadlift",
+   "name_pl": "Martwy ciąg",
+   "pattern": "HINGE",
+   "primary": [
+    "GL",
+    "HAM",
+    "LB"
+   ],
+   "secondary": [
+    "Q",
+    "UB",
+    "TRP",
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "sumo-deadlift",
+   "name_en": "Sumo Deadlift",
+   "name_pl": "Martwy ciąg sumo",
+   "pattern": "HINGE",
+   "primary": [
+    "GL",
+    "Q",
+    "ADD"
+   ],
+   "secondary": [
+    "HAM",
+    "LB",
+    "UB",
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "deficit-deadlift",
+   "name_en": "Deficit Deadlift",
+   "name_pl": "Martwy ciąg z deficytu",
+   "pattern": "HINGE",
+   "primary": [
+    "GL",
+    "HAM",
+    "LB"
+   ],
+   "secondary": [
+    "Q",
+    "UB",
+    "TRP",
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "trap-bar-deadlift",
+   "name_en": "Trap Bar Deadlift",
+   "name_pl": "Martwy ciąg z trap barem",
+   "pattern": "HINGE",
+   "primary": [
+    "Q",
+    "GL",
+    "HAM"
+   ],
+   "secondary": [
+    "LB",
+    "UB",
+    "FA"
+   ],
+   "equipment": "TRAP",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "romanian-deadlift",
+   "name_en": "Romanian Deadlift",
+   "name_pl": "Rumuński martwy ciąg",
+   "pattern": "HINGE",
+   "primary": [
+    "HAM",
+    "GL"
+   ],
+   "secondary": [
+    "LB",
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-romanian-deadlift",
+   "name_en": "Dumbbell Romanian Deadlift",
+   "name_pl": "Rumuński martwy ciąg z hantlami",
+   "pattern": "HINGE",
+   "primary": [
+    "HAM",
+    "GL"
+   ],
+   "secondary": [
+    "LB",
+    "FA"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "good-morning",
+   "name_en": "Good Morning",
+   "name_pl": "Good morning (skłony ze sztangą na karku)",
+   "pattern": "HINGE",
+   "primary": [
+    "HAM",
+    "LB"
+   ],
+   "secondary": [
+    "GL"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "back-extension",
+   "name_en": "Back Extension",
+   "name_pl": "Wyprosty tułowia na ławce rzymskiej",
+   "pattern": "HINGE",
+   "primary": [
+    "LB",
+    "GL"
+   ],
+   "secondary": [
+    "HAM"
+   ],
+   "equipment": "BW",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "kettlebell-swing",
+   "name_en": "Kettlebell Swing",
+   "name_pl": "Swing z kettlebell",
+   "pattern": "HINGE",
+   "primary": [
+    "GL",
+    "HAM"
+   ],
+   "secondary": [
+    "LB"
+   ],
+   "equipment": "KB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "hip-thrust",
+   "name_en": "Hip Thrust",
+   "name_pl": "Hip thrust ze sztangą",
+   "pattern": "HIPEXT",
+   "primary": [
+    "GL"
+   ],
+   "secondary": [
+    "HAM"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "machine-hip-thrust",
+   "name_en": "Machine Hip Thrust",
+   "name_pl": "Hip thrust na maszynie",
+   "pattern": "HIPEXT",
+   "primary": [
+    "GL"
+   ],
+   "secondary": [
+    "HAM"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cable-glute-kickback",
+   "name_en": "Cable Glute Kickback",
+   "name_pl": "Wymachy nogą w tył na wyciągu",
+   "pattern": "HIPEXT",
+   "primary": [
+    "GL"
+   ],
+   "secondary": [
+    "HAM"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "leg-extension",
+   "name_en": "Leg Extension",
+   "name_pl": "Prostowanie nóg na maszynie",
+   "pattern": "KEXT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "seated-leg-curl",
+   "name_en": "Seated Leg Curl",
+   "name_pl": "Uginanie nóg siedząc na maszynie",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "lying-leg-curl",
+   "name_en": "Lying Leg Curl",
+   "name_pl": "Uginanie nóg leżąc na maszynie",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [
+    "CALF"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "nordic-curl",
+   "name_en": "Nordic Curl",
+   "name_pl": "Nordic curl",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "hip-adduction-machine",
+   "name_en": "Hip Adduction Machine",
+   "name_pl": "Przywodzenie nóg na maszynie",
+   "pattern": "HIPADD",
+   "primary": [
+    "ADD"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "hip-abduction-machine",
+   "name_en": "Hip Abduction Machine",
+   "name_pl": "Odwodzenie nóg na maszynie",
+   "pattern": "HIPABD",
+   "primary": [
+    "ABD"
+   ],
+   "secondary": [
+    "GL"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "standing-calf-raise",
+   "name_en": "Standing Calf Raise",
+   "name_pl": "Wspięcia na palce stojąc",
+   "pattern": "CALF",
+   "primary": [
+    "CALF"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "seated-calf-raise",
+   "name_en": "Seated Calf Raise",
+   "name_pl": "Wspięcia na palce siedząc",
+   "pattern": "CALF",
+   "primary": [
+    "CALF"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "leg-press-calf-raise",
+   "name_en": "Leg Press Calf Raise",
+   "name_pl": "Wspięcia na palce na suwnicy",
+   "pattern": "CALF",
+   "primary": [
+    "CALF"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "barbell-curl",
+   "name_en": "Barbell Curl",
+   "name_pl": "Uginanie ramion ze sztangą",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR",
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "ez-bar-curl",
+   "name_en": "EZ-Bar Curl",
+   "name_pl": "Uginanie ramion z gryfem łamanym",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR",
+    "FA"
+   ],
+   "equipment": "EZ",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-curl",
+   "name_en": "Dumbbell Curl",
+   "name_pl": "Uginanie ramion z hantlami",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR",
+    "FA"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "incline-dumbbell-curl",
+   "name_en": "Incline Dumbbell Curl",
+   "name_pl": "Uginanie ramion z hantlami na ławce skośnej",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "hammer-curl",
+   "name_en": "Hammer Curl",
+   "name_pl": "Uginanie ramion chwytem młotkowym",
+   "pattern": "CURL",
+   "primary": [
+    "BR",
+    "BI"
+   ],
+   "secondary": [
+    "FA"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "preacher-curl",
+   "name_en": "Preacher Curl",
+   "name_pl": "Uginanie ramion na modlitewniku",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "EZ",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "machine-preacher-curl",
+   "name_en": "Machine Preacher Curl",
+   "name_pl": "Uginanie ramion na modlitewniku, maszyna",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cable-curl",
+   "name_en": "Cable Curl",
+   "name_pl": "Uginanie ramion na wyciągu dolnym",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR",
+    "FA"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "bayesian-curl",
+   "name_en": "Bayesian Curl",
+   "name_pl": "Uginanie ramion na wyciągu za plecami (Bayesian)",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "reverse-curl",
+   "name_en": "Reverse Curl",
+   "name_pl": "Uginanie ramion nachwytem",
+   "pattern": "CURL",
+   "primary": [
+    "BR",
+    "FA"
+   ],
+   "secondary": [
+    "BI"
+   ],
+   "equipment": "EZ",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "triceps-pushdown",
+   "name_en": "Triceps Pushdown",
+   "name_pl": "Prostowanie ramion na wyciągu z liną",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "straight-bar-pushdown",
+   "name_en": "Straight-Bar Pushdown",
+   "name_pl": "Prostowanie ramion na wyciągu z drążkiem",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "overhead-cable-triceps-extension",
+   "name_en": "Overhead Cable Triceps Extension",
+   "name_pl": "Prostowanie ramion nad głową na wyciągu",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-overhead-cable-triceps-extension",
+   "name_en": "One-Arm Overhead Cable Triceps Extension",
+   "name_pl": "Prostowanie ramienia nad głową na wyciągu jednorącz",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "skull-crusher",
+   "name_en": "Skull Crusher",
+   "name_pl": "Wyciskanie francuskie leżąc",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "EZ",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-overhead-triceps-extension",
+   "name_en": "Dumbbell Overhead Triceps Extension",
+   "name_pl": "Wyciskanie francuskie hantlem nad głową",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "machine-dip",
+   "name_en": "Machine Dip",
+   "name_pl": "Dipy na maszynie",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [
+    "CH",
+    "FD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "wrist-curl",
+   "name_en": "Wrist Curl",
+   "name_pl": "Uginanie nadgarstków",
+   "pattern": "GRIP",
+   "primary": [
+    "FA"
+   ],
+   "secondary": [],
+   "equipment": "BB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "farmer-s-carry",
+   "name_en": "Farmer's Carry",
+   "name_pl": "Spacer farmera",
+   "pattern": "CARRY",
+   "primary": [
+    "FA",
+    "TRP"
+   ],
+   "secondary": [
+    "ABS",
+    "OBL",
+    "GL"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "WD"
+  },
+  {
+   "id": "crunch",
+   "name_en": "Crunch",
+   "name_pl": "Spięcia brzucha",
+   "pattern": "CORE",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "cable-crunch",
+   "name_en": "Cable Crunch",
+   "name_pl": "Spięcia brzucha na wyciągu klęcząc",
+   "pattern": "CORE",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [
+    "OBL"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "machine-crunch",
+   "name_en": "Machine Crunch",
+   "name_pl": "Spięcia brzucha na maszynie",
+   "pattern": "CORE",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "hanging-knee-raise",
+   "name_en": "Hanging Knee Raise",
+   "name_pl": "Unoszenie kolan w zwisie",
+   "pattern": "CORE",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [
+    "HF"
+   ],
+   "equipment": "BAR",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "hanging-leg-raise",
+   "name_en": "Hanging Leg Raise",
+   "name_pl": "Unoszenie nóg w zwisie",
+   "pattern": "CORE",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [
+    "HF",
+    "OBL"
+   ],
+   "equipment": "BAR",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "ab-wheel-rollout",
+   "name_en": "Ab Wheel Rollout",
+   "name_pl": "Rollout na kółku",
+   "pattern": "STAB",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [
+    "OBL",
+    "LAT"
+   ],
+   "equipment": "WHEEL",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "plank",
+   "name_en": "Plank",
+   "name_pl": "Deska (plank)",
+   "pattern": "STAB",
+   "primary": [
+    "ABS"
+   ],
+   "secondary": [
+    "OBL"
+   ],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "T"
+  },
+  {
+   "id": "pallof-press",
+   "name_en": "Pallof Press",
+   "name_pl": "Pallof press",
+   "pattern": "STAB",
+   "primary": [
+    "OBL"
+   ],
+   "secondary": [
+    "ABS"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-dumbbell-bench-press",
+   "name_en": "One-Arm Dumbbell Bench Press",
+   "name_pl": "Wyciskanie hantla jednorącz na ławce płaskiej",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI",
+    "OBL"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-machine-chest-press",
+   "name_en": "One-Arm Machine Chest Press",
+   "name_pl": "Wyciskanie jednorącz na maszynie",
+   "pattern": "HPUSH",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD",
+    "TRI"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-cable-fly",
+   "name_en": "One-Arm Cable Fly",
+   "name_pl": "Rozpiętki na wyciągu jednorącz",
+   "pattern": "FLY",
+   "primary": [
+    "CH"
+   ],
+   "secondary": [
+    "FD"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-dumbbell-shoulder-press",
+   "name_en": "One-Arm Dumbbell Shoulder Press",
+   "name_pl": "Wyciskanie hantla nad głowę jednorącz",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD",
+    "TRI",
+    "OBL"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-machine-shoulder-press",
+   "name_en": "One-Arm Machine Shoulder Press",
+   "name_pl": "Wyciskanie nad głowę jednorącz na maszynie",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD",
+    "TRI"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-landmine-press",
+   "name_en": "One-Arm Landmine Press",
+   "name_pl": "Wyciskanie landmine jednorącz",
+   "pattern": "VPUSH",
+   "primary": [
+    "FD",
+    "CH"
+   ],
+   "secondary": [
+    "TRI",
+    "SD",
+    "OBL"
+   ],
+   "equipment": "LM",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-dumbbell-lateral-raise",
+   "name_en": "One-Arm Dumbbell Lateral Raise",
+   "name_pl": "Wznosy hantla bokiem jednorącz",
+   "pattern": "LATRAISE",
+   "primary": [
+    "SD"
+   ],
+   "secondary": [
+    "TRP"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-reverse-pec-deck",
+   "name_en": "One-Arm Reverse Pec Deck",
+   "name_pl": "Odwrotne rozpiętki na maszynie jednorącz",
+   "pattern": "REARDELT",
+   "primary": [
+    "RD"
+   ],
+   "secondary": [
+    "UB"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-cable-rear-delt-fly",
+   "name_en": "One-Arm Cable Rear Delt Fly",
+   "name_pl": "Odwrotne rozpiętki na wyciągu jednorącz",
+   "pattern": "REARDELT",
+   "primary": [
+    "RD"
+   ],
+   "secondary": [
+    "UB"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-machine-row",
+   "name_en": "One-Arm Machine Row",
+   "name_pl": "Wiosłowanie jednorącz na maszynie",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-chest-supported-dumbbell-row",
+   "name_en": "One-Arm Chest-Supported Dumbbell Row",
+   "name_pl": "Wiosłowanie hantlem jednorącz z podparciem klatki",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-preacher-curl",
+   "name_en": "One-Arm Preacher Curl",
+   "name_pl": "Uginanie ramienia na modlitewniku jednorącz",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-cable-curl",
+   "name_en": "One-Arm Cable Curl",
+   "name_pl": "Uginanie ramienia na wyciągu jednorącz",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "concentration-curl",
+   "name_en": "Concentration Curl",
+   "name_pl": "Uginanie ramienia w siadzie (koncentryczne)",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-triceps-pushdown",
+   "name_en": "One-Arm Triceps Pushdown",
+   "name_pl": "Prostowanie ramienia na wyciągu jednorącz",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "one-arm-dumbbell-overhead-triceps-extension",
+   "name_en": "One-Arm Dumbbell Overhead Triceps Extension",
+   "name_pl": "Wyciskanie francuskie hantlem jednorącz",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "suitcase-carry",
+   "name_en": "Suitcase Carry",
+   "name_pl": "Spacer z jednym hantlem (suitcase carry)",
+   "pattern": "CARRY",
+   "primary": [
+    "OBL",
+    "FA"
+   ],
+   "secondary": [
+    "TRP",
+    "ABS",
+    "GL"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "WD"
+  },
+  {
+   "id": "single-leg-leg-press",
+   "name_en": "Single-Leg Leg Press",
+   "name_pl": "Wypychanie jedną nogą na suwnicy",
+   "pattern": "SINGLE",
+   "primary": [
+    "Q",
+    "GL"
+   ],
+   "secondary": [
+    "ADD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "single-leg-leg-extension",
+   "name_en": "Single-Leg Leg Extension",
+   "name_pl": "Prostowanie nogi na maszynie jednonóż",
+   "pattern": "KEXT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "single-leg-lying-leg-curl",
+   "name_en": "Single-Leg Lying Leg Curl",
+   "name_pl": "Uginanie nogi leżąc jednonóż",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [
+    "CALF"
+   ],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "single-leg-seated-leg-curl",
+   "name_en": "Single-Leg Seated Leg Curl",
+   "name_pl": "Uginanie nogi siedząc jednonóż",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [],
+   "equipment": "MACH",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "single-leg-romanian-deadlift",
+   "name_en": "Single-Leg Romanian Deadlift",
+   "name_pl": "Rumuński martwy ciąg na jednej nodze",
+   "pattern": "HINGE",
+   "primary": [
+    "HAM",
+    "GL"
+   ],
+   "secondary": [
+    "ABD",
+    "LB"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "single-leg-hip-thrust",
+   "name_en": "Single-Leg Hip Thrust",
+   "name_pl": "Hip thrust na jednej nodze",
+   "pattern": "HIPEXT",
+   "primary": [
+    "GL"
+   ],
+   "secondary": [
+    "HAM",
+    "ABD"
+   ],
+   "equipment": "BW",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "BWX"
+  },
+  {
+   "id": "single-leg-calf-raise",
+   "name_en": "Single-Leg Calf Raise",
+   "name_pl": "Wspięcia na palce na jednej nodze",
+   "pattern": "CALF",
+   "primary": [
+    "CALF"
+   ],
+   "secondary": [],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "cable-hip-abduction",
+   "name_en": "Cable Hip Abduction",
+   "name_pl": "Odwodzenie nogi na wyciągu",
+   "pattern": "HIPABD",
+   "primary": [
+    "ABD"
+   ],
+   "secondary": [
+    "GL"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "meadows-row",
+   "name_en": "Meadows Row",
+   "name_pl": "Wiosłowanie Meadowsa",
+   "pattern": "HPULL",
+   "primary": [
+    "LAT",
+    "UB"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "LM",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "kroc-row",
+   "name_en": "Kroc Row",
+   "name_pl": "Wiosłowanie Kroca",
+   "pattern": "HPULL",
+   "primary": [
+    "LAT",
+    "UB"
+   ],
+   "secondary": [
+    "BI",
+    "RD",
+    "TRP",
+    "FA"
+   ],
+   "equipment": "DB",
+   "type": "compound",
+   "unilateral": true,
+   "logging": "W"
+  },
+  {
+   "id": "dumbbell-pullover",
+   "name_en": "Dumbbell Pullover",
+   "name_pl": "Przenoszenie hantla za głowę (pullover)",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT",
+    "CH"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "DB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cable-pullover",
+   "name_en": "Cable Pullover",
+   "name_pl": "Pullover na wyciągu z liną",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "TRI"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "rack-pull",
+   "name_en": "Rack Pull",
+   "name_pl": "Martwy ciąg z podwyższenia (rack pull)",
+   "pattern": "HINGE",
+   "primary": [
+    "LB",
+    "GL",
+    "TRP"
+   ],
+   "secondary": [
+    "HAM",
+    "UB",
+    "FA"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "box-squat",
+   "name_en": "Box Squat",
+   "name_pl": "Przysiad na skrzynię",
+   "pattern": "SQUAT",
+   "primary": [
+    "GL",
+    "Q"
+   ],
+   "secondary": [
+    "HAM",
+    "ADD",
+    "LB"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "sissy-squat",
+   "name_en": "Sissy Squat",
+   "name_pl": "Sissy squat",
+   "pattern": "KEXT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "reverse-nordic",
+   "name_en": "Reverse Nordic",
+   "name_pl": "Odwrotny nordic",
+   "pattern": "KEXT",
+   "primary": [
+    "Q"
+   ],
+   "secondary": [
+    "HF"
+   ],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "glute-ham-raise",
+   "name_en": "Glute Ham Raise",
+   "name_pl": "Glute ham raise",
+   "pattern": "KFLEX",
+   "primary": [
+    "HAM"
+   ],
+   "secondary": [
+    "GL"
+   ],
+   "equipment": "BW",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "BWX"
+  },
+  {
+   "id": "copenhagen-plank",
+   "name_en": "Copenhagen Plank",
+   "name_pl": "Plank kopenhaski",
+   "pattern": "HIPADD",
+   "primary": [
+    "ADD"
+   ],
+   "secondary": [
+    "OBL"
+   ],
+   "equipment": "BW",
+   "type": "isolation",
+   "unilateral": true,
+   "logging": "T"
+  },
+  {
+   "id": "cable-front-raise",
+   "name_en": "Cable Front Raise",
+   "name_pl": "Wznosy przodem na wyciągu",
+   "pattern": "FRONTRAISE",
+   "primary": [
+    "FD"
+   ],
+   "secondary": [
+    "SD"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cable-y-raise",
+   "name_en": "Cable Y-Raise",
+   "name_pl": "Wznosy w literę Y na wyciągu",
+   "pattern": "LATRAISE",
+   "primary": [
+    "SD"
+   ],
+   "secondary": [
+    "TRP",
+    "RD"
+   ],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "jm-press",
+   "name_en": "JM Press",
+   "name_pl": "JM press",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [
+    "CH"
+   ],
+   "equipment": "BB",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "spider-curl",
+   "name_en": "Spider Curl",
+   "name_pl": "Uginanie ramion na ławce skośnej przodem (spider curl)",
+   "pattern": "CURL",
+   "primary": [
+    "BI"
+   ],
+   "secondary": [
+    "BR"
+   ],
+   "equipment": "EZ",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "cross-body-cable-triceps-extension",
+   "name_en": "Cross-Body Cable Triceps Extension",
+   "name_pl": "Prostowanie ramion na wyciągu w skrzyżowaniu",
+   "pattern": "TRIEXT",
+   "primary": [
+    "TRI"
+   ],
+   "secondary": [],
+   "equipment": "CAB",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "smith-machine-shrug",
+   "name_en": "Smith Machine Shrug",
+   "name_pl": "Szrugsy w maszynie Smitha",
+   "pattern": "SHRUG",
+   "primary": [
+    "TRP"
+   ],
+   "secondary": [
+    "FA"
+   ],
+   "equipment": "SMITH",
+   "type": "isolation",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
+   "id": "landmine-row",
+   "name_en": "Landmine Row",
+   "name_pl": "Wiosłowanie landmine oburącz",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD",
+    "LB"
+   ],
+   "equipment": "LM",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  }
+ ]
+}
