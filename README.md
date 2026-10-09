@@ -1,4 +1,4 @@
-# Repsmith v0.5.8
+# Repsmith v0.6.0
 
 Autor: Adrian Drożdżyński
 
@@ -8,7 +8,7 @@ Dziennik treningowy jako PWA. Działa offline, dane trzyma lokalnie na telefonie
 
 1. Załóż konto na github.com, jeśli go nie masz.
 2. Kliknij **New repository**, nazwij je np. `repsmith`, ustaw **Public**, utwórz.
-3. Na stronie repozytorium kliknij **uploading an existing file** i przeciągnij **całą zawartość** tego folderu (`index.html`, `app.js`, `app.css`, `sw.js`, `manifest.webmanifest`, foldery `data` i `icons`). Zatwierdź **Commit changes**.
+3. Na stronie repozytorium kliknij **uploading an existing file** i przeciągnij **całą zawartość** tego folderu (`index.html`, `app.js`, `plans.js`, `coach.js`, `bodymap.js`, `app.css`, `sw.js`, `manifest.webmanifest`, foldery `data` i `icons`). Zatwierdź **Commit changes**.
 4. Wejdź w **Settings → Pages**. W **Source** wybierz **Deploy from a branch**, branch `main`, folder `/ (root)`, **Save**.
 5. Po 1–2 minutach aplikacja będzie pod adresem `https://<twoj-login>.github.io/repsmith/`.
 
@@ -30,7 +30,7 @@ Ograniczenia iOS: brak wibracji na koniec przerwy, dźwięki timera nie grają p
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.5.9`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.6.1`).
 
 ## Sprawdzenie wersji
 
@@ -43,7 +43,9 @@ Ustawienia → na dole numer wersji. Jeśli po aktualizacji widać starą: zamkn
 
 ## Struktura
 
-- `data/exercises.json` – baza 156 ćwiczeń (nazwy PL/EN, wzorzec ruchu, mięśnie główne i pomocnicze, sprzęt, typ, jednostronne, sposób rejestracji).
-- `app.js` – cała logika, bez frameworków i bez kroku budowania.
+- `data/exercises.json` – baza 159 ćwiczeń (nazwy PL/EN, wzorzec ruchu, mięśnie główne i pomocnicze, sprzęt, typ, jednostronne, sposób rejestracji).
+- `app.js` – interfejs i logika dziennika, bez frameworków i bez kroku budowania.
+- `plans.js` – biblioteka 25 planów, pytania kreatora, pakiety dodatkowe i zamiany (generowane z blueprintu planów).
+- `coach.js` – selektor planu, budowanie planu, silnik progresji, objętość, sygnały, bloki i deload.
 - `bodymap.js` – sylwetka mięśni z [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter), licencja MIT, © 2022 ELABBASSI Hicham (pełna treść w `LICENSES.md`).
-- Format kopii: `{ app: "repsmith", schema: 1, settings, templates, sessions, notes, customExercises, active }`.
+- Format kopii: `{ app: "repsmith", schema: 1, settings, templates, sessions, notes, customExercises, active, measurements, flags, calib }`.
