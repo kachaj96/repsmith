@@ -252,3 +252,9 @@ table.rpe td { background: color-mix(in srgb, var(--accent) calc(var(--h) * 38%)
 .stat .v.small-v { font-size: 20px; }
 .mfield { display: flex; flex-direction: column; gap: 4px; }
 .block-btn { width: 100%; }
+
+.credits { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 18px 0 4px; border-top: 1px solid var(--line); margin-top: 6px; font-size: 14px; }
+.credits .brand { font-size: 16px; }
+.credits .brand svg { width: 24px; height: 24px; }
+
+.info > div, .sheet > .muted.small { white-space: pre-line; }

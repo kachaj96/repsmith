@@ -1,7 +1,7 @@
 {
   "name": "Repsmith",
   "short_name": "Repsmith",
-  "description": "Dziennik treningowy: plany, serie, RPE, top set i backoff.",
+  "description": "Dziennik treningowy: plany, serie, RPE, top set i backoff. Autor: Adrian Drożdżyński.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

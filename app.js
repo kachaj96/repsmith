@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.5.0';
+const VERSION = '0.5.2';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -22,7 +22,7 @@ const STR = {
     backoffSets: 'Serie backoff', backoffReps: 'Powt. backoff', backoffPct: 'Backoff % top setu',
     whySchemes: 'Kiedy który schemat?',
     straightInfo: 'Ten sam ciężar i liczba powtórzeń we wszystkich seriach roboczych. Dobre do ćwiczeń izolowanych, maszyn i budowania objętości. Łatwe do śledzenia: jak zrobisz wszystkie serie w górnym zakresie powtórzeń, dokładasz ciężar.',
-    topbackInfo: 'Jedna ciężka seria (top set) na zadane RPE, potem lżejsze serie (backoff) na procent ciężaru z top setu. Top set mówi, jak jesteś dziś dysponowany, a backoffy dokładają objętość bez zajeżdżania się. Dobre do bojów głównych: przysiad, wyciskanie, martwy ciąg, OHP.',
+    topbackInfo: 'Jedna ciężka seria (top set) na zadane RPE, potem lżejsze serie (backoff) na procent ciężaru z top setu.\n\nTop set mówi, jak jesteś dziś dysponowany, a backoffy dokładają objętość bez zajeżdżania się. Dobre do bojów głównych: przysiad, wyciskanie, martwy ciąg, OHP.',
     warmup: 'Rozgrz.', work: 'Seria', top: 'Top set', backoff: 'Backoff',
     prev: 'Poprzednio', kg: 'kg', plusKg: '+kg', time: 'Czas (s)', dist: 'Dyst. (m)',
     addSet: '+ Dodaj serię', removeSet: 'Usuń ostatnią serię', finish: 'Zakończ', finishWorkout: 'Zakończ trening',
@@ -82,7 +82,9 @@ const STR = {
     h_arm: 'W najszerszym miejscu ramienia, ręka luźno wzdłuż tułowia.', h_thigh: 'W połowie między pachwiną a kolanem, noga rozluźniona.',
     h_calf: 'W najszerszym miejscu łydki, na stojąco.', h_bf: 'Z wagi z pomiarem składu ciała. Zawsze ta sama waga i pora.',
     tapHint: 'Stuknij wykres, żeby zobaczyć wartość.',
-    rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS). Z niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
+    repeatWorkout: 'Powtórz trening', repeatHint: 'Te same ćwiczenia i serie, wyniki z tego treningu jako podpowiedź.', finishCurrentFirst: 'Najpierw zakończ albo odrzuć trwający trening.',
+    repeatOfLbl: 'Powtórzenie treningu z', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński',
+    rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS).\n\nZ niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
     today: 'Today', plans: 'Plans', history: 'History', library: 'Exercises',
@@ -99,7 +101,7 @@ const STR = {
     backoffSets: 'Backoff sets', backoffReps: 'Backoff reps', backoffPct: 'Backoff % of top set',
     whySchemes: 'Which scheme when?',
     straightInfo: 'Same weight and reps on every working set. Good for isolation work, machines and building volume. Easy to progress: once you hit the top of the rep range on all sets, add weight.',
-    topbackInfo: 'One heavy set (top set) at a target RPE, then lighter sets (backoff) at a percentage of the top set weight. The top set tells you how you perform today, the backoffs add volume without burning you out. Good for main lifts: squat, bench, deadlift, OHP.',
+    topbackInfo: 'One heavy set (top set) at a target RPE, then lighter sets (backoff) at a percentage of the top set weight.\n\nThe top set tells you how you perform today, the backoffs add volume without burning you out. Good for main lifts: squat, bench, deadlift, OHP.',
     warmup: 'Warm-up', work: 'Set', top: 'Top set', backoff: 'Backoff',
     prev: 'Previous', kg: 'kg', plusKg: '+kg', time: 'Time (s)', dist: 'Dist. (m)',
     addSet: '+ Add set', removeSet: 'Remove last set', finish: 'Finish', finishWorkout: 'Finish workout',
@@ -159,7 +161,9 @@ const STR = {
     h_arm: 'At the widest point of the upper arm, arm hanging relaxed.', h_thigh: 'Halfway between groin and knee, leg relaxed.',
     h_calf: 'At the widest point of the calf, standing.', h_bf: 'From a body composition scale. Same scale, same time of day.',
     tapHint: 'Tap the chart to see a value.',
-    rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS). The app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
+    repeatWorkout: 'Repeat workout', repeatHint: 'Same exercises and sets, this workout\'s results as hints.', finishCurrentFirst: 'Finish or discard the workout in progress first.',
+    repeatOfLbl: 'Repeat of the workout from', author: 'Author', madeBy: 'Made by Adrian Drożdżyński',
+    rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS).\n\nThe app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
 function plural(n, one, few, many) {
@@ -713,7 +717,7 @@ function vHistory() {
   const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(s => {
     const st = sessionStats(s);
     const prs = s.items.reduce((n, it) => n + it.sets.filter(x => x.pr && x.pr.length).length, 0);
-    return `<button class="list-btn row" data-a="open-session" data-v="${s.id}"><span class="grow"><span class="name">${esc(s.name)}</span><br><span class="meta">${esc(fmtDate(s.startedAt, { weekday: 'short', day: 'numeric', month: 'short' }))} · ${esc(fmtDur(s.endedAt - s.startedAt))} · ${st.sets} ${esc(t('setsDone').toLowerCase())}${prs ? ` · <span class="pr-badge">PR ${prs}</span>` : ''}</span></span>${s.difficulty ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${s.difficulty}/10">${s.difficulty}<small>/10</small></span>` : ''}</button>`;
+    return `<button class="list-btn row" data-a="open-session" data-v="${s.id}"><span class="grow"><span class="name">${esc(s.name)}</span><br><span class="meta">${esc(fmtDate(s.startedAt, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))} · ${esc(fmtDur(s.endedAt - s.startedAt))} · ${st.sets} ${esc(t('setsDone').toLowerCase())}${prs ? ` · <span class="pr-badge">PR ${prs}</span>` : ''}</span></span>${s.difficulty ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${s.difficulty}/10">${s.difficulty}<small>/10</small></span>` : ''}</button>`;
   }).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`}</main>`;
 }
@@ -727,11 +731,14 @@ function vSession() {
     const prNote = it.sets.filter(x => x.pr && x.pr.length).map(x => `${fmtSet(x, ex)}: ${prLabel(x.pr)}`).join(' · ');
     return `<div class="row" style="flex-direction:column;align-items:flex-start;padding:10px 0;gap:4px"><span class="name">${esc(exName(it.exId))}</span><div>${sets || '<span class="muted small">–</span>'}</div>${prNote ? `<div class="small" style="color:var(--accent)">PR · ${esc(prNote)}</div>` : ''}</div>`;
   }).join('');
-  return `<main class="screen"><div class="topbar"><button class="icon-btn" data-a="nav" data-v="history" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(fmtDate(s.startedAt))}</div><span style="width:44px"></span></div>
+  return `<main class="screen"><div class="topbar"><button class="icon-btn" data-a="nav" data-v="history" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(fmtDate(s.startedAt, { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}</div><span style="width:44px"></span></div>
     <h1 class="mid">${esc(s.name)}</h1>
+    ${s.repeatOf ? (() => { const o = S.sessions.find(x => x.id === s.repeatOf); return o ? `<button class="btn small ghost" style="justify-content:flex-start;padding:0" data-a="open-session" data-v="${o.id}">${esc(t('repeatOfLbl'))} ${esc(fmtDate(o.startedAt, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))} →</button>` : ''; })() : ''}
     <div class="stat-row"><div class="stat"><div class="v">${esc(fmtDur(s.endedAt - s.startedAt))}</div><div class="k">${esc(t('duration'))}</div></div><div class="stat"><div class="v">${st.sets}</div><div class="k">${esc(t('setsDone'))}</div></div><div class="stat"><div class="v">${st.vol.toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'pl-PL')}</div><div class="k">${esc(t('volume'))} kg</div></div></div>
     ${s.difficulty || s.note ? `<div class="info">${s.difficulty ? `<div style="display:flex;align-items:baseline;gap:10px"><span class="diff-badge">${s.difficulty}<small>/10</small></span><span class="muted small">${esc(t('difficultyShort'))}</span></div>` : ''}${s.note ? `<div style="white-space:pre-wrap">${esc(s.note)}</div>` : ''}</div>` : ''}
     <div class="card">${items}</div>
+    <button class="btn primary block" data-a="repeat" data-v="${s.id}">${esc(t('repeatWorkout'))}</button>
+    <div class="muted small" style="margin-top:-8px">${esc(t('repeatHint'))}</div>
     <button class="btn block" data-a="summary-edit" data-v="${s.id}">${esc(t('editSummary'))}</button>
     <button class="btn danger block" data-a="session-del" data-v="${s.id}">${esc(t('deleteSession'))}</button></main>`;
 }
@@ -863,8 +870,8 @@ function vStrength() {
   const ws = weekStart(now()) - pg.week * 7 * 864e5;
   const vol = weeklyVolume(ws);
   const maxV = vol.length ? Math.max(...vol.map(v => v[1])) : 1;
-  const volBlock = `<div><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2>${esc(t('weeklyVolume'))}</h2>
-      <div class="chips"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('thisWeekS'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('lastWeekS'))}</button></div></div>
+  const volBlock = `<div><h2>${esc(t('weeklyVolume'))}</h2>
+      <div class="chips" style="margin-top:10px"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('thisWeekS'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('lastWeekS'))}</button></div>
     ${vol.length ? `<div class="vol">${vol.map(([m, v]) => `<div class="vol-row"><span class="vm">${esc(muscleName(m))}</span><span class="vb"><i style="width:${(v / maxV * 100).toFixed(1)}%"></i></span><span class="vv">${esc(fmtN(v))}</span></div>`).join('')}</div>` : `<div class="muted small">–</div>`}
     <div class="muted small" style="margin-top:6px">${esc(t('volumeHint'))}</div></div>`;
   const tl = allPrEvents().slice(0, 15);
@@ -1048,7 +1055,7 @@ function renderSheet() {
       <button class="btn block" data-a="export-copy">${esc(t('copyBtn'))}</button>
       <button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>
       <label class="btn block" for="importfile" style="margin:0;color:var(--text);font-size:16px">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
-      <div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div>`;
+      <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
   el.innerHTML = `<div class="scrim" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
   document.body.style.overflow = 'hidden';
@@ -1243,6 +1250,17 @@ const A = {
       s.name = sh.name || s.name; s.difficulty = sh.difficulty; s.note = sh.note;
       persist('sessions'); closeSheet(); render();
     }
+  },
+  repeat: el => {
+    if (S.active) { toast(t('finishCurrentFirst')); return; }
+    const src = S.sessions.find(x => x.id === el.dataset.v); if (!src) return;
+    S.active = {
+      id: uid(), name: src.name, templateId: src.templateId || null, dayId: src.dayId || null, repeatOf: src.id,
+      startedAt: now(), endedAt: null, bw: bodyweightAt(now()),
+      items: src.items.map(it => ({ id: uid(), exId: it.exId, scheme: it.scheme, rest: it.rest, backoffPct: it.backoffPct,
+        sets: it.sets.map(x => newSet(x.kind, x.side, x.target || null)) })),
+    };
+    ensureAudio(); persist('active'); go('workout');
   },
   'summary-edit': el => { const s = S.sessions.find(x => x.id === el.dataset.v); openSheet({ type: 'summary', mode: 'edit', sessionId: s.id, name: s.name, difficulty: s.difficulty || null, note: s.note || '' }); },
   discard: () => ask(t('discardQ'), () => { S.active = null; S.timer = null; persist('active'); go('today'); }, { danger: true, yes: t('discard') }),
