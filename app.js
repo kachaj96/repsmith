@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -60,8 +60,8 @@ const STR = {
     noRecords: 'Rekordy pojawią się po pierwszym treningu z tym ćwiczeniem.', editSummary: 'Edytuj podsumowanie',
     noPlansYet: 'Nie masz jeszcze żadnego planu. Utwórz pierwszy i dodaj do niego dni treningowe.',
     prHint: 'PR liczy się względem wszystkich wcześniejszych serii tego ćwiczenia. e1RM z tabeli RPE Tuchscherera (1–12 powt.).',
-    rpeHints: { 10: 'maks, nic w zapasie', 9.5: 'może 1 powt. więcej, ciężaru już nie', 9: '1 powt. w zapasie', 8.5: '1–2 powt. w zapasie', 8: '2 powt. w zapasie', 7.5: '2–3 powt. w zapasie', 7: '3 powt. w zapasie, szybki ciężar', 6.5: '3–4 powt. w zapasie', low: '4+ powt. w zapasie, lekko' },
-    rpeHintEmpty: 'RPE = ile powtórzeń zostało w zapasie. 10 = nic, 8 = dwa.',
+    rpeHints: { 10: 'Maks. Nic w zapasie', 9.5: 'Może 1 powt. więcej, ciężaru już nie', 9: '1 powtórzenie w zapasie', 8.5: '1–2 powtórzenia w zapasie', 8: '2 powtórzenia w zapasie', 7.5: '2–3 powtórzenia w zapasie', 7: '3 powtórzenia w zapasie, szybko', 6.5: '3–4 powtórzenia w zapasie', 6: '4+ powtórzeń w zapasie, lekko' },
+    rpeHintEmpty: 'RPE to liczba powtórzeń, które zostały w zapasie. 10 = nic, 8 = dwa.', clear: 'Wyczyść',
     rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS). Z niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
@@ -117,8 +117,8 @@ const STR = {
     noRecords: 'Records show up after your first workout with this exercise.', editSummary: 'Edit summary',
     noPlansYet: 'No plans yet. Create your first one and add training days to it.',
     prHint: 'A PR counts against every earlier set of this exercise. e1RM uses Tuchscherer’s RPE table (1–12 reps).',
-    rpeHints: { 10: 'max, nothing left', 9.5: 'maybe 1 more rep, no more weight', 9: '1 rep left', 8.5: '1–2 reps left', 8: '2 reps left', 7.5: '2–3 reps left', 7: '3 reps left, bar moves fast', 6.5: '3–4 reps left', low: '4+ reps left, easy' },
-    rpeHintEmpty: 'RPE = reps left in the tank. 10 = none, 8 = two.',
+    rpeHints: { 10: 'Max. Nothing left', 9.5: 'Maybe 1 more rep, but no more weight', 9: '1 rep left', 8.5: '1–2 reps left', 8: '2 reps left', 7.5: '2–3 reps left', 7: '3 reps left, bar moves fast', 6.5: '3–4 reps left', 6: '4+ reps left, easy' },
+    rpeHintEmpty: 'RPE is how many reps you had left. 10 = none, 8 = two.', clear: 'Clear',
     rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS). The app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
@@ -583,7 +583,7 @@ function setGrid(it) {
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
     return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.done ? 'done' : ''}">
       <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
-      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}${f('rpe', s.rpe, phRpe, 'rpe')}
+      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
   return `<div class="sets"><div class="set-head"><span>${esc(t('sets'))}</span><span>${esc(t('prev'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
@@ -712,6 +712,12 @@ function renderSheet() {
       <button class="btn primary block" data-a="summary-save">${esc(sh.mode === 'finish' ? t('saveWorkout') : t('save'))}</button>`;
   } else if (sh.type === 'schemeInfo') {
     body = `${head(t('whySchemes'))}<div class="info ${sh.cur === 'straight' ? 'sel' : ''}"><h3>${esc(t('straight'))}</h3><div>${esc(t('straightInfo'))}</div></div><div class="info ${sh.cur === 'topback' ? 'sel' : ''}"><h3>${esc(t('topback'))}</h3><div>${esc(t('topbackInfo'))}</div></div><button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>`;
+  } else if (sh.type === 'rpe') {
+    const H = (STR[S.settings.lang] || STR.pl).rpeHints;
+    const vals = [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
+    body = `${head('RPE')}<div class="muted small">${esc(t('rpeHintEmpty'))}</div>
+      <div class="rpe-list" role="listbox" aria-label="RPE">${vals.map((v, i) => `<button role="option" aria-selected="${sh.cur === v}" class="rpe-opt ${sh.cur === v ? 'on' : ''}" style="--k:${(0.08 + i * 0.045).toFixed(3)}" data-a="rpe-set" data-v="${v}"><span class="n">${fmtN(v)}</span><span class="d">${esc(H[v])}</span>${sh.cur === v ? I.check : ''}</button>`).join('')}</div>
+      <div class="btn-row"><button class="btn small ghost" data-a="rpe-set" data-v="">${esc(t('clear'))}</button><button class="btn small ghost" data-a="rpe-table">${esc(t('rpeTable'))}</button></div>`;
   } else if (sh.type === 'rpeTable') {
     const rows = Object.keys(RPE_TABLE).map(Number).sort((a, b) => b - a);
     body = `${head(t('rpeTable'))}<div class="muted small">${esc(t('rpeTableInfo'))}</div>
@@ -889,6 +895,12 @@ const A = {
   },
   'del-set': el => { const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId); it.sets.splice(-(ex && ex.unilateral ? 2 : 1)); saveActive(); render(); },
   'rpe-table': () => openSheet({ type: 'rpeTable' }),
+  'rpe-open': el => { const it = findItem(el.dataset.i); const s = it.sets.find(x => x.id === el.dataset.s); openSheet({ type: 'rpe', itemId: it.id, setId: s.id, cur: normRpe(s.rpe) }); },
+  'rpe-set': el => {
+    const it = findItem(S.sheet.itemId); const s = it && it.sets.find(x => x.id === S.sheet.setId);
+    if (s) { s.rpe = el.dataset.v; if (s.done) s.pr = detectPR(it.exId, s); saveActive(); }
+    closeSheet(); render();
+  },
   'scheme-info': el => { const it = findItem(el.dataset.i); openSheet({ type: 'schemeInfo', cur: it.scheme }); },
   subs: el => openSheet({ type: 'subs', itemId: el.dataset.i }),
   'do-sub': el => doSwap(S.sheet.itemId, el.dataset.v),
@@ -1049,23 +1061,6 @@ async function importBackup(text) {
   }, { yes: t('confirm') });
 }
 
-/* ---------- RPE hint under the set row while typing ---------- */
-function rpeHintText(v) {
-  const h = (STR[S.settings.lang] || STR.pl).rpeHints;
-  const q = normRpe(v);
-  if (q == null) return t('rpeHintEmpty');
-  const txt = q >= 6.5 ? h[q] : h.low;
-  return `RPE ${fmtN(q)} · ${txt}`;
-}
-function showRpeHint(inp) {
-  const row = inp.closest('.set'); if (!row) return;
-  let h = row.nextElementSibling;
-  if (!h || !h.classList.contains('rpe-hint')) { h = document.createElement('div'); h.className = 'rpe-hint'; h.setAttribute('aria-live', 'polite'); row.after(h); }
-  h.textContent = rpeHintText(inp.value);
-}
-document.addEventListener('focusin', ev => { if (ev.target.matches('.set input[data-k=rpe]')) showRpeHint(ev.target); });
-document.addEventListener('focusout', ev => { if (ev.target.matches('.set input[data-k=rpe]')) { const n = ev.target.closest('.set')?.nextElementSibling; if (n && n.classList.contains('rpe-hint')) n.remove(); } });
-
 /* ---------- events ---------- */
 document.addEventListener('click', ev => {
   const el = ev.target.closest('[data-a]');
@@ -1081,7 +1076,6 @@ document.addEventListener('input', ev => {
   if (f === 'set') {
     const it = findItem(el.dataset.i); if (!it) return;
     const s = it.sets.find(x => x.id === el.dataset.s); s[el.dataset.k] = el.value.replace(',', '.');
-    if (el.dataset.k === 'rpe') showRpeHint(el);
     clearTimeout(S._saveT); S._saveT = setTimeout(saveActive, 400);
   } else if (f === 'lib-q') {
     S.lib.q = el.value; const l = $('#liblist'); if (l) l.innerHTML = exRows(filteredExercises(S.lib.q, S.lib.pat), 'ex-detail');
