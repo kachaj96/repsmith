@@ -25,6 +25,12 @@ Na podstawie blueprintów Adriana: progresja, objętość, plany z kreatorem.
 - Silnik: zakres RPE liczony jako cel (nad górną granicą = za ciężko), w trybie "ciężar z aplikacji" dolny koniec zakresu. AMRAP: ciężar zostaje, zmieniasz go sam.
 - Stare wpisy w planach naprawiane przy starcie aplikacji.
 
+## v0.6.3 – zrobione
+- Backoff: powtórzenia jako Jak top set / Stałe / Zakres.
+
+## v0.6.4 – zrobione
+- Nowy plan: najpierw wybór trybu. Prosty (serie, powtórzenia stałe lub zakres, przerwa, automatyczne podpowiedzi) albo zaawansowany (wszystko). Tryb zmienisz w menu planu, ustawienia zaawansowane zostają.
+
 ## Teraz: v0.6.x – feedback od znajomych
 Wysłać aplikację znajomym z siłowni, zebrać uwagi. Feedback może zmienić priorytety.
 

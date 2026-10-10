@@ -218,6 +218,7 @@ function factory(H) {
   }
   const range = reps => { const m = String(reps || '').match(/(\d+)\s*(?:-\s*(\d+))?/); if (!m) return null; const lo = +m[1], hi = m[2] ? +m[2] : lo; return { lo, hi }; };
   function methodOf(it) {
+    if (it.noprog) return null;
     if (it.method) return it.method;
     const log = (EX(it.exId) || { logging: 'W' }).logging;
     if (log === 'T' || log === 'WD') return null;

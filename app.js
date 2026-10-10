@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.6.2';
+const VERSION = '0.6.4';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -197,7 +197,10 @@ Object.assign(STR.pl, {
   m4Title: 'Które ćwiczenia bolą? Usuń maksymalnie 2.', planCreated: 'Plan gotowy i ustawiony jako aktywny',
   planLib: 'Biblioteka planów', pickPlanWizard: 'Dobierz plan', perWeek: n => `${n}× w tygodniu`,
   tgReps: 'Powtórzenia', tgTime: 'Czas (s)', tgDist: 'Dystans (m)', tm_fixed: 'Stałe', tm_range: 'Zakres', tm_amrap: 'AMRAP / max', tmT_fixed: 'Czas', tmT_range: 'Zakres czasu', tmD_fixed: 'Dystans', tmD_range: 'Zakres dystansu',
-  tgFrom: 'Od', tgTo: 'Do', tgMin: 'Minimum', tgVal: 'Liczba', efLbl: 'Intensywność', em_rpe: 'RPE', em_rrange: 'Zakres RPE', em_pct: '% 1RM', pctLbl: '% 1RM',
+  npTitle: 'Nowy plan', npAsk: 'Jak chcesz budować plan?', npSimple: 'Prosty', npSimpleD: 'Ćwiczenie, serie, powtórzenia (stałe albo zakres) i przerwa. Aplikacja sama podpowiada ciężar i powtórzenia na kolejny trening. Dla większości wystarczy.',
+  npAdv: 'Zaawansowany', npAdvD: 'Wszystko: metody progresji (top set + backoff, serie na RPE i RIR), zakres RPE albo % 1RM, rozgrzewki, backoff, AMRAP. Dla tych, którzy wiedzą, czego chcą.', npLater: 'Tryb możesz zmienić później w menu planu. Zapisane ustawienia nie znikają.', npNext: 'Dalej: wybór ćwiczeń',
+  modeSimple: 'Tryb prosty', modeAdv: 'Tryb zaawansowany', modeToAdv: 'Przełącz na tryb zaawansowany', modeToSimple: 'Przełącz na tryb prosty', autoProg: 'Podpowiadaj ciężar i powtórzenia', autoProgD: 'Aplikacja liczy ciężar i powtórzenia na kolejny trening z Twojej historii. Wyłącz, jeśli chcesz wszystko ustawiać sam.', hiddenAdv: 'To ćwiczenie ma ustawienia zaawansowane (progresja, RPE, % 1RM). Zostają bez zmian. Edytujesz je w trybie zaawansowanym.', simpleHint: 'Serie × powtórzenia × przerwa',
+  tgFrom: 'Od', tgTo: 'Do', bkLbl: 'Powtórzenia backoff', bkSame: 'Jak top set', bkSets: 'Serie backoff', tgMin: 'Minimum', tgVal: 'Liczba', efLbl: 'Intensywność', em_rpe: 'RPE', em_rrange: 'Zakres RPE', em_pct: '% 1RM', pctLbl: '% 1RM',
   amrapInfo: 'AMRAP: ile się da w dobrej technice, minimum podane wyżej. Ciężar zmieniasz sam, aplikacja go nie podnosi.',
   pctInfo: 'Ciężar = procent z 1RM. 1RM wpisane ręcznie ma pierwszeństwo, inaczej aplikacja bierze najlepszy e1RM z ostatnich 6 tygodni.',
   ormNone: 'Brak 1RM. Wpisz je albo zrób trening z RPE, aplikacja policzy e1RM.', ormLine: (kg, src) => `1RM: ${kg} kg (${src})`, ormManual: 'wpisane', ormApp: 'e1RM z aplikacji', ormSet: 'Ustaw 1RM',
@@ -274,7 +277,10 @@ Object.assign(STR.en, {
   m4Title: 'Which exercises hurt? Remove up to 2.', planCreated: 'Plan ready and set as active',
   planLib: 'Plan library', pickPlanWizard: 'Find a plan', perWeek: n => `${n}× per week`,
   tgReps: 'Reps', tgTime: 'Time (s)', tgDist: 'Distance (m)', tm_fixed: 'Fixed', tm_range: 'Range', tm_amrap: 'AMRAP / max', tmT_fixed: 'Time', tmT_range: 'Time range', tmD_fixed: 'Distance', tmD_range: 'Distance range',
-  tgFrom: 'From', tgTo: 'To', tgMin: 'Minimum', tgVal: 'Value', efLbl: 'Intensity', em_rpe: 'RPE', em_rrange: 'RPE range', em_pct: '% 1RM', pctLbl: '% 1RM',
+  npTitle: 'New plan', npAsk: 'How do you want to build it?', npSimple: 'Simple', npSimpleD: 'Exercise, sets, reps (fixed or a range) and rest. The app suggests the load and reps for your next workout. Enough for most people.',
+  npAdv: 'Advanced', npAdvD: 'Everything: progression methods (top set + backoff, RPE and RIR sets), RPE range or % 1RM, warm-ups, backoff, AMRAP. For those who know what they want.', npLater: 'You can change the mode later in the plan menu. Saved settings stay.', npNext: 'Next: pick exercises',
+  modeSimple: 'Simple mode', modeAdv: 'Advanced mode', modeToAdv: 'Switch to advanced mode', modeToSimple: 'Switch to simple mode', autoProg: 'Suggest load and reps', autoProgD: 'The app works out the load and reps for your next workout from your history. Turn off to set everything yourself.', hiddenAdv: 'This exercise has advanced settings (progression, RPE, % 1RM). They stay as they are. Edit them in advanced mode.', simpleHint: 'Sets × reps × rest',
+  tgFrom: 'From', tgTo: 'To', bkLbl: 'Backoff reps', bkSame: 'Same as top set', bkSets: 'Backoff sets', tgMin: 'Minimum', tgVal: 'Value', efLbl: 'Intensity', em_rpe: 'RPE', em_rrange: 'RPE range', em_pct: '% 1RM', pctLbl: '% 1RM',
   amrapInfo: 'AMRAP: as many good reps as you can, at least the minimum above. You change the load yourself, the app does not raise it.',
   pctInfo: 'Load = percent of 1RM. A 1RM you enter wins, otherwise the app uses your best e1RM from the last 6 weeks.',
   ormNone: 'No 1RM yet. Enter it, or log a workout with RPE and the app will estimate it.', ormLine: (kg, src) => `1RM: ${kg} kg (${src})`, ormManual: 'entered', ormApp: 'app e1RM', ormSet: 'Set 1RM',
@@ -462,7 +468,7 @@ function normItem(it) {
   const before = JSON.stringify(it);
   const d = defaultItem(it.exId);
   it.reps = normTarget(it.reps, it.exId, d.reps);
-  if (it.backoffReps != null && it.backoffReps !== '') { const n = parseInt(String(it.backoffReps).match(/\d+/) || '', 10); it.backoffReps = n > 0 ? String(Math.min(100, n)) : ''; }
+  if (it.backoffReps != null && it.backoffReps !== '') { const o = parseTarget(normTarget(String(it.backoffReps).replace('+', ''), it.exId, '')); it.backoffReps = o && o.mode !== 'amrap' ? fmtTarget(o) : ''; }
   const ri = x => { const v = num(x); return v == null ? null : Math.round(v); };
   it.sets = Math.min(20, Math.max(1, ri(it.sets) ?? 3));
   it.warmups = Math.min(10, Math.max(0, ri(it.warmups) ?? 0));
@@ -666,7 +672,8 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   if (it.cue) cues.unshift(tx(it.cue));
   if (ctx.effort === 'rir_cap' && kind === 'main') cues.push(t('stopCue'));
   if (cues.length) out.cues = cues;
-  const sug = C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
+  if (it.noprog) out.noprog = true;
+  const sug = it.noprog ? null : C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
   if (sug) { if (sug.load != null && mods.loadPct) sug.load = roundTo(sug.load * mods.loadPct, S.settings.increment); out.sug = sug; }
   return out;
 }
@@ -885,6 +892,7 @@ function render() {
     case 'wizard': html = vWizard(); break;
     case 'wizres': html = vWizRes(); break;
     case 'planlib': html = vPlanLib(); break;
+    case 'newplan': html = vNewPlan(); break;
     case 'planprev': html = vPlanPrev(); break;
     default: html = vToday();
   }
@@ -936,13 +944,25 @@ function vToday() {
     : (wc ? `<div class="sub small">${esc(t('thisWeek'))}: ${esc(t('workoutsDone', wc))}</div>` : '');
   return `<main class="screen">${topbar()}${resumeBanner()}${main}${week}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
 }
-function schemeShort(it) {
+function schemeShort(it, simple) {
   const u = targetUnit(it.exId);
   if (it.scheme === 'topback') return `top ${it.reps}${u}${intensityShort(it)} + ${it.backoffSets}×${it.backoffReps || String(it.reps).replace('+', '')}${u}`;
-  return `${it.sets} × ${it.reps}${u}${intensityShort(it)}`;
+  return `${it.sets} × ${it.reps}${u}${simple ? '' : intensityShort(it)}`;
 }
 
 /* ---------- view: plans ---------- */
+function vNewPlan() {
+  const np = S.np || (S.np = { name: t('newPlan') });
+  const card = (m, title, desc) => `<button class="sub-opt" data-a="np-create" data-v="${m}"><span class="n">${esc(title)}</span><span class="muted">${esc(desc)}</span></button>`;
+  return `<main class="screen"><div class="topbar"><button class="icon-btn" data-a="nav" data-v="plans" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('plans'))}</div><span style="width:44px"></span></div>
+    <h1 class="mid">${esc(t('npTitle'))}</h1>
+    <div><label for="np-name">${esc(t('planName'))}</label><input id="np-name" data-f="np-name" maxlength="60" value="${esc(np.name)}"></div>
+    <div class="sub">${esc(t('npAsk'))}</div>
+    ${card('simple', t('npSimple'), t('npSimpleD'))}
+    ${card('advanced', t('npAdv'), t('npAdvD'))}
+    <div class="muted small">${esc(t('npLater'))}</div></main>`;
+}
+const planMode = tp => (tp && tp.mode === 'simple' ? 'simple' : 'advanced');
 function vPlans() {
   const list = S.templates.map(tp => `<button class="list-btn row" data-a="open-plan" data-v="${tp.id}"><span class="grow"><span class="name">${esc(tp.name)}</span><br><span class="meta">${tp.days.length} × ${esc(t('day').toLowerCase())}</span></span>${tp.id === S.settings.activeTemplateId ? `<span class="tag p">${esc(t('active'))}</span>` : ''}</button>`).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('plans'))}</h1>
@@ -961,7 +981,7 @@ function vPlan() {
         <div style="flex:1;min-width:0"><label for="dn-${d.id}">${esc(t('dayName'))}</label><input id="dn-${d.id}" data-f="day-name" data-d="${d.id}" value="${esc(d.name)}"></div>
         <button class="icon-btn" data-a="day-menu" data-d="${d.id}" aria-label="${esc(t('edit'))}">${I.more}</button>
       </div>
-      ${d.items.length ? d.items.map((it, ii) => { const g = groupInfo(d.items)[it.id]; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it))} · ${it.rest} s${C.methodOf(it) ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
+      ${d.items.length ? d.items.map((it, ii) => { const g = groupInfo(d.items)[it.id]; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it, planMode(tp) === 'simple'))} · ${it.rest} s${C.methodOf(it) && planMode(tp) !== 'simple' ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
         <button class="icon-btn" data-a="item-up" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('moveUp'))}" ${ii === 0 ? 'disabled' : ''}>${I.up}</button>
         <button class="icon-btn" data-a="item-link" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('supBtn'))}">${I.link}</button>
         <button class="icon-btn" data-a="item-del" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('remove'))}">${I.x}</button></div>`; }).join('') : `<div class="muted small">${esc(t('planEmptyDay'))}</div>`}
@@ -970,8 +990,8 @@ function vPlan() {
   const isActive = tp.id === S.settings.activeTemplateId;
   return `<main class="screen">${linkBar()}<div class="topbar"><button class="icon-btn" data-a="nav" data-v="plans" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('plans'))}</div><button class="icon-btn" data-a="plan-menu" aria-label="${esc(t('edit'))}">${I.more}</button></div>
     <div><label for="pn">${esc(t('planName'))}</label><input id="pn" data-f="plan-name" value="${esc(tp.name)}"></div>
-    ${isActive ? `<div><span class="tag p">${esc(t('active'))}</span></div>` : `<button class="btn block" data-a="plan-activate">${esc(t('setActive'))}</button>`}
-    ${planCoachBlock(tp)}
+    ${isActive ? `<div><span class="tag p">${esc(t('active'))}</span> <button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button></div>` : `<button class="btn block" data-a="plan-activate">${esc(t('setActive'))}</button><div><button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button></div>`}
+    ${planMode(tp) === 'simple' ? '' : planCoachBlock(tp)}
     ${days || `<div class="empty">${esc(t('addFirstDay'))}</div>`}
     ${tallyBlock(tp.days, tp.perWeek)}
     <button class="btn block" data-a="plan-add-day">${esc(t('addDay'))}</button>
@@ -1614,6 +1634,20 @@ function renderSheet() {
         <div class="muted small" id="orm-line">${o ? esc(t('ormLine', fmtN(o.kg), o.src === 'manual' ? t('ormManual') : t('ormApp'))) + (load ? ` · ${esc(fmtN(pv))}% = ${esc(fmtN(load))} kg` : '') : esc(t('ormNone'))}</div>
         <div class="muted small">${esc(t('pctInfo'))}</div>`;
     }
+    const hasAdv = !!(it.pct || it.rpe != null || it.scheme === 'topback' || it.warmups || (it.method && !['P2', 'H1'].includes(it.method)));
+    if (sh.simple) {
+      const modes = ['fixed', 'range'].concat(tg.mode === 'amrap' ? ['amrap'] : []);
+      body = `${head(exName(it.exId))}
+        <div class="muted small">${esc(t('simpleHint'))}</div>
+        ${hasAdv ? `<div class="info">${esc(t('hiddenAdv'))}</div>` : ''}
+        <div class="grid2">${it.scheme === 'topback' ? '' : fld('it-sets', t('sets'), it.sets, 'int')}${fld('it-rest', t('rest'), it.rest, 'int')}</div>
+        <div class="tg-block"><label>${esc(kind === 'T' ? t('tgTime') : kind === 'WD' ? t('tgDist') : t('tgReps'))}</label>
+          <div class="seg" role="group">${modes.map(m => `<button class="${tg.mode === m ? 'on' : ''}" data-a="tg-mode" data-v="${m}" aria-pressed="${tg.mode === m}">${esc(tl(m))}</button>`).join('')}</div>
+          ${tgFields}</div>
+        ${kind === 'reps' ? `<label class="check-row"><input type="checkbox" data-a="item-prog" ${it.noprog ? '' : 'checked'}> ${esc(t('autoProg'))}</label><div class="muted small">${esc(t('autoProgD'))}</div>` : ''}
+        ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+        <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
+    } else
     body = `${head(exName(it.exId))}
       <div><label>${esc(t('progression'))}</label><div class="chips wrap">${METHODS.map(m => `<button class="chip ${mth === m ? 'on' : ''}" data-a="item-method" data-v="${m}" aria-pressed="${mth === m}">${esc(t('m_' + m))}</button>`).join('')}</div></div>
       ${mth ? `<details class="info"><summary><h3 style="display:inline">${esc(t('m_' + mth))}</h3></summary><div style="white-space:pre-line">${esc(t('mi_' + mth))}</div></details>` : ''}
@@ -1629,7 +1663,10 @@ function renderSheet() {
       <div class="tg-block"><label>${esc(t('efLbl'))}</label>
         <div class="seg" role="group">${efModesFor(it.exId).map(m => `<button class="${ef.mode === m ? 'on' : ''}" data-a="ef-mode" data-v="${m}" aria-pressed="${ef.mode === m}">${esc(t('em_' + m))}</button>`).join('')}</div>
         ${efFields}</div>
-      ${isTop ? `<div class="grid3">${fld('it-backoffSets', t('backoffSets'), it.backoffSets, 'int')}${fld('it-backoffReps', logOf(it.exId) === 'W' || logOf(it.exId) === 'BWX' ? t('backoffReps') : targetLabel(it.exId), it.backoffReps, 'int', t('bkRepsHint'))}${fld('it-backoffPct', t('backoffPct'), it.backoffPct, 'int')}</div>` : ''}
+      ${isTop ? `<div class="tg-block"><label>${esc(t('bkLbl'))}</label>
+        <div class="seg" role="group">${['same', 'fixed', 'range'].map(m => `<button class="${sh.bk.mode === m ? 'on' : ''}" data-a="bk-mode" data-v="${m}" aria-pressed="${sh.bk.mode === m}">${esc(m === 'same' ? t('bkSame') : tl(m))}</button>`).join('')}</div>
+        ${sh.bk.mode === 'same' ? '' : sh.bk.mode === 'range' ? `<div class="grid2">${inp('bklo', t('tgFrom'), sh.bk.lo)}${inp('bkhi', t('tgTo'), sh.bk.hi)}</div>` : `<div class="grid2">${inp('bklo', t('tgVal'), sh.bk.lo)}<div></div></div>`}
+        <div class="grid2">${fld('it-backoffSets', t('bkSets'), it.backoffSets, 'int')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct, 'int')}</div></div>` : ''}
       ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'orm') {
@@ -1783,6 +1820,17 @@ function applyItemTargets(sh) {
     if (hi <= lo) return t('err_tgOrder');
   }
   it.reps = fmtTarget({ mode: tg.mode, lo, hi: tg.mode === 'range' ? hi : lo });
+  if (it.scheme === 'topback' && sh.bk) {
+    const bk = sh.bk;
+    if (bk.mode === 'same') it.backoffReps = '';
+    else {
+      const bl = parseInt(bk.lo, 10), bh = parseInt(bk.hi, 10);
+      if (!(bl > 0)) return t('err_tgEmpty');
+      if (bl < a || bl > b) return t('err_tgLim', a, b);
+      if (bk.mode === 'range') { if (!(bh > 0)) return t('err_tgEmpty'); if (bh < a || bh > b) return t('err_tgLim', a, b); if (bh <= bl) return t('err_tgOrder'); }
+      it.backoffReps = fmtTarget({ mode: bk.mode, lo: bl, hi: bk.mode === 'range' ? bh : bl });
+    }
+  }
   if (ef.mode === 'pct') {
     const p = num(String(ef.pct).replace(',', '.'));
     if (!(p >= 30 && p <= 100)) return t('err_pct');
@@ -1804,6 +1852,8 @@ function initItemSheet(sh) {
   const o = parseTarget(it.reps) || parseTarget(normTarget(it.reps, it.exId, defaultItem(it.exId).reps)) || { mode: 'fixed', lo: 8, hi: 8 };
   sh.tg = { mode: o.mode, lo: String(o.lo), hi: o.mode === 'range' ? String(o.hi) : '' };
   sh.ef = { mode: efMode(it), pct: it.pct ? fmtN(it.pct) : '' };
+  const bo = parseTarget(it.backoffReps);
+  sh.bk = bo && bo.mode !== 'amrap' ? { mode: bo.mode, lo: String(bo.lo), hi: bo.mode === 'range' ? String(bo.hi) : '' } : { mode: 'same', lo: '', hi: '' };
   if (!efModesFor(it.exId).includes(sh.ef.mode)) sh.ef.mode = 'rpe';
   sh.err = null;
 }
@@ -1860,12 +1910,15 @@ const A = {
   'start-free': () => { ensureAudio(); startSession(null, null); },
   'pick-day': el => { const tp = activeTemplate(); const d = tp.days.find(x => x.id === el.dataset.v); S._pickedDay = d.id; render(); },
 
-  'new-plan': () => {
-    const tp = { id: uid(), name: t('newPlan'), days: [{ id: uid(), name: (S.settings.lang === 'en' ? 'Day ' : 'Dzień ') + 'A', items: [] }], createdAt: now(), updatedAt: now() };
+  'new-plan': () => { S.np = { name: t('newPlan') }; go('newplan'); },
+  'np-create': el => {
+    const nm = (S.np && S.np.name || '').trim() || t('newPlan');
+    const tp = { id: uid(), name: nm, mode: el.dataset.v === 'simple' ? 'simple' : 'advanced', days: [{ id: uid(), name: (S.settings.lang === 'en' ? 'Day ' : 'Dzień ') + 'A', items: [] }], createdAt: now(), updatedAt: now() };
     S.templates.push(tp);
     if (!S.settings.activeTemplateId) { S.settings.activeTemplateId = tp.id; persist('settings'); }
-    saveTemplates(); go('plan', tp.id);
+    saveTemplates(); S.np = null; go('plan', tp.id); setTimeout(() => { if (S.view === 'plan' && S.viewArg === tp.id) A['day-add-ex']({ dataset: { d: tp.days[0].id } }); }, 60);
   },
+  'plan-mode': () => { const tp = S.templates.find(x => x.id === S.viewArg); tp.mode = planMode(tp) === 'simple' ? 'advanced' : 'simple'; tp.updatedAt = now(); saveTemplates(); render(); },
   'open-plan': el => go('plan', el.dataset.v),
   'plan-activate': () => { S.settings.activeTemplateId = S.viewArg; persist('settings'); render(); },
   'plan-add-day': () => {
@@ -1876,8 +1929,9 @@ const A = {
   },
   'plan-menu': () => {
     const tp = S.templates.find(x => x.id === S.viewArg);
-    openSheet({ type: 'menu', title: tp.name, items: [{ id: 'dup', label: S.settings.lang === 'en' ? 'Duplicate plan' : 'Duplikuj plan' }, { id: 'del', label: t('deletePlan'), danger: true }],
+    openSheet({ type: 'menu', title: tp.name, items: [{ id: 'mode', label: planMode(tp) === 'simple' ? t('modeToAdv') : t('modeToSimple') }, { id: 'dup', label: S.settings.lang === 'en' ? 'Duplicate plan' : 'Duplikuj plan' }, { id: 'del', label: t('deletePlan'), danger: true }],
       handlers: {
+        mode: () => A['plan-mode'](),
         dup: () => { const c = clone(tp); c.id = uid(); c.name += ' (2)'; c.days.forEach(d => { d.id = uid(); d.items.forEach(i => { i.id = uid(); }); }); S.templates.push(c); saveTemplates(); go('plan', c.id); },
         del: () => ask(t('deletePlan') + '?', () => { S.templates = S.templates.filter(x => x.id !== tp.id); if (S.settings.activeTemplateId === tp.id) { S.settings.activeTemplateId = S.templates[0] ? S.templates[0].id : null; persist('settings'); } saveTemplates(); go('plans'); }, { danger: true, yes: t('delete') }),
       } });
@@ -1896,7 +1950,7 @@ const A = {
       } });
   },
   'day-add-ex': el => openSheet({ type: 'picker', target: { kind: 'day', dayId: el.dataset.d } }),
-  'edit-item': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); openSheet({ type: 'item', dayId: d.id, item: clone(it), _m0: it.method || C.methodOf(it) || null, _rpe0: it.rpe }); },
+  'edit-item': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); openSheet({ type: 'item', simple: planMode(tplDay(d.id)[0]) === 'simple', dayId: d.id, item: clone(it), _m0: it.method || C.methodOf(it) || null, _rpe0: it.rpe }); },
   'item-up': el => { const [, d] = tplDay(el.dataset.d); const i = d.items.findIndex(x => x.id === el.dataset.i); if (i > 0) { const [x] = d.items.splice(i, 1); d.items.splice(i - 1, 0, x); normGroups(d.items); saveTemplates(); render(); } },
   'item-link': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); groupMenu(d.items, it, saveTemplates); },
   'link-toggle': el => { const L = S.link; if (!L) return; const k = L.ids.indexOf(el.dataset.i); if (k >= 0) L.ids.splice(k, 1); else L.ids.push(el.dataset.i); render(); },
@@ -1911,14 +1965,22 @@ const A = {
     reconcileItem(S.sheet, 'method'); S.sheet.err = null;
     renderSheet();
   },
+  'item-prog': el => { readItemFields(); if (el.checked) delete S.sheet.item.noprog; else S.sheet.item.noprog = true; },
   'tg-mode': el => {
     readItemFields(); const sh = S.sheet; const tg = sh.tg; const m = el.dataset.v; if (tg.mode === m) return;
     const lo = +tg.lo || null;
     if (m === 'range') { tg.hi = lo ? String(Math.min(TGT_LIM[tgtKind(sh.item.exId)][1], lo + (lo >= 8 ? 4 : 2))) : ''; }
     else tg.hi = '';
     tg.mode = m; sh.err = null;
-    const nm = reconcileItem(sh, 'rep'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
+    const nm = sh.simple ? null : reconcileItem(sh, 'rep'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
     renderSheet();
+  },
+  'bk-mode': el => {
+    readItemFields(); const bk = S.sheet.bk; const m = el.dataset.v; if (bk.mode === m) return;
+    const base = parseTarget(S.sheet.tg.lo) ? +S.sheet.tg.lo : 8;
+    if (m === 'same') { bk.lo = ''; bk.hi = ''; }
+    else { if (!bk.lo) bk.lo = String(base + 2); bk.hi = m === 'range' ? String(Math.min(100, (+bk.lo || base) + 3)) : ''; }
+    bk.mode = m; S.sheet.err = null; renderSheet();
   },
   'ef-mode': el => {
     readItemFields(); const sh = S.sheet; const it = sh.item; const m = el.dataset.v; if (sh.ef.mode === m) return;
@@ -1948,7 +2010,7 @@ const A = {
 
   pick: el => {
     const id = el.dataset.v, tg = S.sheet.target;
-    if (tg.kind === 'day') { const [, d] = tplDay(tg.dayId); const it = defaultItem(id); d.items.push(it); saveTemplates(); render(); openSheet({ type: 'item', dayId: d.id, item: clone(it) }); }
+    if (tg.kind === 'day') { const [, d] = tplDay(tg.dayId); const it = defaultItem(id); const sm = planMode(tplDay(d.id)[0]) === 'simple'; if (sm) { it.rpe = null; it.rpeMax = null; } d.items.push(it); saveTemplates(); render(); openSheet({ type: 'item', simple: sm, dayId: d.id, item: clone(it) }); }
     else if (tg.kind === 'session') { S.active.items.push(freeItem(id)); saveActive(); closeSheet(); render(); setTimeout(() => { const c = document.querySelectorAll('.ex-card'); c[c.length - 1]?.scrollIntoView({ block: 'start' }); }, 30); }
     else if (tg.kind === 'swap') { doSwap(tg.itemId, id); }
     else if (tg.kind === 'progress') { S.prog.tab = 'strength'; S.prog.exId = id; closeSheet(); render(); }
@@ -2295,9 +2357,10 @@ function readItemFields() {
   it.warmups = Math.min(10, Math.max(0, Math.round(n('it-warmups', it.warmups))));
   it.rest = Math.min(900, Math.max(10, Math.round(n('it-rest', it.rest))));
   it.backoffSets = Math.min(10, Math.max(0, Math.round(n('it-backoffSets', it.backoffSets))));
-  if (g('it-backoffReps') !== undefined) { const b = parseInt(cleanInt(g('it-backoffReps')), 10); it.backoffReps = b > 0 ? String(Math.min(100, b)) : ''; }
   it.backoffPct = Math.min(100, Math.max(40, n('it-backoffPct', it.backoffPct)));
   const tg = $('#tg-lo'); if (tg && S.sheet.tg) S.sheet.tg.lo = cleanInt(tg.value);
+  const bl = $('#tg-bklo'); if (bl && S.sheet.bk) S.sheet.bk.lo = cleanInt(bl.value);
+  const bh = $('#tg-bkhi'); if (bh && S.sheet.bk) S.sheet.bk.hi = cleanInt(bh.value);
   const th = $('#tg-hi'); if (th && S.sheet.tg) S.sheet.tg.hi = cleanInt(th.value);
   const pc = $('#ef-pct'); if (pc && S.sheet.ef) S.sheet.ef.pct = cleanDec(pc.value);
 }
@@ -2366,7 +2429,8 @@ document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
   if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
-  if (f === 'tg' && S.sheet && S.sheet.tg) { S.sheet.tg[el.dataset.k] = el.value; return; }
+  if (f === 'np-name') { (S.np || (S.np = {})).name = el.value; return; }
+  if (f === 'tg' && S.sheet && S.sheet.tg) { if (el.dataset.k === 'bklo' || el.dataset.k === 'bkhi') S.sheet.bk[el.dataset.k.slice(2)] = el.value; else S.sheet.tg[el.dataset.k] = el.value; return; }
   if (f === 'ef-pct' && S.sheet && S.sheet.ef) {
     S.sheet.ef.pct = el.value;
     const ln = $('#orm-line'); const o = oneRm(S.sheet.item.exId); const pv = num(el.value.replace(',', '.'));
