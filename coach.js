@@ -262,8 +262,14 @@ function factory(H) {
     const step = stepFor(item.exId);
     const hist = history(item.exId, before, ctx.sig);
     const fixed = ctx.effort === 'fixed';
+    const amrap = /\+\s*$/.test(String(item.reps || ''));
     // percentage-based loads get rounded to the plate step; kept or stepped loads stay exact (dumbbells come in 14, 16.5...)
     const res = (load, why, d = {}, reps = null, exact = false) => ({ load: load != null && load > 0 ? (exact ? Math.round(load * 100) / 100 : round(load)) : null, why, d, reps, method });
+    // percentage of 1RM: load comes from the 1RM, method progression does not move it
+    if (item.pct && H.oneRm) {
+      const o = H.oneRm(item.exId, before);
+      return o ? res(o.kg * item.pct / 100, 'pct', { pct: item.pct, orm: Math.round(o.kg * 10) / 10, src: o.src }) : res(null, 'pctNone', { pct: item.pct });
+    }
     if (fixed && target && ['P1', 'P3', 'P5'].includes(method)) {
       const l = fromE1(item.exId, r.lo, target, before);
       if (l) return res(l, 'fixed', { rpe: target });
@@ -271,10 +277,20 @@ function factory(H) {
     const last = hist[0] && hist[0].it;
     if (!last) { const l = target ? fromE1(item.exId, r.lo, target, before) : null; return res(l, l ? 'e1rm' : 'first', { rpe: target }); }
     const work = doneWork(last);
+    // AMRAP: minimum N reps; keep the load, the lifter changes it
+    if (amrap) {
+      const loads = work.map(w).filter(x => x > 0);
+      const load = loads.length ? Math.max(...loads) : null;
+      const at = work.filter(x => (w(x) || 0) === (load || 0));
+      const reps = at.map(x => H.num(x.reps) || 0);
+      if (!reps.length) return res(null, 'first', { rpe: target });
+      const best = Math.max(...reps);
+      return res(load, reps.every(x => x >= r.lo) ? 'amrapOk' : 'amrapLow', { best, n: r.lo }, null, true);
+    }
     if (method === 'P1' || method === 'P5') {
       const top = last.sets.find(x => x.kind === 'top' && x.done && w(x) > 0) || work.find(x => w(x) > 0);
       if (!top) return res(null, 'first', { rpe: target });
-      const reps = H.num(top.reps) || 0, q = rpeOf(top, target), diff = target != null ? q - target : 0;
+      const reps = H.num(top.reps) || 0, q = rpeOf(top, target), diff = target != null ? q - (rmax ?? target) : 0;
       if (method === 'P5') {
         const prevTop = hist[1] && hist[1].it.sets.find(x => x.kind === 'top' && x.done);
         const easy2 = target != null && diff <= -1 && prevTop && rpeOf(prevTop, target) <= target - 1 && w(prevTop) === w(top);
@@ -300,7 +316,7 @@ function factory(H) {
       if (!load) return res(target ? fromE1(item.exId, r.lo, target, before) : null, 'first', {});
       const qs = work.map(x => H.normRpe(x.rpe)).filter(x => x != null);
       if (target != null && qs.length && qs.every(q => q <= target - 1)) return res(load * 1.025, 'up25', {});
-      if (target != null && qs.some(q => q >= target + 1)) return res(load * 0.975, 'down25', {});
+      if (target != null && qs.some(q => q >= (rmax ?? target) + 1)) return res(load * 0.975, 'down25', {});
       return res(load, 'holdP3', {}, null, true);
     }
     if (method === 'H1' || method === 'H2') {

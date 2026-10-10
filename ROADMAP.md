@@ -18,6 +18,13 @@ Na podstawie blueprintów Adriana: progresja, objętość, plany z kreatorem.
 - Serie łączone (pary, trisety, giant sety): w planie i w trakcie treningu. Menu "Seria łączona…" albo przytrzymanie ćwiczenia, potem dotknięcie kolejnych. Przerwa dopiero po rundzie, czas treningu liczony bez przerw w środku.
 - Poprawki układu: biblioteka planów (zawijanie tekstu), formularz serii kalibracyjnej.
 
+## v0.6.2 – zrobione
+- Edytor ćwiczenia w planie: powtórzenia jako Stałe / Zakres / AMRAP (dla ćwiczeń na czas i dystans: wartość albo zakres). Pola przyjmują tylko cyfry, z limitami; złe wartości blokują zapis z komunikatem.
+- Intensywność: RPE, zakres RPE, % 1RM. 1RM wpisane ręcznie ma pierwszeństwo, inaczej najlepszy e1RM z 6 tygodni.
+- Metoda progresji pilnuje zgodności: podwójna progresja wymaga zakresu, AMRAP i % 1RM przełączają na liniową.
+- Silnik: zakres RPE liczony jako cel (nad górną granicą = za ciężko), w trybie "ciężar z aplikacji" dolny koniec zakresu. AMRAP: ciężar zostaje, zmieniasz go sam.
+- Stare wpisy w planach naprawiane przy starcie aplikacji.
+
 ## Teraz: v0.6.x – feedback od znajomych
 Wysłać aplikację znajomym z siłowni, zebrać uwagi. Feedback może zmienić priorytety.
 

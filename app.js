@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.6.1';
+const VERSION = '0.6.2';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -195,7 +195,16 @@ Object.assign(STR.pl, {
   addonDropped: 'Blok dodatkowy pominięty: któraś partia przekroczyłaby 20 serii tygodniowo.', addonAdded: m => `Blok +${m} min dodany do dwóch treningów.`,
   effortLbl: 'Ocena wysiłku', effort_rir: 'RIR / RPE', effort_rir_cap: 'RPE max 8', effort_fixed: 'Ciężar z aplikacji',
   m4Title: 'Które ćwiczenia bolą? Usuń maksymalnie 2.', planCreated: 'Plan gotowy i ustawiony jako aktywny',
-  planLib: 'Biblioteka planów', pickPlanWizard: 'Dobierz plan', perWeek: n => `${n}× w tygodniu`, supLink: 'Połącz z następnym', supUnlink: 'Rozłącz z serii łączonej', supPick: 'Wybierz ćwiczenia do połączenia', supTag: 'seria łączona', supHint: n => n < 2 ? 'Dotknij kolejnych ćwiczeń, które chcesz połączyć' : `Wybrane: ${n}. Dotknij kolejne lub połącz`, supDo: 'Połącz', supBtn: 'Seria łączona',
+  planLib: 'Biblioteka planów', pickPlanWizard: 'Dobierz plan', perWeek: n => `${n}× w tygodniu`,
+  tgReps: 'Powtórzenia', tgTime: 'Czas (s)', tgDist: 'Dystans (m)', tm_fixed: 'Stałe', tm_range: 'Zakres', tm_amrap: 'AMRAP / max', tmT_fixed: 'Czas', tmT_range: 'Zakres czasu', tmD_fixed: 'Dystans', tmD_range: 'Zakres dystansu',
+  tgFrom: 'Od', tgTo: 'Do', tgMin: 'Minimum', tgVal: 'Liczba', efLbl: 'Intensywność', em_rpe: 'RPE', em_rrange: 'Zakres RPE', em_pct: '% 1RM', pctLbl: '% 1RM',
+  amrapInfo: 'AMRAP: ile się da w dobrej technice, minimum podane wyżej. Ciężar zmieniasz sam, aplikacja go nie podnosi.',
+  pctInfo: 'Ciężar = procent z 1RM. 1RM wpisane ręcznie ma pierwszeństwo, inaczej aplikacja bierze najlepszy e1RM z ostatnich 6 tygodni.',
+  ormNone: 'Brak 1RM. Wpisz je albo zrób trening z RPE, aplikacja policzy e1RM.', ormLine: (kg, src) => `1RM: ${kg} kg (${src})`, ormManual: 'wpisane', ormApp: 'e1RM z aplikacji', ormSet: 'Ustaw 1RM',
+  ormTitle: '1RM', ormField: 'Twoje 1RM (kg)', ormAppLine: v => v ? `e1RM z aplikacji (6 tyg.): ${v} kg` : 'Aplikacja nie ma jeszcze e1RM dla tego ćwiczenia.', ormClear: 'Usuń wpisane 1RM', ormHint: 'Puste pole = aplikacja liczy z e1RM.',
+  err_tgEmpty: 'Wpisz liczbę.', err_tgOrder: 'Górna granica musi być większa od dolnej.', err_tgLim: (a, b) => `Dozwolone ${a}-${b}.`, err_rpeRange: 'Zakres RPE: ustaw "od" i "do", "do" większe od "od".', err_pct: 'Procent 1RM: od 30 do 100.', err_orm: 'Wpisz ciężar większy od 0.',
+  methodSwitched: m => `Metoda zmieniona na: ${m}`, bkRepsHint: 'Puste = jak top set', rpeFrom: 'RPE od', rpeTo: 'RPE do',
+  why_pct: d => `${fmtN(d.pct)}% z 1RM ${fmtN(d.orm)} kg (${d.src === 'manual' ? 'wpisane' : 'e1RM'})`, why_pctNone: d => `${fmtN(d.pct)}% 1RM: brak 1RM, ustaw je`, why_amrapOk: d => `AMRAP: ostatnio ${d.best} powt. (min. ${d.n}). Ciężar zostaje, zmieniasz go sam`, why_amrapLow: d => `AMRAP: ostatnio ${d.best} powt., poniżej minimum ${d.n}`, supLink: 'Połącz z następnym', supUnlink: 'Rozłącz z serii łączonej', supPick: 'Wybierz ćwiczenia do połączenia', supTag: 'seria łączona', supHint: n => n < 2 ? 'Dotknij kolejnych ćwiczeń, które chcesz połączyć' : `Wybrane: ${n}. Dotknij kolejne lub połącz`, supDo: 'Połącz', supBtn: 'Seria łączona',
   forLbl: 'Dla kogo', designLbl: 'Jak działa', deloadPlanLbl: 'Bloki i deload', warningLbl: 'Uwaga', notesLbl: 'Dlaczego tak',
   seeDetails: 'Zobacz rozpiskę', hideDetails: 'Ukryj rozpiskę', allGoals: 'Wszystkie',
   heroTitle: 'Dobierz plan w 2 minuty', heroText: '12 krótkich pytań: cel, dni, czas, sprzęt. Dostajesz gotowy plan, a aplikacja prowadzi progresję za Ciebie.',
@@ -263,7 +272,16 @@ Object.assign(STR.en, {
   addonDropped: 'Add-on block skipped: a muscle would go above 20 weekly sets.', addonAdded: m => `+${m} min block added to two sessions.`,
   effortLbl: 'Effort rating', effort_rir: 'RIR / RPE', effort_rir_cap: 'RPE max 8', effort_fixed: 'App sets the load',
   m4Title: 'Which exercises hurt? Remove up to 2.', planCreated: 'Plan ready and set as active',
-  planLib: 'Plan library', pickPlanWizard: 'Find a plan', perWeek: n => `${n}× per week`, supLink: 'Link with next', supUnlink: 'Remove from superset', supPick: 'Pick exercises to link', supTag: 'superset', supHint: n => n < 2 ? 'Tap the other exercises you want to link' : `Selected: ${n}. Tap more or link`, supDo: 'Link', supBtn: 'Superset',
+  planLib: 'Plan library', pickPlanWizard: 'Find a plan', perWeek: n => `${n}× per week`,
+  tgReps: 'Reps', tgTime: 'Time (s)', tgDist: 'Distance (m)', tm_fixed: 'Fixed', tm_range: 'Range', tm_amrap: 'AMRAP / max', tmT_fixed: 'Time', tmT_range: 'Time range', tmD_fixed: 'Distance', tmD_range: 'Distance range',
+  tgFrom: 'From', tgTo: 'To', tgMin: 'Minimum', tgVal: 'Value', efLbl: 'Intensity', em_rpe: 'RPE', em_rrange: 'RPE range', em_pct: '% 1RM', pctLbl: '% 1RM',
+  amrapInfo: 'AMRAP: as many good reps as you can, at least the minimum above. You change the load yourself, the app does not raise it.',
+  pctInfo: 'Load = percent of 1RM. A 1RM you enter wins, otherwise the app uses your best e1RM from the last 6 weeks.',
+  ormNone: 'No 1RM yet. Enter it, or log a workout with RPE and the app will estimate it.', ormLine: (kg, src) => `1RM: ${kg} kg (${src})`, ormManual: 'entered', ormApp: 'app e1RM', ormSet: 'Set 1RM',
+  ormTitle: '1RM', ormField: 'Your 1RM (kg)', ormAppLine: v => v ? `App e1RM (6 wks): ${v} kg` : 'The app has no e1RM for this exercise yet.', ormClear: 'Remove entered 1RM', ormHint: 'Leave empty to use the app e1RM.',
+  err_tgEmpty: 'Enter a number.', err_tgOrder: 'The upper bound must be higher than the lower one.', err_tgLim: (a, b) => `Allowed ${a}-${b}.`, err_rpeRange: 'RPE range: set both ends, "to" higher than "from".', err_pct: '% of 1RM: 30 to 100.', err_orm: 'Enter a load above 0.',
+  methodSwitched: m => `Method changed to: ${m}`, bkRepsHint: 'Empty = same as top set', rpeFrom: 'RPE from', rpeTo: 'RPE to',
+  why_pct: d => `${fmtN(d.pct)}% of 1RM ${fmtN(d.orm)} kg (${d.src === 'manual' ? 'entered' : 'e1RM'})`, why_pctNone: d => `${fmtN(d.pct)}% 1RM: no 1RM yet, set it`, why_amrapOk: d => `AMRAP: last time ${d.best} reps (min. ${d.n}). Load stays, you change it`, why_amrapLow: d => `AMRAP: last time ${d.best} reps, below the minimum of ${d.n}`, supLink: 'Link with next', supUnlink: 'Remove from superset', supPick: 'Pick exercises to link', supTag: 'superset', supHint: n => n < 2 ? 'Tap the other exercises you want to link' : `Selected: ${n}. Tap more or link`, supDo: 'Link', supBtn: 'Superset',
   forLbl: 'Who it is for', designLbl: 'How it works', deloadPlanLbl: 'Blocks and deload', warningLbl: 'Warning', notesLbl: 'Why this',
   seeDetails: 'Show the plan', hideDetails: 'Hide the plan', allGoals: 'All',
   heroTitle: 'Find a plan in 2 minutes', heroText: '12 short questions: goal, days, time, equipment. You get a ready plan and the app runs the progression for you.',
@@ -377,14 +395,14 @@ const DB = {
     } catch (e) { /* keep in memory */ }
   },
 };
-const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib'];
+const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes'];
 const persist = (...keys) => Promise.all(keys.map(k => DB.set(k, clone(S[k]))));
 
 /* ---------- state ---------- */
 const S = {
   settings: { lang: (navigator.language || 'pl').startsWith('pl') ? 'pl' : 'en', restC: 180, restI: 90, increment: 2.5, backoffPct: 90, activeTemplateId: null, sides: { arm: false, thigh: false },
     readiness: true, flagsOn: true, deloadEvery: 5, regressPct: 5, fatigueCut: 30, effortDefault: 'rir' },
-  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [],
+  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [], maxes: {},
   data: null, ex: new Map(),
   view: 'today', viewArg: null, sheet: null, timer: null, toast: null,
 };
@@ -410,6 +428,80 @@ function defaultItem(exId) {
 }
 const logOf = exId => (S.ex.get(exId) || { logging: 'W' }).logging;
 const targetLabel = exId => ({ T: t('targetTime'), WD: t('targetDist') }[logOf(exId)] || t('repsTarget'));
+/* ---------- targets: reps / time / distance and intensity (v0.6.2) ---------- */
+const tgtKind = exId => ({ T: 'T', WD: 'WD' }[logOf(exId)] || 'reps');
+const TGT_LIM = { reps: [1, 100], T: [1, 600], WD: [1, 2000] };
+const REP_MODES = { P1: ['fixed', 'range'], P2: ['fixed', 'amrap'], P3: ['fixed', 'range'], P5: ['fixed'], H1: ['range'], H2: ['fixed', 'range'] };
+const EF_MODES = { P1: ['rpe', 'rrange', 'pct'], P2: ['rpe', 'rrange', 'pct'], P3: ['rpe', 'rrange'], P5: ['rpe', 'rrange', 'pct'], H1: ['rpe', 'rrange'], H2: ['rpe', 'rrange'] };
+function parseTarget(v) {
+  const s = String(v ?? '').trim();
+  let m = s.match(/^(\d+)\s*\+$/); if (m) return { mode: 'amrap', lo: +m[1], hi: +m[1] };
+  m = s.match(/^(\d+)\s*-\s*(\d+)$/); if (m) return +m[1] === +m[2] ? { mode: 'fixed', lo: +m[1], hi: +m[1] } : { mode: 'range', lo: +m[1], hi: +m[2] };
+  m = s.match(/^(\d+)$/); if (m) return { mode: 'fixed', lo: +m[1], hi: +m[1] };
+  return null;
+}
+const fmtTarget = o => (o.mode === 'amrap' ? `${o.lo}+` : o.mode === 'range' && o.hi !== o.lo ? `${o.lo}-${o.hi}` : `${o.lo}`);
+/* repair any old free-text target into a valid one */
+function normTarget(v, exId, dflt) {
+  const kind = tgtKind(exId); const [a, b] = TGT_LIM[kind];
+  let o = parseTarget(v);
+  if (!o) {
+    const ns = (String(v ?? '').replace(/(\d+)[.,]\d+/g, '$1').match(/\d+/g) || []).map(Number);
+    if (ns.length >= 2) o = { mode: 'range', lo: ns[0], hi: ns[1] };
+    else if (ns.length === 1) o = { mode: /\+/.test(String(v)) ? 'amrap' : 'fixed', lo: ns[0], hi: ns[0] };
+    else return dflt;
+  }
+  const cl = x => Math.min(b, Math.max(a, x));
+  o.lo = cl(o.lo); o.hi = cl(o.hi);
+  if (o.lo > o.hi) [o.lo, o.hi] = [o.hi, o.lo];
+  if (o.mode === 'range' && o.lo === o.hi) o.mode = 'fixed';
+  if (o.mode === 'amrap' && kind !== 'reps') o.mode = 'fixed';
+  return fmtTarget(o);
+}
+function normItem(it) {
+  const before = JSON.stringify(it);
+  const d = defaultItem(it.exId);
+  it.reps = normTarget(it.reps, it.exId, d.reps);
+  if (it.backoffReps != null && it.backoffReps !== '') { const n = parseInt(String(it.backoffReps).match(/\d+/) || '', 10); it.backoffReps = n > 0 ? String(Math.min(100, n)) : ''; }
+  const ri = x => { const v = num(x); return v == null ? null : Math.round(v); };
+  it.sets = Math.min(20, Math.max(1, ri(it.sets) ?? 3));
+  it.warmups = Math.min(10, Math.max(0, ri(it.warmups) ?? 0));
+  it.rest = Math.min(900, Math.max(10, ri(it.rest) ?? d.rest));
+  const q = normRpe(it.rpe); it.rpe = q == null ? null : q;
+  const qm = normRpe(it.rpeMax); it.rpeMax = it.rpe == null ? null : qm == null || qm < it.rpe ? it.rpe : qm;
+  if (it.pct != null) { const p = num(it.pct); if (p >= 30 && p <= 100 && logOf(it.exId) === 'W') { it.pct = p; it.rpe = null; it.rpeMax = null; } else delete it.pct; }
+  return JSON.stringify(it) !== before;
+}
+function normTemplates() {
+  let ch = false;
+  for (const tp of S.templates) for (const d of tp.days || []) for (const it of d.items || []) if (normItem(it)) ch = true;
+  return ch;
+}
+/* 1RM for percentage loads: entered value wins, else best e1RM from the last 6 weeks, else the latest */
+function appOneRm(exId, beforeTs = now()) {
+  const pts = e1rmSeries(exId).filter(p => p.x < beforeTs);
+  if (!pts.length) return null;
+  const recent = pts.filter(p => p.x >= beforeTs - 42 * 864e5);
+  return Math.round(Math.max(...(recent.length ? recent : pts.slice(-1)).map(p => p.y)) * 10) / 10;
+}
+function oneRm(exId, beforeTs) {
+  const m = S.maxes && S.maxes[exId];
+  if (m && num(m.kg) > 0) return { kg: num(m.kg), src: 'manual' };
+  const a = appOneRm(exId, beforeTs);
+  return a ? { kg: a, src: 'app' } : null;
+}
+const repMode = it => (parseTarget(it.reps) || { mode: 'fixed' }).mode;
+const efMode = it => (it.pct ? 'pct' : it.rpe != null && it.rpeMax != null && it.rpeMax > it.rpe ? 'rrange' : 'rpe');
+function repModesFor(exId, mth) {
+  const kind = tgtKind(exId);
+  return kind !== 'reps' ? ['fixed', 'range'] : ['fixed', 'range', 'amrap'];
+}
+function efModesFor(exId) { return logOf(exId) === 'W' ? ['rpe', 'rrange', 'pct'] : ['rpe', 'rrange']; }
+function intensityShort(it) {
+  if (it.pct) return ` @${fmtN(it.pct)}%`;
+  if (it.rpe == null) return '';
+  return it.rpeMax != null && it.rpeMax > it.rpe ? ` @${fmtN(it.rpe)}-${fmtN(it.rpeMax)}` : ` @${fmtN(it.rpe)}`;
+}
 const targetUnit = exId => ({ T: ' s', WD: ' m' }[logOf(exId)] || '');
 
 /* ---------- personal records ---------- */
@@ -554,25 +646,27 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   if (mods.extraSets) nWork += mods.extraSets;
   if (mods.cut) { if (it.scheme === 'topback') nBack = Math.max(0, Math.round(nBack * (1 - mods.cut))); else nWork = Math.max(1, Math.round(nWork * (1 - mods.cut))); }
   if (mods.extraBackoff && it.scheme === 'topback') nBack += 1;
-  let rpe = it.rpe;
-  if (mods.rpeCap && rpe != null && kind === 'main') rpe = Math.min(rpe, mods.rpeCap);
+  let rpe = it.rpe, rpeMax = it.rpeMax ?? null;
+  if (mods.rpeCap && rpe != null && kind === 'main') { rpe = Math.min(rpe, mods.rpeCap); if (rpeMax != null) rpeMax = Math.min(rpeMax, mods.rpeCap); }
+  const pct = it.pct || null;
   const sets = [];
   pushSets(sets, ex, 'warmup', it.warmups || 0, null);
   if (it.scheme === 'topback') {
-    pushSets(sets, ex, 'top', 1, { reps: it.reps, rpe });
-    pushSets(sets, ex, 'backoff', nBack, { reps: it.backoffReps || it.reps, rpe: null });
+    pushSets(sets, ex, 'top', 1, { reps: it.reps, rpe, rpeMax, pct });
+    pushSets(sets, ex, 'backoff', nBack, { reps: it.backoffReps || String(it.reps).replace('+', ''), rpe: null });
   } else {
-    pushSets(sets, ex, 'work', nWork, { reps: it.reps, rpe });
+    pushSets(sets, ex, 'work', nWork, { reps: it.reps, rpe, rpeMax, pct });
   }
   const sig = `${method || ''}|${it.reps}|${it.scheme}`;
   const out = { id: uid(), exId: it.exId, scheme: it.scheme, rest: it.rest, backoffPct: it.backoffPct || S.settings.backoffPct, sets,
-    method, kind, reps: it.reps, rpe, rpeMax: it.rpeMax ?? null, sig, tplItemId: it.id || null };
+    method, kind, reps: it.reps, rpe, rpeMax, sig, tplItemId: it.id || null };
+  if (pct) out.pct = pct;
   if (it.group) out.group = it.group;
   const cues = [...(mods.cues || [])];
   if (it.cue) cues.unshift(tx(it.cue));
   if (ctx.effort === 'rir_cap' && kind === 'main') cues.push(t('stopCue'));
   if (cues.length) out.cues = cues;
-  const sug = C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: it.rpeMax ?? rpe, scheme: it.scheme, sets: nWork }, { before: ctx.at || now(), sig, effort: ctx.effort });
+  const sug = C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
   if (sug) { if (sug.load != null && mods.loadPct) sug.load = roundTo(sug.load * mods.loadPct, S.settings.increment); out.sug = sug; }
   return out;
 }
@@ -678,7 +772,7 @@ function substitutes(exId, n = 2) {
 /* ---------- coach (plans, selector, progression, flags) ---------- */
 const C = window.RepsmithCoach.factory({
   ex: () => S.ex, settings: () => S.settings, sessions: () => S.sessions, uid, num, normRpe, rpePct, e1rm, roundTo,
-  lang: () => L(), lastE1rm, loadOf, sessionBw,
+  lang: () => L(), lastE1rm, loadOf, sessionBw, oneRm,
 });
 const CD = window.RepsmithCoach.DATA;
 const tx = arr => (Array.isArray(arr) ? arr[L()] || arr[0] : arr || '');
@@ -844,8 +938,8 @@ function vToday() {
 }
 function schemeShort(it) {
   const u = targetUnit(it.exId);
-  if (it.scheme === 'topback') return `top ${it.reps}${u}${it.rpe ? ' @' + fmtN(it.rpe) : ''} + ${it.backoffSets}×${it.backoffReps || it.reps}${u}`;
-  return `${it.sets} × ${it.reps}${u}${it.rpe ? ' @' + fmtN(it.rpe) : ''}`;
+  if (it.scheme === 'topback') return `top ${it.reps}${u}${intensityShort(it)} + ${it.backoffSets}×${it.backoffReps || String(it.reps).replace('+', '')}${u}`;
+  return `${it.sets} × ${it.reps}${u}${intensityShort(it)}`;
 }
 
 /* ---------- view: plans ---------- */
@@ -898,7 +992,8 @@ function setGrid(it) {
   const rows = it.sets.map((s, idx) => {
     const p = matchPrev(prevItem, it, idx);
     let phW = p ? fmtN(num(p.weight)) : '';
-    const tgt = s.target && s.target.reps ? String(s.target.reps).split('-')[0] : '';
+    const tgt = s.target && s.target.reps ? String(parseInt(s.target.reps, 10) || '') : '';
+    const amrap = s.target && /\+$/.test(String(s.target.reps || '')) && (s.kind === 'work' || s.kind === 'top');
     if (lastE && s.kind !== 'warmup' && s.kind !== 'backoff' && s.target && normRpe(s.target.rpe) && rpePct(tgt, s.target.rpe)) {
       phW = fmtN(roundTo(lastE * rpePct(tgt, s.target.rpe) / 100, S.settings.increment));
     }
@@ -908,9 +1003,9 @@ function setGrid(it) {
     else if (it.sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
     if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundTo(sug.load * (it.backoffPct || 90) / 100, S.settings.increment));
     if (s.kind === 'backoff' && topDone) phW = fmtN(roundTo(num(topDone.weight) * (it.backoffPct || 90) / 100, S.settings.increment));
-    const phRpe = s.target && s.target.rpe ? fmtN(s.target.rpe) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
+    const phRpe = s.target && s.target.rpe ? (s.target.rpeMax > s.target.rpe ? `${fmtN(s.target.rpe)}-${fmtN(s.target.rpeMax)}` : fmtN(s.target.rpe)) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
     const kindLbl = { warmup: t('warmup'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff'), calib: t('calib') }[s.kind];
-    const side = s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '';
+    const side = (s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '') + (amrap ? '<span class="side-tag amrap">AMRAP</span>' : '');
     const f = (field, val, ph, cls = '') => `<input class="${cls}" inputmode="${field === 'reps' ? 'numeric' : 'decimal'}" autocomplete="off" enterkeyhint="next" aria-label="${esc(field)}" data-f="set" data-i="${it.id}" data-s="${s.id}" data-k="${field}" value="${esc(val)}" placeholder="${esc(ph)}">`;
     let a, b;
     if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
@@ -918,7 +1013,7 @@ function setGrid(it) {
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
     return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
       <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
-      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
+      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
   return `<div class="sets"><div class="set-head"><span>${esc(t('sets'))}</span><span>${esc(t('prev'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
@@ -927,7 +1022,7 @@ function sugLine(it) {
   const g = it.sug; if (!g) return '';
   const ex = S.ex.get(it.exId) || {};
   const load = g.load != null ? (ex.logging === 'BWX' ? (g.load ? `+${fmtN(g.load)} kg` : 'BW') : `${fmtN(g.load)} kg`) : '';
-  const reps = g.reps ? ` × ${g.reps.join('/')}` : '';
+  const reps = g.reps ? ` × ${g.reps.join('/')}` : g.load != null && (g.why === 'pct' || g.why === 'amrapOk' || g.why === 'amrapLow' || g.why === 'fixed') ? ` × ${it.reps}${targetUnit(it.exId)}` : '';
   const why = t('why_' + g.why, g.d || {});
   return `<div class="sug">${load ? `<b>${esc(t('sugToday'))}: ${esc(load + reps)}</b> · ` : ''}${esc(why)}</div>`;
 }
@@ -1018,6 +1113,7 @@ function vWorkout() {
       <div class="chips">
         <button class="chip" data-a="scheme-info" data-i="${it.id}">${esc(it.method ? methodName(it.method) : it.scheme === 'topback' ? t('topback') : t('straight'))} ${I.info}</button>
         ${canCalib(it) ? `<button class="chip" data-a="calib-open" data-i="${it.id}">${esc(t('calibChip'))}</button>` : ''}
+        ${it.pct ? `<button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button>` : ''}
         <button class="chip" data-a="subs" data-i="${it.id}">${I.swap} ${esc(t('subs'))}</button>
         <button class="chip" data-a="rest-edit" data-i="${it.id}">${I.clock.replace('<svg ', '<svg width="18" height="18" ')} ${it.rest} s</button>
       </div>
@@ -1497,20 +1593,54 @@ function renderSheet() {
       <div class="card" id="picklist">${exRows(filteredExercises(q, sh.pat, sh.mus), 'pick')}</div>`;
   } else if (sh.type === 'item') {
     const it = sh.item;
+    if (!sh.tg) initItemSheet(sh);
     const isTop = it.scheme === 'topback';
     const mth = it.method || C.methodOf(it) || '';
+    const kind = tgtKind(it.exId);
+    const tl = m => t((kind === 'T' ? 'tmT_' : kind === 'WD' ? 'tmD_' : 'tm_') + m);
+    const tg = sh.tg, ef = sh.ef;
+    const inp = (k, label, val, san = 'int') => `<div><label for="tg-${k}">${esc(label)}</label><input id="tg-${k}" data-f="tg" data-k="${k}" data-san="${san}" inputmode="${san === 'int' ? 'numeric' : 'decimal'}" autocomplete="off" maxlength="5" value="${esc(val ?? '')}"></div>`;
+    const tgFields = tg.mode === 'range' ? `<div class="grid2">${inp('lo', t('tgFrom'), tg.lo)}${inp('hi', t('tgTo'), tg.hi)}</div>`
+      : `<div class="grid2">${inp('lo', tg.mode === 'amrap' ? t('tgMin') : t('tgVal'), tg.lo)}<div></div></div>`;
+    const rb = (which, label, v) => `<div><label>${esc(label)}</label><button class="rpe-btn block-btn ${v ? '' : 'ph'}" data-a="item-rpe" data-v="${which}" aria-label="${esc(label)}">${v ? esc(fmtN(v)) : '–'}</button></div>`;
+    let efFields = '';
+    if (ef.mode === 'rpe') efFields = `<div class="grid2">${rb('lo', 'RPE', it.rpe)}<div></div></div>`;
+    else if (ef.mode === 'rrange') efFields = `<div class="grid2">${rb('lo', t('rpeFrom'), it.rpe)}${rb('hi', t('rpeTo'), it.rpeMax)}</div>`;
+    else {
+      const o = oneRm(it.exId);
+      const pv = num(ef.pct); const load = o && pv ? roundTo(o.kg * pv / 100, S.settings.increment) : null;
+      efFields = `<div class="grid2"><div><label for="ef-pct">${esc(t('pctLbl'))}</label><input id="ef-pct" data-f="ef-pct" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="5" value="${esc(ef.pct ?? '')}"></div>
+        <div><label>&nbsp;</label><button class="btn block" data-a="orm-open" data-v="${esc(it.exId)}">${esc(t('ormSet'))}</button></div></div>
+        <div class="muted small" id="orm-line">${o ? esc(t('ormLine', fmtN(o.kg), o.src === 'manual' ? t('ormManual') : t('ormApp'))) + (load ? ` · ${esc(fmtN(pv))}% = ${esc(fmtN(load))} kg` : '') : esc(t('ormNone'))}</div>
+        <div class="muted small">${esc(t('pctInfo'))}</div>`;
+    }
     body = `${head(exName(it.exId))}
-      <div><label>${esc(t('progression'))}</label><div class="chips">${METHODS.map(m => `<button class="chip ${mth === m ? 'on' : ''}" data-a="item-method" data-v="${m}" aria-pressed="${mth === m}">${esc(t('m_' + m))}</button>`).join('')}</div></div>
-      ${mth ? `<div class="info"><h3>${esc(t('m_' + mth))}</h3><div style="white-space:pre-line">${esc(t('mi_' + mth))}</div></div>` : ''}
+      <div><label>${esc(t('progression'))}</label><div class="chips wrap">${METHODS.map(m => `<button class="chip ${mth === m ? 'on' : ''}" data-a="item-method" data-v="${m}" aria-pressed="${mth === m}">${esc(t('m_' + m))}</button>`).join('')}</div></div>
+      ${mth ? `<details class="info"><summary><h3 style="display:inline">${esc(t('m_' + mth))}</h3></summary><div style="white-space:pre-line">${esc(t('mi_' + mth))}</div></details>` : ''}
       <div class="grid3">
-        ${isTop ? '' : fld('it-sets', t('sets'), it.sets)}
-        ${fld('it-reps', targetLabel(it.exId), it.reps, 'text')}
-        <div><label>${esc(t('rpe'))}</label><button class="rpe-btn block-btn ${it.rpe ? '' : 'ph'}" data-a="item-rpe" aria-label="RPE">${it.rpe ? esc(fmtN(it.rpe)) : '–'}</button></div>
-        ${fld('it-warmups', t('warmups'), it.warmups)}
-        ${fld('it-rest', t('rest'), it.rest)}
+        ${isTop ? '' : fld('it-sets', t('sets'), it.sets, 'int')}
+        ${fld('it-warmups', t('warmups'), it.warmups, 'int')}
+        ${fld('it-rest', t('rest'), it.rest, 'int')}
       </div>
-      ${isTop ? `<div class="grid3">${fld('it-backoffSets', t('backoffSets'), it.backoffSets)}${fld('it-backoffReps', logOf(it.exId) === 'W' || logOf(it.exId) === 'BWX' ? t('backoffReps') : targetLabel(it.exId), it.backoffReps, 'text')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct)}</div>` : ''}
+      <div class="tg-block"><label>${esc(kind === 'T' ? t('tgTime') : kind === 'WD' ? t('tgDist') : t('tgReps'))}${isTop ? ' · ' + esc(t('top')) : ''}</label>
+        <div class="seg" role="group">${repModesFor(it.exId, mth).map(m => `<button class="${tg.mode === m ? 'on' : ''}" data-a="tg-mode" data-v="${m}" aria-pressed="${tg.mode === m}">${esc(tl(m))}</button>`).join('')}</div>
+        ${tgFields}
+        ${tg.mode === 'amrap' ? `<div class="muted small">${esc(t('amrapInfo'))}</div>` : ''}</div>
+      <div class="tg-block"><label>${esc(t('efLbl'))}</label>
+        <div class="seg" role="group">${efModesFor(it.exId).map(m => `<button class="${ef.mode === m ? 'on' : ''}" data-a="ef-mode" data-v="${m}" aria-pressed="${ef.mode === m}">${esc(t('em_' + m))}</button>`).join('')}</div>
+        ${efFields}</div>
+      ${isTop ? `<div class="grid3">${fld('it-backoffSets', t('backoffSets'), it.backoffSets, 'int')}${fld('it-backoffReps', logOf(it.exId) === 'W' || logOf(it.exId) === 'BWX' ? t('backoffReps') : targetLabel(it.exId), it.backoffReps, 'int', t('bkRepsHint'))}${fld('it-backoffPct', t('backoffPct'), it.backoffPct, 'int')}</div>` : ''}
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
+  } else if (sh.type === 'orm') {
+    const m = S.maxes[sh.exId]; const a = appOneRm(sh.exId);
+    body = `${head(t('ormTitle') + ' · ' + exName(sh.exId))}
+      <div class="muted small">${esc(t('ormAppLine', a ? fmtN(a) : null))}</div>
+      <div class="grid2"><div><label for="orm-kg">${esc(t('ormField'))}</label><input id="orm-kg" data-f="orm" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="6" value="${esc(sh.val ?? (m ? fmtN(m.kg) : ''))}"></div><div></div></div>
+      <div class="muted small">${esc(t('ormHint'))}</div>
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+      <button class="btn primary block" data-a="orm-save">${esc(t('save'))}</button>
+      ${m ? `<button class="btn block ghost" data-a="orm-clear">${esc(t('ormClear'))}</button>` : ''}`;
   } else if (sh.type === 'ready') {
     body = `${head(t('readyTitle'))}<div class="muted small">${esc(t('readyText'))}</div>
       <div class="diff ready" role="group" aria-label="${esc(t('readyTitle'))}">${[1, 2, 3, 4, 5].map(v => `<button data-a="ready-pick" data-v="${v}">${v}</button>`).join('')}</div>
@@ -1631,8 +1761,75 @@ function recordsBlock(exId) {
   const row = (lbl, val, x) => `<div class="row"><span class="grow"><span class="name">${esc(val)}</span><br><span class="meta">${esc(lbl)} · ${esc(fmtEntry(ex, x.entry))}</span></span><span class="meta">${esc(d(x.at))}</span></div>`;
   return `<div><label>${esc(t('records'))}</label><div class="card">${row(t('bestWeight'), fmtN(b.w.val) + ' kg', b.w)}${b.e ? row(t('bestE1rm'), fmtN(Math.round(b.e.val * 10) / 10) + ' kg', b.e) : ''}${row(t('bestVol'), fmtN(Math.round(b.v.val)) + ' kg', b.v)}</div><div class="muted small" style="margin-top:6px">${esc(t('prHint'))}</div>${bwNote}</div>`;
 }
-function fld(id, label, val, type = 'num') {
-  return `<div><label for="${id}">${esc(label)}</label><input id="${id}" data-f="${id}" ${type === 'num' ? 'inputmode="decimal"' : ''} value="${esc(val ?? '')}"></div>`;
+function fld(id, label, val, type = 'num', ph = '') {
+  const im = type === 'int' ? 'inputmode="numeric" data-san="int" maxlength="4" autocomplete="off"' : type === 'num' ? 'inputmode="decimal" data-san="dec" autocomplete="off"' : '';
+  return `<div><label for="${id}">${esc(label)}</label><input id="${id}" data-f="${id}" ${im} ${ph ? `placeholder="${esc(ph)}"` : ''} value="${esc(val ?? '')}"></div>`;
+}
+/* switching between top set + backoff and straight sets keeps the total number of sets */
+function setMethod(it, m) {
+  const was = it.scheme; it.method = m; it.scheme = m === 'P1' || m === 'P5' ? 'topback' : 'straight';
+  if (was === 'topback' && it.scheme === 'straight') it.sets = Math.min(20, Math.max(it.sets || 1, 1 + (it.backoffSets || 0)));
+  if (was !== 'topback' && it.scheme === 'topback') it.backoffSets = Math.min(10, Math.max(1, (it.sets || 3) - 1));
+}
+function applyItemTargets(sh) {
+  const it = sh.item; const tg = sh.tg, ef = sh.ef; if (!tg) return null;
+  const [a, b] = TGT_LIM[tgtKind(it.exId)];
+  const lo = parseInt(tg.lo, 10), hi = parseInt(tg.hi, 10);
+  if (!(lo > 0)) return t('err_tgEmpty');
+  if (lo < a || lo > b) return t('err_tgLim', a, b);
+  if (tg.mode === 'range') {
+    if (!(hi > 0)) return t('err_tgEmpty');
+    if (hi < a || hi > b) return t('err_tgLim', a, b);
+    if (hi <= lo) return t('err_tgOrder');
+  }
+  it.reps = fmtTarget({ mode: tg.mode, lo, hi: tg.mode === 'range' ? hi : lo });
+  if (ef.mode === 'pct') {
+    const p = num(String(ef.pct).replace(',', '.'));
+    if (!(p >= 30 && p <= 100)) return t('err_pct');
+    it.pct = Math.round(p * 10) / 10; it.rpe = null; it.rpeMax = null;
+  } else {
+    delete it.pct;
+    if (ef.mode === 'rrange') { if (it.rpe == null || it.rpeMax == null || it.rpeMax <= it.rpe) return t('err_rpeRange'); }
+    else it.rpeMax = it.rpe;
+  }
+  return null;
+}
+function ormDone() {
+  const sh = S.sheet; const back = sh.back;
+  if (S.active) for (const it of S.active.items) if (it.exId === sh.exId && it.pct) { const g = C.suggest({ exId: it.exId, method: it.method, reps: it.reps, rpe: it.rpe, rpeMax: it.rpeMax, scheme: it.scheme, sets: it.sets.filter(x => x.kind === 'work').length, pct: it.pct }, { before: S.active.startedAt, sig: it.sig, effort: S.active.effort }); if (g) it.sug = g; else delete it.sug; saveActive(); }
+  if (back) openSheet(back); else { closeSheet(); render(); }
+}
+function initItemSheet(sh) {
+  const it = sh.item;
+  const o = parseTarget(it.reps) || parseTarget(normTarget(it.reps, it.exId, defaultItem(it.exId).reps)) || { mode: 'fixed', lo: 8, hi: 8 };
+  sh.tg = { mode: o.mode, lo: String(o.lo), hi: o.mode === 'range' ? String(o.hi) : '' };
+  sh.ef = { mode: efMode(it), pct: it.pct ? fmtN(it.pct) : '' };
+  if (!efModesFor(it.exId).includes(sh.ef.mode)) sh.ef.mode = 'rpe';
+  sh.err = null;
+}
+/* keep method, rep mode and intensity mode compatible; returns the new method if it had to change */
+function reconcileItem(sh, changed) {
+  const it = sh.item; const tg = sh.tg, ef = sh.ef;
+  let m = it.method || C.methodOf(it);
+  const kind = tgtKind(it.exId);
+  if (!m || kind !== 'reps') return null;
+  const m0 = m;
+  const okR = REP_MODES[m] || [], okE = EF_MODES[m] || [];
+  let nm = null;
+  if (changed === 'rep' && !okR.includes(tg.mode)) nm = tg.mode === 'amrap' ? 'P2' : tg.mode === 'range' ? 'H1' : 'P3';
+  if (changed === 'ef' && !okE.includes(ef.mode)) nm = ef.mode === 'pct' ? 'P2' : m;
+  if (nm && nm !== m) {
+    setMethod(it, nm); m = nm;
+  }
+  // after a method change, adapt whatever no longer fits
+  const R = REP_MODES[m] || ['fixed'], E = EF_MODES[m] || ['rpe'];
+  if (!R.includes(tg.mode)) {
+    const lo = +tg.lo || 8;
+    if (R.includes('range')) { tg.mode = 'range'; tg.lo = String(lo); tg.hi = String(Math.min(100, lo + (lo >= 8 ? 4 : 2))); }
+    else { tg.mode = 'fixed'; tg.hi = ''; }
+  }
+  if (!E.includes(ef.mode)) ef.mode = 'rpe';
+  return m !== m0 ? m : null;
 }
 
 /* ---------- actions ---------- */
@@ -1699,7 +1896,7 @@ const A = {
       } });
   },
   'day-add-ex': el => openSheet({ type: 'picker', target: { kind: 'day', dayId: el.dataset.d } }),
-  'edit-item': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); openSheet({ type: 'item', dayId: d.id, item: clone(it) }); },
+  'edit-item': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); openSheet({ type: 'item', dayId: d.id, item: clone(it), _m0: it.method || C.methodOf(it) || null, _rpe0: it.rpe }); },
   'item-up': el => { const [, d] = tplDay(el.dataset.d); const i = d.items.findIndex(x => x.id === el.dataset.i); if (i > 0) { const [x] = d.items.splice(i, 1); d.items.splice(i - 1, 0, x); normGroups(d.items); saveTemplates(); render(); } },
   'item-link': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); groupMenu(d.items, it, saveTemplates); },
   'link-toggle': el => { const L = S.link; if (!L) return; const k = L.ids.indexOf(el.dataset.i); if (k >= 0) L.ids.splice(k, 1); else L.ids.push(el.dataset.i); render(); },
@@ -1709,12 +1906,40 @@ const A = {
   'item-scheme': el => { readItemFields(); S.sheet.item.scheme = el.dataset.v; renderSheet(); },
   'item-method': el => {
     readItemFields(); const it = S.sheet.item; const m = el.dataset.v;
-    it.method = m; it.scheme = m === 'P1' || m === 'P5' ? 'topback' : 'straight';
+    setMethod(it, m);
     if (it.rpeMax == null && it.rpe != null) it.rpeMax = it.rpe;
+    reconcileItem(S.sheet, 'method'); S.sheet.err = null;
     renderSheet();
   },
+  'tg-mode': el => {
+    readItemFields(); const sh = S.sheet; const tg = sh.tg; const m = el.dataset.v; if (tg.mode === m) return;
+    const lo = +tg.lo || null;
+    if (m === 'range') { tg.hi = lo ? String(Math.min(TGT_LIM[tgtKind(sh.item.exId)][1], lo + (lo >= 8 ? 4 : 2))) : ''; }
+    else tg.hi = '';
+    tg.mode = m; sh.err = null;
+    const nm = reconcileItem(sh, 'rep'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
+    renderSheet();
+  },
+  'ef-mode': el => {
+    readItemFields(); const sh = S.sheet; const it = sh.item; const m = el.dataset.v; if (sh.ef.mode === m) return;
+    sh.ef.mode = m; sh.err = null;
+    if (m === 'rrange') { if (it.rpe == null) it.rpe = 7.5; if (it.rpeMax == null || it.rpeMax <= it.rpe) it.rpeMax = Math.min(10, it.rpe + 1); }
+    if (m === 'rpe' && it.rpe == null && sh._rpe0 != null) it.rpe = sh._rpe0;
+    if (m === 'pct' && !sh.ef.pct) sh.ef.pct = '75';
+    const nm = reconcileItem(sh, 'ef'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
+    renderSheet();
+  },
+  'orm-open': el => { if (S.sheet && S.sheet.type === 'item') readItemFields(); const back = S.sheet && S.sheet.type === 'item' ? S.sheet : null; openSheet({ type: 'orm', exId: el.dataset.v, back }); },
+  'orm-save': () => {
+    const v = num(cleanDec(($('#orm-kg') || {}).value || '').replace(',', '.'));
+    if (!(v > 0) || v > 1000) { S.sheet.err = t('err_orm'); S.sheet.val = ($('#orm-kg') || {}).value; renderSheet(); return; }
+    S.maxes[S.sheet.exId] = { kg: v, at: now() }; persist('maxes'); ormDone();
+  },
+  'orm-clear': () => { delete S.maxes[S.sheet.exId]; persist('maxes'); ormDone(); },
   'item-save': () => {
     readItemFields();
+    const err = applyItemTargets(S.sheet);
+    if (err) { S.sheet.err = err; renderSheet(); return; }
     const [, d] = tplDay(S.sheet.dayId);
     const i = d.items.findIndex(x => x.id === S.sheet.item.id);
     if (i >= 0) d.items[i] = S.sheet.item;
@@ -1796,7 +2021,7 @@ const A = {
   },
   'm-del': () => { const id = S.sheet.editId; ask(t('deleteMeasurement') + '?', () => { S.measurements = S.measurements.filter(x => x.id !== id); persist('measurements'); render(); }, { danger: true, yes: t('delete') }); },
   'rpe-table': () => openSheet({ type: 'rpeTable' }),
-  'item-rpe': () => { readItemFields(); const back = S.sheet; openSheet({ type: 'rpe', mode: 'item', back, cur: normRpe(back.item.rpe) }); },
+  'item-rpe': el => { readItemFields(); const back = S.sheet; const hi = el.dataset.v === 'hi'; openSheet({ type: 'rpe', mode: 'item', which: hi ? 'hi' : 'lo', back, cur: normRpe(hi ? back.item.rpeMax : back.item.rpe) }); },
   'rpe-open': el => {
     const it = findItem(el.dataset.i); const s = it.sets.find(x => x.id === el.dataset.s);
     const feel = S.active.effort === 'fixed' && s.target && s.target.rpe != null;
@@ -1836,7 +2061,12 @@ const A = {
   },
   'set-flag': el => { readSettingsFields(); S.settings[el.dataset.k] = el.dataset.v === '1'; persist('settings'); renderSheet(); },
   'rpe-set': el => {
-    if (S.sheet.mode === 'item') { const back = S.sheet.back; back.item.rpe = el.dataset.v === '' ? null : normRpe(el.dataset.v); openSheet(back); return; }
+    if (S.sheet.mode === 'item') {
+      const back = S.sheet.back; const v = el.dataset.v === '' ? null : normRpe(el.dataset.v);
+      if (S.sheet.which === 'hi') back.item.rpeMax = v; else back.item.rpe = v;
+      if (back.ef && back.ef.mode === 'rpe') back.item.rpeMax = back.item.rpe;
+      back.err = null; openSheet(back); return;
+    }
     const it = findItem(S.sheet.itemId); const s = it && it.sets.find(x => x.id === S.sheet.setId);
     if (s) { s.rpe = el.dataset.v; if (s.done) s.pr = detectPR(it.exId, s); saveActive(); }
     closeSheet(); render();
@@ -2061,13 +2291,15 @@ function readItemFields() {
   const it = S.sheet.item; const g = id => { const e = $('#' + id); return e ? e.value : undefined; };
   const n = (id, dflt) => { const v = g(id); if (v === undefined) return dflt; const x = num(v); return x == null ? dflt : x; };
   it.sets = Math.max(1, Math.round(n('it-sets', it.sets)));
-  if (g('it-reps') !== undefined) it.reps = g('it-reps').trim();
-  const rpe = g('it-rpe'); if (rpe !== undefined) it.rpe = num(rpe);
-  it.warmups = Math.max(0, Math.round(n('it-warmups', it.warmups)));
-  it.rest = Math.max(10, Math.round(n('it-rest', it.rest)));
-  it.backoffSets = Math.max(0, Math.round(n('it-backoffSets', it.backoffSets)));
-  if (g('it-backoffReps') !== undefined) it.backoffReps = g('it-backoffReps').trim();
+  it.sets = Math.min(20, it.sets);
+  it.warmups = Math.min(10, Math.max(0, Math.round(n('it-warmups', it.warmups))));
+  it.rest = Math.min(900, Math.max(10, Math.round(n('it-rest', it.rest))));
+  it.backoffSets = Math.min(10, Math.max(0, Math.round(n('it-backoffSets', it.backoffSets))));
+  if (g('it-backoffReps') !== undefined) { const b = parseInt(cleanInt(g('it-backoffReps')), 10); it.backoffReps = b > 0 ? String(Math.min(100, b)) : ''; }
   it.backoffPct = Math.min(100, Math.max(40, n('it-backoffPct', it.backoffPct)));
+  const tg = $('#tg-lo'); if (tg && S.sheet.tg) S.sheet.tg.lo = cleanInt(tg.value);
+  const th = $('#tg-hi'); if (th && S.sheet.tg) S.sheet.tg.hi = cleanInt(th.value);
+  const pc = $('#ef-pct'); if (pc && S.sheet.ef) S.sheet.ef.pct = cleanDec(pc.value);
 }
 function readCustomFields() {
   const d = S.sheet.draft;
@@ -2087,7 +2319,7 @@ function readSettingsFields() {
 }
 function backupObj() {
   return { app: 'repsmith', schema: SCHEMA, version: VERSION, exportedAt: new Date().toISOString(),
-    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements, flags: S.flags, calib: S.calib };
+    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements, flags: S.flags, calib: S.calib, maxes: S.maxes };
 }
 async function importBackup(text) {
   let o;
@@ -2095,7 +2327,7 @@ async function importBackup(text) {
   if (!o || o.app !== 'repsmith' || !Array.isArray(o.sessions)) { toast(t('importErr')); return; }
   ask(t('importQ'), async () => {
     S.settings = { ...S.settings, ...o.settings }; S.templates = o.templates || []; S.sessions = o.sessions || [];
-    S.notes = o.notes || {}; S.customExercises = o.customExercises || []; S.active = o.active || null; S.measurements = o.measurements || []; S.flags = o.flags || []; S.calib = o.calib || [];
+    S.notes = o.notes || {}; S.customExercises = o.customExercises || []; S.active = o.active || null; S.measurements = o.measurements || []; S.flags = o.flags || []; S.calib = o.calib || []; S.maxes = o.maxes || {};
     await persist(...KEYS); rebuildExercises(); toast(t('imported')); go('today');
   }, { yes: t('confirm') });
 }
@@ -2133,6 +2365,14 @@ document.addEventListener('click', ev => {
 document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
+  if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (f === 'tg' && S.sheet && S.sheet.tg) { S.sheet.tg[el.dataset.k] = el.value; return; }
+  if (f === 'ef-pct' && S.sheet && S.sheet.ef) {
+    S.sheet.ef.pct = el.value;
+    const ln = $('#orm-line'); const o = oneRm(S.sheet.item.exId); const pv = num(el.value.replace(',', '.'));
+    if (ln && o) ln.textContent = t('ormLine', fmtN(o.kg), o.src === 'manual' ? t('ormManual') : t('ormApp')) + (pv ? ` · ${fmtN(pv)}% = ${fmtN(roundTo(o.kg * pv / 100, S.settings.increment))} kg` : '');
+    return;
+  }
   if (f === 'm') { const cv = cleanDec(el.value); if (cv !== el.value) el.value = cv; return; }
   if (f === 'set') {
     const it = findItem(el.dataset.i); if (!it) return;
@@ -2186,6 +2426,7 @@ async function boot() {
     if (v !== undefined && v !== null) S[k] = k === 'settings' ? { ...S.settings, ...v } : v;
   }
   rebuildExercises();
+  if (normTemplates()) persist('templates');
   document.documentElement.lang = S.settings.lang;
   if (S.active) S.view = 'workout';
   render();
@@ -2201,7 +2442,7 @@ async function boot() {
   }
   if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch (e) {} }
 }
-window.Repsmith = { S, A, C, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt };
+window.Repsmith = { S, A, C, CD, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt, normTarget, normItem, initItemSheet, applyItemTargets, defaultItem, render, persist, backupObj, oneRm };
 boot().catch(err => {
   const pl = (navigator.language || 'pl').startsWith('pl');
   const app = document.getElementById('app');
