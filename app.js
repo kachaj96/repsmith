@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.6.4';
+const VERSION = '0.7.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -197,6 +197,18 @@ Object.assign(STR.pl, {
   m4Title: 'Które ćwiczenia bolą? Usuń maksymalnie 2.', planCreated: 'Plan gotowy i ustawiony jako aktywny',
   planLib: 'Biblioteka planów', pickPlanWizard: 'Dobierz plan', perWeek: n => `${n}× w tygodniu`,
   tgReps: 'Powtórzenia', tgTime: 'Czas (s)', tgDist: 'Dystans (m)', tm_fixed: 'Stałe', tm_range: 'Zakres', tm_amrap: 'AMRAP / max', tmT_fixed: 'Czas', tmT_range: 'Zakres czasu', tmD_fixed: 'Dystans', tmD_range: 'Zakres dystansu',
+  gearTitle: 'Ciężary i talerze', gearInfo: 'Aplikacja podpowiada tylko ciężary, które da się załadować. Puste listy oznaczają zaokrąglanie do kroku z ustawień.', gearPlates: 'Talerze', pairsLbl: 'par', gearBars: 'Gryfy (kg)', gearLists: 'Hantle, kettlebelle, maszyny, wyciągi',
+  gearListHint: 'Zakres od-do/krok albo pojedyncze liczby, np. 2-10/2 12.5-30/2.5. Oddzielaj spacją lub średnikiem. Puste = bez ograniczeń.', gearListErr: tk => `Nie rozumiem: "${tk}". Użyj od-do/krok (np. 2-10/2).`, gearListCount: (n, a, b) => `${n} ciężarów, ${a}-${b} kg`, gearSaved: 'Zapisano ciężary',
+  plateCalc: 'Kalkulator talerzy', pcTarget: 'Ciężar docelowy (kg)', pcBar: 'Gryf (kg)', pcSide: 'Na każdą stronę', pcExact: 'Dokładnie', pcNearest: 'Dokładnie tego się nie da. Najbliżej:', pcLower: '◀ Lżej', pcUpper: 'Ciężej ▶', pcUnder: 'Poniżej wagi gryfu.', pcNone: 'Nie masz ustawionych talerzy w tej jednostce.', pcBarOnly: 'Sam gryf', pcSet: 'Ustaw talerze', plateChip: 'Talerze',
+  freeTitle: 'Dziś trening', freeText: 'Zapisuj serie, ciężary i RPE. Plan nie jest potrzebny, ćwiczenia dodajesz w trakcie.', startFree: 'Zacznij trening', startFreeHint: 'Pusty trening, ćwiczenia dodajesz po drodze',
+  lastWorkout: 'Ostatni trening', repeatLast: 'Powtórz', planCardTitle: 'Wolisz trenować z planem?', planCardText: 'Dobierz plan w 12 pytaniach, wybierz gotowy z biblioteki albo zbuduj własny.', planCardBtn: 'Plany',
+  plansEmptyTitle: 'Dobierz plan w 2 minuty', plansEmptyText: '12 krótkich pytań: cel, dni, czas, sprzęt. Dostajesz gotowy plan, a aplikacja prowadzi progresję za Ciebie.',
+  wakeSet: 'Ekran podczas treningu', wakeOn: 'Nie wygaszaj', wakeOff: 'Standardowo', wakeNo: 'Ta przeglądarka nie pozwala blokować wygaszania ekranu.',
+  lastBackupLbl: 'Ostatnia kopia', neverBackup: 'jeszcze nie robiona', persistOk: 'Dane chronione przed automatycznym czyszczeniem przez przeglądarkę.', persistNo: 'Przeglądarka może usunąć dane przy braku miejsca. Rób kopie.', 
+  bkRemind: (n, d) => d ? `Ostatnia kopia sprzed ${d} dni, od tamtej pory ${n} ${n === 1 ? 'trening' : 'treningów'}. Zapisz nową.` : `Masz ${n} ${n === 1 ? 'trening' : 'treningów'} i żadnej kopii. Dane są tylko na tym telefonie.`, bkNow: 'Zapisz kopię', bkLater: 'Później',
+  introTitle: 'Zanim zaczniesz', introText: 'Repsmith zapisuje wszystko tylko na tym telefonie, bez konta i bez synchronizacji. Zmiana telefonu albo wyczyszczenie danych przeglądarki kasuje historię, więc rób kopię w Ustawieniach.', introOk: 'Rozumiem',
+  esTitle: 'Edytuj serię', esAdd: 'Dodaj serię', esNew: 'Nowa seria', esDel: 'Usuń serię', esRpe: 'RPE (puste = brak)', esWeightPlus: 'Dodatkowy ciężar (kg)', esErrRpe: 'RPE: od 1 do 10, co 0,5.', esErrEmpty: 'Wpisz wartość.', esSaved: 'Zapisano', esDeleted: 'Seria usunięta', tapToEdit: 'Dotknij serię, aby ją poprawić.', calList: 'Lista', calCal: 'Kalendarz', calMonthStat: 'Treningi', calStreak: 'Tyg. z rzędu', calNone: 'Brak treningów tego dnia.', calPrev: 'Poprzedni miesiąc', calNext: 'Następny miesiąc', cardBtn: 'Karta do udostępnienia', cardTitle: 'Karta treningu', cardHide: 'Ukryj ciężary', cardShare: 'Udostępnij', cardSave: 'Zapisz obraz', cardAlt: 'Podgląd karty treningu', cardMore: 'więcej', cardTop: 'Najlepsze serie',
+  feedbackBtn: 'Wyślij uwagi', feedbackSub: 'Uwagi do aplikacji (v', feedbackBody: 'Co działa, co nie, czego brakuje:',
   npTitle: 'Nowy plan', npAsk: 'Jak chcesz budować plan?', npSimple: 'Prosty', npSimpleD: 'Ćwiczenie, serie, powtórzenia (stałe albo zakres) i przerwa. Aplikacja sama podpowiada ciężar i powtórzenia na kolejny trening. Dla większości wystarczy.',
   npAdv: 'Zaawansowany', npAdvD: 'Wszystko: metody progresji (top set + backoff, serie na RPE i RIR), zakres RPE albo % 1RM, rozgrzewki, backoff, AMRAP. Dla tych, którzy wiedzą, czego chcą.', npLater: 'Tryb możesz zmienić później w menu planu. Zapisane ustawienia nie znikają.', npNext: 'Dalej: wybór ćwiczeń',
   modeSimple: 'Tryb prosty', modeAdv: 'Tryb zaawansowany', modeToAdv: 'Przełącz na tryb zaawansowany', modeToSimple: 'Przełącz na tryb prosty', autoProg: 'Podpowiadaj ciężar i powtórzenia', autoProgD: 'Aplikacja liczy ciężar i powtórzenia na kolejny trening z Twojej historii. Wyłącz, jeśli chcesz wszystko ustawiać sam.', hiddenAdv: 'To ćwiczenie ma ustawienia zaawansowane (progresja, RPE, % 1RM). Zostają bez zmian. Edytujesz je w trybie zaawansowanym.', simpleHint: 'Serie × powtórzenia × przerwa',
@@ -277,6 +289,18 @@ Object.assign(STR.en, {
   m4Title: 'Which exercises hurt? Remove up to 2.', planCreated: 'Plan ready and set as active',
   planLib: 'Plan library', pickPlanWizard: 'Find a plan', perWeek: n => `${n}× per week`,
   tgReps: 'Reps', tgTime: 'Time (s)', tgDist: 'Distance (m)', tm_fixed: 'Fixed', tm_range: 'Range', tm_amrap: 'AMRAP / max', tmT_fixed: 'Time', tmT_range: 'Time range', tmD_fixed: 'Distance', tmD_range: 'Distance range',
+  gearTitle: 'Weights and plates', gearInfo: 'The app only suggests loads you can actually make. Empty lists mean rounding to the step in settings.', gearPlates: 'Plates', pairsLbl: 'pairs', gearBars: 'Bars (kg)', gearLists: 'Dumbbells, kettlebells, machines, cables',
+  gearListHint: 'Range from-to/step or single numbers, e.g. 2-10/2 12.5-30/2.5. Separate with a space or semicolon. Empty = no limit.', gearListErr: tk => `Cannot read: "${tk}". Use from-to/step (e.g. 2-10/2).`, gearListCount: (n, a, b) => `${n} weights, ${a}-${b} kg`, gearSaved: 'Weights saved',
+  plateCalc: 'Plate calculator', pcTarget: 'Target weight (kg)', pcBar: 'Bar (kg)', pcSide: 'Per side', pcExact: 'Exactly', pcNearest: 'Cannot make exactly that. Closest:', pcLower: '◀ Lighter', pcUpper: 'Heavier ▶', pcUnder: 'Below the bar weight.', pcNone: 'No plates set up in this unit.', pcBarOnly: 'Bar only', pcSet: 'Set up plates', plateChip: 'Plates',
+  freeTitle: 'Train today', freeText: 'Log sets, loads and RPE. No plan needed, add exercises as you go.', startFree: 'Start workout', startFreeHint: 'Empty workout, add exercises along the way',
+  lastWorkout: 'Last workout', repeatLast: 'Repeat', planCardTitle: 'Prefer training with a plan?', planCardText: 'Find a plan in 12 questions, pick one from the library or build your own.', planCardBtn: 'Plans',
+  plansEmptyTitle: 'Find a plan in 2 minutes', plansEmptyText: '12 short questions: goal, days, time, equipment. You get a ready plan and the app runs the progression for you.',
+  wakeSet: 'Screen during workout', wakeOn: 'Keep awake', wakeOff: 'Default', wakeNo: 'This browser cannot keep the screen awake.',
+  lastBackupLbl: 'Last backup', neverBackup: 'never', persistOk: 'Data is protected from automatic clearing by the browser.', persistNo: 'The browser may delete data when storage runs low. Keep backups.',
+  bkRemind: (n, d) => d ? `Last backup was ${d} days ago, ${n} workout${n === 1 ? '' : 's'} since. Save a new one.` : `You have ${n} workout${n === 1 ? '' : 's'} and no backup. Your data lives only on this phone.`, bkNow: 'Save backup', bkLater: 'Later',
+  introTitle: 'Before you start', introText: 'Repsmith keeps everything only on this phone, with no account and no sync. Changing phones or clearing browser data deletes your history, so make a backup in Settings.', introOk: 'Got it',
+  esTitle: 'Edit set', esAdd: 'Add set', esNew: 'New set', esDel: 'Delete set', esRpe: 'RPE (empty = none)', esWeightPlus: 'Added weight (kg)', esErrRpe: 'RPE: 1 to 10 in steps of 0.5.', esErrEmpty: 'Enter a value.', esSaved: 'Saved', esDeleted: 'Set deleted', tapToEdit: 'Tap a set to fix it.', calList: 'List', calCal: 'Calendar', calMonthStat: 'Workouts', calStreak: 'Weeks in a row', calNone: 'No workouts on this day.', calPrev: 'Previous month', calNext: 'Next month', cardBtn: 'Shareable card', cardTitle: 'Workout card', cardHide: 'Hide weights', cardShare: 'Share', cardSave: 'Save image', cardAlt: 'Workout card preview', cardMore: 'more', cardTop: 'Top sets',
+  feedbackBtn: 'Send feedback', feedbackSub: 'App feedback (v', feedbackBody: 'What works, what does not, what is missing:',
   npTitle: 'New plan', npAsk: 'How do you want to build it?', npSimple: 'Simple', npSimpleD: 'Exercise, sets, reps (fixed or a range) and rest. The app suggests the load and reps for your next workout. Enough for most people.',
   npAdv: 'Advanced', npAdvD: 'Everything: progression methods (top set + backoff, RPE and RIR sets), RPE range or % 1RM, warm-ups, backoff, AMRAP. For those who know what they want.', npLater: 'You can change the mode later in the plan menu. Saved settings stay.', npNext: 'Next: pick exercises',
   modeSimple: 'Simple mode', modeAdv: 'Advanced mode', modeToAdv: 'Switch to advanced mode', modeToSimple: 'Switch to simple mode', autoProg: 'Suggest load and reps', autoProgD: 'The app works out the load and reps for your next workout from your history. Turn off to set everything yourself.', hiddenAdv: 'This exercise has advanced settings (progression, RPE, % 1RM). They stay as they are. Edit them in advanced mode.', simpleHint: 'Sets × reps × rest',
@@ -401,6 +425,13 @@ const DB = {
     } catch (e) { /* keep in memory */ }
   },
 };
+const G = window.RepsmithGear;
+const gearCfg = () => G.norm(S.settings && S.settings.gear);
+const eqOf = exId => (S.ex.get(exId) || {}).equipment || '';
+const snapLoad = (exId, v, up) => G.snap(gearCfg(), eqOf(exId), v, up);
+const roundLoad = (exId, v) => { const s = snapLoad(exId, v); return s != null ? s : roundTo(v, S.settings.increment); };
+const isBarEx = exId => G.BAR_CLASSES.includes(eqOf(exId));
+const FEEDBACK_EMAIL = ''; // set to a real address to show the feedback button
 const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes'];
 const persist = (...keys) => Promise.all(keys.map(k => DB.set(k, clone(S[k]))));
 
@@ -578,6 +609,20 @@ function prTypes(cur, prev) {
 function hasHistory(exId, beforeTs) {
   return S.sessions.some(ses => ses.startedAt < beforeTs && ses.items.some(it => it.exId === exId && it.sets.some(x => x.done)));
 }
+/* recompute stored PR badges for one exercise after editing a finished workout */
+function recalcPRs(ses, exId) {
+  const ex = S.ex.get(exId); const bw = sessionBw(ses); const it = ses.items.find(x => x.exId === exId); if (!it) return;
+  const all = entriesFor(exId);
+  for (const s of it.sets) {
+    if (!s.done) continue;
+    if (!prEligible(ex, s, bw)) { s.pr = []; continue; }
+    const base = all.filter(e => e.sesAt < ses.startedAt);
+    if (!base.length) { s.pr = []; continue; }
+    const ts = s.doneAt || ses.startedAt;
+    const prev = all.filter(e => e.set.id !== s.id && (e.sesAt < ses.startedAt || (e.sesId === ses.id && e.at < ts)));
+    s.pr = prTypes({ load: loadOf(ex, s, bw), reps: num(s.reps), rpe: s.rpe }, prev);
+  }
+}
 function detectPR(exId, set) {
   const ex = S.ex.get(exId);
   const bw = S.active ? S.active.bw : null;
@@ -674,7 +719,7 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   if (cues.length) out.cues = cues;
   if (it.noprog) out.noprog = true;
   const sug = it.noprog ? null : C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
-  if (sug) { if (sug.load != null && mods.loadPct) sug.load = roundTo(sug.load * mods.loadPct, S.settings.increment); out.sug = sug; }
+  if (sug) { if (sug.load != null && mods.loadPct) sug.load = roundLoad(it.exId, sug.load * mods.loadPct); out.sug = sug; }
   return out;
 }
 /* first exercise per lagging muscle that gets the size-block ramp sets */
@@ -779,7 +824,7 @@ function substitutes(exId, n = 2) {
 /* ---------- coach (plans, selector, progression, flags) ---------- */
 const C = window.RepsmithCoach.factory({
   ex: () => S.ex, settings: () => S.settings, sessions: () => S.sessions, uid, num, normRpe, rpePct, e1rm, roundTo,
-  lang: () => L(), lastE1rm, loadOf, sessionBw, oneRm,
+  lang: () => L(), lastE1rm, loadOf, sessionBw, oneRm, snap: snapLoad,
 });
 const CD = window.RepsmithCoach.DATA;
 const tx = arr => (Array.isArray(arr) ? arr[L()] || arr[0] : arr || '');
@@ -877,6 +922,15 @@ function toast(msg) {
 }
 
 /* ---------- render: shell ---------- */
+let _wake = null;
+function syncWake() {
+  if (!('wakeLock' in navigator)) return;
+  const want = !!S.active && S.settings.wake !== false && document.visibilityState === 'visible';
+  if (want && !_wake) {
+    _wake = 'pending';
+    navigator.wakeLock.request('screen').then(l => { if (S.active && S.settings.wake !== false) { _wake = l; l.addEventListener('release', () => { if (_wake === l) _wake = null; }); } else { l.release(); _wake = null; } }).catch(() => { _wake = null; });
+  } else if (!want && _wake && _wake !== 'pending') { const l = _wake; _wake = null; l.release().catch(() => {}); }
+}
 function render() {
   const app = $('#app');
   let html = '';
@@ -901,6 +955,7 @@ function render() {
   S._navAnim = false; S._justDone = null;
   renderTimer();
   renderSheet();
+  syncWake();
   if (S.view === 'library') { const i = $('#libq'); if (i && S._libFocus) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
 }
 function nav() {
@@ -917,6 +972,26 @@ function resumeBanner() {
 }
 
 /* ---------- view: today ---------- */
+function introCard() {
+  if (S.settings.seenIntro || S.sessions.length >= 3) return '';
+  return `<div class="info"><h3 style="font-size:18px">${esc(t('introTitle'))}</h3><div>${esc(t('introText'))}</div><div><button class="btn small" data-a="intro-ok">${esc(t('introOk'))}</button></div></div>`;
+}
+const DAY = 864e5;
+function backupDue() {
+  const st = S.settings; const n = S.sessions.length;
+  if (n < 3 || (st.bkSnooze && st.bkSnooze > now())) return null;
+  const last = st.lastBackup || 0;
+  const since = S.sessions.filter(s => s.startedAt > last).length;
+  const oldest = Math.min(...S.sessions.map(s => s.startedAt));
+  if (!last) return now() - oldest > 7 * DAY ? { n: since, d: 0 } : null;
+  const days = Math.floor((now() - last) / DAY);
+  return days >= 28 && since >= 3 ? { n: since, d: days } : null;
+}
+function backupCard() {
+  if (S.active) return '';
+  const due = backupDue(); if (!due) return '';
+  return `<div class="banner coach"><div class="grow"><div class="eyebrow small">${esc(t('backup'))}</div><div>${esc(t('bkRemind', due.n, due.d))}</div><div class="btn-row wrap"><button class="btn small primary" data-a="bk-now">${esc(t('bkNow'))}</button><button class="btn small ghost" data-a="bk-later">${esc(t('bkLater'))}</button></div></div></div>`;
+}
 function vToday() {
   const tpl = activeTemplate();
   const day = (S._pickedDay && tpl && tpl.days.find(d => d.id === S._pickedDay)) || nextDay(tpl);
@@ -934,15 +1009,18 @@ function vToday() {
       ${S.active ? '' : `<div class="btn-row" style="flex-direction:column"><button class="btn primary block" data-a="start-day">${esc(t('startWorkout'))}</button><button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button></div>`}
       ${tpl.days.length > 1 ? `<div class="chips" role="group" aria-label="${esc(t('day'))}">${tpl.days.map(d => `<button class="chip ${d.id === day.id ? 'on' : ''}" data-a="pick-day" data-v="${d.id}">${esc(d.name)}</button>`).join('')}</div>` : ''}`;
   } else {
-    main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(t('heroTitle'))}</h1><div class="sub" style="margin-top:8px">${esc(t('heroText'))}</div></div>
-      ${S.active ? '' : `<div class="btn-row" style="flex-direction:column"><button class="btn primary block" data-a="wiz-start">${esc(t('pickPlanWizard'))}</button><button class="btn block" data-a="nav" data-v="planlib">${esc(t('planLib'))}</button><button class="btn block" data-a="new-plan">${esc(t('selfBuild'))}</button><button class="btn block ghost" data-a="start-free">${esc(t('emptyWorkout'))}</button></div>`}
-      ${coachCards(null, null)}`;
+    const last = S.sessions.length ? S.sessions.slice().sort((x, y) => y.startedAt - x.startedAt)[0] : null;
+    main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(t('freeTitle'))}</h1><div class="sub" style="margin-top:8px">${esc(t('freeText'))}</div></div>
+      ${S.active ? '' : `<div><button class="btn primary block" data-a="start-free">${esc(t('startFree'))}</button><div class="muted small" style="margin-top:8px;text-align:center">${esc(t('startFreeHint'))}</div></div>`}
+      ${last && !S.active ? `<div class="card" style="padding:12px 16px"><div class="row" style="border:0"><span class="grow"><span class="eyebrow small">${esc(t('lastWorkout'))}</span><br><span class="name">${esc(last.name)}</span><br><span class="meta">${esc(fmtDate(last.startedAt, { weekday: 'short', day: 'numeric', month: 'short' }))}</span></span><button class="btn small" data-a="repeat" data-v="${last.id}">${esc(t('repeatLast'))}</button></div></div>` : ''}
+      ${coachCards(null, null)}
+      <div class="info"><h3 style="font-size:18px">${esc(t('planCardTitle'))}</h3><div>${esc(t('planCardText'))}</div><div><button class="btn small" data-a="nav" data-v="plans">${esc(t('planCardBtn'))}</button></div></div>`;
   }
   const target = tpl ? (tpl.perWeek || tpl.days.length) : 0;
   const week = target
     ? `<div><div class="sub small" style="display:flex;justify-content:space-between;margin-bottom:8px"><span>${esc(t('thisWeek'))}</span><span>${esc(t('ofWorkouts', Math.min(wc, target), target))}</span></div><div class="progress">${Array.from({ length: target }, (_, i) => `<span class="${i < wc ? 'on' : ''}"></span>`).join('')}</div></div>`
     : (wc ? `<div class="sub small">${esc(t('thisWeek'))}: ${esc(t('workoutsDone', wc))}</div>` : '');
-  return `<main class="screen">${topbar()}${resumeBanner()}${main}${week}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
+  return `<main class="screen">${topbar()}${resumeBanner()}${introCard()}${backupCard()}${main}${week}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
 }
 function schemeShort(it, simple) {
   const u = targetUnit(it.exId);
@@ -966,7 +1044,7 @@ const planMode = tp => (tp && tp.mode === 'simple' ? 'simple' : 'advanced');
 function vPlans() {
   const list = S.templates.map(tp => `<button class="list-btn row" data-a="open-plan" data-v="${tp.id}"><span class="grow"><span class="name">${esc(tp.name)}</span><br><span class="meta">${tp.days.length} × ${esc(t('day').toLowerCase())}</span></span>${tp.id === S.settings.activeTemplateId ? `<span class="tag p">${esc(t('active'))}</span>` : ''}</button>`).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('plans'))}</h1>
-    ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noPlansYet'))}</div>`}
+    ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="info"><h3 style="font-size:18px">${esc(t('plansEmptyTitle'))}</h3><div>${esc(t('plansEmptyText'))}</div></div>`}
     <button class="btn primary block" data-a="wiz-start">${esc(t('pickPlanWizard'))}</button>
     <button class="btn block" data-a="nav" data-v="planlib">${esc(t('planLib'))}</button>
     <button class="btn block" data-a="new-plan">${esc(t('newPlan'))}</button></main>`;
@@ -1015,14 +1093,14 @@ function setGrid(it) {
     const tgt = s.target && s.target.reps ? String(parseInt(s.target.reps, 10) || '') : '';
     const amrap = s.target && /\+$/.test(String(s.target.reps || '')) && (s.kind === 'work' || s.kind === 'top');
     if (lastE && s.kind !== 'warmup' && s.kind !== 'backoff' && s.target && normRpe(s.target.rpe) && rpePct(tgt, s.target.rpe)) {
-      phW = fmtN(roundTo(lastE * rpePct(tgt, s.target.rpe) / 100, S.settings.increment));
+      phW = fmtN(roundLoad(it.exId, lastE * rpePct(tgt, s.target.rpe) / 100));
     }
     let phR = p ? (p.reps || '') : tgt;
     if (sug && (s.kind === 'work' || s.kind === 'top')) phW = fmtN(sug.load);
     if (it.sug && it.sug.reps && s.kind === 'work') { const k = it.sets.slice(0, idx + 1).filter(x => x.kind === 'work' && x.side === s.side).length - 1; if (it.sug.reps[k] != null) phR = String(it.sug.reps[k]); }
     else if (it.sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
-    if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundTo(sug.load * (it.backoffPct || 90) / 100, S.settings.increment));
-    if (s.kind === 'backoff' && topDone) phW = fmtN(roundTo(num(topDone.weight) * (it.backoffPct || 90) / 100, S.settings.increment));
+    if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundLoad(it.exId, sug.load * (it.backoffPct || 90) / 100));
+    if (s.kind === 'backoff' && topDone) phW = fmtN(roundLoad(it.exId, num(topDone.weight) * (it.backoffPct || 90) / 100));
     const phRpe = s.target && s.target.rpe ? (s.target.rpeMax > s.target.rpe ? `${fmtN(s.target.rpe)}-${fmtN(s.target.rpeMax)}` : fmtN(s.target.rpe)) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
     const kindLbl = { warmup: t('warmup'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff'), calib: t('calib') }[s.kind];
     const side = (s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '') + (amrap ? '<span class="side-tag amrap">AMRAP</span>' : '');
@@ -1133,6 +1211,7 @@ function vWorkout() {
       <div class="chips">
         <button class="chip" data-a="scheme-info" data-i="${it.id}">${esc(it.method ? methodName(it.method) : it.scheme === 'topback' ? t('topback') : t('straight'))} ${I.info}</button>
         ${canCalib(it) ? `<button class="chip" data-a="calib-open" data-i="${it.id}">${esc(t('calibChip'))}</button>` : ''}
+        ${isBarEx(it.exId) ? `<button class="chip" data-a="plates-open" data-v="${it.id}">${esc(t('plateChip'))}</button>` : ''}
         ${it.pct ? `<button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button>` : ''}
         <button class="chip" data-a="subs" data-i="${it.id}">${I.swap} ${esc(t('subs'))}</button>
         <button class="chip" data-a="rest-edit" data-i="${it.id}">${I.clock.replace('<svg ', '<svg width="18" height="18" ')} ${it.rest} s</button>
@@ -1335,13 +1414,96 @@ function adoptTemplate(tpl, answers) {
 }
 
 /* ---------- view: history ---------- */
+const dayKey = ts => { const d = new Date(ts); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+const monday = ts => { const d = new Date(ts); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d.getTime(); };
+function weekStreak(sessions, at) {
+  const wk = new Set(sessions.map(s => monday(s.startedAt)));
+  let w = monday(at); if (!wk.has(w)) w = monday(w - 1);
+  let n = 0;
+  while (wk.has(w)) { n++; w = monday(w - 1); }
+  return n;
+}
+function histRow(s) {
+  const st = sessionStats(s);
+  const prs = s.items.reduce((n, it) => n + it.sets.filter(x => x.pr && x.pr.length).length, 0);
+  return `<button class="list-btn row" data-a="open-session" data-v="${s.id}"><span class="grow"><span class="name">${esc(s.name)}</span><br><span class="meta">${esc(fmtDate(s.startedAt, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))} · ${esc(fmtDur(s.endedAt - s.startedAt))} · ${st.sets} ${esc(t('setsDone').toLowerCase())}${prs ? ` · <span class="pr-badge">PR ${prs}</span>` : ''}</span></span>${s.difficulty ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${s.difficulty}/10">${s.difficulty}<small>/10</small></span>` : ''}</button>`;
+}
+function calView() {
+  const nowD = new Date(now());
+  if (S.calY == null) { S.calY = nowD.getFullYear(); S.calM = nowD.getMonth(); }
+  const y = S.calY, m = S.calM;
+  const first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
+  const lead = (first.getDay() + 6) % 7;
+  const by = new Map();
+  for (const s of S.sessions) { const k = dayKey(s.startedAt); if (!by.has(k)) by.set(k, []); by.get(k).push(s); }
+  const inMonth = S.sessions.filter(s => { const d = new Date(s.startedAt); return d.getFullYear() === y && d.getMonth() === m; });
+  const sets = inMonth.reduce((n, s) => n + sessionStats(s).sets, 0);
+  const lang = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
+  const wd = [...Array(7)].map((_, i) => new Intl.DateTimeFormat(lang, { weekday: 'narrow' }).format(new Date(2024, 0, 1 + i)));
+  const todayK = dayKey(now());
+  let cells = '';
+  for (let i = 0; i < lead; i++) cells += '<span class="cal-c empty"></span>';
+  for (let d = 1; d <= days; d++) {
+    const k = y + '-' + (m + 1) + '-' + d, n = (by.get(k) || []).length;
+    cells += `<button class="cal-c ${n ? 'has' : ''} ${k === todayK ? 'today' : ''} ${S.calDay === k ? 'sel' : ''}" data-a="cal-day" data-v="${k}" aria-label="${d}${n ? ', ' + n : ''}">${d}${n > 1 ? `<i>${n}</i>` : ''}</button>`;
+  }
+  const sel = S.calDay ? (by.get(S.calDay) || []).sort((a, b) => a.startedAt - b.startedAt) : null;
+  return `<div class="cal-head"><button class="icon-btn" data-a="cal-nav" data-v="-1" aria-label="${esc(t('calPrev'))}">${I.left}</button><div class="cal-title">${esc(new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' }).format(first))}</div><button class="icon-btn" data-a="cal-nav" data-v="1" aria-label="${esc(t('calNext'))}" style="transform:scaleX(-1)">${I.left}</button></div>
+    <div class="stat-row"><div class="stat"><div class="v">${inMonth.length}</div><div class="k">${esc(t('calMonthStat'))}</div></div><div class="stat"><div class="v">${sets}</div><div class="k">${esc(t('setsDone'))}</div></div><div class="stat"><div class="v">${weekStreak(S.sessions, now())}</div><div class="k">${esc(t('calStreak'))}</div></div></div>
+    <div class="cal"><div class="cal-w">${wd.map(x => `<span>${esc(x)}</span>`).join('')}</div><div class="cal-g">${cells}</div></div>
+    ${sel ? (sel.length ? `<div class="card">${sel.map(histRow).join('')}</div>` : `<div class="empty">${esc(t('calNone'))}</div>`) : ''}`;
+}
 function vHistory() {
-  const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(s => {
-    const st = sessionStats(s);
-    const prs = s.items.reduce((n, it) => n + it.sets.filter(x => x.pr && x.pr.length).length, 0);
-    return `<button class="list-btn row" data-a="open-session" data-v="${s.id}"><span class="grow"><span class="name">${esc(s.name)}</span><br><span class="meta">${esc(fmtDate(s.startedAt, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))} · ${esc(fmtDur(s.endedAt - s.startedAt))} · ${st.sets} ${esc(t('setsDone').toLowerCase())}${prs ? ` · <span class="pr-badge">PR ${prs}</span>` : ''}</span></span>${s.difficulty ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${s.difficulty}/10">${s.difficulty}<small>/10</small></span>` : ''}</button>`;
-  }).join('');
-  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`}</main>`;
+  const mode = S.histMode === 'cal' ? 'cal' : 'list';
+  const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(histRow).join('');
+  const seg = S.sessions.length ? `<div class="seg"><button class="${mode === 'list' ? 'on' : ''}" data-a="hist-mode" data-v="list">${esc(t('calList'))}</button><button class="${mode === 'cal' ? 'on' : ''}" data-a="hist-mode" data-v="cal">${esc(t('calCal'))}</button></div>` : '';
+  const body = mode === 'cal' ? calView() : (list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`);
+  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${seg}${body}</main>`;
+}
+function drawCard() {
+  const cv = $('#card-cv'); const sh = S.sheet; if (!cv || !sh) return;
+  const s = S.sessions.find(x => x.id === sh.sesId); if (!s) return;
+  const cs = getComputedStyle(document.documentElement), v = n => (cs.getPropertyValue(n) || '').trim();
+  const bg = v('--bg') || '#1d1220', ac = v('--accent') || '#FF9F70', tx = v('--text') || '#F3ECF1', mu = v('--muted') || '#b9a9b6', su = v('--surface') || '#2a1c2e';
+  const body = getComputedStyle(document.body).fontFamily || 'sans-serif';
+  const disp = v('--display') || body;
+  const c = cv.getContext('2d'), W = 1080, H = 1350, lang = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
+  c.clearRect(0, 0, W, H); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+  const g = c.createRadialGradient(W, 0, 0, W, 0, 900); g.addColorStop(0, 'rgba(255,159,112,.20)'); g.addColorStop(1, 'rgba(255,159,112,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  // logo
+  c.fillStyle = tx; for (let i = 0; i < 4; i++) { c.beginPath(); c.roundRect(60 + i * 20, 60, 10, 62, 5); c.fill(); }
+  c.strokeStyle = ac; c.lineWidth = 11; c.lineCap = 'round'; c.beginPath(); c.moveTo(52, 108); c.lineTo(148, 62); c.stroke();
+  c.fillStyle = tx; c.font = `700 40px ${disp}`; c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillText('Repsmith', 178, 92);
+  const fit = (txt, max, size, wt, fam) => { let z = size; do { c.font = `${wt} ${z}px ${fam}`; z -= 2; } while (c.measureText(txt).width > max && z > 24); };
+  c.fillStyle = tx; fit(s.name, W - 120, 84, 800, disp); c.textBaseline = 'alphabetic'; c.fillText(s.name, 60, 250);
+  c.fillStyle = mu; c.font = `500 34px ${body}`; c.fillText(fmtDate(s.startedAt, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }), 60, 304);
+  // stats
+  const st = sessionStats(s), prs = s.items.reduce((n, it) => n + it.sets.filter(x => x.pr && x.pr.length).length, 0);
+  const cells = [[fmtDur(s.endedAt - s.startedAt), t('duration')], [String(st.sets), t('setsDone')]];
+  if (!sh.hide) cells.push([st.vol.toLocaleString(lang) + ' kg', t('volume')]); else if (prs) cells.push([String(prs), 'PR']);
+  const cw = (W - 120 - 24 * (cells.length - 1)) / cells.length;
+  cells.forEach((cl, i) => {
+    const x = 60 + i * (cw + 24); c.fillStyle = su; c.beginPath(); c.roundRect(x, 360, cw, 170, 28); c.fill();
+    c.fillStyle = ac; fit(cl[0], cw - 30, 56, 800, disp); c.fillText(cl[0], x + 28, 450);
+    c.fillStyle = mu; c.font = `500 28px ${body}`; c.fillText(cl[1], x + 28, 498);
+  });
+  // top exercises by volume
+  const rows = s.items.map(it => {
+    const ex = S.ex.get(it.exId); const done = it.sets.filter(x => x.done && x.kind !== 'warmup');
+    let best = null, bv = -1;
+    for (const x of done) { const sc = (num(x.weight) || 0) * (num(x.reps) || 0) || (num(x.reps) || num(x.time) || 0); if (sc > bv) { bv = sc; best = x; } }
+    return { name: exName(it.exId), n: done.length, best, ex, pr: done.some(x => x.pr && x.pr.length), vol: done.reduce((a, x) => a + (num(x.weight) || 0) * (num(x.reps) || 0), 0) };
+  }).filter(r => r.n).sort((a, b) => b.vol - a.vol);
+  c.fillStyle = mu; c.font = `700 28px ${body}`; c.fillText(t('cardTop').toUpperCase(), 60, 610);
+  const max = 6, show = rows.slice(0, max); let y = 650;
+  show.forEach(r => {
+    c.fillStyle = tx; fit(r.name, 560, 38, 700, body); c.fillText(r.name, 60, y + 50);
+    const right = sh.hide ? `${r.n} × ` + t('setsDone').toLowerCase() : (r.best ? fmtSet(r.best, r.ex) : '');
+    c.textAlign = 'right'; c.fillStyle = r.pr ? ac : mu; c.font = `600 34px ${body}`; c.fillText((r.pr ? 'PR  ' : '') + (sh.hide ? '' : '') + right, W - 60, y + 50); c.textAlign = 'left';
+    c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(60, y + 78, W - 120, 2); y += 100;
+  });
+  if (rows.length > max) { c.fillStyle = mu; c.font = `500 30px ${body}`; c.fillText(`+${rows.length - max} ${t('cardMore')}`, 60, y + 40); }
+  c.fillStyle = mu; c.font = `500 28px ${body}`; c.textAlign = 'center'; c.fillText('repsmith', W / 2, H - 50); c.textAlign = 'left';
 }
 function vSession() {
   const s = S.sessions.find(x => x.id === S.viewArg);
@@ -1349,7 +1511,7 @@ function vSession() {
   const st = sessionStats(s);
   const items = s.items.map(it => {
     const ex = S.ex.get(it.exId);
-    const sets = it.sets.filter(x => x.done).map(x => `<span class="tag ${x.kind === 'top' ? 'p' : ''}">${esc(fmtSet(x, ex))}${x.side ? ' ' + esc(x.side === 'L' ? t('left') : t('right')) : ''}${num(x.rpe) ? ' @' + fmtN(num(x.rpe)) : ''}${x.pr && x.pr.length ? ` <span class="pr-badge" title="${esc(prLabel(x.pr))}">PR</span>` : ''}</span>`).join('');
+    const sets = it.sets.filter(x => x.done).map(x => `<button class="tag ${x.kind === 'top' ? 'p' : ''}" data-a="es-open" data-ses="${s.id}" data-i="${it.id}" data-s="${x.id}">${esc(fmtSet(x, ex))}${x.side ? ' ' + esc(x.side === 'L' ? t('left') : t('right')) : ''}${num(x.rpe) ? ' @' + fmtN(num(x.rpe)) : ''}${x.pr && x.pr.length ? ` <span class="pr-badge" title="${esc(prLabel(x.pr))}">PR</span>` : ''}</button>`).join('') + `<button class="tag add" data-a="es-open" data-ses="${s.id}" data-i="${it.id}" data-s="" aria-label="${esc(t('esAdd'))}">+</button>`;
     const prNote = it.sets.filter(x => x.pr && x.pr.length).map(x => `${fmtSet(x, ex)}: ${prLabel(x.pr)}`).join(' · ');
     return `<div class="row" style="flex-direction:column;align-items:flex-start;padding:10px 0;gap:4px"><span class="name">${esc(exName(it.exId))}</span><div>${sets || '<span class="muted small">–</span>'}</div>${prNote ? `<div class="small" style="color:var(--accent)">PR · ${esc(prNote)}</div>` : ''}</div>`;
   }).join('');
@@ -1359,8 +1521,10 @@ function vSession() {
     <div class="stat-row"><div class="stat"><div class="v">${esc(fmtDur(s.endedAt - s.startedAt))}</div><div class="k">${esc(t('duration'))}</div></div><div class="stat"><div class="v">${st.sets}</div><div class="k">${esc(t('setsDone'))}</div></div><div class="stat"><div class="v">${st.vol.toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'pl-PL')}</div><div class="k">${esc(t('volume'))} kg</div></div></div>
     ${s.difficulty || s.note ? `<div class="info">${s.difficulty ? `<div style="display:flex;align-items:baseline;gap:10px"><span class="diff-badge">${s.difficulty}<small>/10</small></span><span class="muted small">${esc(t('difficultyShort'))}</span></div>` : ''}${s.note ? `<div style="white-space:pre-wrap">${esc(s.note)}</div>` : ''}</div>` : ''}
     <div class="card">${items}</div>
+    <div class="muted small">${esc(t('tapToEdit'))}</div>
     <button class="btn primary block" data-a="repeat" data-v="${s.id}">${esc(t('repeatWorkout'))}</button>
     <div class="muted small" style="margin-top:-8px">${esc(t('repeatHint'))}</div>
+    <button class="btn block" data-a="card-open" data-v="${s.id}">${esc(t('cardBtn'))}</button>
     <button class="btn block" data-a="summary-edit" data-v="${s.id}">${esc(t('editSummary'))}</button>
     <button class="btn danger block" data-a="session-del" data-v="${s.id}">${esc(t('deleteSession'))}</button></main>`;
 }
@@ -1628,7 +1792,7 @@ function renderSheet() {
     else if (ef.mode === 'rrange') efFields = `<div class="grid2">${rb('lo', t('rpeFrom'), it.rpe)}${rb('hi', t('rpeTo'), it.rpeMax)}</div>`;
     else {
       const o = oneRm(it.exId);
-      const pv = num(ef.pct); const load = o && pv ? roundTo(o.kg * pv / 100, S.settings.increment) : null;
+      const pv = num(ef.pct); const load = o && pv ? roundLoad(it.exId, o.kg * pv / 100) : null;
       efFields = `<div class="grid2"><div><label for="ef-pct">${esc(t('pctLbl'))}</label><input id="ef-pct" data-f="ef-pct" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="5" value="${esc(ef.pct ?? '')}"></div>
         <div><label>&nbsp;</label><button class="btn block" data-a="orm-open" data-v="${esc(it.exId)}">${esc(t('ormSet'))}</button></div></div>
         <div class="muted small" id="orm-line">${o ? esc(t('ormLine', fmtN(o.kg), o.src === 'manual' ? t('ormManual') : t('ormApp'))) + (load ? ` · ${esc(fmtN(pv))}% = ${esc(fmtN(load))} kg` : '') : esc(t('ormNone'))}</div>
@@ -1669,6 +1833,42 @@ function renderSheet() {
         <div class="grid2">${fld('it-backoffSets', t('bkSets'), it.backoffSets, 'int')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct, 'int')}</div></div>` : ''}
       ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
+  } else if (sh.type === 'gear') {
+    const g = sh.g, u = g.unit;
+    const bars = G.BAR_CLASSES.map(c => `<div><label for="gb-${c}">${esc(equipName(c))}</label><input id="gb-${c}" data-f="gear-bar" data-c="${c}" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="5" value="${esc(g.bars[c])}"></div>`).join('');
+    const rows = G.PLATES[u].map(p => `<div class="row" style="min-height:44px"><span class="name grow">${fmtN(p)} ${u}</span><input aria-label="${esc(fmtN(p) + ' ' + u)}" data-f="gear-pl" data-p="${p}" data-san="int" inputmode="numeric" autocomplete="off" maxlength="2" style="width:72px;text-align:center" value="${esc(g.plates[u][p])}"><span class="meta" style="width:34px">${esc(t('pairsLbl'))}</span></div>`).join('');
+    const lists = G.LIST_CLASSES.map(c => `<div><label for="gl-${c}">${esc(equipName(c))}</label><input id="gl-${c}" data-f="gear-list" data-c="${c}" data-san="list" autocomplete="off" maxlength="400" value="${esc(g.lists[c])}"><div class="muted small" id="gp-${c}">${gearPreview(g.lists[c])}</div></div>`).join('');
+    body = `${head(t('gearTitle'))}<div class="muted small">${esc(t('gearInfo'))}</div>
+      <div><label>${esc(t('gearPlates'))}</label><div class="chips"><button class="chip ${u === 'kg' ? 'on' : ''}" data-a="gear-unit" data-v="kg">kg</button><button class="chip ${u === 'lb' ? 'on' : ''}" data-a="gear-unit" data-v="lb">lb</button></div></div>
+      <div class="card" style="padding:4px 16px">${rows}</div>
+      <div><label>${esc(t('gearBars'))}</label><div class="grid2">${bars}</div></div>
+      <div><label>${esc(t('gearLists'))}</label><div class="muted small" style="margin-bottom:8px">${esc(t('gearListHint'))}</div><div style="display:flex;flex-direction:column;gap:12px">${lists}</div></div>
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+      <button class="btn primary block" data-a="gear-save">${esc(t('save'))}</button>`;
+  } else if (sh.type === 'plates') {
+    body = `${head(t('plateCalc'))}
+      <div class="grid2"><div><label for="pc-target">${esc(t('pcTarget'))}</label><input id="pc-target" data-f="pc" data-k="target" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="6" value="${esc(fmtN(sh.target))}"></div>
+        <div><label for="pc-bar">${esc(t('pcBar'))}</label><input id="pc-bar" data-f="pc" data-k="bar" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="5" value="${esc(fmtN(sh.bar))}"></div></div>
+      <div class="chips"><button class="chip ${sh.unit === 'kg' ? 'on' : ''}" data-a="pc-unit" data-v="kg">kg</button><button class="chip ${sh.unit === 'lb' ? 'on' : ''}" data-a="pc-unit" data-v="lb">lb</button></div>
+      <div id="pc-res">${platesResult(sh)}</div>`;
+  } else if (sh.type === 'card') {
+    body = `${head(t('cardTitle'))}<canvas id="card-cv" width="1080" height="1350" class="card-cv" role="img" aria-label="${esc(t('cardAlt'))}"></canvas>
+      <div class="chips"><button class="chip ${sh.hide ? 'on' : ''}" data-a="card-hide" aria-pressed="${sh.hide ? 'true' : 'false'}">${esc(t('cardHide'))}</button></div>
+      <div class="btn-row"><button class="btn primary" data-a="card-share">${esc(t('cardShare'))}</button><button class="btn" data-a="card-save">${esc(t('cardSave'))}</button></div>`;
+  } else if (sh.type === 'editset') {
+    const it = (S.sessions.find(x => x.id === sh.sesId) || { items: [] }).items.find(x => x.id === sh.itemId);
+    const ex = it ? S.ex.get(it.exId) : null; const log = ex ? ex.logging : 'W';
+    const v = sh.v || {};
+    const f = (k, label, san) => `<div><label for="es-${k}">${esc(label)}</label><input id="es-${k}" data-f="es" data-k="${k}" data-san="${san}" inputmode="${san === 'int' ? 'numeric' : 'decimal'}" autocomplete="off" maxlength="6" value="${esc(v[k] ?? '')}"></div>`;
+    const fields = log === 'T' ? f('time', t('targetTime'), 'int')
+      : log === 'WD' ? f('weight', t('kg'), 'dec') + f('dist', t('targetDist'), 'int')
+      : f('weight', log === 'BWX' ? t('esWeightPlus') : t('kg'), 'dec') + f('reps', t('reps'), 'int');
+    body = `${head(sh.setId ? t('esTitle') : t('esNew'))}<div class="muted small">${esc(it ? exName(it.exId) : '')}</div>
+      <div class="grid2">${fields}</div>
+      ${log === 'T' ? '' : `<div class="grid2">${f('rpe', t('esRpe'), 'dec')}<div></div></div>`}
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+      <button class="btn primary block" data-a="es-save">${esc(t('save'))}</button>
+      ${sh.setId ? `<button class="btn danger block" data-a="es-del">${esc(t('esDel'))}</button>` : ''}`;
   } else if (sh.type === 'orm') {
     const m = S.maxes[sh.exId]; const a = appOneRm(sh.exId);
     body = `${head(t('ormTitle') + ' · ' + exName(sh.exId))}
@@ -1774,20 +1974,43 @@ function renderSheet() {
       <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
       <div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
       <div class="grid2">${fld('st-restC', t('defaultRestC'), st.restC)}${fld('st-restI', t('defaultRestI'), st.restI)}${fld('st-increment', t('increment'), fmtN(st.increment))}${fld('st-backoffPct', t('defaultBackoff'), st.backoffPct)}</div>
+      ${'wakeLock' in navigator ? `<div><label>${esc(t('wakeSet'))}</label><div class="chips"><button class="chip ${st.wake !== false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="1">${esc(t('wakeOn'))}</button><button class="chip ${st.wake === false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="0">${esc(t('wakeOff'))}</button></div></div>` : `<div class="muted small">${esc(t('wakeNo'))}</div>`}
+      <button class="btn block" data-a="gear-open">${esc(t('gearTitle'))}</button><button class="btn block" data-a="plates-open" data-v="">${esc(t('plateCalc'))}</button>
       <h2 style="font-size:20px;margin-top:6px">${esc(t('coachSec'))}</h2>
       <div><label>${esc(t('readinessSet'))}</label><div class="chips"><button class="chip ${st.readiness !== false ? 'on' : ''}" data-a="set-flag" data-k="readiness" data-v="1">${esc(t('on'))}</button><button class="chip ${st.readiness === false ? 'on' : ''}" data-a="set-flag" data-k="readiness" data-v="0">${esc(t('off'))}</button></div></div>
       <div><label>${esc(t('flagsSet'))}</label><div class="chips"><button class="chip ${st.flagsOn !== false ? 'on' : ''}" data-a="set-flag" data-k="flagsOn" data-v="1">${esc(t('on'))}</button><button class="chip ${st.flagsOn === false ? 'on' : ''}" data-a="set-flag" data-k="flagsOn" data-v="0">${esc(t('off'))}</button></div></div>
       <div class="grid2">${fld('st-deloadEvery', t('deloadEverySet'), st.deloadEvery ?? 5)}${fld('st-regressPct', t('regressSet'), st.regressPct ?? 5)}${fld('st-fatigueCut', t('fatigueSet'), st.fatigueCut ?? 30)}</div>
       <h2 style="font-size:20px;margin-top:6px">${esc(t('backup'))}</h2><div class="muted small">${esc(t('backupInfo'))}</div>
+      <div class="muted small">${esc(t('lastBackupLbl'))}: ${st.lastBackup ? esc(fmtDate(st.lastBackup, { day: 'numeric', month: 'short', year: 'numeric' })) : esc(t('neverBackup'))}${S._persisted != null ? ' · ' + esc(S._persisted ? t('persistOk') : t('persistNo')) : ''}</div>
       ${window.REPSMITH_DATA ? '' : `<button class="btn block" data-a="export">${esc(t('exportBtn'))}</button>`}
       <button class="btn block" data-a="export-copy">${esc(t('copyBtn'))}</button>
       <button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>
+      ${FEEDBACK_EMAIL ? `<button class="btn block" data-a="feedback">${esc(t('feedbackBtn'))}</button>` : ''}
       <label class="btn block" for="importfile" style="margin:0;color:var(--text);font-size:16px">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
       <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('bodyCredit'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
   el.innerHTML = `<div class="scrim ${fresh ? 'enter' : ''}" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
   document.body.style.overflow = 'hidden';
   if (sh.type === 'picker' && sh._focus) { const i = $('#pickq'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
+}
+function gearPreview(spec) {
+  const p = G.parseSpec(spec);
+  if (p.error) return `<span style="color:var(--error)">${esc(t('gearListErr', p.error))}</span>`;
+  return p.list.length ? esc(t('gearListCount', p.list.length, fmtN(p.list[0]), fmtN(p.list[p.list.length - 1]))) : '';
+}
+function platesResult(sh) {
+  const g = gearCfg(); const c = G.plateCalc(g, sh.bar, sh.target, sh.unit);
+  if (c.none) return `<div class="muted">${esc(t('pcNone'))}</div><button class="btn block" data-a="gear-open">${esc(t('pcSet'))}</button>`;
+  if (c.under) return `<div class="muted">${esc(t('pcUnder'))}</div>`;
+  const ch = c.chosen; const max = Math.max(...G.PLATES[sh.unit]);
+  const stack = ch.plates.length ? `<div class="stack" aria-hidden="true"><span class="bar-end"></span>${ch.plates.map(p => `<span class="disc" style="--h:${Math.round(34 + 66 * p / max)}%">${fmtN(p)}</span>`).join('')}</div>` : '';
+  const sideTxt = ch.plates.length ? ch.plates.map(p => fmtN(p)).join(' + ') + ' ' + sh.unit : t('pcBarOnly');
+  const lbTotal = sh.unit === 'lb' ? ` · ${fmtN(Math.round(ch.total / G.LB * 10) / 10)} lb` : '';
+  return `${c.exact ? '' : `<div class="muted">${esc(t('pcNearest'))}</div>`}
+    <div class="pc-total"><span class="v">${fmtN(ch.total)} kg</span><span class="muted">${esc(lbTotal)}</span></div>
+    ${stack}
+    <div><span class="eyebrow small">${esc(t('pcSide'))}</span><div class="pc-side">${esc(sideTxt)}</div></div>
+    ${!c.exact ? `<div class="btn-row">${c.below ? `<button class="btn small" data-a="pc-set" data-v="${c.below.total}">${esc(t('pcLower'))} ${fmtN(c.below.total)}</button>` : ''}${c.above ? `<button class="btn small" data-a="pc-set" data-v="${c.above.total}">${esc(t('pcUpper'))} ${fmtN(c.above.total)}</button>` : ''}</div>` : ''}`;
 }
 function recordsBlock(exId) {
   const ex = S.ex.get(exId);
@@ -2314,17 +2537,92 @@ const A = {
   /* settings */
   sound: el => { readSettingsFields(); S.settings.sound = el.dataset.v === '1'; persist('settings'); renderSheet(); if (S.settings.sound) { ensureAudio(); tick(); } },
   lang: el => { readSettingsFields(); S.settings.lang = el.dataset.v; document.documentElement.lang = S.settings.lang; persist('settings'); render(); },
+  feedback: () => {
+    const body = `${t('feedbackBody')}\n\n\n--\nRepsmith ${VERSION} · ${S.settings.lang} · ${S.sessions.length} sessions\n${navigator.userAgent}`;
+    location.href = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('Repsmith ' + VERSION)}&body=${encodeURIComponent(body)}`;
+  },
+  'es-open': el => {
+    const ses = S.sessions.find(x => x.id === el.dataset.ses); const it = ses && ses.items.find(x => x.id === el.dataset.i); if (!it) return;
+    const s = el.dataset.s ? it.sets.find(x => x.id === el.dataset.s) : null;
+    const last = it.sets.filter(x => x.done && x.kind !== 'warmup').slice(-1)[0];
+    const src = s || last || {};
+    openSheet({ type: 'editset', sesId: ses.id, itemId: it.id, setId: s ? s.id : null, v: { weight: src.weight ?? '', reps: s ? src.reps : (src.reps ?? ''), dist: src.dist ?? '', time: s ? src.time : (src.time ?? ''), rpe: s ? (src.rpe ?? '') : '' } });
+  },
+  'es-save': () => {
+    const sh = S.sheet; const ses = S.sessions.find(x => x.id === sh.sesId); const it = ses && ses.items.find(x => x.id === sh.itemId); if (!it) return;
+    const ex = S.ex.get(it.exId); const log = ex ? ex.logging : 'W';
+    const g = k => { const e = $('#es-' + k); return e ? e.value.replace(',', '.').trim() : ''; };
+    const v = { weight: g('weight'), reps: g('reps'), dist: g('dist'), time: g('time'), rpe: g('rpe') };
+    sh.v = v; sh.err = null;
+    if (log === 'T' && !(num(v.time) > 0)) sh.err = t('esErrEmpty');
+    else if (log === 'WD' && !(num(v.dist) > 0)) sh.err = t('esErrEmpty');
+    else if (log !== 'T' && log !== 'WD' && !(num(v.reps) > 0)) sh.err = t('esErrEmpty');
+    else if (log === 'W' && !(num(v.weight) > 0)) sh.err = t('esErrEmpty');
+    if (!sh.err && v.rpe !== '' && normRpe(v.rpe) == null) sh.err = t('esErrRpe');
+    if (sh.err) { renderSheet(); return; }
+    let s = sh.setId ? it.sets.find(x => x.id === sh.setId) : null;
+    if (!s) { s = newSet('work', null, null); s.done = true; s.doneAt = ses.endedAt || ses.startedAt; it.sets.push(s); }
+    s.weight = log === 'T' ? '' : v.weight; s.reps = log === 'T' || log === 'WD' ? s.reps : v.reps; s.dist = log === 'WD' ? v.dist : s.dist; s.time = log === 'T' ? v.time : s.time;
+    s.rpe = v.rpe === '' ? '' : String(normRpe(v.rpe));
+    recalcPRs(ses, it.exId);
+    persist('sessions'); closeSheet(); toast(t('esSaved')); render();
+  },
+  'es-del': () => {
+    const sh = S.sheet; const ses = S.sessions.find(x => x.id === sh.sesId); const it = ses && ses.items.find(x => x.id === sh.itemId); if (!it) return;
+    it.sets = it.sets.filter(x => x.id !== sh.setId);
+    if (!it.sets.some(x => x.done)) ses.items = ses.items.filter(x => x !== it);
+    recalcPRs(ses, it.exId); persist('sessions'); closeSheet(); toast(t('esDeleted'));
+    if (!ses.items.length) { S.sessions = S.sessions.filter(x => x !== ses); persist('sessions'); go('history'); } else render();
+  },
+  'gear-open': () => { openSheet({ type: 'gear', g: clone(gearCfg()), err: null }); },
+  'gear-unit': el => { S.sheet.g.unit = el.dataset.v; renderSheet(); },
+  'gear-save': () => {
+    const sh = S.sheet; const g = G.norm(sh.g);
+    for (const c of G.LIST_CLASSES) { const p = G.parseSpec(g.lists[c]); if (p.error) { sh.err = `${equipName(c)}: ${t('gearListErr', p.error)}`; renderSheet(); return; } }
+    S.settings.gear = g; persist('settings'); toast(t('gearSaved')); openSheet({ type: 'settings' });
+  },
+  'plates-open': el => {
+    const it = el.dataset.v ? findItem(el.dataset.v) : null; const g = gearCfg();
+    let target = 60, bar = g.bars.BB;
+    if (it) {
+      bar = g.bars[eqOf(it.exId)] || bar;
+      const next = it.sets.find(s => !s.done && s.kind !== 'warmup' && num(s.weight) > 0) || null;
+      const last = it.sets.filter(s => s.done && num(s.weight) > 0).slice(-1)[0];
+      target = (next && num(next.weight)) || (it.sug && it.sug.load) || (last && num(last.weight)) || bar + 40;
+    }
+    openSheet({ type: 'plates', target, bar, unit: g.unit });
+  },
+  'hist-mode': el => { S.histMode = el.dataset.v; render(); },
+  'cal-nav': el => { let m = S.calM + (+el.dataset.v), y = S.calY; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } S.calM = m; S.calY = y; S.calDay = null; render(); },
+  'cal-day': el => { S.calDay = S.calDay === el.dataset.v ? null : el.dataset.v; render(); },
+  'card-open': el => { openSheet({ type: 'card', sesId: el.dataset.v, hide: false }); drawCard(); },
+  'card-hide': () => { S.sheet.hide = !S.sheet.hide; renderSheet(); drawCard(); },
+  'card-save': () => { const cv = $('#card-cv'); if (!cv) return; cv.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'repsmith-' + new Date(S.sessions.find(x => x.id === S.sheet.sesId)?.startedAt || now()).toISOString().slice(0, 10) + '.png'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }, 'image/png'); },
+  'card-share': () => {
+    const cv = $('#card-cv'); if (!cv) return;
+    cv.toBlob(async b => {
+      if (!b) return;
+      const f = new File([b], 'repsmith.png', { type: 'image/png' });
+      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+      A['card-save']();
+    }, 'image/png');
+  },
+  'pc-unit': el => { S.sheet.unit = el.dataset.v; renderSheet(); },
+  'pc-set': el => { S.sheet.target = +el.dataset.v; renderSheet(); },
+  'intro-ok': () => { S.settings.seenIntro = true; persist('settings'); render(); },
+  'bk-later': () => { S.settings.bkSnooze = now() + 7 * DAY; persist('settings'); render(); },
+  'bk-now': () => { if (window.REPSMITH_DATA) A['export-copy'](); else A.export(); render(); },
   export: () => {
     readSettingsFields();
     try {
       const blob = new Blob([JSON.stringify(backupObj(), null, 1)], { type: 'application/json' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `repsmith-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-      toast(t('exported'));
+      S.settings.lastBackup = now(); persist('settings'); toast(t('exported'));
     } catch (e) { toast(String(e)); }
   },
   'export-copy': async () => {
-    try { await navigator.clipboard.writeText(JSON.stringify(backupObj())); toast(t('copied')); } catch (e) { toast('✕'); }
+    try { await navigator.clipboard.writeText(JSON.stringify(backupObj())); S.settings.lastBackup = now(); persist('settings'); toast(t('copied')); } catch (e) { toast('✕'); }
   },
 };
 
@@ -2428,13 +2726,17 @@ document.addEventListener('click', ev => {
 document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
-  if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : el.dataset.san === 'list' ? el.value.replace(/[^0-9.,;\-\/ ]/g, '') : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (f === 'gear-pl' && S.sheet && S.sheet.g) { const g = S.sheet.g; g.plates[g.unit][el.dataset.p] = Math.min(10, parseInt(el.value || '0', 10) || 0); return; }
+  if (f === 'gear-bar' && S.sheet && S.sheet.g) { S.sheet.g.bars[el.dataset.c] = el.value; return; }
+  if (f === 'gear-list' && S.sheet && S.sheet.g) { S.sheet.g.lists[el.dataset.c] = el.value; const pv = $('#gp-' + el.dataset.c); if (pv) pv.innerHTML = gearPreview(el.value); return; }
+  if (f === 'pc' && S.sheet && S.sheet.type === 'plates') { const v = num(el.value.replace(',', '.')); S.sheet[el.dataset.k] = v == null ? 0 : v; const r = $('#pc-res'); if (r) r.innerHTML = platesResult(S.sheet); return; }
   if (f === 'np-name') { (S.np || (S.np = {})).name = el.value; return; }
   if (f === 'tg' && S.sheet && S.sheet.tg) { if (el.dataset.k === 'bklo' || el.dataset.k === 'bkhi') S.sheet.bk[el.dataset.k.slice(2)] = el.value; else S.sheet.tg[el.dataset.k] = el.value; return; }
   if (f === 'ef-pct' && S.sheet && S.sheet.ef) {
     S.sheet.ef.pct = el.value;
     const ln = $('#orm-line'); const o = oneRm(S.sheet.item.exId); const pv = num(el.value.replace(',', '.'));
-    if (ln && o) ln.textContent = t('ormLine', fmtN(o.kg), o.src === 'manual' ? t('ormManual') : t('ormApp')) + (pv ? ` · ${fmtN(pv)}% = ${fmtN(roundTo(o.kg * pv / 100, S.settings.increment))} kg` : '');
+    if (ln && o) ln.textContent = t('ormLine', fmtN(o.kg), o.src === 'manual' ? t('ormManual') : t('ormApp')) + (pv ? ` · ${fmtN(pv)}% = ${fmtN(roundLoad(S.sheet.item.exId, o.kg * pv / 100))} kg` : '');
     return;
   }
   if (f === 'm') { const cv = cleanDec(el.value); if (cv !== el.value) el.value = cv; return; }
@@ -2473,7 +2775,7 @@ document.addEventListener('keydown', ev => {
     if (all[i + 1]) { ev.preventDefault(); all[i + 1].focus(); }
   }
 });
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && S.active) saveActive(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && S.active) saveActive(); syncWake(); });
 
 /* ---------- boot ---------- */
 async function loadData() {
@@ -2493,6 +2795,7 @@ async function boot() {
   if (normTemplates()) persist('templates');
   document.documentElement.lang = S.settings.lang;
   if (S.active) S.view = 'workout';
+  try { if (navigator.storage && navigator.storage.persisted) navigator.storage.persisted().then(v => { S._persisted = v; }); if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(v => { S._persisted = !!v; }).catch(() => {}); } catch (e) {}
   render();
   if ('serviceWorker' in navigator && location.protocol === 'https:' && !window.REPSMITH_DATA) {
     try {
@@ -2504,7 +2807,6 @@ async function boot() {
       }).catch(() => {});
     } catch (e) {}
   }
-  if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch (e) {} }
 }
 window.Repsmith = { S, A, C, CD, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt, normTarget, normItem, initItemSheet, applyItemTargets, defaultItem, render, persist, backupObj, oneRm };
 boot().catch(err => {

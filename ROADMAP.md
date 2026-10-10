@@ -31,7 +31,16 @@ Na podstawie blueprintów Adriana: progresja, objętość, plany z kreatorem.
 ## v0.6.4 – zrobione
 - Nowy plan: najpierw wybór trybu. Prosty (serie, powtórzenia stałe lub zakres, przerwa, automatyczne podpowiedzi) albo zaawansowany (wszystko). Tryb zmienisz w menu planu, ustawienia zaawansowane zostają.
 
-## Teraz: v0.6.x – feedback od znajomych
+## v0.7.0 – zrobione
+- Ekran Dziś bez planu: główny przycisk "Zacznij trening", ostatni trening z powtórzeniem, jedna karta o planach. Kreator i biblioteka żyją w Planach.
+- Blokada wygaszania ekranu w trakcie treningu (Ustawienia: włącz/wyłącz).
+- Przypomnienie o kopii zapasowej, trwały zapis danych w przeglądarce, data ostatniej kopii.
+- Edycja, usuwanie i dodawanie serii w starych treningach.
+- Kalkulator talerzy (kg i lb), ustawienia talerzy, gryfów i dostępnych ciężarów (hantle, kettle, maszyny, wyciągi). Sugestie ciężaru trafiają w to, co faktycznie masz.
+- Kalendarz w Historii (miesiąc, statystyki, tygodnie z rzędu) i karta podsumowania do udostępnienia jako obraz.
+- Wstęp przy pierwszym uruchomieniu, przycisk uwag (wymaga ustawienia FEEDBACK_EMAIL w app.js), testy w repozytorium (`tests/`, `sh tests/run.sh`).
+
+## Teraz: v0.7 – feedback od znajomych – feedback od znajomych
 Wysłać aplikację znajomym z siłowni, zebrać uwagi. Feedback może zmienić priorytety.
 
 Do sprawdzenia w praktyce:

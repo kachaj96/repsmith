@@ -1,4 +1,4 @@
-# Repsmith v0.6.4
+# Repsmith v0.7.0
 
 Autor: Adrian Drożdżyński
 
@@ -30,7 +30,7 @@ Ograniczenia iOS: brak wibracji na koniec przerwy, dźwięki timera nie grają p
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.6.5`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.7.1`).
 
 ## Sprawdzenie wersji
 
