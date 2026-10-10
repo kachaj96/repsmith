@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.7.0';
+const VERSION = '0.7.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -201,7 +201,7 @@ Object.assign(STR.pl, {
   gearListHint: 'Zakres od-do/krok albo pojedyncze liczby, np. 2-10/2 12.5-30/2.5. Oddzielaj spacją lub średnikiem. Puste = bez ograniczeń.', gearListErr: tk => `Nie rozumiem: "${tk}". Użyj od-do/krok (np. 2-10/2).`, gearListCount: (n, a, b) => `${n} ciężarów, ${a}-${b} kg`, gearSaved: 'Zapisano ciężary',
   plateCalc: 'Kalkulator talerzy', pcTarget: 'Ciężar docelowy (kg)', pcBar: 'Gryf (kg)', pcSide: 'Na każdą stronę', pcExact: 'Dokładnie', pcNearest: 'Dokładnie tego się nie da. Najbliżej:', pcLower: '◀ Lżej', pcUpper: 'Ciężej ▶', pcUnder: 'Poniżej wagi gryfu.', pcNone: 'Nie masz ustawionych talerzy w tej jednostce.', pcBarOnly: 'Sam gryf', pcSet: 'Ustaw talerze', plateChip: 'Talerze',
   freeTitle: 'Dziś trening', freeText: 'Zapisuj serie, ciężary i RPE. Plan nie jest potrzebny, ćwiczenia dodajesz w trakcie.', startFree: 'Zacznij trening', startFreeHint: 'Pusty trening, ćwiczenia dodajesz po drodze',
-  lastWorkout: 'Ostatni trening', repeatLast: 'Powtórz', planCardTitle: 'Wolisz trenować z planem?', planCardText: 'Dobierz plan w 12 pytaniach, wybierz gotowy z biblioteki albo zbuduj własny.', planCardBtn: 'Plany',
+  lastWorkout: 'Ostatni trening', lastWeek: 'Ostatnie 7 dni', weekMore: n => `Pokaż pozostałe (${n})`, weekLess: 'Pokaż mniej', repeatLast: 'Powtórz', planCardTitle: 'Wolisz trenować z planem?', planCardText: 'Dobierz plan w 12 pytaniach, wybierz gotowy z biblioteki albo zbuduj własny.', planCardBtn: 'Plany',
   plansEmptyTitle: 'Dobierz plan w 2 minuty', plansEmptyText: '12 krótkich pytań: cel, dni, czas, sprzęt. Dostajesz gotowy plan, a aplikacja prowadzi progresję za Ciebie.',
   wakeSet: 'Ekran podczas treningu', wakeOn: 'Nie wygaszaj', wakeOff: 'Standardowo', wakeNo: 'Ta przeglądarka nie pozwala blokować wygaszania ekranu.',
   lastBackupLbl: 'Ostatnia kopia', neverBackup: 'jeszcze nie robiona', persistOk: 'Dane chronione przed automatycznym czyszczeniem przez przeglądarkę.', persistNo: 'Przeglądarka może usunąć dane przy braku miejsca. Rób kopie.', 
@@ -293,7 +293,7 @@ Object.assign(STR.en, {
   gearListHint: 'Range from-to/step or single numbers, e.g. 2-10/2 12.5-30/2.5. Separate with a space or semicolon. Empty = no limit.', gearListErr: tk => `Cannot read: "${tk}". Use from-to/step (e.g. 2-10/2).`, gearListCount: (n, a, b) => `${n} weights, ${a}-${b} kg`, gearSaved: 'Weights saved',
   plateCalc: 'Plate calculator', pcTarget: 'Target weight (kg)', pcBar: 'Bar (kg)', pcSide: 'Per side', pcExact: 'Exactly', pcNearest: 'Cannot make exactly that. Closest:', pcLower: '◀ Lighter', pcUpper: 'Heavier ▶', pcUnder: 'Below the bar weight.', pcNone: 'No plates set up in this unit.', pcBarOnly: 'Bar only', pcSet: 'Set up plates', plateChip: 'Plates',
   freeTitle: 'Train today', freeText: 'Log sets, loads and RPE. No plan needed, add exercises as you go.', startFree: 'Start workout', startFreeHint: 'Empty workout, add exercises along the way',
-  lastWorkout: 'Last workout', repeatLast: 'Repeat', planCardTitle: 'Prefer training with a plan?', planCardText: 'Find a plan in 12 questions, pick one from the library or build your own.', planCardBtn: 'Plans',
+  lastWorkout: 'Last workout', lastWeek: 'Last 7 days', weekMore: n => `Show ${n} more`, weekLess: 'Show less', repeatLast: 'Repeat', planCardTitle: 'Prefer training with a plan?', planCardText: 'Find a plan in 12 questions, pick one from the library or build your own.', planCardBtn: 'Plans',
   plansEmptyTitle: 'Find a plan in 2 minutes', plansEmptyText: '12 short questions: goal, days, time, equipment. You get a ready plan and the app runs the progression for you.',
   wakeSet: 'Screen during workout', wakeOn: 'Keep awake', wakeOff: 'Default', wakeNo: 'This browser cannot keep the screen awake.',
   lastBackupLbl: 'Last backup', neverBackup: 'never', persistOk: 'Data is protected from automatic clearing by the browser.', persistNo: 'The browser may delete data when storage runs low. Keep backups.',
@@ -977,6 +977,16 @@ function introCard() {
   return `<div class="info"><h3 style="font-size:18px">${esc(t('introTitle'))}</h3><div>${esc(t('introText'))}</div><div><button class="btn small" data-a="intro-ok">${esc(t('introOk'))}</button></div></div>`;
 }
 const DAY = 864e5;
+function recentCard() {
+  const all = S.sessions.slice().sort((x, y) => y.startedAt - x.startedAt);
+  if (!all.length) return '';
+  let list = all.filter(x => x.startedAt > now() - 7 * DAY);
+  if (!list.length) list = [all[0]];
+  const LIM = 3, open = !!S._weekAll, shown = open ? list : list.slice(0, LIM);
+  const rows = shown.map(x => `<div class="row" style="border:0;min-height:48px"><span class="grow"><span class="name">${esc(x.name)}</span><br><span class="meta">${esc(fmtDate(x.startedAt, { weekday: 'short', day: 'numeric', month: 'short' }))} · ${sessionStats(x).sets} ${esc(t('setsDone').toLowerCase())}</span></span><button class="btn small" data-a="repeat" data-v="${x.id}">${esc(t('repeatLast'))}</button></div>`).join('');
+  const tog = list.length > LIM ? `<button class="btn small ghost" data-a="week-toggle" style="width:100%">${esc(open ? t('weekLess') : t('weekMore', list.length - LIM))}</button>` : '';
+  return `<div class="card" style="padding:12px 16px"><div class="eyebrow small">${esc(list.length > 1 || list[0].startedAt > now() - 7 * DAY ? t('lastWeek') : t('lastWorkout'))}</div>${rows}${tog}</div>`;
+}
 function backupDue() {
   const st = S.settings; const n = S.sessions.length;
   if (n < 3 || (st.bkSnooze && st.bkSnooze > now())) return null;
@@ -1009,10 +1019,9 @@ function vToday() {
       ${S.active ? '' : `<div class="btn-row" style="flex-direction:column"><button class="btn primary block" data-a="start-day">${esc(t('startWorkout'))}</button><button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button></div>`}
       ${tpl.days.length > 1 ? `<div class="chips" role="group" aria-label="${esc(t('day'))}">${tpl.days.map(d => `<button class="chip ${d.id === day.id ? 'on' : ''}" data-a="pick-day" data-v="${d.id}">${esc(d.name)}</button>`).join('')}</div>` : ''}`;
   } else {
-    const last = S.sessions.length ? S.sessions.slice().sort((x, y) => y.startedAt - x.startedAt)[0] : null;
     main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(t('freeTitle'))}</h1><div class="sub" style="margin-top:8px">${esc(t('freeText'))}</div></div>
       ${S.active ? '' : `<div><button class="btn primary block" data-a="start-free">${esc(t('startFree'))}</button><div class="muted small" style="margin-top:8px;text-align:center">${esc(t('startFreeHint'))}</div></div>`}
-      ${last && !S.active ? `<div class="card" style="padding:12px 16px"><div class="row" style="border:0"><span class="grow"><span class="eyebrow small">${esc(t('lastWorkout'))}</span><br><span class="name">${esc(last.name)}</span><br><span class="meta">${esc(fmtDate(last.startedAt, { weekday: 'short', day: 'numeric', month: 'short' }))}</span></span><button class="btn small" data-a="repeat" data-v="${last.id}">${esc(t('repeatLast'))}</button></div></div>` : ''}
+      ${S.active ? '' : recentCard()}
       ${coachCards(null, null)}
       <div class="info"><h3 style="font-size:18px">${esc(t('planCardTitle'))}</h3><div>${esc(t('planCardText'))}</div><div><button class="btn small" data-a="nav" data-v="plans">${esc(t('planCardBtn'))}</button></div></div>`;
   }
@@ -2592,6 +2601,7 @@ const A = {
     }
     openSheet({ type: 'plates', target, bar, unit: g.unit });
   },
+  'week-toggle': () => { S._weekAll = !S._weekAll; render(); },
   'hist-mode': el => { S.histMode = el.dataset.v; render(); },
   'cal-nav': el => { let m = S.calM + (+el.dataset.v), y = S.calY; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } S.calM = m; S.calY = y; S.calDay = null; render(); },
   'cal-day': el => { S.calDay = S.calDay === el.dataset.v ? null : el.dataset.v; render(); },
