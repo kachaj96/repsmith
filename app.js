@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.7.1';
+const VERSION = '0.8.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -185,7 +185,7 @@ Object.assign(STR.pl, {
   why_first: d => (d.rpe ? `Pierwszy raz: dobierz ciężar na RPE ${fmtN(d.rpe)}` : 'Pierwszy raz: dobierz ciężar, zostaw 2-3 powtórzenia w zapasie'),
   why_fixed: d => `Ciężar z e1RM na RPE ${fmtN(d.rpe)}`,
   cueReady: 'Słabszy dzień: top set zatrzymaj na RPE 7.', stopCue: 'Kończ serię, gdy sztanga wyraźnie zwolni względem pierwszego powtórzenia.',
-  cueDeload: p => `Tydzień deload: serie −${p}%, ciężar bez zmian.`, cueFatigue: p => `Po sygnale zmęczenia: serie −${p}% na tym treningu.`,
+  cueDeload: (p, l) => l ? `Tydzień deload: serie −${p}%, ciężar −${l}%.` : `Tydzień deload: serie −${p}%, ciężar bez zmian.`, cueFatigue: p => `Po sygnale zmęczenia: serie −${p}% na tym treningu.`,
   cueAdj90: 'Ciężar −10% po spadku e1RM.', cueStallEntry: 'Pierwszy tydzień na 90% ostatnich ciężarów.', cueBackoff: '+1 seria po sygnale stagnacji (przez 2 tygodnie).',
   cueRamp: n => `Blok masy: +${n} ${plural(n, 'seria', 'serie', 'serii')} dla partii do dociągnięcia.`,
   wizTitle: 'Dobór planu', wizNext: 'Dalej', wizStep: (a, b) => `Pytanie ${a} z ${b}`, wizRestart: 'Zacznij od nowa',
@@ -207,6 +207,24 @@ Object.assign(STR.pl, {
   lastBackupLbl: 'Ostatnia kopia', neverBackup: 'jeszcze nie robiona', persistOk: 'Dane chronione przed automatycznym czyszczeniem przez przeglądarkę.', persistNo: 'Przeglądarka może usunąć dane przy braku miejsca. Rób kopie.', 
   bkRemind: (n, d) => d ? `Ostatnia kopia sprzed ${d} dni, od tamtej pory ${n} ${n === 1 ? 'trening' : 'treningów'}. Zapisz nową.` : `Masz ${n} ${n === 1 ? 'trening' : 'treningów'} i żadnej kopii. Dane są tylko na tym telefonie.`, bkNow: 'Zapisz kopię', bkLater: 'Później',
   introTitle: 'Zanim zaczniesz', introText: 'Repsmith zapisuje wszystko tylko na tym telefonie, bez konta i bez synchronizacji. Zmiana telefonu albo wyczyszczenie danych przeglądarki kasuje historię, więc rób kopię w Ustawieniach.', introOk: 'Rozumiem',
+  cycTitle: 'Cykl planu', cycRepeat: 'Powtarzany tydzień', cycFixed: 'Stała długość',
+  cycRepeatD: 'Ten sam tydzień w kółko. Ciężary rosną z Twoich wyników.', cycFixedD: 'Plan ma określoną liczbę tygodni. Każdy tydzień może mieć inne serie, powtórzenia, %1RM albo RPE.',
+  cycWeeks: 'Liczba tygodni', cycWeeksN: n => `${n} ${plural(n, 'tydzień', 'tygodnie', 'tygodni')}`, cycWeekOf: (w, n) => `Tydzień ${w} z ${n}`, cycDone: 'zakończony',
+  cycNow: (w, n) => `Teraz: tydzień ${w} z ${n}`, cycCount: 'Tydzień zalicza się po zrobieniu tylu treningów, ile dni w tygodniu ma plan. Przerwa nie przesuwa planu, strzałkami poprawisz tydzień ręcznie.',
+  cycStartNote: 'Liczenie tygodni ruszy od zapisu.', cycSumRepeat: 'Powtarzany tydzień', dlSumNone: 'bez deloadu', dlSumEvery: n => `deload co ${n} tyg.`, dlSumWeeks: l => `deload: tydz. ${l}`,
+  cycRestart: 'Zacznij cykl od nowa', cycRestartQ: 'Liczenie tygodni wróci do tygodnia 1. Historia treningów zostaje.', cycSaved: 'Cykl zapisany', cycErrWeeks: 'Liczba tygodni: od 2 do 24.', cycErrEvery: 'Deload co 2 do 12 tygodni.', cycErrCut: 'Serie: 0-80%, ciężar: 0-30%.',
+  dlTitle: 'Deload', dlNone: 'Bez deloadu', dlEvery: 'Co N tygodni', dlWeeks: 'Wybrane tygodnie', dlEveryLbl: 'Co ile tygodni', dlSets: 'Mniej serii (%)', dlLoad: 'Mniejszy ciężar (%)', dlPick: 'Dotknij tygodni, w których ma być deload.',
+  dlInfo: (a, b) => `W tygodniu deloadu aplikacja zetnie serie o ${a}%${b ? ` i ciężar o ${b}%` : ''}, licząc od wartości z tego tygodnia. Progresja po deloadzie liczy się od zwykłych tygodni.`,
+  pwLbl: 'Podgląd tygodnia', pwDl: 'Tydzień deloadu: serie i ciężar zetnie aplikacja przy starcie treningu.', skipWeek: 'pominięte w tym tygodniu',
+  wkTitle: 'Tygodnie', wkBtn: n => `Rozpisz ${n} ${plural(n, 'tydzień', 'tygodnie', 'tygodni')}`, wkSet: n => `Zmienione: ${n} ${plural(n, 'tydzień', 'tygodnie', 'tygodni')}.`, wkNone: 'Każdy tydzień jak wyżej.',
+  wkHint: b => `Puste pole = wartość bazowa (${b}). 0 serii = ćwiczenie pominięte w tym tygodniu.`, wkSets: 'Serie', wkReps: 'Powt.', wkPct: '%1RM', wkRpe: 'RPE', wkBack: 'Backoff',
+  wkGen: 'Generator fali', wkGenD: 'Wartość rośnie albo spada równo z tygodnia na tydzień, tygodnie deloadu są pomijane. Ta sama wartość od i do kopiuje ją na wybrane tygodnie.',
+  wkField: 'Co zmieniać', wkFrom: 'Wartość od', wkTo: 'Wartość do', wkW1: 'Od tygodnia', wkW2: 'Do tygodnia', wkApply: 'Wypełnij', wkClear: 'Wyczyść tygodnie', wkDone: 'Gotowe', wkGenErr: 'Wpisz obie wartości i zakres tygodni.',
+  wkErr: (w, m) => `Tydzień ${w}: ${m}`, wkErrSets: 'serie od 0 do 20', wkErrReps: 'powtórzenia jak 5, 6-8 albo 5+', wkErrPct: '%1RM od 30 do 110', wkErrRpe: 'RPE od 5 do 10 co 0,5', wkErrBack: 'backoff od 0 do 10 serii',
+  endTitle: 'Plan zakończony', endText: n => `Zrobione wszystkie tygodnie (${n}). Powtórz blok, ustaw nowy cykl albo wybierz inny plan.`, endRepeat: 'Powtórz blok', endCycle: 'Ustaw cykl', endPlans: 'Inny plan', endRestarted: 'Blok od nowa, tydzień 1',
+  testTitle: 'Wyniki testu 1RM', testWas: kg => `teraz ${kg} kg`, testNoMax: 'bez zapisanego 1RM', testSave: 'Zapisz', testSaveAll: 'Zapisz nowe maksy', testSaved: 'Maksy zapisane', testFrom: (w, r) => `z serii ${w}×${r}`,
+  needs1RM: 'Plan liczy ciężary z 1RM. Przed startem ustaw maksy głównych bojów (w treningu przy ćwiczeniu: Ustaw 1RM) albo zrób jedną sesję kalibracyjną.',
+  whyBtn: 'Dlaczego tak? Źródła', whyTitle: 'Skąd te liczby', whySrc: 'Źródła',
   esTitle: 'Edytuj serię', esAdd: 'Dodaj serię', esNew: 'Nowa seria', esDel: 'Usuń serię', esRpe: 'RPE (puste = brak)', esWeightPlus: 'Dodatkowy ciężar (kg)', esErrRpe: 'RPE: od 1 do 10, co 0,5.', esErrEmpty: 'Wpisz wartość.', esSaved: 'Zapisano', esDeleted: 'Seria usunięta', tapToEdit: 'Dotknij serię, aby ją poprawić.', calList: 'Lista', calCal: 'Kalendarz', calMonthStat: 'Treningi', calStreak: 'Tyg. z rzędu', calNone: 'Brak treningów tego dnia.', calPrev: 'Poprzedni miesiąc', calNext: 'Następny miesiąc', cardBtn: 'Karta do udostępnienia', cardTitle: 'Karta treningu', cardHide: 'Ukryj ciężary', cardShare: 'Udostępnij', cardSave: 'Zapisz obraz', cardAlt: 'Podgląd karty treningu', cardMore: 'więcej', cardTop: 'Najlepsze serie',
   feedbackBtn: 'Wyślij uwagi', feedbackSub: 'Uwagi do aplikacji (v', feedbackBody: 'Co działa, co nie, czego brakuje:',
   npTitle: 'Nowy plan', npAsk: 'Jak chcesz budować plan?', npSimple: 'Prosty', npSimpleD: 'Ćwiczenie, serie, powtórzenia (stałe albo zakres) i przerwa. Aplikacja sama podpowiada ciężar i powtórzenia na kolejny trening. Dla większości wystarczy.',
@@ -224,7 +242,7 @@ Object.assign(STR.pl, {
   seeDetails: 'Zobacz rozpiskę', hideDetails: 'Ukryj rozpiskę', allGoals: 'Wszystkie',
   heroTitle: 'Dobierz plan w 2 minuty', heroText: '12 krótkich pytań: cel, dni, czas, sprzęt. Dostajesz gotowy plan, a aplikacja prowadzi progresję za Ciebie.',
   selfBuild: 'Ułożę plan sam',
-  blockWeek: (w, l) => `Tydzień ${w} z ${l} bloku`, weekN: w => `Tydzień ${w} planu`, deloadNow: p => `Deload: serie −${p}%, ciężary bez zmian`,
+  blockWeek: (w, l) => `Tydzień ${w} z ${l} bloku`, weekN: w => `Tydzień ${w} planu`, deloadNow: (p, l) => l ? `Deload: serie −${p}%, ciężar −${l}%` : `Deload: serie −${p}%, ciężary bez zmian`,
   flagsTitle: 'Sygnały',
   flag_stall: ex => `${ex}: e1RM stoi od 3 treningów.`, flag_regression: ex => `${ex}: e1RM spadł o ponad ${fmtN(S.settings.regressPct ?? 5)}% względem najlepszego z 4 tygodni, dwa razy z rzędu.`,
   flag_fatigue: () => `Ten sam ciężar szedł ciężej na co najmniej 2 ćwiczeniach. Następny trening: serie −${S.settings.fatigueCut ?? 30}%.`,
@@ -256,7 +274,7 @@ Object.assign(STR.pl, {
   changePlan: 'Zmień plan (kreator)', last7: 'Ostatnie 7 dni', prev7: '7 dni wcześniej',
   volumeHint2: 'Liczą się serie ciężkie: RPE 6 lub więcej albo bez RPE. Mięsień główny 1, pomocniczy 0,5. Jednorącz L+P to jedna seria.',
   coachSec: 'Plan i sygnały', readinessSet: 'Pytanie o samopoczucie przed treningiem z planu', flagsSet: 'Sygnały ostrzegawcze',
-  deloadEverySet: 'Deload co N tygodni (siła)', regressSet: 'Spadek e1RM liczony jako regres (%)', fatigueSet: 'Cięcie serii przy zmęczeniu (%)',
+  deloadEverySet: 'Deload co N tyg. (plany z kreatora bez własnego cyklu)', regressSet: 'Spadek e1RM liczony jako regres (%)', fatigueSet: 'Cięcie serii przy zmęczeniu (%)',
   spikeTitle: 'Uwagi do objętości', goalLbl: 'Cel', planFrom: 'Z biblioteki', noMethod: 'Bez progresji',
 });
 Object.assign(STR.en, {
@@ -277,7 +295,7 @@ Object.assign(STR.en, {
   why_first: d => (d.rpe ? `First time: pick a load for RPE ${fmtN(d.rpe)}` : 'First time: pick a load, leave 2-3 reps in reserve'),
   why_fixed: d => `Load from e1RM at RPE ${fmtN(d.rpe)}`,
   cueReady: 'Rough day: stop the top set at RPE 7.', stopCue: 'Stop the set when the bar clearly slows compared with the first rep.',
-  cueDeload: p => `Deload week: sets −${p}%, same load.`, cueFatigue: p => `After a fatigue flag: sets −${p}% in this workout.`,
+  cueDeload: (p, l) => l ? `Deload week: sets −${p}%, weight −${l}%.` : `Deload week: sets −${p}%, same load.`, cueFatigue: p => `After a fatigue flag: sets −${p}% in this workout.`,
   cueAdj90: 'Load −10% after an e1RM drop.', cueStallEntry: 'First week at 90% of your last loads.', cueBackoff: '+1 set after a stall flag (for 2 weeks).',
   cueRamp: n => `Size block: +${n} set${n === 1 ? '' : 's'} for the lagging muscles.`,
   wizTitle: 'Plan finder', wizNext: 'Next', wizStep: (a, b) => `Question ${a} of ${b}`, wizRestart: 'Start over',
@@ -299,6 +317,24 @@ Object.assign(STR.en, {
   lastBackupLbl: 'Last backup', neverBackup: 'never', persistOk: 'Data is protected from automatic clearing by the browser.', persistNo: 'The browser may delete data when storage runs low. Keep backups.',
   bkRemind: (n, d) => d ? `Last backup was ${d} days ago, ${n} workout${n === 1 ? '' : 's'} since. Save a new one.` : `You have ${n} workout${n === 1 ? '' : 's'} and no backup. Your data lives only on this phone.`, bkNow: 'Save backup', bkLater: 'Later',
   introTitle: 'Before you start', introText: 'Repsmith keeps everything only on this phone, with no account and no sync. Changing phones or clearing browser data deletes your history, so make a backup in Settings.', introOk: 'Got it',
+  cycTitle: 'Plan cycle', cycRepeat: 'Repeating week', cycFixed: 'Fixed length',
+  cycRepeatD: 'The same week on repeat. Loads go up from your results.', cycFixedD: 'The plan has a set number of weeks. Each week can have its own sets, reps, %1RM or RPE.',
+  cycWeeks: 'Number of weeks', cycWeeksN: n => `${n} week${n === 1 ? '' : 's'}`, cycWeekOf: (w, n) => `Week ${w} of ${n}`, cycDone: 'finished',
+  cycNow: (w, n) => `Now: week ${w} of ${n}`, cycCount: 'A week counts once you have done as many workouts as the plan has days per week. A break does not move the plan; use the arrows to fix the week by hand.',
+  cycStartNote: 'Week counting starts when you save.', cycSumRepeat: 'Repeating week', dlSumNone: 'no deload', dlSumEvery: n => `deload every ${n} wk`, dlSumWeeks: l => `deload: wk ${l}`,
+  cycRestart: 'Restart the cycle', cycRestartQ: 'Week counting goes back to week 1. Your workout history stays.', cycSaved: 'Cycle saved', cycErrWeeks: 'Number of weeks: 2 to 24.', cycErrEvery: 'Deload every 2 to 12 weeks.', cycErrCut: 'Sets: 0-80%, load: 0-30%.',
+  dlTitle: 'Deload', dlNone: 'No deload', dlEvery: 'Every N weeks', dlWeeks: 'Chosen weeks', dlEveryLbl: 'Every how many weeks', dlSets: 'Fewer sets (%)', dlLoad: 'Less weight (%)', dlPick: 'Tap the weeks that should be a deload.',
+  dlInfo: (a, b) => `In a deload week the app cuts sets by ${a}%${b ? ` and weight by ${b}%` : ''}, starting from that week's values. Progression after the deload continues from normal weeks.`,
+  pwLbl: 'Preview week', pwDl: 'Deload week: the app cuts sets and weight when the workout starts.', skipWeek: 'skipped this week',
+  wkTitle: 'Weeks', wkBtn: n => `Set up ${n} weeks`, wkSet: n => `Changed: ${n} week${n === 1 ? '' : 's'}.`, wkNone: 'Every week as above.',
+  wkHint: b => `Empty field = base value (${b}). 0 sets = exercise skipped that week.`, wkSets: 'Sets', wkReps: 'Reps', wkPct: '%1RM', wkRpe: 'RPE', wkBack: 'Backoff',
+  wkGen: 'Wave generator', wkGenD: 'The value rises or falls evenly week to week, deload weeks are skipped. The same value for from and to copies it to the chosen weeks.',
+  wkField: 'What to change', wkFrom: 'Value from', wkTo: 'Value to', wkW1: 'From week', wkW2: 'To week', wkApply: 'Fill', wkClear: 'Clear weeks', wkDone: 'Done', wkGenErr: 'Enter both values and the week range.',
+  wkErr: (w, m) => `Week ${w}: ${m}`, wkErrSets: 'sets 0 to 20', wkErrReps: 'reps like 5, 6-8 or 5+', wkErrPct: '%1RM 30 to 110', wkErrRpe: 'RPE 5 to 10 in steps of 0.5', wkErrBack: 'backoff 0 to 10 sets',
+  endTitle: 'Plan finished', endText: n => `All ${n} weeks done. Repeat the block, set a new cycle or pick another plan.`, endRepeat: 'Repeat block', endCycle: 'Set cycle', endPlans: 'Other plan', endRestarted: 'Block restarted, week 1',
+  testTitle: '1RM test results', testWas: kg => `now ${kg} kg`, testNoMax: 'no saved 1RM', testSave: 'Save', testSaveAll: 'Save new maxes', testSaved: 'Maxes saved', testFrom: (w, r) => `from ${w}×${r}`,
+  needs1RM: 'This plan calculates loads from your 1RM. Before starting, set maxes for the main lifts (in a workout, next to the exercise: Set 1RM) or do one calibration session.',
+  whyBtn: 'Why? Sources', whyTitle: 'Where these numbers come from', whySrc: 'Sources',
   esTitle: 'Edit set', esAdd: 'Add set', esNew: 'New set', esDel: 'Delete set', esRpe: 'RPE (empty = none)', esWeightPlus: 'Added weight (kg)', esErrRpe: 'RPE: 1 to 10 in steps of 0.5.', esErrEmpty: 'Enter a value.', esSaved: 'Saved', esDeleted: 'Set deleted', tapToEdit: 'Tap a set to fix it.', calList: 'List', calCal: 'Calendar', calMonthStat: 'Workouts', calStreak: 'Weeks in a row', calNone: 'No workouts on this day.', calPrev: 'Previous month', calNext: 'Next month', cardBtn: 'Shareable card', cardTitle: 'Workout card', cardHide: 'Hide weights', cardShare: 'Share', cardSave: 'Save image', cardAlt: 'Workout card preview', cardMore: 'more', cardTop: 'Top sets',
   feedbackBtn: 'Send feedback', feedbackSub: 'App feedback (v', feedbackBody: 'What works, what does not, what is missing:',
   npTitle: 'New plan', npAsk: 'How do you want to build it?', npSimple: 'Simple', npSimpleD: 'Exercise, sets, reps (fixed or a range) and rest. The app suggests the load and reps for your next workout. Enough for most people.',
@@ -316,7 +352,7 @@ Object.assign(STR.en, {
   seeDetails: 'Show the plan', hideDetails: 'Hide the plan', allGoals: 'All',
   heroTitle: 'Find a plan in 2 minutes', heroText: '12 short questions: goal, days, time, equipment. You get a ready plan and the app runs the progression for you.',
   selfBuild: 'I will build my own',
-  blockWeek: (w, l) => `Week ${w} of ${l} in the block`, weekN: w => `Week ${w} of the plan`, deloadNow: p => `Deload: sets −${p}%, same loads`,
+  blockWeek: (w, l) => `Week ${w} of ${l} in the block`, weekN: w => `Week ${w} of the plan`, deloadNow: (p, l) => l ? `Deload: sets −${p}%, weight −${l}%` : `Deload: sets −${p}%, same loads`,
   flagsTitle: 'Flags',
   flag_stall: ex => `${ex}: e1RM has not moved in 3 workouts.`, flag_regression: ex => `${ex}: e1RM fell more than ${fmtN(S.settings.regressPct ?? 5)}% below the 4-week best, twice in a row.`,
   flag_fatigue: () => `The same load felt harder on 2 or more lifts. Next workout: sets −${S.settings.fatigueCut ?? 30}%.`,
@@ -348,7 +384,7 @@ Object.assign(STR.en, {
   changePlan: 'Change plan (finder)', last7: 'Last 7 days', prev7: 'Previous 7 days',
   volumeHint2: 'Hard sets count: RPE 6 or more, or no RPE. Main muscle 1, supporting 0.5. A one-arm L+R pair is one set.',
   coachSec: 'Plan and flags', readinessSet: 'Ask about readiness before a plan workout', flagsSet: 'Warning flags',
-  deloadEverySet: 'Deload every N weeks (strength)', regressSet: 'e1RM drop that counts as regression (%)', fatigueSet: 'Set cut after fatigue (%)',
+  deloadEverySet: 'Deload every N wk (wizard plans without their own cycle)', regressSet: 'e1RM drop that counts as regression (%)', fatigueSet: 'Set cut after fatigue (%)',
   spikeTitle: 'Volume notes', goalLbl: 'Goal', planFrom: 'From the library', noMethod: 'No progression',
 });
 function plural(n, one, few, many) {
@@ -718,6 +754,7 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   if (ctx.effort === 'rir_cap' && kind === 'main') cues.push(t('stopCue'));
   if (cues.length) out.cues = cues;
   if (it.noprog) out.noprog = true;
+  if (it.test) out.test = true;
   const sug = it.noprog ? null : C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
   if (sug) { if (sug.load != null && mods.loadPct) sug.load = roundLoad(it.exId, sug.load * mods.loadPct); out.sug = sug; }
   return out;
@@ -742,6 +779,7 @@ function planMods(tpl, it, bi, ready) {
   if (adj && adj.until && adj.until > now() && adj.extraBackoff) { if (it.scheme === 'topback') m.extraBackoff = 1; else m.extraSets = (m.extraSets || 0) + 1; m.cues.push(t('cueBackoff')); }
   if (adj && adj.loadPct) { m.loadPct = adj.loadPct; m.cues.push(t('cueAdj90')); }
   if (tpl.stallEntry && bi && bi.weeksTotal === 1) { m.loadPct = (m.loadPct || 1) * 0.9; m.cues.push(t('cueStallEntry')); }
+  if (bi && bi.deload && bi.loadCut) m.loadPct = (m.loadPct || 1) * (1 - bi.loadCut);
   return m;
 }
 function freeItem(exId) {
@@ -751,6 +789,50 @@ function freeItem(exId) {
   pushSets(sets, ex, 'work', 3, null);
   return { id: uid(), exId, scheme: 'straight', rest: it.rest, backoffPct: S.settings.backoffPct, sets };
 }
+const wkItem = (it, bi) => (bi && bi.fixed ? C.weekItem(it, bi.week) : it);
+const skipped = it => it.scheme !== 'topback' && Number(it.sets) === 0;
+const dlLabel = bi => t('deloadNow', bi.cycle.deload.sets, bi.cycle.deload.load);
+const weekLabel = bi => (bi.fixed ? t('cycWeekOf', bi.week, bi.weeks) : bi.len ? t('blockWeek', bi.week, bi.len) : t('weekN', bi.weeksTotal));
+function dlSummary(c) {
+  return c.deload.mode === 'every' ? t('dlSumEvery', c.deload.every) : c.deload.mode === 'weeks' && c.deload.weeks.length ? t('dlSumWeeks', c.deload.weeks.join(', ')) : t('dlSumNone');
+}
+function cycleSummary(tp) {
+  const c = C.cycleOf(tp);
+  if (!c) return `${t('cycSumRepeat')} · ${t('dlSumNone')}`;
+  if (c.type === 'fixed') { const bi = C.blockInfo(tp); return `${t('cycWeeksN', c.weeks)} · ${bi.finished ? t('cycDone') : t('cycWeekOf', bi.week, c.weeks)} · ${dlSummary(c)}`; }
+  return `${t('cycSumRepeat')} · ${dlSummary(c)}`;
+}
+/* best test-week result per lift since the cycle started */
+function testResults(tp, c) {
+  const out = {};
+  for (const ses of S.sessions) {
+    if (ses.templateId !== tp.id || ses.startedAt < c.start) continue;
+    for (const it of ses.items) {
+      if (!it.test) continue;
+      for (const x of it.sets) {
+        if (!x.done || x.kind === 'warmup') continue;
+        const w = num(x.weight), r = num(x.reps);
+        if (!(w > 0) || !(r >= 1)) continue;
+        const kg = r === 1 ? w : Math.floor((e1rm(w, r, normRpe(x.rpe) || 10) || w) * 2) / 2;
+        if (!out[it.exId] || kg > out[it.exId].kg) out[it.exId] = { kg, w, r };
+      }
+    }
+  }
+  return out;
+}
+function endCard(tp, bi) {
+  const res = testResults(tp, bi.cycle);
+  const ids = Object.keys(res);
+  const rows = ids.map(id => { const o = oneRm(id); const r = res[id]; return `<div class="row"><span class="grow"><span class="name">${esc(exName(id))}: ${esc(fmtN(r.kg))} kg</span><br><span class="meta">${r.r > 1 ? esc(t('testFrom', fmtN(r.w), r.r)) + ' · ' : ''}${esc(o ? t('testWas', fmtN(o.kg)) : t('testNoMax'))}</span></span><button class="btn small" data-a="test-save" data-v="${esc(id)}">${esc(t('testSave'))}</button></div>`; }).join('');
+  return `<div class="info"><h3 style="font-size:18px">${esc(t('endTitle'))}</h3><div>${esc(t('endText', bi.weeks))}</div>
+    ${ids.length ? `<div><div class="eyebrow small" style="margin-top:6px">${esc(t('testTitle'))}</div>${rows}${ids.length > 1 ? `<button class="btn small block" data-a="test-save" data-v="">${esc(t('testSaveAll'))}</button>` : ''}</div>` : ''}
+    <div class="btn-row wrap"><button class="btn small primary" data-a="cyc-again" data-v="${tp.id}">${esc(t('endRepeat'))}</button><button class="btn small" data-a="cyc-open" data-v="${tp.id}">${esc(t('endCycle'))}</button><button class="btn small ghost" data-a="nav" data-v="plans">${esc(t('endPlans'))}</button></div></div>`;
+}
+function weekChips(id, n, sel, c) {
+  return `<div><label>${esc(t('pwLbl'))}</label><div class="chips wrap wk-chips" role="group" aria-label="${esc(t('pwLbl'))}">${Array.from({ length: n }, (_, i) => i + 1).map(w => { const dl = c && C.isDeloadWeek(c, w); return `<button class="chip ${w === sel ? 'on' : ''} ${dl ? 'dl' : ''}" data-a="pw-pick" data-k="${id}" data-v="${w}" aria-pressed="${w === sel}">${w}${dl ? '<small>D</small>' : ''}</button>`; }).join('')}</div>${c && C.isDeloadWeek(c, sel) ? `<div class="muted small" style="margin-top:6px">${esc(t('pwDl'))}</div>` : ''}</div>`;
+}
+const pwOf = (id, bi) => { const v = S.pw && S.pw[id]; return v && v <= (bi.weeks || 1) ? v : (bi.finished ? 1 : bi.week); };
+const resolvedDays = (days, w) => (w ? days.map(d => ({ ...d, items: d.items.map(it => C.weekItem(it, w)).filter(it => !skipped(it)) })) : days);
 function activeTemplate() { return S.templates.find(x => x.id === S.settings.activeTemplateId) || null; }
 function nextDay(tpl) {
   if (!tpl || !tpl.days.length) return null;
@@ -764,13 +846,13 @@ function startSession(tpl, day, opts = {}) {
   const bi = tpl ? C.blockInfo(tpl, at) : null;
   const effort = tpl ? tpl.effort || null : null;
   const notes = [];
-  if (bi && bi.deload) notes.push(t('cueDeload', Math.round(bi.cut * 100)));
+  if (bi && bi.deload) notes.push(t('cueDeload', bi.cycle.deload.sets, bi.cycle.deload.load));
   else if (tpl && tpl.fatigueNext) notes.push(t('cueFatigue', S.settings.fatigueCut ?? 30));
-  const items = day ? day.items.map(it => sessionItemFromTemplate(it, tpl ? planMods(tpl, it, bi, opts.ready) : {}, { effort, at })) : [];
+  const items = day ? day.items.map(it => wkItem(it, bi)).filter(it => !skipped(it)).map(it => sessionItemFromTemplate(it, tpl ? planMods(tpl, it, bi, opts.ready) : {}, { effort, at })) : [];
   S.active = {
     id: uid(), name: day ? day.name : t('freeWorkout'), templateId: tpl ? tpl.id : null, dayId: day ? day.id : null,
     startedAt: at, endedAt: null, items, bw: bodyweightAt(at), effort, ready: opts.ready ?? null, notes,
-    week: bi ? { week: bi.week, len: bi.len, deload: bi.deload } : null,
+    week: bi ? { week: bi.week, len: bi.len, deload: bi.deload, fixed: bi.fixed, weeks: bi.weeks } : null,
   };
   if (tpl && day) {
     // one-shot adjustments are used up by this workout
@@ -1007,12 +1089,16 @@ function vToday() {
   const day = (S._pickedDay && tpl && tpl.days.find(d => d.id === S._pickedDay)) || nextDay(tpl);
   const wc = weekCount();
   let main = '';
-  if (tpl && day) {
-    const items = day.items;
+  const tbi = tpl ? C.blockInfo(tpl) : null;
+  if (tpl && day && tbi && tbi.finished && !S.active) {
+    main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(tpl.name)}</h1></div>${endCard(tpl, tbi)}
+      <button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button>`;
+  } else if (tpl && day) {
+    const items = day.items.map(it => wkItem(it, tbi)).filter(it => !skipped(it));
     const rows = items.slice(0, 5).map(it => `<div class="row"><span class="name grow">${esc(exName(it.exId))}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('');
     const more = items.length > 5 ? `<div class="row"><span class="meta">+ ${items.length - 5}</span></div>` : '';
-    const bi = C.blockInfo(tpl);
-    const blk = bi ? `<div class="blk"><span>${esc(bi.len ? t('blockWeek', bi.week, bi.len) : t('weekN', bi.weeksTotal))}</span>${bi.deload ? `<span class="tag p">${esc(t('deloadNow', Math.round(bi.cut * 100)))}</span>` : ''}</div>` : '';
+    const bi = tbi;
+    const blk = bi ? `<div class="blk"><span>${esc(weekLabel(bi))}</span>${bi.deload ? `<span class="tag p">${esc(dlLabel(bi))}</span>` : ''}</div>` : '';
     main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(day.name)}</h1><div class="sub" style="margin-top:8px">${esc(tpl.name)} · ${esc(t('exercisesN', items.length))}</div>${blk}</div>
       ${coachCards(tpl, bi)}
       ${items.length ? `<div class="card">${rows}${more}</div>` : `<div class="empty">${esc(t('planEmptyDay'))}</div>`}
@@ -1061,14 +1147,16 @@ function vPlans() {
 function vPlan() {
   const tp = S.templates.find(x => x.id === S.viewArg);
   if (!tp) return vPlans();
+  const pbi = C.blockInfo(tp);
+  const pv = pbi && pbi.fixed ? pwOf(tp.id, pbi) : 0;
   const days = tp.days.map((d, di) => `
     <section class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-      ${d.items.length ? `<div class="muted small">${esc(t('estMin', Math.round(C.sessionMinutes(d.items.map(i => ({ ...i, kind: C.kindOf(i) }))))))}</div>` : ''}
+      ${d.items.length ? `<div class="muted small">${esc(t('estMin', Math.round(C.sessionMinutes(resolvedDays([d], pv)[0].items.map(i => ({ ...i, kind: C.kindOf(i) }))))))}</div>` : ''}
       <div style="display:flex;gap:8px;align-items:flex-end">
         <div style="flex:1;min-width:0"><label for="dn-${d.id}">${esc(t('dayName'))}</label><input id="dn-${d.id}" data-f="day-name" data-d="${d.id}" value="${esc(d.name)}"></div>
         <button class="icon-btn" data-a="day-menu" data-d="${d.id}" aria-label="${esc(t('edit'))}">${I.more}</button>
       </div>
-      ${d.items.length ? d.items.map((it, ii) => { const g = groupInfo(d.items)[it.id]; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it, planMode(tp) === 'simple'))} · ${it.rest} s${C.methodOf(it) && planMode(tp) !== 'simple' ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
+      ${d.items.length ? d.items.map((it, ii) => { const g = groupInfo(d.items)[it.id]; const rit = pv ? C.weekItem(it, pv) : it; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${pv && skipped(rit) ? esc(t('skipWeek')) : esc(schemeShort(rit, planMode(tp) === 'simple'))} · ${it.rest} s${C.methodOf(it) && planMode(tp) !== 'simple' ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
         <button class="icon-btn" data-a="item-up" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('moveUp'))}" ${ii === 0 ? 'disabled' : ''}>${I.up}</button>
         <button class="icon-btn" data-a="item-link" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('supBtn'))}">${I.link}</button>
         <button class="icon-btn" data-a="item-del" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('remove'))}">${I.x}</button></div>`; }).join('') : `<div class="muted small">${esc(t('planEmptyDay'))}</div>`}
@@ -1078,9 +1166,12 @@ function vPlan() {
   return `<main class="screen">${linkBar()}<div class="topbar"><button class="icon-btn" data-a="nav" data-v="plans" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('plans'))}</div><button class="icon-btn" data-a="plan-menu" aria-label="${esc(t('edit'))}">${I.more}</button></div>
     <div><label for="pn">${esc(t('planName'))}</label><input id="pn" data-f="plan-name" value="${esc(tp.name)}"></div>
     ${isActive ? `<div><span class="tag p">${esc(t('active'))}</span> <button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button></div>` : `<button class="btn block" data-a="plan-activate">${esc(t('setActive'))}</button><div><button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button></div>`}
+    <div class="card" style="padding:4px 16px"><button class="list-btn row" data-a="cyc-open" data-v="${tp.id}" style="border:0"><span class="grow"><span class="eyebrow small">${esc(t('cycTitle'))}</span><br><span class="name">${esc(cycleSummary(tp))}</span></span><span class="meta">›</span></button></div>
+    ${pbi && pbi.finished ? endCard(tp, pbi) : ''}
+    ${pv ? weekChips(tp.id, pbi.weeks, pv, pbi.cycle) : ''}
     ${planMode(tp) === 'simple' ? '' : planCoachBlock(tp)}
     ${days || `<div class="empty">${esc(t('addFirstDay'))}</div>`}
-    ${tallyBlock(tp.days, tp.perWeek)}
+    ${tallyBlock(resolvedDays(tp.days, pv), tp.perWeek)}
     <button class="btn block" data-a="plan-add-day">${esc(t('addDay'))}</button>
     <button class="btn primary block" data-a="nav" data-v="plans">${esc(t('done'))}</button>
   </main>`;
@@ -1260,9 +1351,10 @@ function flagActions(f) {
   return b('ok', t('act_ok'), 'ghost');
 }
 function deloadOffer(tpl, bi) {
-  if (!tpl || !tpl.block || !bi || bi.deload || S.settings.flagsOn === false) return null;
+  if (!tpl || !C.cycleOf(tpl) || !bi || bi.deload || bi.finished || S.settings.flagsOn === false) return null;
+  const dAt = (tpl.cycle && tpl.cycle.deloadAt) || (tpl.block && tpl.block.deloadAt) || 0;
   const since = now() - 7 * 864e5;
-  const types = new Set(S.flags.filter(f => f.at >= since && FLAG_TYPES_DELOAD.has(f.type) && !(tpl.block.deloadAt && f.at <= tpl.block.deloadAt)).map(f => f.type));
+  const types = new Set(S.flags.filter(f => f.at >= since && FLAG_TYPES_DELOAD.has(f.type) && !(dAt && f.at <= dAt)).map(f => f.type));
   if (types.size < 2) return null;
   return { down: tpl.planId && tpl.planId.endsWith('XL') ? tpl.planId.slice(0, -2) : null };
 }
@@ -1294,7 +1386,7 @@ function planCoachBlock(tp) {
   if (plan) {
     h += `<div class="info"><div class="eyebrow small">${esc(t('planFrom'))} · ${esc(goalName(plan.goal))}</div>
       <div>${esc(planName(plan))} · ${esc(t('perWeek', tp.perWeek || plan.perWeek))}</div>
-      ${bi ? `<div class="muted small">${esc(bi.len ? t('blockWeek', bi.week, bi.len) : t('weekN', bi.weeksTotal))}${bi.deload ? ' · ' + esc(t('deloadNow', Math.round(bi.cut * 100))) : ''}</div>` : ''}
+      ${bi ? `<div class="muted small">${esc(weekLabel(bi))}${bi.deload ? ' · ' + esc(dlLabel(bi)) : ''}</div>` : ''}
       <div class="muted small">${esc(tx(CD.deload[plan.goal]))}</div>
       ${plan.warning ? `<div class="small" style="color:var(--accent)">${esc(tx(plan.warning))}</div>` : ''}
       ${tp.addon && tp.addon.minutes ? `<div class="muted small">${esc(tp.addon.dropped ? t('addonDropped') : t('addonAdded', tp.addon.minutes))}</div>` : ''}</div>`;
@@ -1328,7 +1420,7 @@ function tallyBlock(days, perWeek) {
   if (!withItems.length) return '';
   const tl = C.tallyDays(days, perWeek);
   const sp = spikesOf(tl.perSession, days.map(d => d.name));
-  return `<div><h2>${esc(t('tallyTitle'))}</h2><div class="muted small" style="margin:6px 0 10px">${esc(t('tallyHint'))} ${esc(t('zonesHint'))}</div>${volRows(tl.muscles)}
+  return `<div><h2>${esc(t('tallyTitle'))}</h2><div class="muted small" style="margin:6px 0 10px">${esc(t('tallyHint'))} ${esc(t('zonesHint'))} <button class="linkish" data-a="why-open" data-v="vol">${esc(t('whyBtn'))}</button></div>${volRows(tl.muscles)}
     ${sp.length ? `<div class="info" style="margin-top:10px"><h3>${esc(t('spikeTitle'))}</h3>${sp.map(x => `<div class="small">${esc(x)}</div>`).join('')}</div>` : ''}</div>`;
 }
 /* hard sets per muscle and per main lift in the workout being finished */
@@ -1388,15 +1480,15 @@ function vWizRes() {
     <div class="btn-row"><button class="btn ghost" data-a="wiz-start">${esc(t('wizRestart'))}</button><button class="btn ghost" data-a="nav" data-v="planlib">${esc(t('planLib'))}</button></div>
   </main>`;
 }
-function planDaysHtml(tpl) {
-  return tpl.days.map(d => `<div class="card" style="padding:12px 16px"><div class="row" style="border:0"><span class="name grow">${esc(d.name)}</span><span class="meta">${esc(t('estMin', Math.round(C.sessionMinutes(d.items))))}</span></div>
-    ${d.items.map(it => `<div class="row"><span class="grow"><span class="name">${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it))} · ${esc(methodName(it.method))}</span></span></div>`).join('')}</div>`).join('');
+function planDaysHtml(tpl, w) {
+  return resolvedDays(tpl.days, w).map(d => `<div class="card" style="padding:12px 16px"><div class="row" style="border:0"><span class="name grow">${esc(d.name)}</span><span class="meta">${esc(t('estMin', Math.round(C.sessionMinutes(d.items))))}</span></div>
+    ${d.items.map(it => `<div class="row"><span class="grow"><span class="name">${esc(exName(it.exId))}</span><br><span class="meta">${esc(schemeShort(it))} · ${esc(it.pct ? "%1RM" : methodName(it.method))}</span></span></div>`).join('')}</div>`).join('');
 }
 
 /* ---------- v0.6: plan library ---------- */
 function vPlanLib() {
   const st = S.plib || (S.plib = { goal: '' });
-  const goals = ['Heavy', 'Size', 'Mix', 'Start', 'Keep'];
+  const goals = ['Heavy', 'Size', 'Mix', 'Start', 'Keep', 'Peak'];
   const list = CD.plans.filter(p => !st.goal || p.goal === st.goal);
   return `<main class="screen">${topbar()}<h1 class="mid">${esc(t('planLib'))}</h1>
     <button class="btn primary block" data-a="wiz-start">${esc(t('pickPlanWizard'))}</button>
@@ -1408,11 +1500,12 @@ function vPlanPrev() {
   if (!plan) return vPlanLib();
   const tpl = C.buildTemplate(plan, {}, { effort: S.settings.effortDefault || 'rir' });
   return `<main class="screen"><div class="topbar"><button class="icon-btn" data-a="nav" data-v="planlib" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('planLib'))}</div><span style="width:44px"></span></div>
-    <div><div class="eyebrow">${esc(goalName(plan.goal))}</div><h1>${esc(planName(plan))}</h1><div class="sub" style="margin-top:8px">${esc(t('perWeek', plan.perWeek))}</div></div>
+    <div><div class="eyebrow">${esc(goalName(plan.goal))}</div><h1>${esc(planName(plan))}</h1><div class="sub" style="margin-top:8px">${esc(t('perWeek', plan.perWeek))}${plan.cycle ? ' · ' + esc(t('cycWeeksN', plan.cycle.weeks)) + ' · ' + esc(dlSummary(C.cycleOf({ cycle: plan.cycle }))) : ''}</div></div>
+    ${plan.needs1RM ? `<div class="info"><div>${esc(t('needs1RM'))}</div></div>` : ''}
     <div class="info"><h3>${esc(t('forLbl'))}</h3><div>${esc(tx(plan.for))}</div><h3>${esc(t('designLbl'))}</h3><div>${esc(tx(plan.design))}</div><h3>${esc(t('deloadPlanLbl'))}</h3><div>${esc(tx(CD.deload[plan.goal]))}</div></div>
     ${plan.warning ? `<div class="err">${esc(tx(plan.warning))}</div>` : ''}
     <button class="btn primary block" data-a="plib-use" data-v="${plan.id}">${esc(t('usePlan'))}</button>
-    ${planDaysHtml(tpl)}${tallyBlock(tpl.days, tpl.perWeek)}
+    ${(() => { if (!plan.cycle) return planDaysHtml(tpl) + tallyBlock(tpl.days, tpl.perWeek); const c = C.cycleOf(tpl); const w = Math.min(c.weeks, (S.pw && S.pw[plan.id]) || 1); return weekChips(plan.id, c.weeks, w, c) + planDaysHtml(tpl, w) + tallyBlock(resolvedDays(tpl.days, w), tpl.perWeek) + `<button class="btn ghost small" data-a="why-open" data-v="plan">${esc(t('whyBtn'))}</button>`; })()}
     <button class="btn primary block" data-a="plib-use" data-v="${plan.id}">${esc(t('usePlan'))}</button></main>`;
 }
 function adoptTemplate(tpl, answers) {
@@ -1691,7 +1784,7 @@ function vStrength() {
       <div class="chips" style="margin-top:10px"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('last7'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('prev7'))}</button></div>
     ${vol.length ? bm({ heat: Object.fromEntries(vol.map(([m, v]) => [m, v / maxV])), interactive: true, aria: t('weeklyVolume') }) + `<div class="bm-legend"><span><i style="background:var(--bm-h1)"></i>${esc(t('fewerSets'))}</span><span><i style="background:var(--bm-h4)"></i>${esc(t('moreSets'))}</span></div><div class="tip muted small" id="bm-tip" style="text-align:center;min-height:20px">${esc(t('tapMuscle'))}</div>` : ''}
     ${volRows(Object.fromEntries(vol))}
-    <div class="muted small" style="margin-top:6px">${esc(t('volumeHint2'))} ${esc(t('zonesHint'))}</div></div>`;
+    <div class="muted small" style="margin-top:6px">${esc(t('volumeHint2'))} ${esc(t('zonesHint'))} <button class="linkish" data-a="why-open" data-v="vol">${esc(t('whyBtn'))}</button></div></div>`;
   const tl = allPrEvents().slice(0, 15);
   const tlBlock = tl.length ? `<div><h2>${esc(t('prTimeline'))}</h2><div class="card">${tl.map(e => `<button class="list-btn row" data-a="prog-ex" data-v="${esc(e.exId)}"><span class="grow"><span class="name">${esc(exName(e.exId))}</span><br><span class="meta">${esc(fmtEntry(S.ex.get(e.exId), e))} · ${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></button>`).join('')}</div></div>` : '';
   return exBlock + volBlock + tlBlock;
@@ -1842,6 +1935,54 @@ function renderSheet() {
         <div class="grid2">${fld('it-backoffSets', t('bkSets'), it.backoffSets, 'int')}${fld('it-backoffPct', t('backoffPct'), it.backoffPct, 'int')}</div></div>` : ''}
       ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="item-save">${esc(t('save'))}</button>`;
+    const tpw = sh.dayId && S.view === 'plan' ? tplDay(sh.dayId)[0] : null; const bw = tpw && C.blockInfo(tpw);
+    if (bw && bw.fixed) {
+      const nW = it.wk ? Object.keys(it.wk).length : 0;
+      body = body.replace('<button class="btn primary block" data-a="item-save">', `<div class="tg-block"><label>${esc(t('wkTitle'))}</label><button class="btn block" data-a="wk-open">${esc(t('wkBtn', bw.weeks))}</button><div class="muted small">${esc(nW ? t('wkSet', nW) : t('wkNone'))}</div></div><button class="btn primary block" data-a="item-save">`);
+    }
+  } else if (sh.type === 'cycle') {
+    const c = sh.c, fixed = c.type === 'fixed', dl = c.deload;
+    const tp = S.templates.find(x => x.id === sh.tpId); const cur = tp && tp.cycle && C.cycleOf(tp);
+    const bi = cur && cur.type === 'fixed' && fixed ? C.blockInfo(tp) : null;
+    const nW = Math.min(24, Math.max(2, parseInt(c.weeks, 10) || 2));
+    const inp = (k, label, val, ml = 2) => `<div><label for="cy-${k}">${esc(label)}</label><input id="cy-${k}" data-f="cy" data-k="${k}" data-san="int" inputmode="numeric" autocomplete="off" maxlength="${ml}" value="${esc(val ?? '')}"></div>`;
+    body = `${head(t('cycTitle'))}
+      <div class="seg" role="group"><button class="${!fixed ? 'on' : ''}" data-a="cyc-type" data-v="repeat" aria-pressed="${!fixed}">${esc(t('cycRepeat'))}</button><button class="${fixed ? 'on' : ''}" data-a="cyc-type" data-v="fixed" aria-pressed="${fixed}">${esc(t('cycFixed'))}</button></div>
+      <div class="muted small">${esc(fixed ? t('cycFixedD') : t('cycRepeatD'))}</div>
+      ${fixed ? `<div class="grid2">${inp('weeks', t('cycWeeks'), c.weeks)}<div></div></div>
+        ${bi ? `<div class="row" style="border:0;min-height:48px"><span class="grow">${esc(bi.finished ? t('cycDone') : t('cycNow', bi.week, bi.weeks))}</span><button class="icon-btn" data-a="cyc-shift" data-v="-1" aria-label="−1">−</button><button class="icon-btn" data-a="cyc-shift" data-v="1" aria-label="+1">+</button></div>` : `<div class="muted small">${esc(t('cycStartNote'))}</div>`}
+        <div class="muted small">${esc(t('cycCount'))}</div>` : ''}
+      <div class="tg-block"><label>${esc(t('dlTitle'))}</label>
+        <div class="chips wrap">${['none', 'every'].concat(fixed ? ['weeks'] : []).map(m => `<button class="chip ${dl.mode === m ? 'on' : ''}" data-a="cyc-dl" data-v="${m}" aria-pressed="${dl.mode === m}">${esc(t(m === 'none' ? 'dlNone' : m === 'every' ? 'dlEvery' : 'dlWeeks'))}</button>`).join('')}</div>
+        ${dl.mode === 'every' ? `<div class="grid2">${inp('every', t('dlEveryLbl'), dl.every)}<div></div></div>` : ''}
+        ${dl.mode === 'weeks' ? `<div class="muted small">${esc(t('dlPick'))}</div><div class="chips wrap wk-chips">${Array.from({ length: nW }, (_, i) => i + 1).map(w => `<button class="chip ${dl.weeks.includes(w) ? 'on' : ''}" data-a="cyc-dlw" data-v="${w}" aria-pressed="${dl.weeks.includes(w)}">${w}</button>`).join('')}</div>` : ''}
+        ${dl.mode !== 'none' ? `<div class="grid2">${inp('sets', t('dlSets'), dl.sets)}${inp('load', t('dlLoad'), dl.load)}</div><div class="muted small">${esc(t('dlInfo', +dl.sets || 0, +dl.load || 0))}</div>` : ''}
+        <button class="linkish" data-a="why-open" data-v="deload">${esc(t('whyBtn'))}</button></div>
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+      <button class="btn primary block" data-a="cyc-save">${esc(t('save'))}</button>
+      ${tp && tp.cycle ? `<button class="btn block" data-a="cyc-restart">${esc(t('cycRestart'))}</button>` : ''}`;
+  } else if (sh.type === 'weeks') {
+    const it = sh.back.item; const cols = wkCols(sh);
+    const lbl = { sets: t('wkSets'), reps: t('wkReps'), x: sh.x === 'pct' ? t('wkPct') : t('wkRpe'), bs: t('wkBack') };
+    const ph = { sets: fmtN(it.sets), reps: it.reps, x: sh.x === 'pct' ? fmtN(it.pct) : it.rpe != null ? fmtN(it.rpe) : '', bs: fmtN(it.backoffSets || 0) };
+    const san = { sets: 'int', reps: 'reps', x: 'dec', bs: 'int' };
+    const im = { sets: 'numeric', reps: 'text', x: 'decimal', bs: 'numeric' };
+    const rows = Array.from({ length: sh.n }, (_, i) => i + 1).map(w => { const dl = C.isDeloadWeek(sh.c, w); const r = sh.rows[w] || {};
+      return `<div class="wk-r ${dl ? 'dl' : ''}"><span class="wk-n">${w}${dl ? '<small>D</small>' : ''}</span>${cols.map(k => `<input data-f="wk" data-w="${w}" data-k="${k}" data-san="${san[k]}" inputmode="${im[k]}" autocomplete="off" maxlength="5" placeholder="${esc(ph[k])}" value="${esc(r[k] ?? '')}" aria-label="${esc(t('cycWeekOf', w, sh.n) + ' · ' + lbl[k])}">`).join('')}</div>`; }).join('');
+    const g = sh.gen;
+    const gi = (k, label) => `<div><label for="wg-${k}">${esc(label)}</label><input id="wg-${k}" data-f="wg" data-k="${k}" data-san="${k === 'a' || k === 'b' ? (g.f === 'x' ? 'dec' : 'int') : 'int'}" inputmode="${(k === 'a' || k === 'b') && g.f === 'x' ? 'decimal' : 'numeric'}" autocomplete="off" maxlength="5" value="${esc(g[k] ?? '')}"></div>`;
+    body = `${head(t('wkTitle') + ' · ' + exName(it.exId))}
+      <div class="muted small">${esc(t('wkHint', schemeShort(it, sh.back.simple)))}</div>
+      <div class="wk-tbl" style="--cols:${cols.length}"><div class="wk-r wk-h"><span></span>${cols.map(k => `<span>${esc(lbl[k])}</span>`).join('')}</div>${rows}</div>
+      <div class="tg-block"><label>${esc(t('wkGen'))}</label><div class="muted small">${esc(t('wkGenD'))}</div>
+        <div class="chips wrap">${cols.map(k => `<button class="chip ${g.f === k ? 'on' : ''}" data-a="wg-f" data-v="${k}" aria-pressed="${g.f === k}">${esc(lbl[k])}</button>`).join('')}</div>
+        <div class="grid2">${gi('a', t('wkFrom'))}${gi('b', t('wkTo'))}</div><div class="grid2">${gi('w1', t('wkW1'))}${gi('w2', t('wkW2'))}</div>
+        <button class="btn block" data-a="wg-apply">${esc(t('wkApply'))}</button></div>
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+      <button class="btn primary block" data-a="wk-done">${esc(t('wkDone'))}</button>
+      <button class="btn ghost block" data-a="wk-clear">${esc(t('wkClear'))}</button>`;
+  } else if (sh.type === 'why') {
+    body = `${head(t('whyTitle'))}${whyHtml()}`;
   } else if (sh.type === 'gear') {
     const g = sh.g, u = g.unit;
     const bars = G.BAR_CLASSES.map(c => `<div><label for="gb-${c}">${esc(equipName(c))}</label><input id="gb-${c}" data-f="gear-bar" data-c="${c}" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="5" value="${esc(g.bars[c])}"></div>`).join('');
@@ -2074,6 +2215,117 @@ function applyItemTargets(sh) {
   }
   return null;
 }
+function wkCols(sh) {
+  const it = sh.back.item;
+  if (it.scheme === 'topback') return ['reps'].concat(sh.x ? ['x'] : []).concat(['bs']);
+  return ['sets', 'reps'].concat(sh.x ? ['x'] : []);
+}
+function wkRowsFrom(it, x) {
+  const rows = {};
+  for (const [w, o] of Object.entries(it.wk || {})) {
+    rows[w] = { sets: o.sets != null ? String(o.sets) : '', reps: o.reps != null ? String(o.reps) : '', bs: o.backoffSets != null ? String(o.backoffSets) : '',
+      x: x === 'pct' ? (o.pct != null ? fmtN(o.pct) : '') : x === 'rpe' ? (o.rpe != null ? fmtN(o.rpe) : '') : '' };
+  }
+  return rows;
+}
+/* sheet rows -> it.wk; returns an error string or null */
+function wkApplyRows(sh) {
+  const it = sh.back.item; const [a, b] = TGT_LIM[tgtKind(it.exId)];
+  const out = {};
+  for (let w = 1; w <= sh.n; w++) {
+    const r = sh.rows[w]; if (!r) continue;
+    const o = {};
+    const v = k => String(r[k] ?? '').trim();
+    if (v('sets')) { const n = parseInt(v('sets'), 10); if (!(n >= 0 && n <= 20)) return t('wkErr', w, t('wkErrSets')); o.sets = n; }
+    if (v('reps')) { const p = parseTarget(v('reps')); if (!p || p.lo < a || p.hi > b || (p.mode === 'amrap' && tgtKind(it.exId) !== 'reps')) return t('wkErr', w, t('wkErrReps')); o.reps = fmtTarget(p); }
+    if (v('x')) {
+      const n = num(v('x').replace(',', '.'));
+      if (sh.x === 'pct') { if (!(n >= 30 && n <= 110)) return t('wkErr', w, t('wkErrPct')); o.pct = Math.round(n * 10) / 10; }
+      else { const q = normRpe(n); if (q == null || q < 5 || Math.abs(q - n) > 1e-9) return t('wkErr', w, t('wkErrRpe')); o.rpe = q; o.rpeMax = q; }
+    }
+    if (v('bs')) { const n = parseInt(v('bs'), 10); if (!(n >= 0 && n <= 10)) return t('wkErr', w, t('wkErrBack')); o.backoffSets = n; }
+    // a value equal to the base is not an override (so later base edits still apply to that week)
+    if (o.sets === it.sets) delete o.sets; if (o.reps === it.reps) delete o.reps; if (o.pct != null && o.pct === it.pct) delete o.pct;
+    if (o.rpe != null && o.rpe === it.rpe && (it.rpeMax == null || it.rpeMax === it.rpe)) { delete o.rpe; delete o.rpeMax; } if (o.backoffSets === it.backoffSets) delete o.backoffSets;
+    const keep = it.wk && it.wk[w] ? Object.fromEntries(['cue', 'test'].filter(k => it.wk[w][k] != null).map(k => [k, it.wk[w][k]])) : {};
+    if (Object.keys(o).length || Object.keys(keep).length) out[w] = { ...keep, ...o };
+  }
+  // test markers on weeks the sheet does not show as rows still survive
+  for (const [w, o] of Object.entries(it.wk || {})) if (!out[w] && (o.cue || o.test)) out[w] = Object.fromEntries(['cue', 'test'].filter(k => o[k] != null).map(k => [k, o[k]]));
+  if (Object.keys(out).length) it.wk = out; else delete it.wk;
+  return null;
+}
+/* ---------- volume and deload: reasoning and sources ---------- */
+const WHY_SRC = {
+  schoenfeld: ['Schoenfeld BJ, Ogborn D, Krieger JW. Dose-response relationship between weekly resistance training volume and increases in muscle mass: a systematic review and meta-analysis. J Sports Sci. 2017;35(11):1073-1082.', 'https://doi.org/10.1080/02640414.2016.1210197'],
+  baz: ['Baz-Valle E, Balsalobre-Fernández C, Alix-Fages C, Santos-Concejero J. A systematic review of the effects of different resistance training volumes on muscle hypertrophy. J Hum Kinet. 2022;81:199-210.', 'https://doi.org/10.2478/hukin-2022-0017'],
+  pelland: ['Pelland JC, Remmert JF, Robinson ZP, Hinson SR, Zourdos MC. The resistance training dose-response: meta-regressions exploring the effects of weekly volume and frequency on muscle hypertrophy and strength gain. SportRxiv (preprint), 2024.', 'https://sportrxiv.org/index.php/server/preprint/view/460'],
+  bickel: ['Bickel CS, Cross JM, Bamman MM. Exercise dosing to retain resistance training adaptations in young and older adults. Med Sci Sports Exerc. 2011;43(7):1177-1187.', 'https://doi.org/10.1249/MSS.0b013e318207c15d'],
+  refalo: ['Refalo MC, Helms ER, Trexler ET, Hamilton DL, Fyfe JJ. Influence of resistance training proximity-to-failure on skeletal muscle hypertrophy: a systematic review with meta-analysis. Sports Med. 2023;53(3):649-665.', 'https://doi.org/10.1007/s40279-022-01784-y'],
+  robinson: ['Robinson ZP, Pelland JC, Remmert JF, Refalo MC, Jukic I, Steele J, Zourdos MC. Exploring the dose-response relationship between estimated resistance training proximity to failure, strength gain, and muscle hypertrophy: a series of meta-regressions. Sports Med. 2024;54(9):2209-2231.', 'https://doi.org/10.1007/s40279-024-02069-2'],
+  bell: ['Bell L, Strafford BW, Coleman M, Androulakis Korakakis P, Nolan D. Integrating deloading into strength and physique sports training programmes: an international Delphi consensus approach. Sports Med Open. 2023;9.', 'https://doi.org/10.1186/s40798-023-00633-0'],
+  rogerson: ['Rogerson D, Nolan D, Androulakis Korakakis P, Immonen V, Wolf M, Bell L. Deloading practices in strength and physique sports: a cross-sectional survey. Sports Med Open. 2024;10.', 'https://doi.org/10.1186/s40798-024-00691-y'],
+  coleman: ['Coleman M, Burke R, Augustin F, et al. Gaining more from doing less? The effects of a one-week deload period during supervised resistance training on muscular adaptations. PeerJ. 2024;12:e16777.', 'https://doi.org/10.7717/peerj.16777'],
+  travis: ['Travis SK, Mujika I, Gentles JA, Stone MH, Bazyler CD. Tapering and peaking maximal strength for powerlifting performance: a review. Sports. 2020;8(9):125.', 'https://doi.org/10.3390/sports8090125'],
+  zourdos: ['Zourdos MC, Klemp A, Dolan C, et al. Novel resistance training-specific rating of perceived exertion scale measuring repetitions in reserve. J Strength Cond Res. 2016;30(1):267-275.', 'https://doi.org/10.1519/JSC.0000000000001049'],
+};
+const WHY = {
+  pl: [
+    { id: 'vol', h: 'Co liczymy jako serię', p: [
+      'Do objętości liczą się serie robocze, bez rozgrzewki, i tylko ciężkie: z RPE 6 lub więcej albo bez wpisanego RPE. Próg RPE 6 to nasze uproszczenie, żeby lekkie serie nie zawyżały liczby, nie wartość z jednego badania.',
+      'Mięsień główny ćwiczenia dostaje 1 serię, pomocniczy 0,5. Tak liczy się ułamkowo. W meta-regresji Pellanda i współpracowników (2024) z trzech sposobów liczenia (pełny, ułamkowy, tylko bezpośredni) właśnie ułamkowy najlepiej opisywał przyrost mięśni.',
+      'Bliskość upadku ma znaczenie, ale nie trzeba dochodzić do zera. Refalo i współpracownicy (2023) nie znaleźli przewagi treningu do upadku nad zatrzymaniem tuż przed nim. Robinson i współpracownicy (2024) pokazali, że przyrost masy rośnie, im bliżej upadku kończysz serię, a przyrost siły prawie od tego nie zależy.'],
+      src: ['pelland', 'refalo', 'robinson'] },
+    { id: 'zones', h: 'Strefy tygodniowe na partię', p: [
+      'Poniżej 4: mało. Utrzymać jest łatwiej niż zbudować: u Bickela i współpracowników (2011) młodzi ludzie zachowali masę mięśni przy 1/3 wcześniejszej objętości (starsi nie). Granica 4 serii to nasza umowna linia, poniżej której nie liczymy na wyraźny postęp.',
+      '4-10, efektywna: każda seria daje tu dużo. W meta-analizie Schoenfelda i współpracowników (2017) przedziały poniżej 5, 5-9 i 10+ serii tygodniowo dały kolejno większe przyrosty masy (średnio 5,4%, 6,6% i 9,8%), choć różnica była na granicy istotności statystycznej.',
+      '10-20, typowa: przegląd Baz-Valle i współpracowników (2022) wskazał 12-20 serii na partię tygodniowo jako rozsądny standard dla osób trenujących.',
+      'Ponad 20, wysoko: więcej serii nadal może coś dać, ale każda kolejna daje mniej. Pelland i współpracownicy (2024) widzą malejące zyski dla masy i jeszcze wyraźniej dla siły. U Baz-Valle powyżej 20 serii nie było przewagi dla większości badanych mięśni. Rośnie za to koszt regeneracji.',
+      'Granice stref są umowne. Badania dotyczą głównie młodych mężczyzn i trwają zwykle 8-12 tygodni, a masę mierzy się różnymi metodami. Traktuj strefy jak mapę, nie wyrok.'],
+      src: ['bickel', 'schoenfeld', 'baz', 'pelland'] },
+    { id: 'deload', h: 'Deload', p: [
+      'Domyślnie aplikacja w tygodniu deloadu tnie serie o 40% i ciężar o 10%. Bell i współpracownicy (2023) w konsensusie ekspertów opisują deload jako celowe, okresowe zmniejszenie obciążenia treningowego, które ma poprawić regenerację i gotowość do dalszego treningu.',
+      'W ankiecie Rogersona i współpracowników (2024) wśród 246 zawodników sportów siłowych i sylwetkowych podczas deloadu spadały objętość, ciężar i wysiłek, a częstotliwość i dobór ćwiczeń zostawały. Tak samo działa aplikacja: te same dni i ćwiczenia, mniej i lżej.',
+      'Coleman i współpracownicy (2024) sprawdzili tydzień całkowitej przerwy w połowie 9 tygodni treningu. Masa mięśni nie ucierpiała, ale przyrost siły nóg był mniejszy. Dlatego deload tnie trening zamiast go odwoływać.',
+      'Liczby 40% i 10% to nasz punkt wyjścia zgodny z tą praktyką, nie wynik jednego badania. Zmienisz je w ustawieniach cyklu każdego planu.'],
+      src: ['bell', 'rogerson', 'coleman'] },
+    { id: 'plan', h: 'Bloki z procentami i test 1RM', p: [
+      'Plany blokowe liczą ciężar z 1RM: z wartości wpisanej ręcznie albo z najlepszego e1RM z ostatnich 6 tygodni. Tabela RPE, z której aplikacja liczy e1RM, opiera się na skali RPE opisanej przez powtórzenia w zapasie (Zourdos i współpracownicy, 2016).',
+      'Przed testem objętość spada, a intensywność zostaje. Tak opisuje tapering przegląd Travisa i współpracowników (2020) dla trójboju. Dlatego w planie 12-tygodniowym tydzień 11 ma mało serii przy wysokim procencie, a tydzień 12 to test.',
+      'Tabele w planach blokowych ułożyliśmy sami na tych zasadach. Nie są kopią żadnego nazwanego programu.'],
+      src: ['zourdos', 'travis'] },
+  ],
+  en: [
+    { id: 'vol', h: 'What counts as a set', p: [
+      'Volume counts working sets only, no warm-ups, and only hard ones: RPE 6 or higher, or no RPE logged. The RPE 6 cut-off is our simplification so light sets do not inflate the number, not a value from one study.',
+      'The main muscle of an exercise gets 1 set, a supporting muscle 0.5. That is fractional counting. In the meta-regression by Pelland and colleagues (2024), out of three counting methods (total, fractional, direct only) fractional described muscle growth best.',
+      'Proximity to failure matters, but you do not need to hit zero. Refalo and colleagues (2023) found no advantage of training to failure over stopping just short of it. Robinson and colleagues (2024) showed muscle growth improves the closer to failure you stop, while strength gain barely depends on it.'],
+      src: ['pelland', 'refalo', 'robinson'] },
+    { id: 'zones', h: 'Weekly zones per muscle', p: [
+      'Under 4: low. Keeping muscle is easier than building it: in Bickel and colleagues (2011) young adults kept their muscle at 1/3 of the earlier volume (older adults did not). The 4-set line is our own threshold below which we do not expect clear progress.',
+      '4-10, efficient: every set does a lot here. In the meta-analysis by Schoenfeld and colleagues (2017), under 5, 5-9 and 10+ weekly sets gave progressively larger gains (about 5.4%, 6.6% and 9.8%), although the difference was borderline significant.',
+      '10-20, common: the review by Baz-Valle and colleagues (2022) points to 12-20 weekly sets per muscle as a reasonable standard for trained people.',
+      'Over 20, high: more sets can still help, but each extra set gives less. Pelland and colleagues (2024) see diminishing returns for muscle and even more for strength. In Baz-Valle, over 20 sets showed no advantage for most muscles studied. Recovery cost keeps rising.',
+      'Zone limits are a convention. Studies mostly involve young men over 8-12 weeks, and muscle is measured in different ways. Treat the zones as a map, not a verdict.'],
+      src: ['bickel', 'schoenfeld', 'baz', 'pelland'] },
+    { id: 'deload', h: 'Deload', p: [
+      'By default a deload week cuts sets by 40% and weight by 10%. Bell and colleagues (2023), in an expert consensus, describe a deload as a planned, periodic reduction in training load meant to improve recovery and readiness to keep training.',
+      'In the survey by Rogerson and colleagues (2024) of 246 strength and physique athletes, deloads reduced volume, load and effort, while frequency and exercise choice stayed the same. The app does the same: same days and exercises, less and lighter.',
+      'Coleman and colleagues (2024) tested a full week off in the middle of 9 weeks of training. Muscle growth was unaffected, but lower-body strength gains were smaller. That is why a deload cuts training rather than cancelling it.',
+      'The 40% and 10% figures are our starting point in line with that practice, not the result of one study. Change them in each plan\'s cycle settings.'],
+      src: ['bell', 'rogerson', 'coleman'] },
+    { id: 'plan', h: 'Percentage blocks and the 1RM test', p: [
+      'Block plans calculate loads from your 1RM: the value you entered, or the best e1RM from the last 6 weeks. The RPE table the app uses for e1RM is based on the repetitions-in-reserve RPE scale (Zourdos and colleagues, 2016).',
+      'Before a test, volume drops and intensity stays. That is how the review by Travis and colleagues (2020) describes tapering for powerlifting. So in the 12-week plan week 11 has few sets at a high percentage, and week 12 is the test.',
+      'We wrote the tables in the block plans ourselves on these principles. They are not a copy of any named program.'],
+      src: ['zourdos', 'travis'] },
+  ],
+};
+function whyHtml() {
+  const L = S.settings.lang === 'en' ? 'en' : 'pl';
+  return WHY[L].map(sec => `<section class="why" id="why-${sec.id}"><h3>${esc(sec.h)}</h3>${sec.p.map(x => `<p>${esc(x)}</p>`).join('')}
+    <div class="why-src"><div class="eyebrow small">${esc(t('whySrc'))}</div><ol>${sec.src.map(k => `<li>${esc(WHY_SRC[k][0])} <a href="${WHY_SRC[k][1]}" target="_blank" rel="noopener">${esc(WHY_SRC[k][1].replace(/^https:\/\//, ''))}</a></li>`).join('')}</ol></div></section>`).join('');
+}
 function ormDone() {
   const sh = S.sheet; const back = sh.back;
   if (S.active) for (const it of S.active.items) if (it.exId === sh.exId && it.pct) { const g = C.suggest({ exId: it.exId, method: it.method, reps: it.reps, rpe: it.rpe, rpeMax: it.rpeMax, scheme: it.scheme, sets: it.sets.filter(x => x.kind === 'work').length, pct: it.pct }, { before: S.active.startedAt, sig: it.sig, effort: S.active.effort }); if (g) it.sug = g; else delete it.sug; saveActive(); }
@@ -2124,7 +2376,7 @@ const saveActive = () => persist('active');
 const A = {
   nav: el => go(el.dataset.v),
   settings: () => openSheet({ type: 'settings' }),
-  'sheet-close': () => closeSheet(),
+  'sheet-close': () => { if (S.sheet && (S.sheet.type === 'why' || S.sheet.type === 'weeks') && S.sheet.back) openSheet(S.sheet.back); else closeSheet(); },
   scrim: (el, ev) => { if (ev.target === el) closeSheet(); },
   'confirm-yes': () => { const f = S._onYes; closeSheet(); if (f) f(); },
   'menu-pick': el => { const f = S.sheet && S.sheet.handlers && S.sheet.handlers[el.dataset.v]; closeSheet(); if (f) f(); },
@@ -2498,8 +2750,10 @@ const A = {
     render();
   },
   'deload-now': () => {
-    const tp = activeTemplate(); if (!tp || !tp.block) return;
-    tp.block.deloadUntil = now() + 7 * 864e5; tp.block.deloadAt = now();
+    const tp = activeTemplate(); if (!tp || !C.cycleOf(tp)) return;
+    const until = now() + 7 * 864e5;
+    if (tp.cycle) { tp.cycle.deloadUntil = until; tp.cycle.deloadAt = now(); }
+    if (tp.block) { tp.block.deloadUntil = until; tp.block.deloadAt = now(); }
     S.flags.forEach(f => { if (f.status === 'open' && FLAG_TYPES_DELOAD.has(f.type)) f.status = 'done'; });
     persist('templates', 'flags'); toast(t('deloadSet')); render();
   },
@@ -2602,6 +2856,69 @@ const A = {
     openSheet({ type: 'plates', target, bar, unit: g.unit });
   },
   'week-toggle': () => { S._weekAll = !S._weekAll; render(); },
+  'pw-pick': el => { S.pw = S.pw || {}; S.pw[el.dataset.k] = +el.dataset.v; render(); },
+  'cyc-open': el => {
+    const tp = S.templates.find(x => x.id === (el.dataset.v || S.viewArg)); if (!tp) return;
+    const c = C.cycleOf(tp) || { type: 'repeat', weeks: 8, shift: 0, deload: { mode: 'none', every: 5, weeks: [], sets: 40, load: 10 } };
+    openSheet({ type: 'cycle', tpId: tp.id, c: { type: c.type, weeks: String(c.weeks), deload: { mode: c.deload.mode, every: String(c.deload.every), weeks: [...c.deload.weeks], sets: String(c.deload.sets), load: String(c.deload.load) } }, err: null });
+  },
+  'cyc-type': el => { S.sheet.c.type = el.dataset.v; if (el.dataset.v === 'repeat' && S.sheet.c.deload.mode === 'weeks') S.sheet.c.deload.mode = 'every'; S.sheet.err = null; renderSheet(); },
+  'cyc-dl': el => { S.sheet.c.deload.mode = el.dataset.v; S.sheet.err = null; renderSheet(); },
+  'cyc-dlw': el => { const l = S.sheet.c.deload.weeks; const w = +el.dataset.v; const i = l.indexOf(w); if (i >= 0) l.splice(i, 1); else { l.push(w); l.sort((a, b) => a - b); } renderSheet(); },
+  'cyc-shift': el => {
+    const tp = S.templates.find(x => x.id === S.sheet.tpId); if (!tp || !tp.cycle) return;
+    const d = +el.dataset.v; const bi = C.blockInfo(tp);
+    if ((d > 0 && bi.finished) || (d < 0 && bi.week <= 1 && !bi.finished)) return;
+    tp.cycle.shift = (tp.cycle.shift || 0) + d; tp.updatedAt = now(); saveTemplates(); renderSheet(); render();
+  },
+  'cyc-save': () => {
+    const sh = S.sheet; const c = sh.c; const tp = S.templates.find(x => x.id === sh.tpId); if (!tp) return;
+    const iv = v => parseInt(v, 10);
+    const weeks = iv(c.weeks), every = iv(c.deload.every), ds = iv(c.deload.sets), dlL = iv(c.deload.load);
+    if (c.type === 'fixed' && !(weeks >= 2 && weeks <= 24)) { sh.err = t('cycErrWeeks'); renderSheet(); return; }
+    if (c.deload.mode === 'every' && !(every >= 2 && every <= 12)) { sh.err = t('cycErrEvery'); renderSheet(); return; }
+    if (c.deload.mode !== 'none' && !(ds >= 0 && ds <= 80 && dlL >= 0 && dlL <= 30)) { sh.err = t('cycErrCut'); renderSheet(); return; }
+    const prev = C.cycleOf(tp);
+    const W = c.type === 'fixed' ? weeks : (prev && prev.weeks) || 8;
+    let mode = c.deload.mode; const dw = c.deload.weeks.filter(w => w <= W);
+    if (mode === 'weeks' && !dw.length) mode = 'none';
+    const keepStart = prev && prev.type === c.type && (tp.cycle || c.type === 'repeat');
+    tp.cycle = { type: c.type, weeks: W, start: keepStart ? prev.start : now(), shift: keepStart ? prev.shift || 0 : 0, deloadUntil: prev ? prev.deloadUntil || 0 : 0,
+      deload: { mode, every: every >= 2 ? every : 5, weeks: dw, sets: ds >= 0 ? ds : 40, load: dlL >= 0 ? dlL : 10 } };
+    tp.updatedAt = now(); saveTemplates(); closeSheet(); toast(t('cycSaved')); render();
+  },
+  'cyc-restart': () => { const id = S.sheet.tpId; ask(t('cycRestartQ'), () => { const tp = S.templates.find(x => x.id === id); if (!tp || !tp.cycle) return; tp.cycle.start = now(); tp.cycle.shift = 0; tp.cycle.deloadUntil = 0; saveTemplates(); toast(t('endRestarted')); render(); }, { yes: t('cycRestart') }); },
+  'cyc-again': el => { const tp = S.templates.find(x => x.id === el.dataset.v); if (!tp || !tp.cycle) return; tp.cycle.start = now(); tp.cycle.shift = 0; tp.cycle.deloadUntil = 0; tp.updatedAt = now(); saveTemplates(); toast(t('endRestarted')); render(); },
+  'test-save': el => {
+    const tp = S.view === 'plan' ? S.templates.find(x => x.id === S.viewArg) : activeTemplate(); if (!tp) return;
+    const res = testResults(tp, C.cycleOf(tp));
+    const ids = el.dataset.v ? [el.dataset.v] : Object.keys(res);
+    for (const id of ids) if (res[id]) S.maxes[id] = { kg: res[id].kg, at: now() };
+    persist('maxes'); toast(t('testSaved')); render();
+  },
+  'wk-open': () => {
+    const sh = S.sheet; readItemFields();
+    const err = applyItemTargets(sh); if (err) { sh.err = err; renderSheet(); return; }
+    const tp = tplDay(sh.dayId)[0]; const bi = C.blockInfo(tp); if (!bi || !bi.fixed) return;
+    const it = sh.item; const x = sh.simple ? null : it.pct ? 'pct' : it.rpe != null ? 'rpe' : null;
+    const nsh = { type: 'weeks', back: sh, n: bi.weeks, c: bi.cycle, x, rows: wkRowsFrom(it, x), err: null };
+    nsh.gen = { f: wkCols(nsh)[0], a: '', b: '', w1: '1', w2: String(bi.weeks) };
+    openSheet(nsh);
+  },
+  'wg-f': el => { S.sheet.gen.f = el.dataset.v; S.sheet.gen.a = ''; S.sheet.gen.b = ''; renderSheet(); },
+  'wg-apply': () => {
+    const sh = S.sheet, g = sh.gen;
+    const a = num(String(g.a).replace(',', '.')), b = num(String(g.b).replace(',', '.'));
+    const w1 = Math.max(1, parseInt(g.w1, 10) || 0), w2 = Math.min(sh.n, parseInt(g.w2, 10) || 0);
+    if (a == null || b == null || !(w1 >= 1) || !(w2 >= w1)) { sh.err = t('wkGenErr'); renderSheet(); return; }
+    const ws = []; for (let w = w1; w <= w2; w++) if (!C.isDeloadWeek(sh.c, w)) ws.push(w);
+    const step = g.f === 'x' ? 0.5 : 1;
+    ws.forEach((w, i) => { const v = ws.length === 1 ? a : a + (b - a) * i / (ws.length - 1); const r = Math.round(v / step) * step; sh.rows[w] = sh.rows[w] || {}; sh.rows[w][g.f] = fmtN(r); });
+    sh.err = null; renderSheet();
+  },
+  'wk-clear': () => { S.sheet.rows = {}; S.sheet.err = null; renderSheet(); },
+  'wk-done': () => { const sh = S.sheet; const err = wkApplyRows(sh); if (err) { sh.err = err; renderSheet(); return; } openSheet(sh.back); },
+  'why-open': el => { const back = S.sheet && S.sheet.type !== 'why' ? S.sheet : null; openSheet({ type: 'why', back }); setTimeout(() => { const x = document.getElementById('why-' + (el.dataset.v === 'vol' ? 'vol' : el.dataset.v)); if (x && el.dataset.v !== 'vol') x.scrollIntoView({ block: 'start' }); }, 30); },
   'hist-mode': el => { S.histMode = el.dataset.v; render(); },
   'cal-nav': el => { let m = S.calM + (+el.dataset.v), y = S.calY; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } S.calM = m; S.calY = y; S.calDay = null; render(); },
   'cal-day': el => { S.calDay = S.calDay === el.dataset.v ? null : el.dataset.v; render(); },
@@ -2736,9 +3053,12 @@ document.addEventListener('click', ev => {
 document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
-  if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : el.dataset.san === 'list' ? el.value.replace(/[^0-9.,;\-\/ ]/g, '') : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : el.dataset.san === 'list' ? el.value.replace(/[^0-9.,;\-\/ ]/g, '') : el.dataset.san === 'reps' ? el.value.replace(/[^0-9+\-]/g, '') : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
   if (f === 'gear-pl' && S.sheet && S.sheet.g) { const g = S.sheet.g; g.plates[g.unit][el.dataset.p] = Math.min(10, parseInt(el.value || '0', 10) || 0); return; }
   if (f === 'gear-bar' && S.sheet && S.sheet.g) { S.sheet.g.bars[el.dataset.c] = el.value; return; }
+  if (f === 'cy' && S.sheet && S.sheet.c) { const k = el.dataset.k; if (k === 'weeks') S.sheet.c.weeks = el.value; else S.sheet.c.deload[k] = el.value; return; }
+  if (f === 'wk' && S.sheet && S.sheet.rows) { const w = el.dataset.w; S.sheet.rows[w] = S.sheet.rows[w] || {}; S.sheet.rows[w][el.dataset.k] = el.value; return; }
+  if (f === 'wg' && S.sheet && S.sheet.gen) { S.sheet.gen[el.dataset.k] = el.value; return; }
   if (f === 'gear-list' && S.sheet && S.sheet.g) { S.sheet.g.lists[el.dataset.c] = el.value; const pv = $('#gp-' + el.dataset.c); if (pv) pv.innerHTML = gearPreview(el.value); return; }
   if (f === 'pc' && S.sheet && S.sheet.type === 'plates') { const v = num(el.value.replace(',', '.')); S.sheet[el.dataset.k] = v == null ? 0 : v; const r = $('#pc-res'); if (r) r.innerHTML = platesResult(S.sheet); return; }
   if (f === 'np-name') { (S.np || (S.np = {})).name = el.value; return; }

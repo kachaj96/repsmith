@@ -409,3 +409,22 @@ button.tag.add { color: var(--accent); border-style: dashed; min-width: 34px; }
 .cal-c.sel { outline: 3px solid var(--text); outline-offset: 1px; }
 .cal-c i { position: absolute; top: 2px; right: 5px; font-size: 10px; font-style: normal; opacity: .75; }
 .card-cv { width: 100%; height: auto; border-radius: 16px; display: block; background: var(--surface); }
+
+/* v0.8: plan cycle, week table, sources */
+.chip.dl { border-style: dashed; }
+.chip small { font-size: 10px; margin-left: 3px; opacity: .8; font-weight: 700; }
+.wk-chips .chip { min-width: 44px; justify-content: center; padding: 0 10px; }
+.wk-tbl { display: flex; flex-direction: column; gap: 6px; }
+.wk-r { display: grid; grid-template-columns: 36px repeat(var(--cols, 3), minmax(0, 1fr)); gap: 6px; align-items: center; }
+.wk-r input { min-width: 0; width: 100%; text-align: center; padding-left: 4px; padding-right: 4px; }
+.wk-h span { font-size: 12px; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .04em; }
+.wk-n { font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.wk-n small { display: block; font-size: 10px; color: var(--accent); line-height: 1; }
+.wk-r.dl input { border-style: dashed; }
+button.linkish { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 32px; text-align: left; }
+.why { display: flex; flex-direction: column; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line, rgba(255,255,255,.08)); }
+.why:last-child { border-bottom: 0; }
+.why h3 { margin: 6px 0 0; font-size: 18px; }
+.why p { margin: 0; line-height: 1.5; }
+.why-src ol { margin: 6px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+.why-src a { color: var(--accent); word-break: break-all; }

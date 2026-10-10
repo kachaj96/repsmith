@@ -1,4 +1,4 @@
-# Repsmith v0.7.1
+# Repsmith v0.8.0
 
 Autor: Adrian Drożdżyński
 
@@ -8,7 +8,7 @@ Dziennik treningowy jako PWA. Działa offline, dane trzyma lokalnie na telefonie
 
 1. Załóż konto na github.com, jeśli go nie masz.
 2. Kliknij **New repository**, nazwij je np. `repsmith`, ustaw **Public**, utwórz.
-3. Na stronie repozytorium kliknij **uploading an existing file** i przeciągnij **całą zawartość** tego folderu (`index.html`, `app.js`, `plans.js`, `coach.js`, `bodymap.js`, `app.css`, `sw.js`, `manifest.webmanifest`, foldery `data` i `icons`). Zatwierdź **Commit changes**.
+3. Na stronie repozytorium kliknij **uploading an existing file** i przeciągnij **całą zawartość** tego folderu (`index.html`, `app.js`, `plans.js`, `blocks.js`, `gear.js`, `coach.js`, `bodymap.js`, `app.css`, `sw.js`, `manifest.webmanifest`, foldery `data` i `icons`). Zatwierdź **Commit changes**.
 4. Wejdź w **Settings → Pages**. W **Source** wybierz **Deploy from a branch**, branch `main`, folder `/ (root)`, **Save**.
 5. Po 1–2 minutach aplikacja będzie pod adresem `https://<twoj-login>.github.io/repsmith/`.
 
@@ -30,7 +30,7 @@ Ograniczenia iOS: brak wibracji na koniec przerwy, dźwięki timera nie grają p
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.7.2`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.8.1`).
 
 ## Sprawdzenie wersji
 

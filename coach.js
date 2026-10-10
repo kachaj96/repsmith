@@ -194,7 +194,8 @@ function factory(H) {
     return {
       id, name: opts.name || plan.name[lang], planId: plan.id, goal: plan.goal, effort, perWeek: plan.perWeek,
       createdAt: Date.now(), updatedAt: Date.now(),
-      block: { start: Date.now(), type: plan.goal }, lag, addon: addonInfo, stallEntry: !!opts.stallEntry,
+      block: { start: Date.now(), type: plan.goal }, lag,
+      ...(plan.cycle ? { cycle: { ...JSON.parse(JSON.stringify(plan.cycle)), start: Date.now() } } : {}), addon: addonInfo, stallEntry: !!opts.stallEntry,
       days: days.map((d, i) => ({ id: H.uid(), name: `${i + 1} · ${d.name[lang]}`, items: d.items.map(it => toItem(it)) })),
     };
   }
@@ -204,6 +205,8 @@ function factory(H) {
       backoffSets: it.backoffSets || 2, backoffReps: it.backoffReps || '', backoffPct: it.backoffPct || H.settings().backoffPct };
     if (it.cue) o.cue = it.cue;
     if (it.pack) o.pack = true;
+    if (it.pct) { o.pct = it.pct; o.rpe = null; o.rpeMax = null; }
+    if (it.wk) o.wk = JSON.parse(JSON.stringify(it.wk));
     return o;
   }
 
@@ -238,10 +241,13 @@ function factory(H) {
 
   /* previous finished session items for an exercise, newest first; same day-type first (same method + reps) */
   function history(exId, beforeTs, sig) {
-    const list = H.sessions().filter(s => s.startedAt < beforeTs)
+    let list = H.sessions().filter(s => s.startedAt < beforeTs)
       .sort((a, b) => b.startedAt - a.startedAt)
       .map(s => ({ s, it: s.items.find(i => i.exId === exId && i.sets.some(x => x.done && x.kind !== 'warmup')) }))
       .filter(x => x.it);
+    // deload weeks run lighter on purpose; progression continues from normal weeks
+    const nd = list.filter(x => !(x.s.week && x.s.week.deload));
+    if (nd.length) list = nd;
     if (sig) { const same = list.filter(x => x.it.sig === sig); if (same.length) return same; }
     return list;
   }
@@ -433,21 +439,68 @@ function factory(H) {
 
   /* ---------- blocks and deload ---------- */
   const WEEK = 7 * 864e5;
+  const clampI = (v, a, b, d) => { const n = Math.round(+v); return Number.isFinite(n) ? Math.min(b, Math.max(a, n)) : d; };
+  /* plan cycle: stored tpl.cycle, or derived from the wizard block so old plans keep their behaviour */
+  function cycleOf(tpl) {
+    if (!tpl) return null;
+    if (tpl.cycle) {
+      const c = tpl.cycle, d = c.deload || {};
+      const type = c.type === 'fixed' ? 'fixed' : 'repeat';
+      const weeks = clampI(c.weeks, 2, 24, 8);
+      let mode = ['none', 'every', 'weeks'].includes(d.mode) ? d.mode : 'none';
+      if (type === 'repeat' && mode === 'weeks') mode = 'none';
+      return { type, weeks, start: +c.start || +(tpl.block && tpl.block.start) || +tpl.createdAt || 0, shift: Math.round(+c.shift || 0),
+        deloadUntil: c.deloadUntil || (tpl.block && tpl.block.deloadUntil) || 0,
+        deload: { mode, every: clampI(d.every, 2, 12, 5), weeks: (d.weeks || []).map(Number).filter(w => w >= 1 && w <= weeks), sets: clampI(d.sets ?? 40, 0, 80, 40), load: clampI(d.load ?? 10, 0, 30, 10) } };
+    }
+    if (tpl.block) {
+      const type = tpl.block.type; const st = H.settings();
+      const every = type === 'Heavy' || type === 'Mix' ? (st.deloadEvery || 5) : type === 'Size' ? 5 : null;
+      return { type: 'repeat', weeks: 8, start: tpl.block.start, shift: 0, deloadUntil: tpl.block.deloadUntil || 0, derived: true,
+        deload: { mode: every ? 'every' : 'none', every: every || 5, weeks: [], sets: type === 'Size' ? 45 : 40, load: 0 } };
+    }
+    return null;
+  }
+  const isDeloadWeek = (c, w) => c.deload.mode === 'every' ? w % c.deload.every === 0 : c.deload.mode === 'weeks' ? c.deload.weeks.includes(w) : false;
+  /* where the lifter is in the plan. fixed plans count finished training weeks (perWeek sessions), repeat plans count calendar weeks */
   function blockInfo(tpl, at = Date.now()) {
-    if (!tpl || !tpl.block) return null;
-    const st = H.settings();
-    const type = tpl.block.type;
-    const weeks = Math.floor((at - tpl.block.start) / WEEK);
-    const len = type === 'Heavy' || type === 'Mix' ? (st.deloadEvery || 5) : type === 'Size' ? 5 : null;
-    const week = len ? (weeks % len) + 1 : weeks + 1;
-    const early = tpl.block.deloadUntil && at < tpl.block.deloadUntil;
-    const deload = !!(early || (len && week === len));
-    const cut = deload ? (type === 'Size' ? 0.45 : 0.4) : 0;
-    const ramp = type === 'Size' && !deload && week >= 2 && week <= 4 ? week - 1 : 0;
-    return { type, week, len, deload, early: !!early, cut, ramp, weeksTotal: weeks + 1 };
+    const c = cycleOf(tpl); if (!c) return null;
+    const type = tpl.block ? tpl.block.type : null;
+    const fixed = c.type === 'fixed';
+    let week, len, weeksTotal, finished = false, done = 0;
+    if (fixed) {
+      const per = Math.max(1, tpl.perWeek || (tpl.days || []).length || 1);
+      done = H.sessions().filter(s => s.templateId === tpl.id && s.startedAt >= c.start && s.startedAt < at).length;
+      const raw = Math.floor(done / per) + 1 + c.shift;
+      week = Math.max(1, raw);
+      if (week > c.weeks) { finished = true; week = c.weeks; }
+      len = c.weeks; weeksTotal = week;
+    } else {
+      const weeks = Math.max(0, Math.floor((at - c.start) / WEEK) + c.shift);
+      len = c.deload.mode === 'every' ? c.deload.every : null;
+      week = len ? (weeks % len) + 1 : weeks + 1;
+      weeksTotal = weeks + 1;
+    }
+    const early = !!(c.deloadUntil && at < c.deloadUntil);
+    const deload = !finished && (early || isDeloadWeek(c, week));
+    const cut = deload ? c.deload.sets / 100 : 0;
+    const loadCut = deload ? c.deload.load / 100 : 0;
+    const ramp = type === 'Size' && !fixed && !deload && len && week >= 2 && week <= Math.min(4, len - 1) ? week - 1 : 0;
+    return { type, week, len, deload, early, cut, loadCut, ramp, weeksTotal, fixed, weeks: fixed ? c.weeks : null, finished, done, cycle: c };
+  }
+  /* template item as it runs in a given week of a fixed plan */
+  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'cue', 'test'];
+  function weekItem(it, week) {
+    const o = week && it.wk && it.wk[week];
+    if (!o) return it;
+    const out = { ...it };
+    for (const k of WK_KEYS) if (o[k] != null && o[k] !== '') out[k] = o[k];
+    if (o.pct != null && o.pct !== '') { out.rpe = null; out.rpeMax = null; }
+    if (o.rpe != null && o.rpe !== '' && (o.rpeMax == null || o.rpeMax === '')) out.rpeMax = o.rpe;
+    return out;
   }
 
-  return { DATA, derive, pick, planById, estMax, sessionMinutes, nsets, buildTemplate, tallyDays, lagging, suggest, methodOf, kindOf, range,
+  return { cycleOf, isDeloadWeek, weekItem, DATA, derive, pick, planById, estMax, sessionMinutes, nsets, buildTemplate, tallyDays, lagging, suggest, methodOf, kindOf, range,
     windowVolume, zone, evaluate, blockInfo, stepFor, history, isHard, adapt };
 }
 

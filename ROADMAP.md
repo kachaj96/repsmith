@@ -40,7 +40,14 @@ Na podstawie blueprintów Adriana: progresja, objętość, plany z kreatorem.
 - Kalendarz w Historii (miesiąc, statystyki, tygodnie z rzędu) i karta podsumowania do udostępnienia jako obraz.
 - Wstęp przy pierwszym uruchomieniu, przycisk uwag (wymaga ustawienia FEEDBACK_EMAIL w app.js), testy w repozytorium (`tests/`, `sh tests/run.sh`).
 
-## Teraz: v0.7 – feedback od znajomych – feedback od znajomych
+## v0.8.0 – zrobione
+- Cykl planu: powtarzany tydzień albo stała długość (2-24 tygodni). W stałej długości tydzień zalicza się po zrobieniu tylu treningów, ile dni ma plan; ręczne przesunięcie tygodnia.
+- Deload per plan: brak, co N tygodni albo wybrane tygodnie; domyślnie serie -40%, ciężar -10%. Plany z kreatora zachowują swój deload (serie, bez cięcia ciężaru). Progresja po deloadzie liczy się od zwykłych tygodni.
+- Edytor tygodni przy ćwiczeniu: serie, powtórzenia, %1RM albo RPE, backoff; generator fali; 0 serii = ćwiczenie pominięte w tygodniu. Podgląd tygodnia w planie.
+- Trzy bloki siłowe w bibliotece (4, 8 i 12 tygodni, procenty 1RM), 12-tygodniowy kończy się testem 1RM i zapisem nowych maksów.
+- "Skąd te liczby": objaśnienie liczenia serii, stref objętości i deloadu ze źródłami.
+
+## Teraz: v0.8 – feedback od znajomych
 Wysłać aplikację znajomym z siłowni, zebrać uwagi. Feedback może zmienić priorytety.
 
 Do sprawdzenia w praktyce:
