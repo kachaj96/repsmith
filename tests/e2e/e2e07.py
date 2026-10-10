@@ -59,7 +59,7 @@ try:
 
     # --- Today with a last workout: repeat
     click(p, "button[data-a=nav][data-v=today]")
-    ok("ostatni trening" in p.locator("main").inner_text().lower() and p.locator("button[data-a=repeat]").count() == 1, "Today shows last workout with Repeat")
+    ok(("ostatnie 7 dni" in p.locator("main").inner_text().lower()) and p.locator("button[data-a=repeat]").count() == 1, "Today shows last workout with Repeat")
     p.screenshot(path=f"{SH}/10-today-last.png")
 
     # --- history: edit a past set
