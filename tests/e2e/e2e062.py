@@ -38,7 +38,7 @@ try:
           if (err || JSON.stringify(sh.item) !== JSON.stringify(it)) bad.push(['sheet', pl.id, it.exId, err, JSON.stringify(it), JSON.stringify(sh.item)]);
         } }
       return { n: R.CD.plans.length, bad: bad.slice(0, 5), nb: bad.length }; }""")
-    ok(rt["n"] == 25 and rt["nb"] == 0, f"25 library plans round-trip unchanged: {rt}")
+    ok(rt["n"] == 28 and rt["nb"] == 0, f"28 library plans (25 + 3 blocks) round-trip unchanged: {rt}")
 
     # --- adopt HEAVY-3, open plan editor
     click(p, "button[data-a=nav][data-v=plans]"); click(p, "button[data-a=nav][data-v=planlib]")
