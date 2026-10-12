@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.8.0';
+const VERSION = '0.8.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -83,7 +83,7 @@ const STR = {
     h_calf: 'W najszerszym miejscu łydki, na stojąco.', h_bf: 'Z wagi z pomiarem składu ciała. Zawsze ta sama waga i pora.',
     tapHint: 'Stuknij wykres, żeby zobaczyć wartość.',
     repeatWorkout: 'Powtórz trening', repeatHint: 'Te same ćwiczenia i serie, wyniki z tego treningu jako podpowiedź.', finishCurrentFirst: 'Najpierw zakończ albo odrzuć trwający trening.',
-    repeatOfLbl: 'Powtórzenie treningu z', restOver: 'Koniec przerwy', sounds: 'Dźwięki timera (odliczanie 5–1 i koniec przerwy)', on: 'Włączone', off: 'Wyłączone', front: 'Przód', back: 'Tył', showBody: 'Pokaż sylwetkę', hideBody: 'Ukryj sylwetkę', fewerSets: 'mniej serii', moreSets: 'więcej serii', tapMuscle: 'Stuknij mięsień, żeby zobaczyć liczbę serii.', movement: 'Ruch', muscleGroup: 'Partia (główna)', clearFilters: 'Wyczyść filtry', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński', bodyCredit: 'Sylwetka mięśni: react-native-body-highlighter (ELABBASSI Hicham, licencja MIT)',
+    repeatOfLbl: 'Powtórzenie treningu z', restOver: 'Koniec przerwy', sounds: 'Dźwięki timera (odliczanie 5–1 i koniec przerwy)', soundTest: 'Test dźwięku', soundVol: 'Głośność', volLow: 'Cicho', volMid: 'Średnio', volHigh: 'Głośno', soundHint: 'iPhone: odblokuj dźwięk przyciskiem po lewej (nie może być wyciszony) i podgłośnij multimedia. Przy zablokowanym ekranie lub po zminimalizowaniu appki iOS nie odtworzy sygnału. Wibracji Safari nie wspiera. Podczas przerwy muzyka z innej appki może się na chwilę zatrzymać.', on: 'Włączone', off: 'Wyłączone', front: 'Przód', back: 'Tył', showBody: 'Pokaż sylwetkę', hideBody: 'Ukryj sylwetkę', fewerSets: 'mniej serii', moreSets: 'więcej serii', tapMuscle: 'Stuknij mięsień, żeby zobaczyć liczbę serii.', movement: 'Ruch', muscleGroup: 'Partia (główna)', clearFilters: 'Wyczyść filtry', author: 'Autor', madeBy: 'Tworzy Adrian Drożdżyński', bodyCredit: 'Sylwetka mięśni: react-native-body-highlighter (ELABBASSI Hicham, licencja MIT)',
     rpeTable: 'Tabela RPE', rpeTableInfo: 'Procent 1RM dla liczby powtórzeń i RPE według tabeli Mike’a Tuchscherera (RTS).\n\nZ niej aplikacja liczy e1RM i podpowiada ciężar na zadane powtórzenia i RPE. Seria bez RPE liczy się jak RPE 10, RPE poniżej 6,5 jak 6,5 (tabela niżej nie sięga).',
   },
   en: {
@@ -162,7 +162,7 @@ const STR = {
     h_calf: 'At the widest point of the calf, standing.', h_bf: 'From a body composition scale. Same scale, same time of day.',
     tapHint: 'Tap the chart to see a value.',
     repeatWorkout: 'Repeat workout', repeatHint: 'Same exercises and sets, this workout\'s results as hints.', finishCurrentFirst: 'Finish or discard the workout in progress first.',
-    repeatOfLbl: 'Repeat of the workout from', restOver: 'Rest over', sounds: 'Timer sounds (5–1 countdown and end of rest)', on: 'On', off: 'Off', front: 'Front', back: 'Back', showBody: 'Show body', hideBody: 'Hide body', fewerSets: 'fewer sets', moreSets: 'more sets', tapMuscle: 'Tap a muscle to see its sets.', movement: 'Movement', muscleGroup: 'Muscle (main)', clearFilters: 'Clear filters', author: 'Author', madeBy: 'Made by Adrian Drożdżyński', bodyCredit: 'Muscle figure: react-native-body-highlighter (ELABBASSI Hicham, MIT License)',
+    repeatOfLbl: 'Repeat of the workout from', restOver: 'Rest over', sounds: 'Timer sounds (5–1 countdown and end of rest)', soundTest: 'Test sound', soundVol: 'Volume', volLow: 'Low', volMid: 'Medium', volHigh: 'Loud', soundHint: 'iPhone: unmute with the side switch and raise media volume. With a locked screen or the app in the background iOS will not play the signal. Safari has no vibration. Music from another app may pause briefly during a rest.', on: 'On', off: 'Off', front: 'Front', back: 'Back', showBody: 'Show body', hideBody: 'Hide body', fewerSets: 'fewer sets', moreSets: 'more sets', tapMuscle: 'Tap a muscle to see its sets.', movement: 'Movement', muscleGroup: 'Muscle (main)', clearFilters: 'Clear filters', author: 'Author', madeBy: 'Made by Adrian Drożdżyński', bodyCredit: 'Muscle figure: react-native-body-highlighter (ELABBASSI Hicham, MIT License)',
     rpeTable: 'RPE table', rpeTableInfo: 'Percent of 1RM for a given number of reps and RPE, from Mike Tuchscherer’s table (RTS).\n\nThe app uses it to calculate e1RM and to suggest a weight for target reps at a target RPE. A set without RPE counts as RPE 10, RPE below 6.5 counts as 6.5 (the table does not go lower).',
   },
 };
@@ -467,7 +467,7 @@ const eqOf = exId => (S.ex.get(exId) || {}).equipment || '';
 const snapLoad = (exId, v, up) => G.snap(gearCfg(), eqOf(exId), v, up);
 const roundLoad = (exId, v) => { const s = snapLoad(exId, v); return s != null ? s : roundTo(v, S.settings.increment); };
 const isBarEx = exId => G.BAR_CLASSES.includes(eqOf(exId));
-const FEEDBACK_EMAIL = ''; // set to a real address to show the feedback button
+const FEEDBACK_EMAIL = 'repsmithapp@gmail.com'; // set to a real address to show the feedback button
 const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes'];
 const persist = (...keys) => Promise.all(keys.map(k => DB.set(k, clone(S[k]))));
 
@@ -934,27 +934,50 @@ function weekCount() {
 }
 
 /* ---------- rest timer ---------- */
-let audioCtx = null;
-function ensureAudio() { try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) { audioCtx = null; } }
-function tone(freq, start, dur, vol) {
+let audioCtx = null, silentEl = null, audioUnlocked = false;
+/* tiny silent WAV (0.5 s) used to keep iOS in "media playback" mode while a rest timer runs */
+const SILENT_WAV = (() => { const n = 4000, b = new Uint8Array(44 + n); const w = (o, v, l) => { for (let i = 0; i < l; i++) b[o + i] = (v >> (8 * i)) & 255; }; [...'RIFF'].forEach((c, i) => b[i] = c.charCodeAt(0)); w(4, 36 + n, 4); [...'WAVEfmt '].forEach((c, i) => b[8 + i] = c.charCodeAt(0)); w(16, 16, 4); w(20, 1, 2); w(22, 1, 2); w(24, 8000, 4); w(28, 8000, 4); w(32, 1, 2); w(34, 8, 2); [...'data'].forEach((c, i) => b[36 + i] = c.charCodeAt(0)); w(40, n, 4); for (let i = 44; i < b.length; i++) b[i] = 128; let bin = ''; b.forEach(x => bin += String.fromCharCode(x)); return 'data:audio/wav;base64,' + btoa(bin); })();
+function audioSession(type) { try { if (navigator.audioSession) navigator.audioSession.type = type; } catch (e) {} }
+function ensureAudio() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state !== 'running') audioCtx.resume();
+    if (!audioUnlocked) { // play one silent buffer inside a user gesture, this is what unlocks iOS
+      const buf = audioCtx.createBuffer(1, 1, 22050), src = audioCtx.createBufferSource(); src.buffer = buf; src.connect(audioCtx.destination); src.start(0); audioUnlocked = true;
+    }
+  } catch (e) { audioCtx = null; }
+}
+function silentLoop(on) {
+  try {
+    if (on) {
+      audioSession('playback');
+      if (!silentEl) { silentEl = new Audio(SILENT_WAV); silentEl.loop = true; silentEl.setAttribute('playsinline', ''); silentEl.volume = 0.01; }
+      const p = silentEl.play(); if (p && p.catch) p.catch(() => {});
+    } else { if (silentEl) silentEl.pause(); audioSession('auto'); }
+  } catch (e) {}
+}
+['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (!audioCtx || audioCtx.state !== 'running') ensureAudio(); }, { passive: true }));
+document.addEventListener('visibilitychange', () => { if (!document.hidden && audioCtx && audioCtx.state !== 'running') { try { audioCtx.resume(); } catch (e) {} } });
+function tone(freq, start, dur, vol, type) {
   const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-  o.type = 'sine'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination);
+  o.type = type || 'triangle'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination);
   const t0 = audioCtx.currentTime + start;
   g.gain.setValueAtTime(0.0001, t0);
-  g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(Math.min(1, vol), t0 + 0.012);
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
   o.start(t0); o.stop(t0 + dur + 0.02);
 }
 const soundOn = () => S.settings.sound !== false;
-/* short soft tick for 5..1 s left */
-function tick() { if (!audioCtx || !soundOn()) return; try { tone(660, 0, 0.09, 0.18); } catch (e) {} }
-/* end of rest: two rising tones + vibration */
+const volMul = () => ({ low: 0.45, mid: 0.8, high: 1.25 }[S.settings.vol || 'high']);
+/* 5-4: soft tick, 3-2-1: higher and louder */
+function tick(secs) { if (!audioCtx || !soundOn()) return; try { ensureAudio(); const m = volMul(); if (secs <= 3) tone(988, 0, 0.14, 0.55 * m); else tone(660, 0, 0.09, 0.3 * m); } catch (e) {} }
+/* end of rest: three rising tones + vibration where supported */
 function beep() {
   try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
   if (!audioCtx || !soundOn()) return;
-  try { tone(880, 0, 0.18, 0.3); tone(1175, 0.2, 0.28, 0.3); } catch (e) {}
+  try { ensureAudio(); const m = volMul(); tone(880, 0, 0.2, 0.6 * m); tone(1175, 0.22, 0.2, 0.6 * m); tone(1568, 0.44, 0.45, 0.7 * m); } catch (e) {}
 }
-function startTimer(sec) { S.timer = { endAt: now() + sec * 1000, total: sec, fired: false, lastTick: null }; clearTimeout(S._timerHide); renderTimer(); }
+function startTimer(sec) { if (soundOn()) { ensureAudio(); silentLoop(true); } S.timer = { endAt: now() + sec * 1000, total: sec, fired: false, lastTick: null }; clearTimeout(S._timerHide); renderTimer(); }
 function adjustTimer(d) {
   if (!S.timer) return;
   if (S.timer.fired) { if (d > 0) startTimer(d); return; } // after the end, +15 s starts a fresh 15 s
@@ -963,7 +986,7 @@ function adjustTimer(d) {
   S.timer.lastTick = null;
   renderTimer();
 }
-function stopTimer() { clearTimeout(S._timerHide); S.timer = null; renderTimer(); }
+function stopTimer() { clearTimeout(S._timerHide); S.timer = null; silentLoop(false); renderTimer(); }
 function renderTimer() {
   let el = $('#timer');
   if (!S.timer || S.view !== 'workout') { if (el) el.remove(); return; }
@@ -981,7 +1004,7 @@ function renderTimer() {
   $('#tbig').textContent = fmtClock(secs);
   $('#tbig').classList.toggle('over', done || secs <= 5);
   $('#tbar').style.width = pct + '%';
-  if (!done && secs <= 5 && secs >= 1 && S.timer.lastTick !== secs) { S.timer.lastTick = secs; tick(); }
+  if (!done && secs <= 5 && secs >= 1 && S.timer.lastTick !== secs) { S.timer.lastTick = secs; tick(secs); }
   if (done && !S.timer.fired) {
     S.timer.fired = true; beep();
     clearTimeout(S._timerHide); S._timerHide = setTimeout(() => { if (S.timer && S.timer.fired) stopTimer(); }, 4000);
@@ -2123,6 +2146,7 @@ function renderSheet() {
     body = `${head(t('settings'))}
       <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
       <div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
+      <div><label>${esc(t('soundVol'))}</label><div class="chips">${['low', 'mid', 'high'].map(v => `<button class="chip ${(st.vol || 'high') === v ? 'on' : ''}" data-a="vol" data-v="${v}">${esc(t('vol' + v[0].toUpperCase() + v.slice(1)))}</button>`).join('')}</div><button class="btn block" style="margin-top:8px" data-a="sound-test">${esc(t('soundTest'))}</button><div class="small muted" style="margin-top:6px">${esc(t('soundHint'))}</div></div>
       <div class="grid2">${fld('st-restC', t('defaultRestC'), st.restC)}${fld('st-restI', t('defaultRestI'), st.restI)}${fld('st-increment', t('increment'), fmtN(st.increment))}${fld('st-backoffPct', t('defaultBackoff'), st.backoffPct)}</div>
       ${'wakeLock' in navigator ? `<div><label>${esc(t('wakeSet'))}</label><div class="chips"><button class="chip ${st.wake !== false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="1">${esc(t('wakeOn'))}</button><button class="chip ${st.wake === false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="0">${esc(t('wakeOff'))}</button></div></div>` : `<div class="muted small">${esc(t('wakeNo'))}</div>`}
       <button class="btn block" data-a="gear-open">${esc(t('gearTitle'))}</button><button class="btn block" data-a="plates-open" data-v="">${esc(t('plateCalc'))}</button>
@@ -2798,6 +2822,8 @@ const A = {
   },
 
   /* settings */
+  vol: el => { readSettingsFields(); S.settings.vol = el.dataset.v; persist('settings'); renderSheet(); ensureAudio(); beep(); },
+  'sound-test': () => { ensureAudio(); silentLoop(true); if (!audioCtx) return toast('Audio niedostępne'); const was = S.settings.sound; S.settings.sound = true; beep(); S.settings.sound = was; setTimeout(() => { if (!S.timer) silentLoop(false); }, 1500); },
   sound: el => { readSettingsFields(); S.settings.sound = el.dataset.v === '1'; persist('settings'); renderSheet(); if (S.settings.sound) { ensureAudio(); tick(); } },
   lang: el => { readSettingsFields(); S.settings.lang = el.dataset.v; document.documentElement.lang = S.settings.lang; persist('settings'); render(); },
   feedback: () => {
@@ -3138,7 +3164,7 @@ async function boot() {
     } catch (e) {}
   }
 }
-window.Repsmith = { S, A, C, CD, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt, normTarget, normItem, initItemSheet, applyItemTargets, defaultItem, render, persist, backupObj, oneRm };
+window.Repsmith = { S, A, C, CD, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt, normTarget, normItem, initItemSheet, applyItemTargets, defaultItem, render, persist, backupObj, oneRm, startTimer, stopTimer };
 boot().catch(err => {
   const pl = (navigator.language || 'pl').startsWith('pl');
   const app = document.getElementById('app');

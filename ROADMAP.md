@@ -55,6 +55,10 @@ Do sprawdzenia w praktyce:
 - czy model czasu treningu (4,5 / 3,5 / 2,5 min na serię) zgadza się z realnymi treningami; docelowo zastąpić go zapisanymi czasami,
 - czy podpowiedzi ciężaru dla hantli i maszyn pasują do realnych skoków ciężaru.
 
+## v0.8.1 – zrobione
+- iPhone: odstęp od notcha/wyspy i paska home (safe-area) na ekranach, w arkuszach i przy timerze przerwy.
+- Dźwięk: odblokowanie audio przy pierwszym dotknięciu, tryb mediów na czas przerwy, głośniejsze odliczanie 3-2-1 i trzy tony na koniec, wybór głośności, przycisk Test dźwięku.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

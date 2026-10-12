@@ -1,4 +1,4 @@
-# Repsmith v0.8.0
+# Repsmith v0.8.1
 
 Autor: Adrian Drożdżyński
 
@@ -26,11 +26,11 @@ Ten sam link wysyłasz znajomym.
 2. Przycisk **Udostępnij** → **Dodaj do ekranu początkowego**.
 3. Uruchamiaj zawsze z ikony na ekranie, nie z przeglądarki. Dane aplikacji z ikony nie są czyszczone automatycznie, dane strony otwieranej w Safari mogą zniknąć po kilku tygodniach nieużywania.
 
-Ograniczenia iOS: brak wibracji na koniec przerwy, dźwięki timera nie grają przy wyciszonym telefonie (przełącznik z boku) ani przy zablokowanym ekranie.
+Ograniczenia iOS: brak wibracji na koniec przerwy, brak dźwięku przy zablokowanym ekranie i po zminimalizowaniu appki. Od v0.8.1 dźwięk próbuje przejść mimo wyciszenia (tryb odtwarzania mediów na czas przerwy), ale to zależy od wersji iOS. Sprawdź w Ustawieniach przyciskiem **Test dźwięku**. W trybie mediów muzyka z innej appki może się na chwilę zatrzymać.
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.8.1`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.8.2`).
 
 ## Sprawdzenie wersji
 
