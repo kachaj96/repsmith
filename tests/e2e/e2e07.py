@@ -105,7 +105,7 @@ try:
     ok("zapisz kopię" not in p.locator("main").inner_text().lower(), "reminder gone after backup")
     click(p, "button[data-a=settings]")
     ok("Ostatnia kopia:" in p.locator(".sheet").inner_text() and "jeszcze nie" not in p.locator(".sheet").inner_text(), "settings shows last backup date")
-    ok(p.locator("button[data-a=feedback]").count() == 0, "feedback hidden while no address configured")
+    ok(p.locator("button[data-a=feedback]").count() == 1, "feedback button shown with address configured")
     click(p, "button[data-a=sheet-close]")
     b.close()
 finally: srv.terminate()
