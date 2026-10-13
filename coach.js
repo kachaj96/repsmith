@@ -185,7 +185,7 @@ function factory(H) {
       const chosen = [order[0].i];
       for (const o of order.slice(1)) { if (chosen.length === 2) break; if (days.length >= 4 && Math.abs(o.i - chosen[0]) === 1) continue; chosen.push(o.i); }
       if (chosen.length < 2 && order[1]) chosen.push(order[1].i);
-      const trial = days.map((d, i) => (chosen.includes(i) ? { ...d, items: [...d.items, ...adapt(packItems(key, d, lag), a)] } : d));
+      const trial = days.map((d, i) => (chosen.includes(i) ? { ...d, items: [...d.items, ...adapt(packItems(key, d, lag), a).filter(p => !d.items.some(x => x.exId === p.exId))] } : d));
       const over = Object.values(tallyDays(trial, plan.perWeek).muscles).some(v => v > 20.01);
       if (over) addonInfo = { dropped: true, minutes: opts.addon };
       else { days = trial; addonInfo = { minutes: opts.addon, days: chosen }; }

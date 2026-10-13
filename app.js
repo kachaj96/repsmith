@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.8.1';
+const VERSION = '0.8.2';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -44,7 +44,7 @@ const STR = {
     backup: 'Kopia zapasowa', exportBtn: 'Pobierz kopię (JSON)', copyBtn: 'Kopiuj kopię do schowka', importBtn: 'Wczytaj kopię z pliku',
     importQ: 'Wczytanie kopii zastąpi wszystkie dane w aplikacji. Kontynuować?', imported: 'Kopia wczytana', copied: 'Skopiowano do schowka',
     exported: 'Kopia pobrana', importErr: 'To nie jest plik kopii Repsmith.', backupInfo: 'Dane są tylko na tym telefonie. Rób kopię co jakiś czas i trzymaj ją poza telefonem.',
-    saved: 'Zapisano', workoutSaved: 'Trening zapisany', confirm: 'Potwierdź', next: 'Następny', freeWorkout: 'Pusty trening',
+    saveFail: 'Nie udało się zapisać danych na telefonie. Pobierz kopię w Ustawieniach.', saved: 'Zapisano', workoutSaved: 'Trening zapisany', confirm: 'Potwierdź', next: 'Następny', freeWorkout: 'Pusty trening',
     min: 'min', left: 'L', right: 'P', planEmptyDay: 'Brak ćwiczeń w tym dniu.', addFirstDay: 'Dodaj pierwszy dzień treningowy.',
     nameRequired: 'Podaj nazwę.', primaryRequired: 'Wybierz co najmniej jeden mięsień główny.',
     moveUp: 'W górę', moveDown: 'W dół', remove: 'Usuń', edit: 'Edytuj', copyPlanDay: '',
@@ -123,7 +123,7 @@ const STR = {
     backup: 'Backup', exportBtn: 'Download backup (JSON)', copyBtn: 'Copy backup to clipboard', importBtn: 'Load backup from file',
     importQ: 'Loading a backup replaces all data in the app. Continue?', imported: 'Backup loaded', copied: 'Copied to clipboard',
     exported: 'Backup downloaded', importErr: 'This is not a Repsmith backup file.', backupInfo: 'Your data lives only on this phone. Make a backup now and then and keep it somewhere else.',
-    saved: 'Saved', workoutSaved: 'Workout saved', confirm: 'Confirm', next: 'Next', freeWorkout: 'Empty workout',
+    saveFail: 'Could not save data on this device. Download a backup in Settings.', saved: 'Saved', workoutSaved: 'Workout saved', confirm: 'Confirm', next: 'Next', freeWorkout: 'Empty workout',
     min: 'min', left: 'L', right: 'R', planEmptyDay: 'No exercises on this day.', addFirstDay: 'Add your first training day.',
     nameRequired: 'Enter a name.', primaryRequired: 'Pick at least one main muscle.',
     moveUp: 'Move up', moveDown: 'Move down', remove: 'Remove', edit: 'Edit', copyPlanDay: '',
@@ -458,7 +458,9 @@ const DB = {
     if (!this.ok) return;
     try {
       await new Promise((res, rej) => { const tx = this.db.transaction('kv', 'readwrite'); tx.objectStore('kv').put(v, k); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
-    } catch (e) { /* keep in memory */ }
+    } catch (e) { // kept in memory only: tell the user, at most once a minute
+      if (!this.warnAt || Date.now() - this.warnAt > 60000) { this.warnAt = Date.now(); try { toast(t('saveFail')); } catch (e2) {} }
+    }
   },
 };
 const G = window.RepsmithGear;
@@ -658,6 +660,10 @@ function recalcPRs(ses, exId) {
     const prev = all.filter(e => e.set.id !== s.id && (e.sesAt < ses.startedAt || (e.sesId === ses.id && e.at < ts)));
     s.pr = prTypes({ load: loadOf(ex, s, bw), reps: num(s.reps), rpe: s.rpe }, prev);
   }
+}
+/* an edit or delete in an old workout can change which later sets were records */
+function recalcAllPRs(exId) {
+  for (const ses of S.sessions) if (ses.items.some(it => it.exId === exId)) recalcPRs(ses, exId);
 }
 function detectPR(exId, set) {
   const ex = S.ex.get(exId);
@@ -989,7 +995,14 @@ function adjustTimer(d) {
 function stopTimer() { clearTimeout(S._timerHide); S.timer = null; silentLoop(false); renderTimer(); }
 function renderTimer() {
   let el = $('#timer');
-  if (!S.timer || S.view !== 'workout') { if (el) el.remove(); return; }
+  if (!S.timer) { if (el) el.remove(); return; }
+  if (S.view !== 'workout') { // off the workout screen the timer still ticks, beeps and shuts the audio loop down
+    const left = Math.max(0, (S.timer.endAt - now()) / 1000), secs = Math.ceil(left);
+    if (el) el.remove();
+    if (left > 0 && secs <= 5 && S.timer.lastTick !== secs) { S.timer.lastTick = secs; tick(secs); }
+    if (left <= 0 && !S.timer.fired) { S.timer.fired = true; beep(); clearTimeout(S._timerHide); S._timerHide = setTimeout(() => { if (S.timer && S.timer.fired) stopTimer(); }, 4000); }
+    return;
+  }
   if (!el) { el = document.createElement('div'); el.id = 'timer'; el.className = 'timer'; document.body.appendChild(el); }
   const left = Math.max(0, (S.timer.endAt - now()) / 1000);
   const done = left <= 0;
@@ -2431,8 +2444,9 @@ const A = {
   'plan-activate': () => { S.settings.activeTemplateId = S.viewArg; persist('settings'); render(); },
   'plan-add-day': () => {
     const tp = S.templates.find(x => x.id === S.viewArg);
-    const letter = String.fromCharCode(65 + tp.days.length);
-    tp.days.push({ id: uid(), name: (S.settings.lang === 'en' ? 'Day ' : 'Dzień ') + letter, items: [] });
+    const base = S.settings.lang === 'en' ? 'Day ' : 'Dzień ';
+    let n = 0; while (n < 26 && tp.days.some(d => d.name === base + String.fromCharCode(65 + n))) n++;
+    tp.days.push({ id: uid(), name: n < 26 ? base + String.fromCharCode(65 + n) : base + (tp.days.length + 1), items: [] });
     tp.updatedAt = now(); saveTemplates(); render();
   },
   'plan-menu': () => {
@@ -2550,7 +2564,7 @@ const A = {
   },
   'add-set': el => {
     const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId);
-    const last = it.sets[it.sets.length - 1];
+    const last = [...it.sets].reverse().find(x => x.kind !== 'calib');
     const kind = last ? (last.kind === 'top' ? 'backoff' : last.kind) : 'work';
     pushSets(it.sets, ex, kind, 1, last ? last.target : null);
     saveActive(); render();
@@ -2686,7 +2700,7 @@ const A = {
         if (tp && nf.some(f => f.type === 'fatigue')) { tp.fatigueNext = true; persist('templates'); }
         persist('flags');
       }
-      S.active = null; S.timer = null;
+      S.active = null; stopTimer();
       persist('sessions', 'active');
       toast(nf.length ? `${t('workoutSaved')} · ${t('flagsTitle')}: ${nf.length}` : t('workoutSaved'));
       go(s.items.length ? 'session' : 'today', s.id);
@@ -2701,19 +2715,23 @@ const A = {
     const src = S.sessions.find(x => x.id === el.dataset.v); if (!src) return;
     S.active = {
       id: uid(), name: src.name, templateId: src.templateId || null, dayId: src.dayId || null, repeatOf: src.id,
-      startedAt: now(), endedAt: null, bw: bodyweightAt(now()),
+      startedAt: now(), endedAt: null, bw: bodyweightAt(now()), effort: src.effort || null,
       items: src.items.map(it => {
         const o = { id: uid(), exId: it.exId, scheme: it.scheme, rest: it.rest, backoffPct: it.backoffPct, method: it.method || null, kind: it.kind || null,
           reps: it.reps || null, rpe: it.rpe ?? null, rpeMax: it.rpeMax ?? null, sig: it.sig || null,
           sets: it.sets.filter(x => x.kind !== 'calib').map(x => newSet(x.kind, x.side, x.target || null)) };
-        if (o.method && o.reps) { const g = C.suggest({ ...o, sets: o.sets.filter(x => x.kind === 'work' && x.side !== 'R').length }, { before: now(), sig: o.sig }); if (g) o.sug = g; }
+        if (it.pct) o.pct = it.pct;
+        if (it.group) o.group = it.group;
+        if (it.noprog) o.noprog = true;
+        if (it.test) o.test = true;
+        if (o.method && o.reps && !o.noprog) { const g = C.suggest({ ...o, sets: o.sets.filter(x => x.kind === 'work' && x.side !== 'R').length }, { before: now(), sig: o.sig, effort: src.effort || null }); if (g) o.sug = g; }
         return o;
       }),
     };
     ensureAudio(); persist('active'); go('workout');
   },
   'summary-edit': el => { const s = S.sessions.find(x => x.id === el.dataset.v); openSheet({ type: 'summary', mode: 'edit', sessionId: s.id, name: s.name, difficulty: s.difficulty || null, note: s.note || '' }); },
-  discard: () => ask(t('discardQ'), () => { S.active = null; S.timer = null; persist('active'); go('today'); }, { danger: true, yes: t('discard') }),
+  discard: () => ask(t('discardQ'), () => { S.active = null; stopTimer(); persist('active'); go('today'); }, { danger: true, yes: t('discard') }),
 
   note: el => openSheet({ type: 'note', exId: el.dataset.v, back: S.sheet }),
   'note-save': () => {
@@ -2789,7 +2807,7 @@ const A = {
 
   /* history */
   'open-session': el => go('session', el.dataset.v),
-  'session-del': el => ask(t('deleteSessionQ'), () => { S.sessions = S.sessions.filter(x => x.id !== el.dataset.v); persist('sessions'); go('history'); }, { danger: true, yes: t('delete') }),
+  'session-del': el => ask(t('deleteSessionQ'), () => { const gone = S.sessions.find(x => x.id === el.dataset.v); S.sessions = S.sessions.filter(x => x.id !== el.dataset.v); if (gone) new Set(gone.items.map(i => i.exId)).forEach(recalcAllPRs); persist('sessions'); go('history'); }, { danger: true, yes: t('delete') }),
 
   /* library */
   'ex-detail': el => openSheet({ type: 'exDetail', exId: el.dataset.v }),
@@ -2853,15 +2871,16 @@ const A = {
     if (!s) { s = newSet('work', null, null); s.done = true; s.doneAt = ses.endedAt || ses.startedAt; it.sets.push(s); }
     s.weight = log === 'T' ? '' : v.weight; s.reps = log === 'T' || log === 'WD' ? s.reps : v.reps; s.dist = log === 'WD' ? v.dist : s.dist; s.time = log === 'T' ? v.time : s.time;
     s.rpe = v.rpe === '' ? '' : String(normRpe(v.rpe));
-    recalcPRs(ses, it.exId);
+    recalcAllPRs(it.exId);
     persist('sessions'); closeSheet(); toast(t('esSaved')); render();
   },
   'es-del': () => {
     const sh = S.sheet; const ses = S.sessions.find(x => x.id === sh.sesId); const it = ses && ses.items.find(x => x.id === sh.itemId); if (!it) return;
     it.sets = it.sets.filter(x => x.id !== sh.setId);
     if (!it.sets.some(x => x.done)) ses.items = ses.items.filter(x => x !== it);
-    recalcPRs(ses, it.exId); persist('sessions'); closeSheet(); toast(t('esDeleted'));
-    if (!ses.items.length) { S.sessions = S.sessions.filter(x => x !== ses); persist('sessions'); go('history'); } else render();
+    if (!ses.items.length) S.sessions = S.sessions.filter(x => x !== ses);
+    recalcAllPRs(it.exId); persist('sessions'); closeSheet(); toast(t('esDeleted'));
+    if (!ses.items.length) go('history'); else render();
   },
   'gear-open': () => { openSheet({ type: 'gear', g: clone(gearCfg()), err: null }); },
   'gear-unit': el => { S.sheet.g.unit = el.dataset.v; renderSheet(); },
@@ -2988,11 +3007,19 @@ function wizAdvance() {
   }
   render(); window.scrollTo(0, 0);
 }
+/* swap keeps what was already logged on the old exercise; the sets still to do move to the new one */
 function doSwap(itemId, newExId) {
   const it = findItem(itemId); const ex = S.ex.get(newExId);
-  const kinds = []; it.sets.filter(s => s.side !== 'R').forEach(s => kinds.push({ kind: s.kind, target: s.target, done: s.done }));
-  it.exId = newExId; it.sets = [];
-  kinds.forEach(k => pushSets(it.sets, ex, k.kind, 1, k.target));
+  const left = it.sets.filter(s => !s.done && s.side !== 'R').map(s => ({ kind: s.kind, target: s.target }));
+  const hasDone = it.sets.some(s => s.done);
+  const next = { id: uid(), exId: newExId, scheme: 'straight', rest: it.rest, backoffPct: it.backoffPct, sets: [] };
+  if (it.group) next.group = it.group;
+  if (it.cues) next.cues = it.cues.slice();
+  if (!left.length) left.push({ kind: 'work', target: null });
+  left.forEach(k => pushSets(next.sets, ex, k.kind, 1, k.target));
+  const items = S.active.items, ix = items.indexOf(it);
+  if (hasDone) { it.sets = it.sets.filter(s => s.done); items.splice(ix + 1, 0, next); }
+  else items[ix] = next;
   saveActive(); closeSheet(); render();
 }
 function readSummaryFields() {
@@ -3038,11 +3065,17 @@ function backupObj() {
 async function importBackup(text) {
   let o;
   try { o = JSON.parse(text); } catch (e) { o = null; }
-  if (!o || o.app !== 'repsmith' || !Array.isArray(o.sessions)) { toast(t('importErr')); return; }
+  if (!o || o.app !== 'repsmith' || !Array.isArray(o.sessions) || (o.schema && o.schema > SCHEMA)) { toast(t('importErr')); return; }
+  const arr = v => (Array.isArray(v) ? v : []), obj = v => (v && typeof v === 'object' && !Array.isArray(v) ? v : {});
   ask(t('importQ'), async () => {
-    S.settings = { ...S.settings, ...o.settings }; S.templates = o.templates || []; S.sessions = o.sessions || [];
-    S.notes = o.notes || {}; S.customExercises = o.customExercises || []; S.active = o.active || null; S.measurements = o.measurements || []; S.flags = o.flags || []; S.calib = o.calib || []; S.maxes = o.maxes || {};
-    await persist(...KEYS); rebuildExercises(); toast(t('imported')); go('today');
+    S.settings = { ...S.settings, ...obj(o.settings) };
+    S.templates = arr(o.templates).filter(tp => tp && Array.isArray(tp.days));
+    S.sessions = o.sessions.filter(x => x && Array.isArray(x.items));
+    S.notes = obj(o.notes); S.customExercises = arr(o.customExercises);
+    S.active = o.active && Array.isArray(o.active.items) ? o.active : null;
+    S.measurements = arr(o.measurements); S.flags = arr(o.flags); S.calib = arr(o.calib); S.maxes = obj(o.maxes);
+    rebuildExercises(); normTemplates();
+    await persist(...KEYS); toast(t('imported')); go('today');
   }, { yes: t('confirm') });
 }
 
