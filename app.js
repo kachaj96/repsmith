@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.10.0';
+const VERSION = '0.10.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -447,6 +447,7 @@ const I = {
   up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
   cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
   tally: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><rect x="22" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><rect x="34" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><rect x="46" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><path d="M5 46 L59 18" stroke="#FF9F70" stroke-width="7" stroke-linecap="round"/></svg>',
 };
@@ -1295,7 +1296,7 @@ function setGrid(it) {
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
     return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
       <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
-      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
+      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}${p && normRpe(p.rpe) ? `<small>@${esc(fmtN(normRpe(p.rpe)))}</small>` : ''}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
   return `<div class="sets"><div class="set-head"><span>${esc(t('sets'))}</span><span>${esc(t('prev'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
@@ -1409,7 +1410,7 @@ function vWorkout() {
     const prCard = prSets.length ? `<div class="pr-card ${S._justPR === it.id ? 'pop' : ''}"><b>PR</b><span>${esc(fmtSet(prSets[prSets.length - 1], ex))} · ${esc(prLabel([...new Set(prSets.flatMap(x => x.pr))]))}</span></div>` : '';
     return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
       <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}</div>
-      <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></div>
+      <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><span class="ex-tools"><button class="icon-btn note-ic ${note && note.text ? 'has' : ''}" data-a="note" data-v="${esc(it.exId)}" aria-label="${esc(t('note'))}">${I.note}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div>
       ${prCard}
       ${it.sug || hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
       ${sugLine(it)}

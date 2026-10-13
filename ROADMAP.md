@@ -94,6 +94,10 @@ Spokojniejszy wygląd i momenty nagrody.
 - Historia: jeden przełącznik (Treningi | Biegi), kalendarz i dodawanie jako ikony. Postęp: jeden duży wynik na ćwiczenie, rekordy, objętość i ostatnie rekordy zwinięte.
 - Plan: akcje wiersza w menu "...", ustawienia planu i objętość zwinięte. Ustawienia w sekcjach.
 
+## v0.10.1 – zrobione
+- Ikona notatki przy każdym ćwiczeniu na treningu (z kropką, gdy notatka istnieje).
+- Kolumna "Poprzednio" pokazuje też RPE z poprzedniego razu, jeśli było wpisane.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").
