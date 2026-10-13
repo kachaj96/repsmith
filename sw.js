@@ -1,7 +1,7 @@
 /* Repsmith service worker: app shell offline, network-first for the shell so updates arrive. */
-const CACHE = 'repsmith-v0.8.2';
+const CACHE = 'repsmith-v0.9.0';
 const NET_WAIT = 4000;
-const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'bodymap.js', 'plans.js', 'blocks.js', 'gear.js', 'coach.js', 'data/exercises.json', 'manifest.webmanifest',
+const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'bodymap.js', 'plans.js', 'blocks.js', 'gear.js', 'coach.js', 'runs.js', 'data/exercises.json', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
 
 self.addEventListener('install', e => {

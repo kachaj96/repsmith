@@ -430,3 +430,8 @@ button.linkish { background: none; border: 0; padding: 0; color: var(--accent); 
 .why p { margin: 0; line-height: 1.5; }
 .why-src ol { margin: 6px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
 .why-src a { color: var(--accent); word-break: break-all; }
+
+/* runs */
+.chart .cb { fill: var(--accent); }
+.chart .ch { fill: transparent; cursor: pointer; }
+.chart .ch:active { fill: color-mix(in srgb, var(--accent) 12%, transparent); }

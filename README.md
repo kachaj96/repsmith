@@ -1,4 +1,4 @@
-# Repsmith v0.8.2
+# Repsmith v0.9.0
 
 Autor: Adrian Drożdżyński
 
@@ -8,7 +8,7 @@ Dziennik treningowy jako PWA. Działa offline, dane trzyma lokalnie na telefonie
 
 1. Załóż konto na github.com, jeśli go nie masz.
 2. Kliknij **New repository**, nazwij je np. `repsmith`, ustaw **Public**, utwórz.
-3. Na stronie repozytorium kliknij **uploading an existing file** i przeciągnij **całą zawartość** tego folderu (`index.html`, `app.js`, `plans.js`, `blocks.js`, `gear.js`, `coach.js`, `bodymap.js`, `app.css`, `sw.js`, `manifest.webmanifest`, foldery `data` i `icons`). Zatwierdź **Commit changes**.
+3. Na stronie repozytorium kliknij **uploading an existing file** i przeciągnij **całą zawartość** tego folderu (`index.html`, `app.js`, `plans.js`, `blocks.js`, `gear.js`, `coach.js`, `runs.js`, `bodymap.js`, `app.css`, `sw.js`, `manifest.webmanifest`, foldery `data` i `icons`). Zatwierdź **Commit changes**.
 4. Wejdź w **Settings → Pages**. W **Source** wybierz **Deploy from a branch**, branch `main`, folder `/ (root)`, **Save**.
 5. Po 1–2 minutach aplikacja będzie pod adresem `https://<twoj-login>.github.io/repsmith/`.
 
@@ -47,5 +47,6 @@ Ustawienia → na dole numer wersji. Jeśli po aktualizacji widać starą: zamkn
 - `app.js` – interfejs i logika dziennika, bez frameworków i bez kroku budowania.
 - `plans.js` – biblioteka 25 planów, pytania kreatora, pakiety dodatkowe i zamiany (generowane z blueprintu planów).
 - `coach.js` – selektor planu, budowanie planu, silnik progresji, objętość, sygnały, bloki i deload.
+- `runs.js` – dziennik biegów: walidacja dystansu, tempa, czasu i tętna, statystyki tygodniowe i rekordy.
 - `bodymap.js` – sylwetka mięśni z [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter), licencja MIT, © 2022 ELABBASSI Hicham (pełna treść w `LICENSES.md`).
-- Format kopii: `{ app: "repsmith", schema: 1, settings, templates, sessions, notes, customExercises, active, measurements, flags, calib }`.
+- Format kopii: `{ app: "repsmith", schema: 1, settings, templates, sessions, notes, customExercises, active, measurements, flags, calib, maxes, runs }`.
