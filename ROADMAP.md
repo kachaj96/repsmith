@@ -79,6 +79,9 @@ Poprawki po przeglądzie kodu.
 - Kopia zapasowa obejmuje biegi.
 - Dalej: interwały i inne rodzaje biegów (model danych ma już pole rodzaju).
 
+## v0.9.1 – zrobione
+- Notatka do biegu (do 500 znaków), widoczna w historii biegów.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

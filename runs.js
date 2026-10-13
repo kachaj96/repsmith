@@ -1,9 +1,9 @@
 'use strict';
 /* Repsmith runs: manual run log. Pure functions, no DOM.
-   A run: { id, name, type, date, distM, paceSec, durS, hr, felt }. Distance in meters, pace in seconds per km, duration in seconds.
+   A run: { id, name, type, date, distM, paceSec, durS, hr, felt, note }. Distance in meters, pace in seconds per km, duration in seconds.
    type is a free key so more kinds (tempo, intervals with a segments list) can be added without a migration. */
 (function () {
-const LIM = { distMin: 100, distMax: 500000, paceMin: 120, paceMax: 1200, hrMin: 30, hrMax: 230, durMax: 24 * 3600 };
+const LIM = { distMin: 100, distMax: 500000, paceMin: 120, paceMax: 1200, hrMin: 30, hrMax: 230, noteMax: 500, durMax: 24 * 3600 };
 const TYPES = ['easy', 'long'];
 const DAY = 864e5;
 const num = v => { if (v === '' || v == null) return null; const n = parseFloat(String(v).replace(',', '.')); return Number.isFinite(n) ? n : null; };
@@ -55,7 +55,7 @@ function build(i) {
   if (!blank(i.hr)) { hr = int(i.hr); if (hr == null || hr < LIM.hrMin || hr > LIM.hrMax) return { err: 'hr', min: LIM.hrMin, max: LIM.hrMax }; }
   const felt = i.felt >= 1 && i.felt <= 10 ? Math.round(i.felt) : null;
   const type = TYPES.includes(i.type) ? i.type : 'easy';
-  return { run: { name: String(i.name || '').trim().slice(0, 60), type, date: i.date, distM, paceSec, durS, hr, felt } };
+  return { run: { name: String(i.name || '').trim().slice(0, 60), type, date: i.date, distM, paceSec, durS, hr, felt, note: String(i.note || '').trim().slice(0, LIM.noteMax) } };
 }
 
 /* live hint while typing: what pace or time the entered numbers imply (null = nothing to say yet) */

@@ -28,6 +28,8 @@ eq(R.build({ ...base, pMin: '', pSec: '', tM: '75', tS: '0' }).err, 'time', 'min
 eq(R.build({ ...base, pMin: '', pSec: '', tM: '5', tS: '0' }).err, 'mismatch', 'derived pace out of range');
 eq(R.build({ ...base, hr: '20' }).err, 'hr', 'hr too low'); eq(R.build({ ...base, hr: '300' }).err, 'hr', 'hr too high'); eq(R.build({ ...base, hr: '14x' }).err, 'hr', 'hr junk');
 ok(R.build({ ...base, hr: '' }).run.hr === null, 'hr optional'); ok(R.build({ ...base, felt: null }).run.felt === null, 'felt optional'); ok(R.build({ ...base, type: 'zzz' }).run.type === 'easy', 'unknown type falls back');
+/* note */
+ok(R.build({ ...base, note: '  windy  ' }).run.note === 'windy', 'note trimmed'); ok(R.build({ ...base, note: 'x'.repeat(900) }).run.note.length === 500, 'note capped'); ok(R.build(base).run.note === '', 'note optional');
 /* hint */
 eq(R.hint({ ...base, pMin: '5', pSec: '0', dist: '10' }), { time: '50:00' }, 'hint time'); eq(R.hint({ ...base, pMin: '', pSec: '', tM: '50', tS: '0', dist: '10' }), { pace: '5:00' }, 'hint pace'); eq(R.hint({ ...base, dist: '' }), null, 'no hint without distance');
 /* stats */

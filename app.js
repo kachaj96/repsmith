@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.9.0';
+const VERSION = '0.9.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -400,7 +400,7 @@ Object.assign(STR.pl, {
   runErrNeed: 'Podaj tempo albo czas.', runErrHr: (a, b) => `Tętno: od ${a} do ${b} bpm.`, runErrDate: 'Data nie może być z przyszłości.',
   runErrMismatch: (exp, got, pace, km) => (exp ? `Czas ${got} nie pasuje do ${km} km w tempie ${pace}/km (wychodzi ${exp}).` : `Czas ${got} na ${km} km daje tempo ${pace}/km, poza zakresem.`) + ' Popraw dystans, tempo albo czas.',
   runFixPace: 'Zostaw tempo, przelicz czas', runFixTime: 'Zostaw czas, przelicz tempo',
-  runNone: 'Brak biegów. Zapisz pierwszy.', runDelQ: 'Usunąć ten bieg?', runDelete: 'Usuń bieg',
+  runNotePh: 'Jak się biegło, trasa, pogoda...', runNone: 'Brak biegów. Zapisz pierwszy.', runDelQ: 'Usunąć ten bieg?', runDelete: 'Usuń bieg',
   runWeek: 'Ten tydzień', runMonth: 'Ten miesiąc', runTotal: 'Razem', runCount: 'Biegi', runLongest: 'Najdłuższy bieg', runBestPace: 'Najszybsze tempo (od 1 km)',
   runWeekly: 'Dystans tygodniowo (km)', runPaceChart: 'Średnie tempo (min/km, wyżej = szybciej)', runHrChart: 'Średnie tętno (bpm)', runRecords: 'Rekordy', runWeekOf: d => `Tydzień od ${d}`, runStats: 'Statystyki',
   pastWorkout: 'Zapisz wcześniejszy trening', pastHint: 'Wybierz datę treningu przy zakończeniu.', sumDur: 'Czas trwania (min)', durErr: 'Czas trwania: 1-1440 min.',
@@ -413,7 +413,7 @@ Object.assign(STR.en, {
   runErrNeed: 'Enter pace or time.', runErrHr: (a, b) => `Heart rate: ${a} to ${b} bpm.`, runErrDate: 'The date cannot be in the future.',
   runErrMismatch: (exp, got, pace, km) => (exp ? `Time ${got} does not match ${km} km at ${pace}/km (that gives ${exp}).` : `Time ${got} over ${km} km gives a pace of ${pace}/km, out of range.`) + ' Fix the distance, pace or time.',
   runFixPace: 'Keep pace, recalculate time', runFixTime: 'Keep time, recalculate pace',
-  runNone: 'No runs yet. Log your first one.', runDelQ: 'Delete this run?', runDelete: 'Delete run',
+  runNotePh: 'How it went, route, weather...', runNone: 'No runs yet. Log your first one.', runDelQ: 'Delete this run?', runDelete: 'Delete run',
   runWeek: 'This week', runMonth: 'This month', runTotal: 'Total', runCount: 'Runs', runLongest: 'Longest run', runBestPace: 'Fastest pace (1 km and up)',
   runWeekly: 'Weekly distance (km)', runPaceChart: 'Avg pace (min/km, higher = faster)', runHrChart: 'Avg heart rate (bpm)', runRecords: 'Records', runWeekOf: d => `Week of ${d}`, runStats: 'Stats',
   pastWorkout: 'Log a past workout', pastHint: 'Pick the workout date when you finish.', sumDur: 'Duration (min)', durErr: 'Duration: 1-1440 min.',
@@ -1625,7 +1625,7 @@ function calView() {
 }
 function runRow(r) {
   const meta = [fmtDate(r.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }), `${fmtKmL(r.distM)} km`, `${RR.fmtPace(r.paceSec)} /km`, RR.fmtDur(r.durS), r.hr ? `${r.hr} bpm` : ''].filter(Boolean).join(' · ');
-  return `<button class="list-btn row" data-a="run-edit" data-v="${r.id}"><span class="grow"><span class="name">${esc(r.name)}</span><br><span class="meta" style="white-space:normal">${esc(meta)}</span></span>${r.felt ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${r.felt}/10">${r.felt}<small>/10</small></span>` : ''}</button>`;
+  return `<button class="list-btn row" data-a="run-edit" data-v="${r.id}"><span class="grow"><span class="name">${esc(r.name)}</span><br><span class="meta" style="white-space:normal">${esc(meta)}</span>${r.note ? `<span class="run-note">${esc(r.note)}</span>` : ''}</span>${r.felt ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${r.felt}/10">${r.felt}<small>/10</small></span>` : ''}</button>`;
 }
 function vHistory() {
   const tab = S.histTab === 'runs' ? 'runs' : 'workouts';
@@ -1963,10 +1963,10 @@ function measureSheet(sh) {
 }
 function runDraft(r) {
   const unit = S.settings.runUnit === 'm' ? 'm' : 'km';
-  if (!r) return { name: '', type: 'easy', date: isoDate(now()), unit, dist: '', pMin: '', pSec: '', tH: '', tM: '', tS: '', hr: '', felt: null };
+  if (!r) return { name: '', type: 'easy', date: isoDate(now()), unit, dist: '', pMin: '', pSec: '', tH: '', tM: '', tS: '', hr: '', felt: null, note: '' };
   return { name: r.name, type: r.type, date: isoDate(r.date), unit, dist: unit === 'km' ? String(r.distM / 1000) : String(r.distM),
     pMin: String(Math.floor(r.paceSec / 60)), pSec: String(r.paceSec % 60),
-    tH: r.durS >= 3600 ? String(Math.floor(r.durS / 3600)) : '', tM: String(Math.floor((r.durS % 3600) / 60)), tS: String(r.durS % 60), hr: r.hr ? String(r.hr) : '', felt: r.felt || null };
+    tH: r.durS >= 3600 ? String(Math.floor(r.durS / 3600)) : '', tM: String(Math.floor((r.durS % 3600) / 60)), tS: String(r.durS % 60), hr: r.hr ? String(r.hr) : '', felt: r.felt || null, note: r.note || '' };
 }
 const runCalcText = d => { const h = RR.hint(d); return h ? (h.time ? t('runCalcTime', h.time) : t('runCalcPace', h.pace)) : ''; };
 function runSheet(sh) {
@@ -1986,6 +1986,7 @@ function runSheet(sh) {
       <div class="muted small" id="run-calc" style="margin-top:6px;min-height:20px">${esc(runCalcText(d))}</div></div>
     <div><label for="run-hr">${esc(t('runHr'))}</label><input id="run-hr" data-f="run" data-k="hr" data-san="int" inputmode="numeric" autocomplete="off" maxlength="3" value="${esc(d.hr)}"></div>
     <div><label>${esc(t('difficulty'))}</label><div class="diff" role="group" aria-label="${esc(t('difficulty'))}">${Array.from({ length: 10 }, (_, i) => i + 1).map(v => `<button class="${d.felt === v ? 'on' : ''}" data-a="run-felt" data-v="${v}" aria-pressed="${d.felt === v}">${v}</button>`).join('')}</div></div>
+    <div><label for="run-note">${esc(t('note'))}</label><textarea id="run-note" data-f="run" data-k="note" rows="3" maxlength="500" placeholder="${esc(t('runNotePh'))}">${esc(d.note)}</textarea></div>
     ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
     ${sh.fix ? `<div class="btn-row wrap"><button class="btn small" data-a="run-fix" data-v="pace">${esc(t('runFixPace'))}</button><button class="btn small" data-a="run-fix" data-v="time">${esc(t('runFixTime'))}</button></div>` : ''}
     <div class="btn-row">${sh.editId ? `<button class="btn danger" data-a="run-del">${esc(t('runDelete'))}</button>` : ''}<button class="btn primary" data-a="run-save">${esc(t('save'))}</button></div>`;
