@@ -82,6 +82,18 @@ Poprawki po przeglądzie kodu.
 ## v0.9.1 – zrobione
 - Notatka do biegu (do 500 znaków), widoczna w historii biegów.
 
+## v0.10.0 – zrobione
+Spokojniejszy wygląd i momenty nagrody.
+- Jeden akcent: pomarańcz tylko dla głównego przycisku, zaznaczenia nawigacji, wykonanej serii, rekordów i wykresów. Aktywne chipy i przełączniki są jasną powierzchnią, ocena treningu jest szara.
+- Skala czcionek: 11 / 14 / 17 / 22 / 28 / 40 / 56 px. Duże litery tylko w nagłówkach i głównym przycisku.
+- Dziś: nazwa dnia, tydzień jako kropki, lista ćwiczeń, jeden duży przycisk. "Pusty trening" i "Zapisz bieg" jako cichy rząd. Przypomnienie o kopii to wąska linia na dole.
+- Trening: pusta notatka znika, dodatkowe akcje (metoda, kalibracja, talerze, zamiana, notatka) w menu "...". Karta rekordu (PR) pod nazwą ćwiczenia, różnica ciężaru względem ostatniego razu w podpowiedzi.
+- Tryb skupienia (Ustawienia, domyślnie wyłączony): otwarte tylko bieżące ćwiczenie, po skończeniu przechodzi do następnego.
+- Tryb spokojny (Ustawienia, domyślnie wyłączony): bez wibracji, animacji nagród i ekranu podsumowania.
+- Po treningu ekran podsumowania: rekordy albo objętość z porównaniem do ostatniego razu, kreski tygodnia jak w logo, seria tygodni. Po biegu krótkie podsumowanie z tempem na tle średniej z 30 dni.
+- Historia: jeden przełącznik (Treningi | Biegi), kalendarz i dodawanie jako ikony. Postęp: jeden duży wynik na ćwiczenie, rekordy, objętość i ostatnie rekordy zwinięte.
+- Plan: akcje wiersza w menu "...", ustawienia planu i objętość zwinięte. Ustawienia w sekcjach.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

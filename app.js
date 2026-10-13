@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.9.1';
+const VERSION = '0.10.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -400,6 +400,10 @@ Object.assign(STR.pl, {
   runErrNeed: 'Podaj tempo albo czas.', runErrHr: (a, b) => `Tętno: od ${a} do ${b} bpm.`, runErrDate: 'Data nie może być z przyszłości.',
   runErrMismatch: (exp, got, pace, km) => (exp ? `Czas ${got} nie pasuje do ${km} km w tempie ${pace}/km (wychodzi ${exp}).` : `Czas ${got} na ${km} km daje tempo ${pace}/km, poza zakresem.`) + ' Popraw dystans, tempo albo czas.',
   runFixPace: 'Zostaw tempo, przelicz czas', runFixTime: 'Zostaw czas, przelicz tempo',
+  doneRec: n => plural(n, 'rekord', 'rekordy', 'rekordów'), doneFirst: 'Pierwszy zapis tego treningu', doneVsLast: 'vs ostatnio', doneWeek: n => `${n}. trening w tym tygodniu`, doneStreak: n => (n === 1 ? 'tydzień z rzędu' : 'tyg. z rzędu'), doneDetails: 'Szczegóły', doneClose: 'Gotowe',
+  runDoneTitle: 'Dobry bieg', runDonePace: (p, avg, d) => (d > 0 ? `Tempo ${p}/km, ${d} s szybciej niż Twoja średnia z 30 dni (${avg}).` : d < 0 ? `Tempo ${p}/km, ${-d} s wolniej niż Twoja średnia z 30 dni (${avg}).` : `Tempo ${p}/km, tak jak Twoja średnia z 30 dni.`), runDoneLongest: 'Najdłuższy bieg w tym miesiącu.', runDoneWeek: (n, km) => `W tym tygodniu: ${n}× biegu, ${km} km.`,
+  progSince: (d, x) => `${x} kg od ${d}`, planSettings: 'Ustawienia planu', secWorkout: 'Trening', secSound: 'Dźwięk', secData: 'Dane i kopia',
+  focusMode: 'Tryb skupienia', focusModeD: 'Na treningu otwarte jest tylko bieżące ćwiczenie, reszta zwija się do jednej linii.', calmMode: 'Tryb spokojny', calmModeD: 'Bez wibracji, animacji nagród i ekranu podsumowania po treningu.',
   runNotePh: 'Jak się biegło, trasa, pogoda...', runNone: 'Brak biegów. Zapisz pierwszy.', runDelQ: 'Usunąć ten bieg?', runDelete: 'Usuń bieg',
   runWeek: 'Ten tydzień', runMonth: 'Ten miesiąc', runTotal: 'Razem', runCount: 'Biegi', runLongest: 'Najdłuższy bieg', runBestPace: 'Najszybsze tempo (od 1 km)',
   runWeekly: 'Dystans tygodniowo (km)', runPaceChart: 'Średnie tempo (min/km, wyżej = szybciej)', runHrChart: 'Średnie tętno (bpm)', runRecords: 'Rekordy', runWeekOf: d => `Tydzień od ${d}`, runStats: 'Statystyki',
@@ -413,6 +417,10 @@ Object.assign(STR.en, {
   runErrNeed: 'Enter pace or time.', runErrHr: (a, b) => `Heart rate: ${a} to ${b} bpm.`, runErrDate: 'The date cannot be in the future.',
   runErrMismatch: (exp, got, pace, km) => (exp ? `Time ${got} does not match ${km} km at ${pace}/km (that gives ${exp}).` : `Time ${got} over ${km} km gives a pace of ${pace}/km, out of range.`) + ' Fix the distance, pace or time.',
   runFixPace: 'Keep pace, recalculate time', runFixTime: 'Keep time, recalculate pace',
+  doneRec: n => (n === 1 ? 'record' : 'records'), doneFirst: 'First log of this workout', doneVsLast: 'vs last time', doneWeek: n => `Workout ${n} this week`, doneStreak: n => (n === 1 ? 'week streak' : 'wk streak'), doneDetails: 'Details', doneClose: 'Done',
+  runDoneTitle: 'Nice run', runDonePace: (p, avg, d) => (d > 0 ? `Pace ${p}/km, ${d} s faster than your 30-day average (${avg}).` : d < 0 ? `Pace ${p}/km, ${-d} s slower than your 30-day average (${avg}).` : `Pace ${p}/km, same as your 30-day average.`), runDoneLongest: 'Longest run this month.', runDoneWeek: (n, km) => `This week: ${n} ${n === 1 ? 'run' : 'runs'}, ${km} km.`,
+  progSince: (d, x) => `${x} kg since ${d}`, planSettings: 'Plan settings', secWorkout: 'Workout', secSound: 'Sound', secData: 'Data and backup',
+  focusMode: 'Focus mode', focusModeD: 'During a workout only the current exercise is open, the rest collapse to one line.', calmMode: 'Calm mode', calmModeD: 'No vibration, reward animations or post-workout summary screen.',
   runNotePh: 'How it went, route, weather...', runNone: 'No runs yet. Log your first one.', runDelQ: 'Delete this run?', runDelete: 'Delete run',
   runWeek: 'This week', runMonth: 'This month', runTotal: 'Total', runCount: 'Runs', runLongest: 'Longest run', runBestPace: 'Fastest pace (1 km and up)',
   runWeekly: 'Weekly distance (km)', runPaceChart: 'Avg pace (min/km, higher = faster)', runHrChart: 'Avg heart rate (bpm)', runRecords: 'Records', runWeekOf: d => `Week of ${d}`, runStats: 'Stats',
@@ -437,6 +445,8 @@ const I = {
   left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
   tally: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><rect x="22" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><rect x="34" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><rect x="46" y="10" width="7" height="44" rx="3.5" fill="#F3ECF1"/><path d="M5 46 L59 18" stroke="#FF9F70" stroke-width="7" stroke-linecap="round"/></svg>',
 };
@@ -460,6 +470,9 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const isoDate = ts => { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 const RR = window.RepsmithRuns;
 const fmtKmL = m => RR.fmtKm(m, S.settings.lang === 'pl' ? ',' : '.');
+/* collapsible section; open state survives re-renders */
+const disc = (sec, title, body, meta = '') => `<details class="disc" data-sec="${sec}" ${S.openSec[sec] ? 'open' : ''}><summary><span>${esc(title)}</span>${meta ? `<span class="meta">${esc(meta)}</span>` : ''}</summary><div class="disc-body">${body}</div></details>`;
+const tabsBar = (items, cur, action) => `<div class="tabs" role="tablist">${items.map(([k, label]) => `<button role="tab" aria-selected="${cur === k}" class="${cur === k ? 'on' : ''}" data-a="${action}" data-v="${k}">${esc(label)}</button>`).join('')}</div>`;
 
 /* ---------- storage (IndexedDB, falls back to memory) ---------- */
 const DB = {
@@ -508,7 +521,7 @@ const S = {
     readiness: true, flagsOn: true, deloadEvery: 5, regressPct: 5, fatigueCut: 30, effortDefault: 'rir' },
   templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [], maxes: {}, runs: [],
   data: null, ex: new Map(),
-  view: 'today', viewArg: null, sheet: null, timer: null, toast: null,
+  view: 'today', viewArg: null, sheet: null, timer: null, toast: null, openSec: {}, focusId: null,
 };
 
 function rebuildExercises() {
@@ -859,7 +872,7 @@ function endCard(tp, bi) {
   const res = testResults(tp, bi.cycle);
   const ids = Object.keys(res);
   const rows = ids.map(id => { const o = oneRm(id); const r = res[id]; return `<div class="row"><span class="grow"><span class="name">${esc(exName(id))}: ${esc(fmtN(r.kg))} kg</span><br><span class="meta">${r.r > 1 ? esc(t('testFrom', fmtN(r.w), r.r)) + ' · ' : ''}${esc(o ? t('testWas', fmtN(o.kg)) : t('testNoMax'))}</span></span><button class="btn small" data-a="test-save" data-v="${esc(id)}">${esc(t('testSave'))}</button></div>`; }).join('');
-  return `<div class="info"><h3 style="font-size:18px">${esc(t('endTitle'))}</h3><div>${esc(t('endText', bi.weeks))}</div>
+  return `<div class="info"><h3>${esc(t('endTitle'))}</h3><div>${esc(t('endText', bi.weeks))}</div>
     ${ids.length ? `<div><div class="eyebrow small" style="margin-top:6px">${esc(t('testTitle'))}</div>${rows}${ids.length > 1 ? `<button class="btn small block" data-a="test-save" data-v="">${esc(t('testSaveAll'))}</button>` : ''}</div>` : ''}
     <div class="btn-row wrap"><button class="btn small primary" data-a="cyc-again" data-v="${tp.id}">${esc(t('endRepeat'))}</button><button class="btn small" data-a="cyc-open" data-v="${tp.id}">${esc(t('endCycle'))}</button><button class="btn small ghost" data-a="nav" data-v="plans">${esc(t('endPlans'))}</button></div></div>`;
 }
@@ -973,6 +986,8 @@ let audioCtx = null, silentEl = null, audioUnlocked = false;
 /* tiny silent WAV (0.5 s) used to keep iOS in "media playback" mode while a rest timer runs */
 const SILENT_WAV = (() => { const n = 4000, b = new Uint8Array(44 + n); const w = (o, v, l) => { for (let i = 0; i < l; i++) b[o + i] = (v >> (8 * i)) & 255; }; [...'RIFF'].forEach((c, i) => b[i] = c.charCodeAt(0)); w(4, 36 + n, 4); [...'WAVEfmt '].forEach((c, i) => b[8 + i] = c.charCodeAt(0)); w(16, 16, 4); w(20, 1, 2); w(22, 1, 2); w(24, 8000, 4); w(28, 8000, 4); w(32, 1, 2); w(34, 8, 2); [...'data'].forEach((c, i) => b[36 + i] = c.charCodeAt(0)); w(40, n, 4); for (let i = 44; i < b.length; i++) b[i] = 128; let bin = ''; b.forEach(x => bin += String.fromCharCode(x)); return 'data:audio/wav;base64,' + btoa(bin); })();
 function audioSession(type) { try { if (navigator.audioSession) navigator.audioSession.type = type; } catch (e) {} }
+/* short haptic tick; off in calm mode */
+function buzz(pattern) { if (S.settings.calm === true) return; try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (e) {} }
 function ensureAudio() {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1095,18 +1110,19 @@ function render() {
     case 'planlib': html = vPlanLib(); break;
     case 'newplan': html = vNewPlan(); break;
     case 'planprev': html = vPlanPrev(); break;
+    case 'done': html = vDone(); break;
     default: html = vToday();
   }
   app.innerHTML = html + (S.view === 'workout' || S.view === 'wizard' ? '' : nav());
   if (S._navAnim && app.firstElementChild) app.firstElementChild.classList.add('enter');
-  S._navAnim = false; S._justDone = null;
+  S._navAnim = false; S._justDone = null; S._justPR = null;
   renderTimer();
   renderSheet();
   syncWake();
   if (S.view === 'library') { const i = $('#libq'); if (i && S._libFocus) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
 }
 function nav() {
-  const tab = { today: 'today', plans: 'plans', plan: 'plans', wizard: 'plans', wizres: 'plans', planlib: 'plans', planprev: 'plans', history: 'history', session: 'history', library: 'library', progress: 'progress' }[S.view];
+  const tab = { today: 'today', done: 'today', plans: 'plans', plan: 'plans', wizard: 'plans', wizres: 'plans', planlib: 'plans', planprev: 'plans', history: 'history', session: 'history', library: 'library', progress: 'progress' }[S.view];
   const b = (v, icon, label) => `<button class="${tab === v ? 'on' : ''}" data-a="nav" data-v="${v}" aria-current="${tab === v ? 'page' : 'false'}">${I[icon]}${esc(t(label))}</button>`;
   return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'home', 'today')}${b('plans', 'list', 'plans')}${b('progress', 'chart', 'progress')}${b('history', 'clock', 'history')}${b('library', 'dumbbell', 'library')}</div></nav>`;
 }
@@ -1121,7 +1137,7 @@ function resumeBanner() {
 /* ---------- view: today ---------- */
 function introCard() {
   if (S.settings.seenIntro || S.sessions.length >= 3) return '';
-  return `<div class="info"><h3 style="font-size:18px">${esc(t('introTitle'))}</h3><div>${esc(t('introText'))}</div><div><button class="btn small" data-a="intro-ok">${esc(t('introOk'))}</button></div></div>`;
+  return `<div class="info"><h3>${esc(t('introTitle'))}</h3><div>${esc(t('introText'))}</div><div><button class="btn small" data-a="intro-ok">${esc(t('introOk'))}</button></div></div>`;
 }
 const DAY = 864e5;
 function recentCard() {
@@ -1147,7 +1163,13 @@ function backupDue() {
 function backupCard() {
   if (S.active) return '';
   const due = backupDue(); if (!due) return '';
-  return `<div class="banner coach"><div class="grow"><div class="eyebrow small">${esc(t('backup'))}</div><div>${esc(t('bkRemind', due.n, due.d))}</div><div class="btn-row wrap"><button class="btn small primary" data-a="bk-now">${esc(t('bkNow'))}</button><button class="btn small ghost" data-a="bk-later">${esc(t('bkLater'))}</button></div></div></div>`;
+  return `<div class="slim"><span>${esc(t('bkRemind', due.n, due.d))}</span><span class="slim-act"><button class="linkish" data-a="bk-now">${esc(t('bkNow'))}</button><button class="linkish mute" data-a="bk-later">${esc(t('bkLater'))}</button></span></div>`;
+}
+const quietRow = (empty = true) => `<div class="quiet">${empty ? `<button data-a="start-free">${esc(t('emptyWorkout'))}</button>` : ''}<button data-a="run-new">${esc(t('runLog'))}</button></div>`;
+function weekBar(tpl, wc) {
+  const target = tpl ? (tpl.perWeek || tpl.days.length) : 0;
+  if (target) return `<div class="week-row"><div class="progress">${Array.from({ length: target }, (_, i) => `<span class="${i < wc ? 'on' : ''}"></span>`).join('')}</div><div class="lbl"><span>${esc(t('thisWeek'))}</span><span>${esc(t('ofWorkouts', Math.min(wc, target), target))}</span></div></div>`;
+  return wc ? `<div class="sub small">${esc(t('thisWeek'))}: ${esc(t('workoutsDone', wc))}</div>` : '';
 }
 function vToday() {
   const tpl = activeTemplate();
@@ -1157,34 +1179,29 @@ function vToday() {
   const tbi = tpl ? C.blockInfo(tpl) : null;
   if (tpl && day && tbi && tbi.finished && !S.active) {
     main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(tpl.name)}</h1></div>${endCard(tpl, tbi)}
-      <button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button>${runBtn()}`;
+      ${quietRow()}`;
   } else if (tpl && day) {
     const items = day.items.map(it => wkItem(it, tbi)).filter(it => !skipped(it));
     const rows = items.slice(0, 5).map(it => `<div class="row"><span class="name grow">${esc(exName(it.exId))}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('');
     const more = items.length > 5 ? `<div class="row"><span class="meta">+ ${items.length - 5}</span></div>` : '';
     const bi = tbi;
-    const blk = bi ? `<div class="blk"><span>${esc(weekLabel(bi))}</span>${bi.deload ? `<span class="tag p">${esc(dlLabel(bi))}</span>` : ''}</div>` : '';
-    main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(day.name)}</h1><div class="sub" style="margin-top:8px">${esc(tpl.name)} · ${esc(t('exercisesN', items.length))}</div>${blk}</div>
+    main = `<div class="hero"><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(day.name)}</h1><div class="sub">${esc(tpl.name)} · ${esc(t('exercisesN', items.length))}${bi ? ' · ' + esc(weekLabel(bi)) : ''}${bi && bi.deload ? ` <span class="tag p">${esc(dlLabel(bi))}</span>` : ''}</div></div>
+      ${weekBar(tpl, wc)}
       ${coachCards(tpl, bi)}
       ${items.length ? `<div class="card">${rows}${more}</div>` : `<div class="empty">${esc(t('planEmptyDay'))}</div>`}
-      ${S.active ? '' : `<div class="btn-row" style="flex-direction:column"><button class="btn primary block" data-a="start-day">${esc(t('startWorkout'))}</button><button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button></div>`}
-      ${runBtn()}
+      ${S.active ? '' : `<button class="btn primary block" data-a="start-day">${esc(t('startWorkout'))}</button>${quietRow()}`}
       ${tpl.days.length > 1 ? `<div class="chips" role="group" aria-label="${esc(t('day'))}">${tpl.days.map(d => `<button class="chip ${d.id === day.id ? 'on' : ''}" data-a="pick-day" data-v="${d.id}">${esc(d.name)}</button>`).join('')}</div>` : ''}`;
   } else {
     main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(t('freeTitle'))}</h1><div class="sub" style="margin-top:8px">${esc(t('freeText'))}</div></div>
       ${S.active ? '' : `<div><button class="btn primary block" data-a="start-free">${esc(t('startFree'))}</button><div class="muted small" style="margin-top:8px;text-align:center">${esc(t('startFreeHint'))}</div></div>`}
-      ${runBtn()}
+      ${S.active ? '' : quietRow(false)}
       ${S.active ? '' : recentCard()}
       ${coachCards(null, null)}
-      <div class="info"><h3 style="font-size:18px">${esc(t('planCardTitle'))}</h3><div>${esc(t('planCardText'))}</div><div><button class="btn small" data-a="nav" data-v="plans">${esc(t('planCardBtn'))}</button></div></div>`;
+      <div class="info"><h3>${esc(t('planCardTitle'))}</h3><div>${esc(t('planCardText'))}</div><div><button class="btn small" data-a="nav" data-v="plans">${esc(t('planCardBtn'))}</button></div></div>`;
   }
-  const target = tpl ? (tpl.perWeek || tpl.days.length) : 0;
-  const week = target
-    ? `<div><div class="sub small" style="display:flex;justify-content:space-between;margin-bottom:8px"><span>${esc(t('thisWeek'))}</span><span>${esc(t('ofWorkouts', Math.min(wc, target), target))}</span></div><div class="progress">${Array.from({ length: target }, (_, i) => `<span class="${i < wc ? 'on' : ''}"></span>`).join('')}</div></div>`
-    : (wc ? `<div class="sub small">${esc(t('thisWeek'))}: ${esc(t('workoutsDone', wc))}</div>` : '');
-  return `<main class="screen">${topbar()}${resumeBanner()}${introCard()}${backupCard()}${main}${week}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
+  const week = tpl && day && !(tbi && tbi.finished && !S.active) ? '' : weekBar(tpl, wc);
+  return `<main class="screen">${topbar()}${resumeBanner()}${introCard()}${main}${week}${backupCard()}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
 }
-const runBtn = () => `<button class="btn block" data-a="run-new">${esc(t('runLog'))}</button>`;
 function schemeShort(it, simple) {
   const u = targetUnit(it.exId);
   if (it.scheme === 'topback') return `top ${it.reps}${u}${intensityShort(it)} + ${it.backoffSets}×${it.backoffReps || String(it.reps).replace('+', '')}${u}`;
@@ -1207,7 +1224,7 @@ const planMode = tp => (tp && tp.mode === 'simple' ? 'simple' : 'advanced');
 function vPlans() {
   const list = S.templates.map(tp => `<button class="list-btn row" data-a="open-plan" data-v="${tp.id}"><span class="grow"><span class="name">${esc(tp.name)}</span><br><span class="meta">${tp.days.length} × ${esc(t('day').toLowerCase())}</span></span>${tp.id === S.settings.activeTemplateId ? `<span class="tag p">${esc(t('active'))}</span>` : ''}</button>`).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('plans'))}</h1>
-    ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="info"><h3 style="font-size:18px">${esc(t('plansEmptyTitle'))}</h3><div>${esc(t('plansEmptyText'))}</div></div>`}
+    ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="info"><h3>${esc(t('plansEmptyTitle'))}</h3><div>${esc(t('plansEmptyText'))}</div></div>`}
     <button class="btn primary block" data-a="wiz-start">${esc(t('pickPlanWizard'))}</button>
     <button class="btn block" data-a="nav" data-v="planlib">${esc(t('planLib'))}</button>
     <button class="btn block" data-a="new-plan">${esc(t('newPlan'))}</button></main>`;
@@ -1217,30 +1234,29 @@ function vPlan() {
   if (!tp) return vPlans();
   const pbi = C.blockInfo(tp);
   const pv = pbi && pbi.fixed ? pwOf(tp.id, pbi) : 0;
-  const days = tp.days.map((d, di) => `
+  const days = tp.days.map(d => `
     <section class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
       ${d.items.length ? `<div class="muted small">${esc(t('estMin', Math.round(C.sessionMinutes(resolvedDays([d], pv)[0].items.map(i => ({ ...i, kind: C.kindOf(i) }))))))}</div>` : ''}
       <div style="display:flex;gap:8px;align-items:flex-end">
         <div style="flex:1;min-width:0"><label for="dn-${d.id}">${esc(t('dayName'))}</label><input id="dn-${d.id}" data-f="day-name" data-d="${d.id}" value="${esc(d.name)}"></div>
         <button class="icon-btn" data-a="day-menu" data-d="${d.id}" aria-label="${esc(t('edit'))}">${I.more}</button>
       </div>
-      ${d.items.length ? d.items.map((it, ii) => { const g = groupInfo(d.items)[it.id]; const rit = pv ? C.weekItem(it, pv) : it; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${pv && skipped(rit) ? esc(t('skipWeek')) : esc(schemeShort(rit, planMode(tp) === 'simple'))} · ${it.rest} s${C.methodOf(it) && planMode(tp) !== 'simple' ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
-        <button class="icon-btn" data-a="item-up" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('moveUp'))}" ${ii === 0 ? 'disabled' : ''}>${I.up}</button>
-        <button class="icon-btn" data-a="item-link" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('supBtn'))}">${I.link}</button>
-        <button class="icon-btn" data-a="item-del" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('remove'))}">${I.x}</button></div>`; }).join('') : `<div class="muted small">${esc(t('planEmptyDay'))}</div>`}
+      ${d.items.length ? d.items.map(it => { const g = groupInfo(d.items)[it.id]; const rit = pv ? C.weekItem(it, pv) : it; const L = S.link && S.link.where === 'plan' && S.link.dayId === d.id ? S.link : null; return `<div class="row ${g ? 'grp' : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}"><button class="list-btn grow" style="padding:8px 0" data-lp="${it.id}" data-lpd="${d.id}" ${L ? `data-a="link-toggle" data-i="${it.id}"` : `data-a="edit-item" data-d="${d.id}" data-i="${it.id}"`}><span class="grow"><span class="name">${L ? (L.ids.includes(it.id) ? '✓ ' : '○ ') : ''}${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><br><span class="meta">${pv && skipped(rit) ? esc(t('skipWeek')) : esc(schemeShort(rit, planMode(tp) === 'simple'))} · ${it.rest} s${C.methodOf(it) && planMode(tp) !== 'simple' ? ' · ' + esc(methodName(C.methodOf(it))) : ''}</span></span></button>
+        <button class="icon-btn" data-a="plan-item-menu" data-d="${d.id}" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></div>`; }).join('') : `<div class="muted small">${esc(t('planEmptyDay'))}</div>`}
       <button class="btn small" data-a="day-add-ex" data-d="${d.id}">${esc(t('addExercise'))}</button>
     </section>`).join('');
   const isActive = tp.id === S.settings.activeTemplateId;
+  const modeTag = `<button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button>`;
+  const cfg = `<button class="list-btn row" data-a="cyc-open" data-v="${tp.id}" style="border:0"><span class="grow"><span class="meta">${esc(t('cycTitle'))}</span><br><span class="name">${esc(cycleSummary(tp))}</span></span><span class="meta">›</span></button>${planMode(tp) === 'simple' ? '' : planCoachBlock(tp)}`;
   return `<main class="screen">${linkBar()}<div class="topbar"><button class="icon-btn" data-a="nav" data-v="plans" aria-label="${esc(t('back'))}">${I.left}</button><div class="eyebrow">${esc(t('plans'))}</div><button class="icon-btn" data-a="plan-menu" aria-label="${esc(t('edit'))}">${I.more}</button></div>
     <div><label for="pn">${esc(t('planName'))}</label><input id="pn" data-f="plan-name" value="${esc(tp.name)}"></div>
-    ${isActive ? `<div><span class="tag p">${esc(t('active'))}</span> <button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button></div>` : `<button class="btn block" data-a="plan-activate">${esc(t('setActive'))}</button><div><button class="tag" data-a="plan-mode" style="background:none">${esc(planMode(tp) === 'simple' ? t('modeSimple') : t('modeAdv'))}</button></div>`}
-    <div class="card" style="padding:4px 16px"><button class="list-btn row" data-a="cyc-open" data-v="${tp.id}" style="border:0"><span class="grow"><span class="eyebrow small">${esc(t('cycTitle'))}</span><br><span class="name">${esc(cycleSummary(tp))}</span></span><span class="meta">›</span></button></div>
+    ${isActive ? `<div><span class="tag p">${esc(t('active'))}</span> ${modeTag}</div>` : `<button class="btn block" data-a="plan-activate">${esc(t('setActive'))}</button><div>${modeTag}</div>`}
     ${pbi && pbi.finished ? endCard(tp, pbi) : ''}
     ${pv ? weekChips(tp.id, pbi.weeks, pv, pbi.cycle) : ''}
-    ${planMode(tp) === 'simple' ? '' : planCoachBlock(tp)}
     ${days || `<div class="empty">${esc(t('addFirstDay'))}</div>`}
-    ${tallyBlock(resolvedDays(tp.days, pv), tp.perWeek)}
     <button class="btn block" data-a="plan-add-day">${esc(t('addDay'))}</button>
+    ${disc('planCfg', t('planSettings'), cfg, cycleSummary(tp))}
+    ${tp.days.some(d => d.items.length) ? disc('planVol', t('tallyTitle'), tallyBlock(resolvedDays(tp.days, pv), tp.perWeek, true)) : ''}
     <button class="btn primary block" data-a="nav" data-v="plans">${esc(t('done'))}</button>
   </main>`;
 }
@@ -1277,7 +1293,7 @@ function setGrid(it) {
     if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
     else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
-    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
+    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
       <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
       <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
@@ -1287,11 +1303,19 @@ function setGrid(it) {
 function sugLine(it) {
   const g = it.sug; if (!g) return '';
   const ex = S.ex.get(it.exId) || {};
+  let delta = null;
+  if (ex.logging === 'W' && g.load != null) {
+    const prev = previousFor(it.exId, S.active ? S.active.startedAt : now());
+    const ws = prev ? prev.sets.filter(x => x.done && x.kind !== 'warmup').map(x => num(x.weight)).filter(x => x > 0) : [];
+    if (ws.length) delta = Math.round((g.load - Math.max(...ws)) * 100) / 100;
+  }
   const load = g.load != null ? (ex.logging === 'BWX' ? (g.load ? `+${fmtN(g.load)} kg` : 'BW') : `${fmtN(g.load)} kg`) : '';
   const reps = g.reps ? ` × ${g.reps.join('/')}` : g.load != null && (g.why === 'pct' || g.why === 'amrapOk' || g.why === 'amrapLow' || g.why === 'fixed') ? ` × ${it.reps}${targetUnit(it.exId)}` : '';
-  const why = t('why_' + g.why, g.d || {});
-  return `<div class="sug">${load ? `<b>${esc(t('sugToday'))}: ${esc(load + reps)}</b> · ` : ''}${esc(why)}</div>`;
+  const dl = delta ? ` (${delta > 0 ? '+' : '−'}${fmtN(Math.abs(delta))})` : '';
+  const why = delta && g.why === 'up' ? '' : t('why_' + g.why, g.d || {});
+  return `<div class="sug">${load ? `<b>${esc(t('sugToday'))}: ${esc(load + reps + dl)}</b>${why ? ' · ' : ''}` : ''}${esc(why)}</div>`;
 }
+
 function canCalib(it) {
   if (C.kindOf(it) !== 'main' || logOf(it.exId) !== 'W') return false;
   if (it.sets.some(s => s.kind === 'calib')) return false;
@@ -1362,29 +1386,38 @@ function linkBar() {
   const L = S.link; if (!L) return '';
   return `<div class="link-bar"><div class="grow">${esc(t('supHint', L.ids.length))}</div><button class="btn small primary" data-a="link-go" ${L.ids.length < 2 ? 'disabled' : ''}>${esc(t('supDo'))}</button><button class="btn small ghost" data-a="link-cancel">${esc(t('cancel'))}</button></div>`;
 }
+function focusTarget(a) {
+  if (S.focusId && a.items.some(x => x.id === S.focusId)) return S.focusId;
+  const open = a.items.find(x => x.sets.some(y => !y.done));
+  return (open || a.items[a.items.length - 1] || {}).id || null;
+}
+function scrollToItem(id) { setTimeout(() => { const c = document.querySelector(`[data-item="${id}"]`); if (c) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60); }
 function vWorkout() {
   const a = S.active;
   if (!a) return vToday();
   const gi = groupInfo(a.items); const L = S.link && S.link.where === 'session' ? S.link : null;
+  const focus = S.settings.focus === true && !L; const fid = focus ? focusTarget(a) : null;
   const cards = a.items.map((it, n) => {
     const ex = S.ex.get(it.exId);
     const note = S.notes[it.exId];
     const g = gi[it.id];
+    if (focus && it.id !== fid) {
+      const done = it.sets.filter(x => x.done).length, total = it.sets.length, fin = total > 0 && done === total;
+      return `<button class="ex-mini ${fin ? 'finished' : ''}" data-a="focus-item" data-i="${it.id}" data-item="${it.id}"><span class="name">${g ? `<span class="gtag">${g.label}</span> ` : ''}${esc(exName(it.exId))}</span><span class="meta">${done}/${total}</span>${fin ? I.check : ''}</button>`;
+    }
+    const prSets = it.sets.filter(x => x.pr && x.pr.length);
+    const prCard = prSets.length ? `<div class="pr-card ${S._justPR === it.id ? 'pop' : ''}"><b>PR</b><span>${esc(fmtSet(prSets[prSets.length - 1], ex))} · ${esc(prLabel([...new Set(prSets.flatMap(x => x.pr))]))}</span></div>` : '';
     return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
       <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}</div>
       <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></div>
-      ${hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
+      ${prCard}
+      ${it.sug || hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
       ${sugLine(it)}
       ${it.cues && it.cues.length ? `<div class="cues">${it.cues.map(c => `<div>${esc(c)}</div>`).join('')}</div>` : ''}
-      <div class="chips">
-        <button class="chip" data-a="scheme-info" data-i="${it.id}">${esc(it.method ? methodName(it.method) : it.scheme === 'topback' ? t('topback') : t('straight'))} ${I.info}</button>
-        ${canCalib(it) ? `<button class="chip" data-a="calib-open" data-i="${it.id}">${esc(t('calibChip'))}</button>` : ''}
-        ${isBarEx(it.exId) ? `<button class="chip" data-a="plates-open" data-v="${it.id}">${esc(t('plateChip'))}</button>` : ''}
-        ${it.pct ? `<button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button>` : ''}
-        <button class="chip" data-a="subs" data-i="${it.id}">${I.swap} ${esc(t('subs'))}</button>
+      <div class="ex-meta"><span>${esc(it.method ? methodName(it.method) : it.scheme === 'topback' ? t('topback') : t('straight'))}</span>
         <button class="chip" data-a="rest-edit" data-i="${it.id}">${I.clock.replace('<svg ', '<svg width="18" height="18" ')} ${it.rest} s</button>
-      </div>
-      <button class="note-box ${note && note.text ? '' : 'empty'}" data-a="note" data-v="${esc(it.exId)}">${note && note.text ? `<span class="lbl">${esc(t('note'))}</span>${esc(note.text)}` : `<span class="lbl">+ ${esc(t('note'))}</span>`}</button>
+        ${it.pct ? `<button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button>` : ''}</div>
+      ${note && note.text ? `<button class="note-box" data-a="note" data-v="${esc(it.exId)}"><span class="lbl">${esc(t('note'))}</span>${esc(note.text)}</button>` : ''}
       ${setGrid(it)}
       <div class="set-actions"><button class="btn small" data-a="add-set" data-i="${it.id}">${esc(t('addSet'))}</button>${it.sets.length ? `<button class="btn small ghost" data-a="del-set" data-i="${it.id}">${esc(t('removeSet'))}</button>` : ''}</div>
     </section>`;
@@ -1392,7 +1425,7 @@ function vWorkout() {
   return `<main class="screen workout">${linkBar()}
     <div class="wk-head"><button class="icon-btn" data-a="nav" data-v="today" aria-label="${esc(t('back'))}">${I.down}</button>
       <div class="wk-title"><button class="t" data-a="rename" style="background:none;border:0;padding:0;max-width:100%" aria-label="${esc(t('rename'))}">${esc(a.name)} <span class="muted" aria-hidden="true">✎</span></button><div class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</div></div>
-      <button class="btn small ghost" style="color:var(--accent)" data-a="finish">${esc(t('finish'))}</button></div>
+      <button class="btn small ghost" data-a="finish">${esc(t('finish'))}</button></div>
     ${a.notes && a.notes.length ? `<div class="info wk-notes">${a.notes.map(n => `<div>${esc(n)}</div>`).join('')}</div>` : ''}
     ${cards || `<div class="empty">${esc(t('addExercise'))}</div>`}
     <div class="workout-foot"><button class="btn block" data-a="session-add-ex">${esc(t('addExercise'))}</button>
@@ -1483,12 +1516,12 @@ function spikesOf(perSession, names) {
   });
   return out;
 }
-function tallyBlock(days, perWeek) {
+function tallyBlock(days, perWeek, bare) {
   const withItems = days.filter(d => d.items.length);
   if (!withItems.length) return '';
   const tl = C.tallyDays(days, perWeek);
   const sp = spikesOf(tl.perSession, days.map(d => d.name));
-  return `<div><h2>${esc(t('tallyTitle'))}</h2><div class="muted small" style="margin:6px 0 10px">${esc(t('tallyHint'))} ${esc(t('zonesHint'))} <button class="linkish" data-a="why-open" data-v="vol">${esc(t('whyBtn'))}</button></div>${volRows(tl.muscles)}
+  return `<div>${bare ? '' : `<h2>${esc(t('tallyTitle'))}</h2>`}<div class="muted small" style="margin:6px 0 10px">${esc(t('tallyHint'))} ${esc(t('zonesHint'))} <button class="linkish" data-a="why-open" data-v="vol">${esc(t('whyBtn'))}</button></div>${volRows(tl.muscles)}
     ${sp.length ? `<div class="info" style="margin-top:10px"><h3>${esc(t('spikeTitle'))}</h3>${sp.map(x => `<div class="small">${esc(x)}</div>`).join('')}</div>` : ''}</div>`;
 }
 /* hard sets per muscle and per main lift in the workout being finished */
@@ -1629,16 +1662,18 @@ function runRow(r) {
 }
 function vHistory() {
   const tab = S.histTab === 'runs' ? 'runs' : 'workouts';
-  const tabs = `<div class="seg" role="tablist"><button role="tab" aria-selected="${tab === 'workouts'}" class="${tab === 'workouts' ? 'on' : ''}" data-a="hist-tab" data-v="workouts">${esc(t('workouts'))}</button><button role="tab" aria-selected="${tab === 'runs'}" class="${tab === 'runs' ? 'on' : ''}" data-a="hist-tab" data-v="runs">${esc(t('runs'))}</button></div>`;
+  const mode = S.histMode === 'cal' ? 'cal' : 'list';
+  const tabs = tabsBar([['workouts', t('workouts')], ['runs', t('runs')]], tab, 'hist-tab');
+  const tools = `<div class="head-tools">${tab === 'workouts' && S.sessions.length ? `<button class="icon-btn" data-a="hist-mode" data-v="${mode === 'cal' ? 'list' : 'cal'}" aria-label="${esc(mode === 'cal' ? t('calList') : t('calCal'))}">${mode === 'cal' ? I.list : I.cal}</button>` : ''}<button class="icon-btn" data-a="${tab === 'runs' ? 'run-new' : 'past-workout'}" aria-label="${esc(tab === 'runs' ? t('runLog') : t('pastWorkout'))}">${I.plus}</button></div>`;
+  let body;
   if (tab === 'runs') {
     const list = [...S.runs].sort((a, b) => b.date - a.date).map(runRow).join('');
-    return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${tabs}<button class="btn primary block" data-a="run-new">${esc(t('runLog'))}</button>${list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('runNone'))}</div>`}</main>`;
+    body = list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('runNone'))}<button class="btn small" data-a="run-new">${esc(t('runLog'))}</button></div>`;
+  } else {
+    const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(histRow).join('');
+    body = mode === 'cal' ? calView() : (list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`);
   }
-  const mode = S.histMode === 'cal' ? 'cal' : 'list';
-  const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(histRow).join('');
-  const seg = S.sessions.length ? `<div class="seg"><button class="${mode === 'list' ? 'on' : ''}" data-a="hist-mode" data-v="list">${esc(t('calList'))}</button><button class="${mode === 'cal' ? 'on' : ''}" data-a="hist-mode" data-v="cal">${esc(t('calCal'))}</button></div>` : '';
-  const body = mode === 'cal' ? calView() : (list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`);
-  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${tabs}${seg}${body}<button class="btn block" data-a="past-workout">${esc(t('pastWorkout'))}</button></main>`;
+  return `<main class="screen">${topbar()}${resumeBanner()}<div class="head-row"><h1 class="mid">${esc(t('history'))}</h1>${tools}</div>${tabs}${body}</main>`;
 }
 function drawCard() {
   const cv = $('#card-cv'); const sh = S.sheet; if (!cv || !sh) return;
@@ -1684,6 +1719,38 @@ function drawCard() {
   });
   if (rows.length > max) { c.fillStyle = mu; c.font = `500 30px ${body}`; c.fillText(`+${rows.length - max} ${t('cardMore')}`, 60, y + 40); }
   c.fillStyle = mu; c.font = `500 28px ${body}`; c.textAlign = 'center'; c.fillText('repsmith', W / 2, H - 50); c.textAlign = 'left';
+}
+function tallySvg(n) {
+  let idx = 0, out = '';
+  for (let k = 0; k < n; k += 5) {
+    const m = Math.min(5, n - k); let g = '';
+    for (let b = 0; b < Math.min(4, m); b++) { idx++; g += `<line class="m ${idx === n ? 'new' : ''}" style="--i:${idx}" x1="${14 + b * 12}" y1="10" x2="${14 + b * 12}" y2="54"/>`; }
+    if (m === 5) { idx++; g += `<line class="sl ${idx === n ? 'new' : ''}" style="--i:${idx}" x1="6" y1="48" x2="58" y2="16"/>`; }
+    out += `<svg viewBox="0 0 64 64" aria-hidden="true">${g}</svg>`;
+  }
+  return out;
+}
+function vDone() {
+  const s = S.sessions.find(x => x.id === S.viewArg); if (!s) return vToday();
+  const st = sessionStats(s); const lang = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
+  const prSets = s.items.flatMap(it => it.sets.filter(x => x.pr && x.pr.length).map(x => ({ it, x })));
+  const prEx = [...new Set(prSets.map(p => p.it.exId))];
+  const prev = S.sessions.filter(x => x.id !== s.id && x.startedAt < s.startedAt && (!s.dayId || x.dayId === s.dayId)).sort((a, b) => b.startedAt - a.startedAt)[0];
+  const pv = prev ? sessionStats(prev).vol : 0;
+  const pct = pv > 0 && st.vol > 0 ? Math.round((st.vol - pv) / pv * 100) : null;
+  const wkN = S.sessions.filter(x => monday(x.startedAt) === monday(s.startedAt)).length;
+  const streak = weekStreak(S.sessions, s.startedAt);
+  let hero;
+  if (prEx.length) hero = `<div class="big pr">${prEx.length}</div><div class="lbl">${esc(t('doneRec', prEx.length))}</div><div class="delta">${esc(prEx.slice(0, 3).map(exName).join(' · '))}</div>`;
+  else if (st.vol > 0) hero = `<div class="big">${esc(st.vol.toLocaleString(lang))}<small class="lbl"> kg</small></div><div class="lbl">${esc(t('volume'))}</div><div class="delta">${pct == null ? esc(t('doneFirst')) : `${pct >= 0 ? '+' : '−'}${Math.abs(pct)}% ${esc(t('doneVsLast'))}`}</div>`;
+  else hero = `<div class="big">${st.sets}</div><div class="lbl">${esc(t('setsDone'))}</div>`;
+  return `<main class="screen">${topbar()}
+    <div class="done-hero"><div class="eyebrow">${esc(t('workoutSaved'))}</div>${hero}</div>
+    <div class="tally" role="img" aria-label="${esc(t('doneWeek', wkN))}">${tallySvg(Math.min(wkN, 20))}</div>
+    <div class="sec-note" style="text-align:center;margin-top:-10px">${esc(t('doneWeek', wkN))}</div>
+    <div class="done-stats"><span><b>${esc(fmtDur(s.endedAt - s.startedAt))}</b> ${esc(t('duration').toLowerCase())}</span><span><b>${st.sets}</b> ${esc(t('setsDone').toLowerCase())}</span><span><b>${streak}</b> ${esc(t('doneStreak', streak))}</span></div>
+    <button class="btn primary block" data-a="open-session" data-v="${s.id}">${esc(t('doneDetails'))}</button>
+    <button class="btn ghost block" data-a="nav" data-v="today">${esc(t('doneClose'))}</button></main>`;
 }
 function vSession() {
   const s = S.sessions.find(x => x.id === S.viewArg);
@@ -1830,7 +1897,7 @@ function progressExercises() {
 }
 function vProgress() {
   const pg = S.prog || (S.prog = { tab: 'strength', exId: null, week: 0, metric: 'weight' });
-  const seg = `<div class="seg" role="tablist">${[['strength', 'strength'], ['runs', 'runs'], ['body', 'body']].map(([k, l]) => `<button role="tab" aria-selected="${pg.tab === k}" class="${pg.tab === k ? 'on' : ''}" data-a="prog-tab" data-v="${k}">${esc(t(l))}</button>`).join('')}</div>`;
+  const seg = tabsBar([['strength', t('strength')], ['runs', t('runs')], ['body', t('body')]], pg.tab, 'prog-tab');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('progress'))}</h1>${seg}${pg.tab === 'body' ? vBody() : pg.tab === 'runs' ? vRuns() : vStrength()}</main>`;
 }
 function vStrength() {
@@ -1838,34 +1905,32 @@ function vStrength() {
   if (!S.sessions.length) return `<div class="empty">${esc(t('noStrength'))}</div>`;
   const exs = progressExercises();
   if (!pg.exId || !exs.includes(pg.exId)) pg.exId = pg.exId && S.ex.get(pg.exId) && entriesFor(pg.exId).length ? pg.exId : exs[0] || null;
-  const L_ = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
   let exBlock = '';
   if (pg.exId) {
     const ex = S.ex.get(pg.exId);
     const series = e1rmSeries(pg.exId);
-    const best = series.length ? Math.max(...series.map(p => p.y)) : null;
     const last = series.length ? series[series.length - 1].y : null;
     const delta = series.length > 1 ? last - series[0].y : null;
     const evs = prEvents(pg.exId).slice().reverse();
     const chips = exs.slice(0, 8).map(id => `<button class="chip ${id === pg.exId ? 'on' : ''}" data-a="prog-ex" data-v="${esc(id)}">${esc(exName(id))}</button>`).join('');
-    exBlock = `
-      <div class="chips">${chips}<button class="chip" data-a="prog-ex-pick">${esc(t('otherExercise'))}</button></div>
-      <h2>${esc(exName(pg.exId))}</h2>
-      ${series.length ? `<div class="stat-row"><div class="stat"><div class="v">${esc(fmtN(Math.round(last * 10) / 10))}</div><div class="k">${esc(t('lastE1rm'))} kg</div></div><div class="stat"><div class="v">${esc(fmtN(Math.round(best * 10) / 10))}</div><div class="k">${esc(t('bestE1rmShort'))} kg</div></div><div class="stat"><div class="v">${delta == null ? '–' : (delta >= 0 ? '+' : '−') + esc(fmtN(Math.abs(Math.round(delta * 10) / 10)))}</div><div class="k">${esc(t('change'))} kg</div></div></div>
-      <div><label>${esc(t('e1rmChart'))}</label>${lineChart('c-e1rm', { dots: series, unit: 'kg', connect: true })}</div>` : ''}
+    const head = series.length
+      ? `<div class="headline"><div class="eyebrow">${esc(exName(pg.exId))} · ${esc(t('lastE1rm'))}</div><div class="big">${esc(fmtN(Math.round(last * 10) / 10))} <small>kg</small></div>${delta == null ? '' : `<div class="sub">${esc(t('progSince', fmtDate(series[0].x, { day: 'numeric', month: 'short' }), (delta >= 0 ? '+' : '−') + fmtN(Math.abs(Math.round(delta * 10) / 10))))}</div>`}</div>`
+      : `<h2>${esc(exName(pg.exId))}</h2>`;
+    const prBody = evs.length ? `<div class="card">${evs.slice(0, 20).map(e => `<div class="row"><span class="grow"><span class="name">${esc(fmtEntry(ex, e))}</span><br><span class="meta">${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></div>`).join('')}</div>` : `<div class="muted small">${esc(t('noPrYet'))}</div>`;
+    exBlock = `<div class="chips">${chips}<button class="chip" data-a="prog-ex-pick">${esc(t('otherExercise'))}</button></div>${head}
+      ${series.length ? lineChart('c-e1rm', { dots: series, unit: 'kg', connect: true }) : ''}
       ${ex.logging === 'BWX' && !S.measurements.some(m => num(m.weight) > 0) ? `<div class="muted small">${esc(t('bwMissing'))}</div>` : ''}
-      <div><label>${esc(t('prList'))}</label>${evs.length ? `<div class="card">${evs.slice(0, 20).map(e => `<div class="row"><span class="grow"><span class="name">${esc(fmtEntry(ex, e))}</span><br><span class="meta">${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></div>`).join('')}</div>` : `<div class="muted small">${esc(t('noPrYet'))}</div>`}</div>`;
+      ${disc('prList', t('prList'), prBody, evs.length ? String(evs.length) : '')}`;
   }
   const vol = rollingVolume(pg.week);
   const maxV = vol.length ? Math.max(...vol.map(v => v[1])) : 1;
-  const volBlock = `<div><h2>${esc(t('weeklyVolume'))}</h2>
-      <div class="chips" style="margin-top:10px"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('last7'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('prev7'))}</button></div>
+  const volInner = `<div class="chips"><button class="chip ${pg.week === 0 ? 'on' : ''}" data-a="prog-week" data-v="0">${esc(t('last7'))}</button><button class="chip ${pg.week === 1 ? 'on' : ''}" data-a="prog-week" data-v="1">${esc(t('prev7'))}</button></div>
     ${vol.length ? bm({ heat: Object.fromEntries(vol.map(([m, v]) => [m, v / maxV])), interactive: true, aria: t('weeklyVolume') }) + `<div class="bm-legend"><span><i style="background:var(--bm-h1)"></i>${esc(t('fewerSets'))}</span><span><i style="background:var(--bm-h4)"></i>${esc(t('moreSets'))}</span></div><div class="tip muted small" id="bm-tip" style="text-align:center;min-height:20px">${esc(t('tapMuscle'))}</div>` : ''}
     ${volRows(Object.fromEntries(vol))}
-    <div class="muted small" style="margin-top:6px">${esc(t('volumeHint2'))} ${esc(t('zonesHint'))} <button class="linkish" data-a="why-open" data-v="vol">${esc(t('whyBtn'))}</button></div></div>`;
+    <div class="muted small">${esc(t('volumeHint2'))} ${esc(t('zonesHint'))} <button class="linkish" data-a="why-open" data-v="vol">${esc(t('whyBtn'))}</button></div>`;
   const tl = allPrEvents().slice(0, 15);
-  const tlBlock = tl.length ? `<div><h2>${esc(t('prTimeline'))}</h2><div class="card">${tl.map(e => `<button class="list-btn row" data-a="prog-ex" data-v="${esc(e.exId)}"><span class="grow"><span class="name">${esc(exName(e.exId))}</span><br><span class="meta">${esc(fmtEntry(S.ex.get(e.exId), e))} · ${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></button>`).join('')}</div></div>` : '';
-  return exBlock + volBlock + tlBlock;
+  const tlBlock = tl.length ? disc('prTl', t('prTimeline'), `<div class="card">${tl.map(e => `<button class="list-btn row" data-a="prog-ex" data-v="${esc(e.exId)}"><span class="grow"><span class="name">${esc(exName(e.exId))}</span><br><span class="meta">${esc(fmtEntry(S.ex.get(e.exId), e))} · ${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></button>`).join('')}</div>`) : '';
+  return exBlock + disc('vol', t('weeklyVolume'), volInner) + tlBlock;
 }
 
 /* ---------- runs ---------- */
@@ -1892,7 +1957,6 @@ function vRuns() {
   const rec = (lbl, r, val) => `<div class="row"><span class="grow"><span class="name">${esc(val)}</span><br><span class="meta" style="white-space:normal">${esc(lbl)} · ${esc(r.name)}</span></span><span class="meta">${esc(fmtDate(r.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</span></div>`;
   return `${add}
     <div class="stat-row">${stat(fmtKmL(st.weekM), t('runWeek') + ' km')}${stat(fmtKmL(st.monthM), t('runMonth') + ' km')}${stat(fmtKmL(st.totalM), t('runTotal') + ' km')}</div>
-    <div class="stat-row">${stat(String(st.count), t('runCount'))}${stat(RR.fmtDur(st.totalS), t('duration'))}${stat(st.bestPace ? RR.fmtPace(st.bestPace.paceSec) : '–', t('runBestPace').split(' (')[0])}</div>
     <div><label>${esc(t('runWeekly'))}</label>${barChart(st.series)}</div>
     <div><label>${esc(t('runPaceChart'))}</label>${lineChart('c-runpace', { dots: paceDots, unit: '/km', connect: true, fmt: v => RR.fmtPace(-v) })}</div>
     ${hrDots.length ? `<div><label>${esc(t('runHrChart'))}</label>${lineChart('c-runhr', { dots: hrDots, unit: 'bpm', connect: true, fmt: v => String(Math.round(v)) })}</div>` : ''}
@@ -1990,6 +2054,20 @@ function runSheet(sh) {
     ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
     ${sh.fix ? `<div class="btn-row wrap"><button class="btn small" data-a="run-fix" data-v="pace">${esc(t('runFixPace'))}</button><button class="btn small" data-a="run-fix" data-v="time">${esc(t('runFixTime'))}</button></div>` : ''}
     <div class="btn-row">${sh.editId ? `<button class="btn danger" data-a="run-del">${esc(t('runDelete'))}</button>` : ''}<button class="btn primary" data-a="run-save">${esc(t('save'))}</button></div>`;
+}
+function runDoneSheet(sh) {
+  const r = S.runs.find(x => x.id === sh.id); if (!r) return '';
+  const lines = [];
+  const prior = S.runs.filter(x => x.id !== r.id && x.date < r.date && x.date >= r.date - 30 * RR.DAY);
+  if (prior.length) { const avg = prior.reduce((a, x) => a + x.paceSec, 0) / prior.length; lines.push(t('runDonePace', RR.fmtPace(r.paceSec), RR.fmtPace(avg), Math.round(avg - r.paceSec))); }
+  const sameMonth = S.runs.filter(x => x.id !== r.id && new Date(x.date).getFullYear() === new Date(r.date).getFullYear() && new Date(x.date).getMonth() === new Date(r.date).getMonth());
+  if (sameMonth.length && r.distM > Math.max(...sameMonth.map(x => x.distM))) lines.push(t('runDoneLongest'));
+  const wk = S.runs.filter(x => RR.mondayOf(x.date) === RR.mondayOf(r.date));
+  lines.push(t('runDoneWeek', wk.length, fmtKmL(wk.reduce((a, x) => a + x.distM, 0))));
+  return `<div class="sheet-head"><h2>${esc(t('runDoneTitle'))}</h2><button class="icon-btn" data-a="sheet-close" aria-label="${esc(t('close'))}">${I.x}</button></div>
+    <div><div class="rd-big">${esc(fmtKmL(r.distM))} <span class="muted" style="font-size:22px">km</span></div><div class="sub">${esc(r.name)} · ${esc(RR.fmtPace(r.paceSec))} /km · ${esc(RR.fmtDur(r.durS))}</div></div>
+    ${lines.map(x => `<div>${esc(x)}</div>`).join('')}
+    <button class="btn primary block" data-a="sheet-close">${esc(t('doneClose'))}</button>`;
 }
 function runError(r) {
   if (r.err === 'dist') return t('runErrDist', r.min, r.max / 1000);
@@ -2191,6 +2269,8 @@ function renderSheet() {
       : `<div class="grid3 calib">${fld('cw', t('calibW'), sh.w ?? '')}${fld('cg', t('calibGuess'), sh.g ?? '')}${fld('ct', t('calibTotal'), sh.tot ?? '')}</div>
         ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
         <button class="btn primary block" data-a="calib-save">${esc(t('calibSave'))}</button>`}`;
+  } else if (sh.type === 'runDone') {
+    body = runDoneSheet(sh);
   } else if (sh.type === 'run') {
     body = runSheet(sh);
   } else if (sh.type === 'measure') {
@@ -2271,24 +2351,28 @@ function renderSheet() {
       <button class="btn primary block" data-a="cx-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'settings') {
     const st = S.settings;
-    body = `${head(t('settings'))}
-      <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
-      <div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
-      <div><label>${esc(t('soundVol'))}</label><div class="chips">${['low', 'mid', 'high'].map(v => `<button class="chip ${(st.vol || 'high') === v ? 'on' : ''}" data-a="vol" data-v="${v}">${esc(t('vol' + v[0].toUpperCase() + v.slice(1)))}</button>`).join('')}</div><button class="btn block" style="margin-top:8px" data-a="sound-test">${esc(t('soundTest'))}</button><div class="small muted" style="margin-top:6px">${esc(t('soundHint'))}</div></div>
+    const onoff = (k, on) => `<div class="chips"><button class="chip ${on ? 'on' : ''}" data-a="set-flag" data-k="${k}" data-v="1">${esc(t('on'))}</button><button class="chip ${!on ? 'on' : ''}" data-a="set-flag" data-k="${k}" data-v="0">${esc(t('off'))}</button></div>`;
+    const workout = `<div><label>${esc(t('focusMode'))}</label>${onoff('focus', st.focus === true)}<div class="muted small" style="margin-top:6px">${esc(t('focusModeD'))}</div></div>
+      <div><label>${esc(t('calmMode'))}</label>${onoff('calm', st.calm === true)}<div class="muted small" style="margin-top:6px">${esc(t('calmModeD'))}</div></div>
       <div class="grid2">${fld('st-restC', t('defaultRestC'), st.restC)}${fld('st-restI', t('defaultRestI'), st.restI)}${fld('st-increment', t('increment'), fmtN(st.increment))}${fld('st-backoffPct', t('defaultBackoff'), st.backoffPct)}</div>
       ${'wakeLock' in navigator ? `<div><label>${esc(t('wakeSet'))}</label><div class="chips"><button class="chip ${st.wake !== false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="1">${esc(t('wakeOn'))}</button><button class="chip ${st.wake === false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="0">${esc(t('wakeOff'))}</button></div></div>` : `<div class="muted small">${esc(t('wakeNo'))}</div>`}
-      <button class="btn block" data-a="gear-open">${esc(t('gearTitle'))}</button><button class="btn block" data-a="plates-open" data-v="">${esc(t('plateCalc'))}</button>
-      <h2 style="font-size:20px;margin-top:6px">${esc(t('coachSec'))}</h2>
-      <div><label>${esc(t('readinessSet'))}</label><div class="chips"><button class="chip ${st.readiness !== false ? 'on' : ''}" data-a="set-flag" data-k="readiness" data-v="1">${esc(t('on'))}</button><button class="chip ${st.readiness === false ? 'on' : ''}" data-a="set-flag" data-k="readiness" data-v="0">${esc(t('off'))}</button></div></div>
-      <div><label>${esc(t('flagsSet'))}</label><div class="chips"><button class="chip ${st.flagsOn !== false ? 'on' : ''}" data-a="set-flag" data-k="flagsOn" data-v="1">${esc(t('on'))}</button><button class="chip ${st.flagsOn === false ? 'on' : ''}" data-a="set-flag" data-k="flagsOn" data-v="0">${esc(t('off'))}</button></div></div>
-      <div class="grid2">${fld('st-deloadEvery', t('deloadEverySet'), st.deloadEvery ?? 5)}${fld('st-regressPct', t('regressSet'), st.regressPct ?? 5)}${fld('st-fatigueCut', t('fatigueSet'), st.fatigueCut ?? 30)}</div>
-      <h2 style="font-size:20px;margin-top:6px">${esc(t('backup'))}</h2><div class="muted small">${esc(t('backupInfo'))}</div>
+      <button class="btn block" data-a="gear-open">${esc(t('gearTitle'))}</button><button class="btn block" data-a="plates-open" data-v="">${esc(t('plateCalc'))}</button>`;
+    const sound = `<div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
+      <div><label>${esc(t('soundVol'))}</label><div class="chips">${['low', 'mid', 'high'].map(v => `<button class="chip ${(st.vol || 'high') === v ? 'on' : ''}" data-a="vol" data-v="${v}">${esc(t('vol' + v[0].toUpperCase() + v.slice(1)))}</button>`).join('')}</div></div>
+      <button class="btn block" data-a="sound-test">${esc(t('soundTest'))}</button><div class="small muted">${esc(t('soundHint'))}</div>`;
+    const coach = `<div><label>${esc(t('readinessSet'))}</label>${onoff('readiness', st.readiness !== false)}</div>
+      <div><label>${esc(t('flagsSet'))}</label>${onoff('flagsOn', st.flagsOn !== false)}</div>
+      <div class="grid2">${fld('st-deloadEvery', t('deloadEverySet'), st.deloadEvery ?? 5)}${fld('st-regressPct', t('regressSet'), st.regressPct ?? 5)}${fld('st-fatigueCut', t('fatigueSet'), st.fatigueCut ?? 30)}</div>`;
+    const data = `<div class="muted small">${esc(t('backupInfo'))}</div>
       <div class="muted small">${esc(t('lastBackupLbl'))}: ${st.lastBackup ? esc(fmtDate(st.lastBackup, { day: 'numeric', month: 'short', year: 'numeric' })) : esc(t('neverBackup'))}${S._persisted != null ? ' · ' + esc(S._persisted ? t('persistOk') : t('persistNo')) : ''}</div>
       ${window.REPSMITH_DATA ? '' : `<button class="btn block" data-a="export">${esc(t('exportBtn'))}</button>`}
       <button class="btn block" data-a="export-copy">${esc(t('copyBtn'))}</button>
+      <label class="btn block" for="importfile" style="margin:0;color:var(--text)">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
       <button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>
-      ${FEEDBACK_EMAIL ? `<button class="btn block" data-a="feedback">${esc(t('feedbackBtn'))}</button>` : ''}
-      <label class="btn block" for="importfile" style="margin:0;color:var(--text);font-size:16px">${esc(t('importBtn'))}</label><input id="importfile" type="file" accept="application/json,.json" hidden>
+      ${FEEDBACK_EMAIL ? `<button class="btn block" data-a="feedback">${esc(t('feedbackBtn'))}</button>` : ''}`;
+    body = `${head(t('settings'))}
+      <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
+      ${disc('set-workout', t('secWorkout'), workout)}${disc('set-sound', t('secSound'), sound)}${disc('set-coach', t('coachSec'), coach)}${disc('set-data', t('secData'), data)}
       <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('bodyCredit'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
   el.innerHTML = `<div class="scrim ${fresh ? 'enter' : ''}" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
@@ -2588,6 +2672,18 @@ const A = {
   },
   'day-add-ex': el => openSheet({ type: 'picker', target: { kind: 'day', dayId: el.dataset.d } }),
   'edit-item': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); openSheet({ type: 'item', simple: planMode(tplDay(d.id)[0]) === 'simple', dayId: d.id, item: clone(it), _m0: it.method || C.methodOf(it) || null, _rpe0: it.rpe }); },
+  'plan-item-menu': el => {
+    const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); if (!it) return; const i = d.items.indexOf(it);
+    openSheet({ type: 'menu', title: exName(it.exId), items: [
+      ...(i > 0 ? [{ id: 'up', label: t('moveUp') }] : []), ...(i < d.items.length - 1 ? [{ id: 'down', label: t('moveDown') }] : []),
+      { id: 'lnk', label: t('supBtn') + '…' }, { id: 'del', label: t('remove'), danger: true }],
+      handlers: {
+        up: () => A['item-up'](el),
+        down: () => { d.items.splice(i, 1); d.items.splice(i + 1, 0, it); normGroups(d.items); saveTemplates(); render(); },
+        lnk: () => A['item-link'](el),
+        del: () => A['item-del'](el),
+      } });
+  },
   'item-up': el => { const [, d] = tplDay(el.dataset.d); const i = d.items.findIndex(x => x.id === el.dataset.i); if (i > 0) { const [x] = d.items.splice(i, 1); d.items.splice(i - 1, 0, x); normGroups(d.items); saveTemplates(); render(); } },
   'item-link': el => { const [, d] = tplDay(el.dataset.d); const it = d.items.find(x => x.id === el.dataset.i); groupMenu(d.items, it, saveTemplates); },
   'link-toggle': el => { const L = S.link; if (!L) return; const k = L.ids.indexOf(el.dataset.i); if (k >= 0) L.ids.splice(k, 1); else L.ids.push(el.dataset.i); render(); },
@@ -2666,7 +2762,8 @@ const A = {
       s.done = true; s.doneAt = now();
       if (s.rpe !== '' && s.rpe != null) { const q = normRpe(s.rpe); s.rpe = q == null ? '' : String(q); }
       s.pr = detectPR(it.exId, s); S._justDone = s.id;
-      if (s.pr.length) toast(`${t('prNew')}: ${prLabel(s.pr)}`);
+      if (s.pr.length) S._justPR = it.id;
+      buzz(s.pr.length ? [15, 60, 25] : 10);
       ensureAudio();
       const items = S.active.items, ix = items.indexOf(it), sIdx = it.sets.indexOf(s);
       const later = it.group ? items.slice(ix + 1).filter(x => x.group === it.group) : [];
@@ -2674,7 +2771,10 @@ const A = {
       if (!wait) startTimer(it.rest || S.settings.restI);
       else { const nx = later.find(x => x.sets.length > sIdx); S._focusNext = { i: nx.id, s: nx.sets[sIdx].id }; }
     } else { s.done = false; s.pr = []; }
+    let advance = null;
+    if (S.settings.focus === true && s.done && it.sets.every(x => x.done)) { const nx = S.active.items.find(x => x !== it && x.sets.some(y => !y.done)); if (nx) { S.focusId = nx.id; advance = nx.id; } }
     saveActive(); render();
+    if (advance) scrollToItem(advance);
     if (S._focusNext) { const f = S._focusNext; S._focusNext = null; setTimeout(() => { const inp = document.querySelector(`input[data-f="set"][data-i="${f.i}"][data-s="${f.s}"]`); if (inp && !inp.value) { try { inp.focus({ preventScroll: false }); } catch (e) {} } }, 60); }
   },
   'add-set': el => {
@@ -2740,7 +2840,8 @@ const A = {
     const run = { ...(old || {}), ...r.run, date: ts, id: old ? old.id : uid(), createdAt: old ? old.createdAt : now(), updatedAt: now() };
     if (!run.name) run.name = t(run.type === 'long' ? 'runLong' : 'runEasy');
     if (old) S.runs = S.runs.map(x => (x.id === old.id ? run : x)); else S.runs.push(run);
-    S.settings.runUnit = d.unit; persist('runs', 'settings'); closeSheet(); toast(t('saved')); render();
+    S.settings.runUnit = d.unit; persist('runs', 'settings'); closeSheet(); render();
+    if (!old && S.settings.calm !== true) openSheet({ type: 'runDone', id: run.id }); else toast(t('saved'));
   },
   'run-del': () => { const id = S.sheet.editId; ask(t('runDelQ'), () => { S.runs = S.runs.filter(x => x.id !== id); persist('runs'); render(); }, { danger: true, yes: t('delete') }); },
   'run-bar': el => {
@@ -2791,7 +2892,7 @@ const A = {
     if (S.active) { S.active.effort = el.dataset.v; saveActive(); }
     closeSheet(); toast(t('saved')); render();
   },
-  'set-flag': el => { readSettingsFields(); S.settings[el.dataset.k] = el.dataset.v === '1'; persist('settings'); renderSheet(); },
+  'set-flag': el => { readSettingsFields(); S.settings[el.dataset.k] = el.dataset.v === '1'; document.body.classList.toggle('calm', S.settings.calm === true); persist('settings'); renderSheet(); },
   'rpe-set': el => {
     if (S.sheet.mode === 'item') {
       const back = S.sheet.back; const v = el.dataset.v === '' ? null : normRpe(el.dataset.v);
@@ -2811,18 +2912,25 @@ const A = {
   'rest-pick': el => { S.sheet.val = +el.dataset.v; renderSheet(); },
   'rest-save': () => { const v = num($('#rest-val').value); const it = findItem(S.sheet.itemId); if (v && v > 0) it.rest = Math.round(v); saveActive(); closeSheet(); render(); },
   'item-menu': el => {
-    const it = findItem(el.dataset.i); const i = S.active.items.indexOf(it);
+    const it = findItem(el.dataset.i); const i = S.active.items.indexOf(it); const ref = { dataset: { i: it.id, v: it.id } };
     openSheet({ type: 'menu', title: exName(it.exId), items: [
+      { id: 'info', label: t('progression') },
+      ...(canCalib(it) ? [{ id: 'cal', label: t('calibChip') }] : []),
+      ...(isBarEx(it.exId) ? [{ id: 'plates', label: t('plateChip') }] : []),
+      { id: 'swap', label: t('subs') }, { id: 'note', label: t('note') },
       { id: 'grp', label: t('supBtn') + '…' },
       ...(i > 0 ? [{ id: 'up', label: t('moveUp') }] : []), ...(i < S.active.items.length - 1 ? [{ id: 'down', label: t('moveDown') }] : []),
       { id: 'del', label: t('remove'), danger: true }],
       handlers: {
+        info: () => A['scheme-info'](ref), cal: () => A['calib-open'](ref), plates: () => A['plates-open'](ref), swap: () => A.subs(ref),
+        note: () => A.note({ dataset: { v: it.exId } }),
         grp: () => groupMenu(S.active.items, it, saveActive),
         up: () => { S.active.items.splice(i, 1); S.active.items.splice(i - 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
         down: () => { S.active.items.splice(i, 1); S.active.items.splice(i + 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
         del: () => { S.active.items = S.active.items.filter(x => x !== it); normGroups(S.active.items); saveActive(); render(); },
       } });
   },
+  'focus-item': el => { S.focusId = el.dataset.i; render(); scrollToItem(el.dataset.i); },
   'timer-adj': el => adjustTimer(+el.dataset.v),
   'timer-skip': () => stopTimer(),
   finish: () => {
@@ -2856,8 +2964,8 @@ const A = {
       }
       S.active = null; stopTimer();
       persist('sessions', 'active');
-      toast(nf.length ? `${t('workoutSaved')} · ${t('flagsTitle')}: ${nf.length}` : t('workoutSaved'));
-      go(s.items.length ? 'session' : 'today', s.id);
+      if (!(s.items.length && S.settings.calm !== true && !nf.length)) toast(nf.length ? `${t('workoutSaved')} · ${t('flagsTitle')}: ${nf.length}` : t('workoutSaved'));
+      go(s.items.length ? (S.settings.calm === true ? 'session' : 'done') : 'today', s.id);
     } else {
       const s = S.sessions.find(x => x.id === sh.sessionId);
       applySessionTime(s, plan);
@@ -3336,6 +3444,7 @@ document.addEventListener('input', ev => {
     const [tp, d] = tplDay(el.dataset.d); d.name = el.value; tp.updatedAt = now(); clearTimeout(S._tT); S._tT = setTimeout(saveTemplates, 400);
   }
 });
+document.addEventListener('toggle', ev => { const d = ev.target; if (d && d.matches && d.matches('details[data-sec]')) S.openSec[d.dataset.sec] = d.open; }, true);
 document.addEventListener('change', ev => {
   const el = ev.target;
   if (el.id === 'importfile' && el.files && el.files[0]) {
@@ -3368,6 +3477,7 @@ async function boot() {
   rebuildExercises();
   if (normTemplates()) persist('templates');
   document.documentElement.lang = S.settings.lang;
+  document.body.classList.toggle('calm', S.settings.calm === true);
   if (S.active) S.view = 'workout';
   try { if (navigator.storage && navigator.storage.persisted) navigator.storage.persisted().then(v => { S._persisted = v; }); if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(v => { S._persisted = !!v; }).catch(() => {}); } catch (e) {}
   render();
