@@ -59,6 +59,17 @@ Do sprawdzenia w praktyce:
 - iPhone: odstęp od notcha/wyspy i paska home (safe-area) na ekranach, w arkuszach i przy timerze przerwy.
 - Dźwięk: odblokowanie audio przy pierwszym dotknięciu, tryb mediów na czas przerwy, głośniejsze odliczanie 3-2-1 i trzy tony na koniec, wybór głośności, przycisk Test dźwięku.
 
+## v0.8.2 – zrobione
+Poprawki po przeglądzie kodu.
+- Zamiana ćwiczenia w trakcie treningu: zapisane serie zostają przy starym ćwiczeniu, reszta idzie do nowego, bez starej podpowiedzi ciężaru.
+- Zakończenie lub odrzucenie treningu zatrzymuje timer i cichą pętlę audio. Timer przerwy dzwoni też poza ekranem treningu.
+- Blok dodatkowy nie dubluje już ćwiczeń po zamianach.
+- Service worker zapisuje tylko poprawne odpowiedzi i po 4 s bez sieci bierze kopię z pamięci.
+- "Powtórz trening" zachowuje %1RM, serie łączone i tryb oceny wysiłku.
+- Rekordy (PR) w późniejszych treningach przeliczają się po edycji lub usunięciu starego treningu.
+- Import kopii sprawdza strukturę danych i schemat. Błąd zapisu w IndexedDB pokazuje ostrzeżenie.
+- Mniejsze: dodanie serii po kalibracji, nazwa nowego dnia w planie.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

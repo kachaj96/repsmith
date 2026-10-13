@@ -1,4 +1,4 @@
-# Repsmith v0.8.1
+# Repsmith v0.8.2
 
 Autor: Adrian Drożdżyński
 
@@ -30,7 +30,7 @@ Ograniczenia iOS: brak wibracji na koniec przerwy, brak dźwięku przy zablokowa
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.8.2`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.8.3`).
 
 ## Sprawdzenie wersji
 
