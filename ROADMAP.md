@@ -70,6 +70,15 @@ Poprawki po przeglądzie kodu.
 - Import kopii sprawdza strukturę danych i schemat. Błąd zapisu w IndexedDB pokazuje ostrzeżenie.
 - Mniejsze: dodanie serii po kalibracji, nazwa nowego dnia w planie.
 
+## v0.9.0 – zrobione
+- Dziennik biegów: przycisk "Zapisz bieg" na ekranie Dziś. Biegi są osobno od ćwiczeń, nie trafiają do biblioteki.
+- Pola: nazwa, rodzaj (spokojny, długi), data (także wsteczna), dystans (km lub m, wynik zawsze w km z 2 miejscami), tempo, czas, tętno, ocena 1-10. Pola przyjmują tylko cyfry.
+- Sprawdzanie zgodności: czas wpisany ręcznie musi pasować do dystansu i tempa, w przeciwnym razie błąd z dwoma szybkimi poprawkami (przelicz czas albo tempo).
+- Historia: przełącznik Treningi | Biegi. Postęp: zakładka Biegi z dystansem tygodniowo, wykresami tempa i tętna, rekordami.
+- Wcześniejsze treningi: data i czas trwania przy zakończeniu i edycji treningu, przycisk "Zapisz wcześniejszy trening" w Historii.
+- Kopia zapasowa obejmuje biegi.
+- Dalej: interwały i inne rodzaje biegów (model danych ma już pole rodzaju).
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

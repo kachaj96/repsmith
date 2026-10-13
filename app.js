@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.8.2';
+const VERSION = '0.9.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -392,6 +392,32 @@ function plural(n, one, few, many) {
   const d = n % 10, h = n % 100;
   return d >= 2 && d <= 4 && (h < 12 || h > 14) ? few : many;
 }
+Object.assign(STR.pl, {
+  runLog: 'Zapisz bieg', runEdit: 'Edytuj bieg', runs: 'Biegi', workouts: 'Treningi', runName: 'Nazwa', runType: 'Rodzaj', runTypeEasy: 'Spokojny', runTypeLong: 'Długi',
+  runEasy: 'Bieg spokojny', runLong: 'Długi bieg', runDate: 'Data', runDist: 'Dystans', runPace: 'Średnie tempo (min/km)', runTime: 'Czas (opcjonalnie, jeśli podasz tempo)',
+  runMin: 'min', runSec: 'sek', runHour: 'godz', runHr: 'Średnie tętno (bpm, opcjonalnie)', runCalcTime: x => `Czas z dystansu i tempa: ${x}`, runCalcPace: x => `Tempo z dystansu i czasu: ${x}/km`,
+  runErrDist: (a, b) => `Dystans: od ${a} m do ${b} km.`, runErrPace: (a, b) => `Tempo: od ${a} do ${b} na km, sekundy 0-59.`, runErrTime: 'Czas: minuty i sekundy 0-59, więcej niż zero.',
+  runErrNeed: 'Podaj tempo albo czas.', runErrHr: (a, b) => `Tętno: od ${a} do ${b} bpm.`, runErrDate: 'Data nie może być z przyszłości.',
+  runErrMismatch: (exp, got, pace, km) => (exp ? `Czas ${got} nie pasuje do ${km} km w tempie ${pace}/km (wychodzi ${exp}).` : `Czas ${got} na ${km} km daje tempo ${pace}/km, poza zakresem.`) + ' Popraw dystans, tempo albo czas.',
+  runFixPace: 'Zostaw tempo, przelicz czas', runFixTime: 'Zostaw czas, przelicz tempo',
+  runNone: 'Brak biegów. Zapisz pierwszy.', runDelQ: 'Usunąć ten bieg?', runDelete: 'Usuń bieg',
+  runWeek: 'Ten tydzień', runMonth: 'Ten miesiąc', runTotal: 'Razem', runCount: 'Biegi', runLongest: 'Najdłuższy bieg', runBestPace: 'Najszybsze tempo (od 1 km)',
+  runWeekly: 'Dystans tygodniowo (km)', runPaceChart: 'Średnie tempo (min/km, wyżej = szybciej)', runHrChart: 'Średnie tętno (bpm)', runRecords: 'Rekordy', runWeekOf: d => `Tydzień od ${d}`, runStats: 'Statystyki',
+  pastWorkout: 'Zapisz wcześniejszy trening', pastHint: 'Wybierz datę treningu przy zakończeniu.', sumDur: 'Czas trwania (min)', durErr: 'Czas trwania: 1-1440 min.',
+});
+Object.assign(STR.en, {
+  runLog: 'Log a run', runEdit: 'Edit run', runs: 'Runs', workouts: 'Workouts', runName: 'Name', runType: 'Type', runTypeEasy: 'Easy', runTypeLong: 'Long',
+  runEasy: 'Easy run', runLong: 'Long run', runDate: 'Date', runDist: 'Distance', runPace: 'Avg pace (min/km)', runTime: 'Time (optional if you give pace)',
+  runMin: 'min', runSec: 'sec', runHour: 'h', runHr: 'Avg heart rate (bpm, optional)', runCalcTime: x => `Time from distance and pace: ${x}`, runCalcPace: x => `Pace from distance and time: ${x}/km`,
+  runErrDist: (a, b) => `Distance: ${a} m to ${b} km.`, runErrPace: (a, b) => `Pace: ${a} to ${b} per km, seconds 0-59.`, runErrTime: 'Time: minutes and seconds 0-59, more than zero.',
+  runErrNeed: 'Enter pace or time.', runErrHr: (a, b) => `Heart rate: ${a} to ${b} bpm.`, runErrDate: 'The date cannot be in the future.',
+  runErrMismatch: (exp, got, pace, km) => (exp ? `Time ${got} does not match ${km} km at ${pace}/km (that gives ${exp}).` : `Time ${got} over ${km} km gives a pace of ${pace}/km, out of range.`) + ' Fix the distance, pace or time.',
+  runFixPace: 'Keep pace, recalculate time', runFixTime: 'Keep time, recalculate pace',
+  runNone: 'No runs yet. Log your first one.', runDelQ: 'Delete this run?', runDelete: 'Delete run',
+  runWeek: 'This week', runMonth: 'This month', runTotal: 'Total', runCount: 'Runs', runLongest: 'Longest run', runBestPace: 'Fastest pace (1 km and up)',
+  runWeekly: 'Weekly distance (km)', runPaceChart: 'Avg pace (min/km, higher = faster)', runHrChart: 'Avg heart rate (bpm)', runRecords: 'Records', runWeekOf: d => `Week of ${d}`, runStats: 'Stats',
+  pastWorkout: 'Log a past workout', pastHint: 'Pick the workout date when you finish.', sumDur: 'Duration (min)', durErr: 'Duration: 1-1440 min.',
+});
 const t = (k, ...a) => { const v = (STR[S.settings.lang] || STR.pl)[k]; return typeof v === 'function' ? v(...a) : (v ?? k); };
 const L = () => (S.settings.lang === 'en' ? 1 : 0);
 
@@ -431,6 +457,9 @@ const fmtDur = ms => { const s = Math.max(0, Math.floor(ms / 1000)); const h = M
 const fmtClock = sec => { const s = Math.max(0, Math.round(sec)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 const fmtDate = (ts, opts = { weekday: 'long', day: 'numeric', month: 'short' }) => new Intl.DateTimeFormat(S.settings.lang === 'en' ? 'en-GB' : 'pl-PL', opts).format(new Date(ts));
 const clone = o => JSON.parse(JSON.stringify(o));
+const isoDate = ts => { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const RR = window.RepsmithRuns;
+const fmtKmL = m => RR.fmtKm(m, S.settings.lang === 'pl' ? ',' : '.');
 
 /* ---------- storage (IndexedDB, falls back to memory) ---------- */
 const DB = {
@@ -470,14 +499,14 @@ const snapLoad = (exId, v, up) => G.snap(gearCfg(), eqOf(exId), v, up);
 const roundLoad = (exId, v) => { const s = snapLoad(exId, v); return s != null ? s : roundTo(v, S.settings.increment); };
 const isBarEx = exId => G.BAR_CLASSES.includes(eqOf(exId));
 const FEEDBACK_EMAIL = 'repsmithapp@gmail.com'; // set to a real address to show the feedback button
-const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes'];
+const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes', 'runs'];
 const persist = (...keys) => Promise.all(keys.map(k => DB.set(k, clone(S[k]))));
 
 /* ---------- state ---------- */
 const S = {
   settings: { lang: (navigator.language || 'pl').startsWith('pl') ? 'pl' : 'en', restC: 180, restI: 90, increment: 2.5, backoffPct: 90, activeTemplateId: null, sides: { arm: false, thigh: false },
     readiness: true, flagsOn: true, deloadEvery: 5, regressPct: 5, fatigueCut: 30, effortDefault: 'rir' },
-  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [], maxes: {},
+  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [], maxes: {}, runs: [],
   data: null, ex: new Map(),
   view: 'today', viewArg: null, sheet: null, timer: null, toast: null,
 };
@@ -1128,7 +1157,7 @@ function vToday() {
   const tbi = tpl ? C.blockInfo(tpl) : null;
   if (tpl && day && tbi && tbi.finished && !S.active) {
     main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(tpl.name)}</h1></div>${endCard(tpl, tbi)}
-      <button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button>`;
+      <button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button>${runBtn()}`;
   } else if (tpl && day) {
     const items = day.items.map(it => wkItem(it, tbi)).filter(it => !skipped(it));
     const rows = items.slice(0, 5).map(it => `<div class="row"><span class="name grow">${esc(exName(it.exId))}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('');
@@ -1139,10 +1168,12 @@ function vToday() {
       ${coachCards(tpl, bi)}
       ${items.length ? `<div class="card">${rows}${more}</div>` : `<div class="empty">${esc(t('planEmptyDay'))}</div>`}
       ${S.active ? '' : `<div class="btn-row" style="flex-direction:column"><button class="btn primary block" data-a="start-day">${esc(t('startWorkout'))}</button><button class="btn block" data-a="start-free">${esc(t('emptyWorkout'))}</button></div>`}
+      ${runBtn()}
       ${tpl.days.length > 1 ? `<div class="chips" role="group" aria-label="${esc(t('day'))}">${tpl.days.map(d => `<button class="chip ${d.id === day.id ? 'on' : ''}" data-a="pick-day" data-v="${d.id}">${esc(d.name)}</button>`).join('')}</div>` : ''}`;
   } else {
     main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(t('freeTitle'))}</h1><div class="sub" style="margin-top:8px">${esc(t('freeText'))}</div></div>
       ${S.active ? '' : `<div><button class="btn primary block" data-a="start-free">${esc(t('startFree'))}</button><div class="muted small" style="margin-top:8px;text-align:center">${esc(t('startFreeHint'))}</div></div>`}
+      ${runBtn()}
       ${S.active ? '' : recentCard()}
       ${coachCards(null, null)}
       <div class="info"><h3 style="font-size:18px">${esc(t('planCardTitle'))}</h3><div>${esc(t('planCardText'))}</div><div><button class="btn small" data-a="nav" data-v="plans">${esc(t('planCardBtn'))}</button></div></div>`;
@@ -1153,6 +1184,7 @@ function vToday() {
     : (wc ? `<div class="sub small">${esc(t('thisWeek'))}: ${esc(t('workoutsDone', wc))}</div>` : '');
   return `<main class="screen">${topbar()}${resumeBanner()}${introCard()}${backupCard()}${main}${week}${DB.ok ? '' : `<div class="err">${esc(t('storageOff'))}</div>`}</main>`;
 }
+const runBtn = () => `<button class="btn block" data-a="run-new">${esc(t('runLog'))}</button>`;
 function schemeShort(it, simple) {
   const u = targetUnit(it.exId);
   if (it.scheme === 'topback') return `top ${it.reps}${u}${intensityShort(it)} + ${it.backoffSets}×${it.backoffReps || String(it.reps).replace('+', '')}${u}`;
@@ -1591,12 +1623,22 @@ function calView() {
     <div class="cal"><div class="cal-w">${wd.map(x => `<span>${esc(x)}</span>`).join('')}</div><div class="cal-g">${cells}</div></div>
     ${sel ? (sel.length ? `<div class="card">${sel.map(histRow).join('')}</div>` : `<div class="empty">${esc(t('calNone'))}</div>`) : ''}`;
 }
+function runRow(r) {
+  const meta = [fmtDate(r.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }), `${fmtKmL(r.distM)} km`, `${RR.fmtPace(r.paceSec)} /km`, RR.fmtDur(r.durS), r.hr ? `${r.hr} bpm` : ''].filter(Boolean).join(' · ');
+  return `<button class="list-btn row" data-a="run-edit" data-v="${r.id}"><span class="grow"><span class="name">${esc(r.name)}</span><br><span class="meta" style="white-space:normal">${esc(meta)}</span></span>${r.felt ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${r.felt}/10">${r.felt}<small>/10</small></span>` : ''}</button>`;
+}
 function vHistory() {
+  const tab = S.histTab === 'runs' ? 'runs' : 'workouts';
+  const tabs = `<div class="seg" role="tablist"><button role="tab" aria-selected="${tab === 'workouts'}" class="${tab === 'workouts' ? 'on' : ''}" data-a="hist-tab" data-v="workouts">${esc(t('workouts'))}</button><button role="tab" aria-selected="${tab === 'runs'}" class="${tab === 'runs' ? 'on' : ''}" data-a="hist-tab" data-v="runs">${esc(t('runs'))}</button></div>`;
+  if (tab === 'runs') {
+    const list = [...S.runs].sort((a, b) => b.date - a.date).map(runRow).join('');
+    return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${tabs}<button class="btn primary block" data-a="run-new">${esc(t('runLog'))}</button>${list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('runNone'))}</div>`}</main>`;
+  }
   const mode = S.histMode === 'cal' ? 'cal' : 'list';
   const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(histRow).join('');
   const seg = S.sessions.length ? `<div class="seg"><button class="${mode === 'list' ? 'on' : ''}" data-a="hist-mode" data-v="list">${esc(t('calList'))}</button><button class="${mode === 'cal' ? 'on' : ''}" data-a="hist-mode" data-v="cal">${esc(t('calCal'))}</button></div>` : '';
   const body = mode === 'cal' ? calView() : (list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`);
-  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${seg}${body}</main>`;
+  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('history'))}</h1>${tabs}${seg}${body}<button class="btn block" data-a="past-workout">${esc(t('pastWorkout'))}</button></main>`;
 }
 function drawCard() {
   const cv = $('#card-cv'); const sh = S.sheet; if (!cv || !sh) return;
@@ -1719,7 +1761,7 @@ function niceRange(lo, hi) {
   const step = Math.pow(10, Math.floor(Math.log10(hi - lo))) / 2;
   return [Math.floor(lo / step) * step, Math.ceil(hi / step) * step];
 }
-function lineChart(id, { dots = [], line = [], unit = '', legend = null, connect = false }) {
+function lineChart(id, { dots = [], line = [], unit = '', legend = null, connect = false, fmt = v => fmtN(Math.round(v * 10) / 10) }) {
   const all = [...dots, ...line];
   if (!all.length) return '';
   const W = 340, H = 170, L = 44, R = 12, T = 12, B = 26;
@@ -1729,14 +1771,14 @@ function lineChart(id, { dots = [], line = [], unit = '', legend = null, connect
   const X = x => L + (x - x0) / (x1 - x0) * (W - L - R), Y = y => T + (1 - (y - y0) / (y1 - y0)) * (H - T - B);
   const ticks = [y0, (y0 + y1) / 2, y1];
   const dfmt = ts => fmtDate(ts, { day: 'numeric', month: 'short' });
-  const grid = ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="cg"/><text x="${L - 6}" y="${(Y(v) + 4).toFixed(1)}" class="ct" text-anchor="end">${esc(fmtN(Math.round(v * 10) / 10))}</text>`).join('');
+  const grid = ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="cg"/><text x="${L - 6}" y="${(Y(v) + 4).toFixed(1)}" class="ct" text-anchor="end">${esc(fmt(v))}</text>`).join('');
   const path = pts => pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.x).toFixed(1)} ${Y(p.y).toFixed(1)}`).join(' ');
   const lineSvg = line.length > 1 ? `<path d="${path(line)}" class="cl"/>` : connect && dots.length > 1 ? `<path d="${path(dots)}" class="cl"/>` : '';
   const dotsSvg = dots.map((p, i) => `<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${i === dots.length - 1 && !line.length ? 5 : 3.5}" class="${line.length ? 'cd2' : 'cd'}"/>`).join('');
   const lastL = line.length ? line[line.length - 1] : null;
   const endSvg = lastL ? `<circle cx="${X(lastL.x).toFixed(1)}" cy="${Y(lastL.y).toFixed(1)}" r="5" class="cd"/>` : '';
   const main = line.length ? line : dots;
-  CHARTS[id] = { pts: main, alt: line.length ? dots : null, X, Y, unit, W };
+  CHARTS[id] = { pts: main, alt: line.length ? dots : null, X, Y, unit, W, fmt };
   const xl = `<text x="${L}" y="${H - 6}" class="ct">${esc(dfmt(x0 + (Math.min(...xs) === Math.max(...xs) ? 864e5 : 0)))}</text><text x="${W - R}" y="${H - 6}" class="ct" text-anchor="end">${esc(dfmt(Math.max(...xs)))}</text>`;
   const leg = legend ? `<div class="legend">${legend.map(l => `<span><i class="${l.cls}"></i>${esc(l.label)}</span>`).join('')}</div>` : '';
   return `<figure class="chart">${leg}<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(legend ? legend.map(l => l.label).join(', ') : unit)}" data-a="chart-tap" data-v="${id}">
@@ -1751,8 +1793,8 @@ function chartTap(svg, ev) {
   const cur = $('#' + svg.dataset.v + '-cur');
   if (cur) { cur.setAttribute('x1', c.X(best.x)); cur.setAttribute('x2', c.X(best.x)); cur.setAttribute('visibility', 'visible'); }
   const tip = $('#' + svg.dataset.v + '-tip');
-  let txt = `${fmtDate(best.x, { day: 'numeric', month: 'short', year: 'numeric' })} · ${fmtN(Math.round(best.y * 10) / 10)} ${c.unit}`;
-  if (c.alt) { const a = c.alt.find(p => p.x === best.x); if (a) txt += ` · ${t('point')}: ${fmtN(a.y)} ${c.unit}`; }
+  let txt = `${fmtDate(best.x, { day: 'numeric', month: 'short', year: 'numeric' })} · ${c.fmt(best.y)} ${c.unit}`;
+  if (c.alt) { const a = c.alt.find(p => p.x === best.x); if (a) txt += ` · ${t('point')}: ${c.fmt(a.y)} ${c.unit}`; }
   if (best.label) txt += ` · ${best.label}`;
   if (tip) tip.textContent = txt;
 }
@@ -1788,8 +1830,8 @@ function progressExercises() {
 }
 function vProgress() {
   const pg = S.prog || (S.prog = { tab: 'strength', exId: null, week: 0, metric: 'weight' });
-  const seg = `<div class="seg" role="tablist"><button role="tab" aria-selected="${pg.tab === 'strength'}" class="${pg.tab === 'strength' ? 'on' : ''}" data-a="prog-tab" data-v="strength">${esc(t('strength'))}</button><button role="tab" aria-selected="${pg.tab === 'body'}" class="${pg.tab === 'body' ? 'on' : ''}" data-a="prog-tab" data-v="body">${esc(t('body'))}</button></div>`;
-  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('progress'))}</h1>${seg}${pg.tab === 'body' ? vBody() : vStrength()}</main>`;
+  const seg = `<div class="seg" role="tablist">${[['strength', 'strength'], ['runs', 'runs'], ['body', 'body']].map(([k, l]) => `<button role="tab" aria-selected="${pg.tab === k}" class="${pg.tab === k ? 'on' : ''}" data-a="prog-tab" data-v="${k}">${esc(t(l))}</button>`).join('')}</div>`;
+  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('progress'))}</h1>${seg}${pg.tab === 'body' ? vBody() : pg.tab === 'runs' ? vRuns() : vStrength()}</main>`;
 }
 function vStrength() {
   const pg = S.prog;
@@ -1824,6 +1866,37 @@ function vStrength() {
   const tl = allPrEvents().slice(0, 15);
   const tlBlock = tl.length ? `<div><h2>${esc(t('prTimeline'))}</h2><div class="card">${tl.map(e => `<button class="list-btn row" data-a="prog-ex" data-v="${esc(e.exId)}"><span class="grow"><span class="name">${esc(exName(e.exId))}</span><br><span class="meta">${esc(fmtEntry(S.ex.get(e.exId), e))} · ${esc(prLabel(e.types))}</span></span><span class="meta">${esc(fmtDate(e.sesAt, { day: 'numeric', month: 'short' }))}</span></button>`).join('')}</div></div>` : '';
   return exBlock + volBlock + tlBlock;
+}
+
+/* ---------- runs ---------- */
+let RUNBARS = [];
+function niceTop(v) { const p = Math.pow(10, Math.floor(Math.log10(v))); for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= v) return m * p; return 10 * p; }
+function barChart(series) {
+  const W = 340, H = 170, L = 44, R = 12, T = 12, B = 26;
+  const top = niceTop(Math.max(0.5, ...series.map(w => w.distM / 1000)));
+  const bw = (W - L - R) / series.length, Y = v => T + (1 - v / top) * (H - T - B);
+  const grid = [0, top / 2, top].map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="cg"/><text x="${L - 6}" y="${(Y(v) + 4).toFixed(1)}" class="ct" text-anchor="end">${esc(fmtN(Math.round(v * 10) / 10))}</text>`).join('');
+  const bars = series.map((w, i) => { const km = w.distM / 1000, x = L + i * bw; return `${km ? `<rect class="cb" x="${(x + bw * 0.16).toFixed(1)}" y="${Y(km).toFixed(1)}" width="${(bw * 0.68).toFixed(1)}" height="${(Y(0) - Y(km)).toFixed(1)}" rx="3"/>` : ''}<rect class="ch" x="${x.toFixed(1)}" y="${T}" width="${bw.toFixed(1)}" height="${H - T - B}" data-a="run-bar" data-v="${i}"/>`; }).join('');
+  const dl = ts => fmtDate(ts, { day: 'numeric', month: 'short' });
+  const xl = `<text x="${L}" y="${H - 6}" class="ct">${esc(dl(series[0].start))}</text><text x="${W - R}" y="${H - 6}" class="ct" text-anchor="end">${esc(dl(series[series.length - 1].start))}</text>`;
+  return `<figure class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('runWeekly'))}">${grid}${bars}${xl}</svg><figcaption class="tip" id="runbar-tip">${esc(t('tapHint'))}</figcaption></figure>`;
+}
+function vRuns() {
+  const add = `<button class="btn primary block" data-a="run-new">${esc(t('runLog'))}</button>`;
+  if (!S.runs.length) return `${add}<div class="empty">${esc(t('runNone'))}</div>`;
+  const st = RR.stats(S.runs, now()); RUNBARS = st.series;
+  const stat = (v, k) => `<div class="stat"><div class="v small-v">${esc(v)}</div><div class="k">${esc(k)}</div></div>`;
+  const sorted = [...S.runs].sort((a, b) => a.date - b.date);
+  const paceDots = sorted.map(r => ({ x: r.date, y: -r.paceSec, label: r.name }));
+  const hrDots = sorted.filter(r => r.hr).map(r => ({ x: r.date, y: r.hr, label: r.name }));
+  const rec = (lbl, r, val) => `<div class="row"><span class="grow"><span class="name">${esc(val)}</span><br><span class="meta" style="white-space:normal">${esc(lbl)} · ${esc(r.name)}</span></span><span class="meta">${esc(fmtDate(r.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</span></div>`;
+  return `${add}
+    <div class="stat-row">${stat(fmtKmL(st.weekM), t('runWeek') + ' km')}${stat(fmtKmL(st.monthM), t('runMonth') + ' km')}${stat(fmtKmL(st.totalM), t('runTotal') + ' km')}</div>
+    <div class="stat-row">${stat(String(st.count), t('runCount'))}${stat(RR.fmtDur(st.totalS), t('duration'))}${stat(st.bestPace ? RR.fmtPace(st.bestPace.paceSec) : '–', t('runBestPace').split(' (')[0])}</div>
+    <div><label>${esc(t('runWeekly'))}</label>${barChart(st.series)}</div>
+    <div><label>${esc(t('runPaceChart'))}</label>${lineChart('c-runpace', { dots: paceDots, unit: '/km', connect: true, fmt: v => RR.fmtPace(-v) })}</div>
+    ${hrDots.length ? `<div><label>${esc(t('runHrChart'))}</label>${lineChart('c-runhr', { dots: hrDots, unit: 'bpm', connect: true, fmt: v => String(Math.round(v)) })}</div>` : ''}
+    <div><label>${esc(t('runRecords'))}</label><div class="card">${rec(t('runLongest'), st.longest, fmtKmL(st.longest.distM) + ' km')}${st.bestPace ? rec(t('runBestPace'), st.bestPace, RR.fmtPace(st.bestPace.paceSec) + ' /km') : ''}</div></div>`;
 }
 
 /* ---------- body measurements ---------- */
@@ -1887,6 +1960,43 @@ function measureSheet(sh) {
     ${rows}
     ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
     <div class="btn-row">${sh.editId ? `<button class="btn danger" data-a="m-del">${esc(t('deleteMeasurement'))}</button>` : ''}<button class="btn primary" data-a="m-save">${esc(t('save'))}</button></div>`;
+}
+function runDraft(r) {
+  const unit = S.settings.runUnit === 'm' ? 'm' : 'km';
+  if (!r) return { name: '', type: 'easy', date: isoDate(now()), unit, dist: '', pMin: '', pSec: '', tH: '', tM: '', tS: '', hr: '', felt: null };
+  return { name: r.name, type: r.type, date: isoDate(r.date), unit, dist: unit === 'km' ? String(r.distM / 1000) : String(r.distM),
+    pMin: String(Math.floor(r.paceSec / 60)), pSec: String(r.paceSec % 60),
+    tH: r.durS >= 3600 ? String(Math.floor(r.durS / 3600)) : '', tM: String(Math.floor((r.durS % 3600) / 60)), tS: String(r.durS % 60), hr: r.hr ? String(r.hr) : '', felt: r.felt || null };
+}
+const runCalcText = d => { const h = RR.hint(d); return h ? (h.time ? t('runCalcTime', h.time) : t('runCalcPace', h.pace)) : ''; };
+function runSheet(sh) {
+  const d = sh.d;
+  const head = `<div class="sheet-head"><h2>${esc(sh.editId ? t('runEdit') : t('runLog'))}</h2><button class="icon-btn" data-a="sheet-close" aria-label="${esc(t('close'))}">${I.x}</button></div>`;
+  const inp = (k, label, max = 2) => `<div><label for="run-${k}">${esc(label)}</label><input id="run-${k}" data-f="run" data-k="${k}" data-san="int" inputmode="numeric" autocomplete="off" maxlength="${max}" value="${esc(d[k])}"></div>`;
+  const chip = (a, v, label, on) => `<button class="chip ${on ? 'on' : ''}" data-a="${a}" data-v="${v}" aria-pressed="${on}">${esc(label)}</button>`;
+  return `${head}
+    <div><label for="run-name">${esc(t('runName'))}</label><input id="run-name" data-f="run" data-k="name" maxlength="60" autocomplete="off" placeholder="${esc(t(d.type === 'long' ? 'runLong' : 'runEasy'))}" value="${esc(d.name)}"></div>
+    <div><label>${esc(t('runType'))}</label><div class="chips">${chip('run-type', 'easy', t('runTypeEasy'), d.type === 'easy')}${chip('run-type', 'long', t('runTypeLong'), d.type === 'long')}</div></div>
+    <div><label for="run-date">${esc(t('runDate'))}</label><input id="run-date" type="date" data-f="run" data-k="date" value="${esc(d.date)}" max="${isoDate(now())}"></div>
+    <div><label for="run-dist">${esc(t('runDist'))} (${d.unit})</label>
+      <div style="display:flex;gap:10px;align-items:center"><input id="run-dist" data-f="run" data-k="dist" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="9" placeholder="${d.unit === 'km' ? '10.00' : '10000'}" value="${esc(d.dist)}" style="flex:1;min-width:0">
+      <div class="chips" style="flex:none">${chip('run-unit', 'km', 'km', d.unit === 'km')}${chip('run-unit', 'm', 'm', d.unit === 'm')}</div></div></div>
+    <div><label>${esc(t('runPace'))}</label><div class="grid2">${inp('pMin', t('runMin'))}${inp('pSec', t('runSec'))}</div></div>
+    <div><label>${esc(t('runTime'))}</label><div class="grid3">${inp('tH', t('runHour'))}${inp('tM', t('runMin'))}${inp('tS', t('runSec'))}</div>
+      <div class="muted small" id="run-calc" style="margin-top:6px;min-height:20px">${esc(runCalcText(d))}</div></div>
+    <div><label for="run-hr">${esc(t('runHr'))}</label><input id="run-hr" data-f="run" data-k="hr" data-san="int" inputmode="numeric" autocomplete="off" maxlength="3" value="${esc(d.hr)}"></div>
+    <div><label>${esc(t('difficulty'))}</label><div class="diff" role="group" aria-label="${esc(t('difficulty'))}">${Array.from({ length: 10 }, (_, i) => i + 1).map(v => `<button class="${d.felt === v ? 'on' : ''}" data-a="run-felt" data-v="${v}" aria-pressed="${d.felt === v}">${v}</button>`).join('')}</div></div>
+    ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+    ${sh.fix ? `<div class="btn-row wrap"><button class="btn small" data-a="run-fix" data-v="pace">${esc(t('runFixPace'))}</button><button class="btn small" data-a="run-fix" data-v="time">${esc(t('runFixTime'))}</button></div>` : ''}
+    <div class="btn-row">${sh.editId ? `<button class="btn danger" data-a="run-del">${esc(t('runDelete'))}</button>` : ''}<button class="btn primary" data-a="run-save">${esc(t('save'))}</button></div>`;
+}
+function runError(r) {
+  if (r.err === 'dist') return t('runErrDist', r.min, r.max / 1000);
+  if (r.err === 'pace') return t('runErrPace', r.min, r.max);
+  if (r.err === 'time') return t('runErrTime');
+  if (r.err === 'need') return t('runErrNeed');
+  if (r.err === 'hr') return t('runErrHr', r.min, r.max);
+  return t('runErrMismatch', r.expected, r.got, r.pace, r.km);
 }
 function readMeasure() {
   const d = S.sheet.draft;
@@ -2080,6 +2190,8 @@ function renderSheet() {
       : `<div class="grid3 calib">${fld('cw', t('calibW'), sh.w ?? '')}${fld('cg', t('calibGuess'), sh.g ?? '')}${fld('ct', t('calibTotal'), sh.tot ?? '')}</div>
         ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
         <button class="btn primary block" data-a="calib-save">${esc(t('calibSave'))}</button>`}`;
+  } else if (sh.type === 'run') {
+    body = runSheet(sh);
   } else if (sh.type === 'measure') {
     body = measureSheet(sh);
   } else if (sh.type === 'rename') {
@@ -2087,8 +2199,10 @@ function renderSheet() {
   } else if (sh.type === 'summary') {
     body = `${head(sh.mode === 'finish' ? t('finishWorkout') : t('editSummary'))}
       <div><label for="sum-name">${esc(t('workoutName'))}</label><input id="sum-name" value="${esc(sh.name)}" maxlength="60"></div>
+      <div class="grid2"><div><label for="sum-date">${esc(t('runDate'))}</label><input id="sum-date" type="date" value="${esc(sh.date || '')}" max="${isoDate(now())}"></div>${fld('sum-dur', t('sumDur'), sh.dur ?? '', 'int')}</div>
       <div><label>${esc(t('difficulty'))}</label><div class="diff" role="group" aria-label="${esc(t('difficulty'))}">${Array.from({ length: 10 }, (_, i) => i + 1).map(v => `<button class="${sh.difficulty === v ? 'on' : ''}" data-a="diff-pick" data-v="${v}" aria-pressed="${sh.difficulty === v}">${v}</button>`).join('')}</div></div>
       <div><label for="sum-note">${esc(t('summaryNote'))}</label><textarea id="sum-note" rows="3" placeholder="${esc(t('summaryNotePh'))}">${esc(sh.note)}</textarea></div>
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       ${sh.left ? `<div class="muted small">${esc(t('unchecked', sh.left))}</div>` : ''}
       ${sh.spikes && sh.spikes.length ? `<div class="info"><h3>${esc(t('spikeTitle'))}</h3>${sh.spikes.map(x => `<div class="small">${esc(x)}</div>`).join('')}</div>` : ''}
       <button class="btn primary block" data-a="summary-save">${esc(sh.mode === 'finish' ? t('saveWorkout') : t('save'))}</button>`;
@@ -2604,6 +2718,39 @@ const A = {
     persist('measurements'); closeSheet(); toast(t('saved')); render();
   },
   'm-del': () => { const id = S.sheet.editId; ask(t('deleteMeasurement') + '?', () => { S.measurements = S.measurements.filter(x => x.id !== id); persist('measurements'); render(); }, { danger: true, yes: t('delete') }); },
+  'run-new': () => openSheet({ type: 'run', d: runDraft(), err: null }),
+  'run-edit': el => { const r = S.runs.find(x => x.id === el.dataset.v); if (r) openSheet({ type: 'run', editId: r.id, d: runDraft(r), err: null }); },
+  'run-type': el => { S.sheet.d.type = el.dataset.v; renderSheet(); },
+  'run-felt': el => { const d = S.sheet.d, v = +el.dataset.v; d.felt = d.felt === v ? null : v; renderSheet(); },
+  'run-unit': el => {
+    const d = S.sheet.d, u = el.dataset.v; if (u === d.unit) return;
+    const m = RR.parseDist(d.dist, d.unit); d.unit = u;
+    if (m != null) d.dist = u === 'km' ? String(m / 1000) : String(m);
+    S.settings.runUnit = u; persist('settings'); renderSheet();
+  },
+  'run-fix': el => { const d = S.sheet.d; if (el.dataset.v === 'pace') { d.tH = ''; d.tM = ''; d.tS = ''; } else { d.pMin = ''; d.pSec = ''; } A['run-save'](); },
+  'run-save': () => {
+    const sh = S.sheet, d = sh.d, today = isoDate(now()); sh.fix = false;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date) || d.date > today) { sh.err = t('runErrDate'); renderSheet(); return; }
+    const r = RR.build({ ...d, date: 0 });
+    if (r.err) { sh.err = runError(r); sh.fix = r.err === 'mismatch' && !!r.expected; renderSheet(); return; }
+    const old = sh.editId ? S.runs.find(x => x.id === sh.editId) : null;
+    const ts = old && isoDate(old.date) === d.date ? old.date : d.date === today ? now() : new Date(+d.date.slice(0, 4), +d.date.slice(5, 7) - 1, +d.date.slice(8, 10), 12).getTime();
+    const run = { ...(old || {}), ...r.run, date: ts, id: old ? old.id : uid(), createdAt: old ? old.createdAt : now(), updatedAt: now() };
+    if (!run.name) run.name = t(run.type === 'long' ? 'runLong' : 'runEasy');
+    if (old) S.runs = S.runs.map(x => (x.id === old.id ? run : x)); else S.runs.push(run);
+    S.settings.runUnit = d.unit; persist('runs', 'settings'); closeSheet(); toast(t('saved')); render();
+  },
+  'run-del': () => { const id = S.sheet.editId; ask(t('runDelQ'), () => { S.runs = S.runs.filter(x => x.id !== id); persist('runs'); render(); }, { danger: true, yes: t('delete') }); },
+  'run-bar': el => {
+    const w = RUNBARS[+el.dataset.v], tip = $('#runbar-tip'); if (!w || !tip) return;
+    tip.textContent = `${t('runWeekOf', fmtDate(w.start, { day: 'numeric', month: 'short' }))}: ${fmtKmL(w.distM)} km${w.n ? ` · ${w.n}×` : ''}`;
+  },
+  'hist-tab': el => { S.histTab = el.dataset.v; render(); },
+  'past-workout': () => {
+    if (S.active) { toast(t('finishCurrentFirst')); return; }
+    ensureAudio(); startSession(null, null); S.active.past = true; saveActive(); toast(t('pastHint'));
+  },
   'rpe-table': () => openSheet({ type: 'rpeTable' }),
   'item-rpe': el => { readItemFields(); const back = S.sheet; const hi = el.dataset.v === 'hi'; openSheet({ type: 'rpe', mode: 'item', which: hi ? 'hi' : 'lo', back, cur: normRpe(hi ? back.item.rpeMax : back.item.rpe) }); },
   'rpe-open': el => {
@@ -2679,7 +2826,9 @@ const A = {
   'timer-skip': () => stopTimer(),
   finish: () => {
     const left = S.active.items.reduce((n, it) => n + it.sets.filter(s => !s.done).length, 0);
-    openSheet({ type: 'summary', mode: 'finish', left, name: S.active.name, difficulty: S.active.difficulty || null, note: S.active.note || '', spikes: sessionSpikes(S.active) });
+    const mins = String(Math.max(1, Math.round((now() - S.active.startedAt) / 60000)));
+    const past = !!S.active.past, dur = past ? '60' : mins;
+    openSheet({ type: 'summary', mode: 'finish', left, date: past ? isoDate(now() - DAY) : isoDate(S.active.startedAt), dur, dur0: dur, name: S.active.name, difficulty: S.active.difficulty || null, note: S.active.note || '', spikes: sessionSpikes(S.active) });
   },
   rename: () => openSheet({ type: 'rename', name: S.active.name }),
   'rename-save': () => { const v = $('#rn').value.trim(); if (v) { S.active.name = v; saveActive(); } closeSheet(); render(); },
@@ -2687,8 +2836,12 @@ const A = {
   'summary-save': () => {
     readSummaryFields();
     const sh = S.sheet;
+    const subject = sh.mode === 'finish' ? S.active : S.sessions.find(x => x.id === sh.sessionId);
+    const plan = planSessionTime(subject, sh, sh.mode === 'finish' ? now() : subject.endedAt);
+    if (plan.err) { sh.err = plan.err; renderSheet(); return; }
     if (sh.mode === 'finish') {
       const s = clone(S.active); s.endedAt = now();
+      applySessionTime(s, plan); delete s.past;
       s.name = sh.name || s.name; s.difficulty = sh.difficulty; s.note = sh.note;
       s.items = s.items.map(it => ({ ...it, sets: it.sets.filter(x => x.done) })).filter(it => it.sets.length);
       if (s.items.length) S.sessions.push(s);
@@ -2706,7 +2859,9 @@ const A = {
       go(s.items.length ? 'session' : 'today', s.id);
     } else {
       const s = S.sessions.find(x => x.id === sh.sessionId);
+      applySessionTime(s, plan);
       s.name = sh.name || s.name; s.difficulty = sh.difficulty; s.note = sh.note;
+      if (plan.delta) new Set(s.items.map(i => i.exId)).forEach(recalcAllPRs);
       persist('sessions'); closeSheet(); render();
     }
   },
@@ -2730,7 +2885,7 @@ const A = {
     };
     ensureAudio(); persist('active'); go('workout');
   },
-  'summary-edit': el => { const s = S.sessions.find(x => x.id === el.dataset.v); openSheet({ type: 'summary', mode: 'edit', sessionId: s.id, name: s.name, difficulty: s.difficulty || null, note: s.note || '' }); },
+  'summary-edit': el => { const s = S.sessions.find(x => x.id === el.dataset.v); const dur = String(Math.max(1, Math.round((s.endedAt - s.startedAt) / 60000))); openSheet({ type: 'summary', mode: 'edit', sessionId: s.id, date: isoDate(s.startedAt), dur, dur0: dur, name: s.name, difficulty: s.difficulty || null, note: s.note || '' }); },
   discard: () => ask(t('discardQ'), () => { S.active = null; stopTimer(); persist('active'); go('today'); }, { danger: true, yes: t('discard') }),
 
   note: el => openSheet({ type: 'note', exId: el.dataset.v, back: S.sheet }),
@@ -3008,6 +3163,32 @@ function wizAdvance() {
   render(); window.scrollTo(0, 0);
 }
 /* swap keeps what was already logged on the old exercise; the sets still to do move to the new one */
+/* workout date and length picked in the summary sheet; keeps the time of day, never in the future */
+function planSessionTime(s, sh, endedAt) {
+  const out = { start: s.startedAt, end: endedAt, delta: 0 };
+  if (sh.date) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(sh.date) || sh.date > isoDate(now())) return { err: t('runErrDate') };
+    if (sh.date !== isoDate(s.startedAt)) {
+      const o = new Date(s.startedAt), [y, m, d] = sh.date.split('-').map(Number);
+      out.start = new Date(y, m - 1, d, o.getHours(), o.getMinutes(), o.getSeconds()).getTime();
+      out.delta = out.start - s.startedAt; out.end = endedAt + out.delta;
+    }
+  }
+  if (sh.dur !== '' && sh.dur != null && sh.dur !== sh.dur0) {
+    const mins = parseInt(sh.dur, 10);
+    if (!(mins >= 1 && mins <= 1440)) return { err: t('durErr') };
+    out.end = out.start + mins * 60000;
+  }
+  out.end = Math.max(out.start + 1000, Math.min(out.end, Math.max(now(), out.start + 60000)));
+  return out;
+}
+function applySessionTime(s, plan) {
+  if (plan.delta) {
+    s.items.forEach(it => it.sets.forEach(x => { if (x.doneAt) x.doneAt += plan.delta; }));
+    s.startedAt = plan.start; s.bw = bodyweightAt(plan.start);
+  }
+  s.endedAt = plan.end;
+}
 function doSwap(itemId, newExId) {
   const it = findItem(itemId); const ex = S.ex.get(newExId);
   const left = it.sets.filter(s => !s.done && s.side !== 'R').map(s => ({ kind: s.kind, target: s.target }));
@@ -3024,8 +3205,9 @@ function doSwap(itemId, newExId) {
 }
 function readSummaryFields() {
   const sh = S.sheet; if (!sh || sh.type !== 'summary') return;
-  const n = $('#sum-name'), no = $('#sum-note');
+  const n = $('#sum-name'), no = $('#sum-note'), da = $('#sum-date'), du = $('#sum-dur');
   if (n) sh.name = n.value.trim(); if (no) sh.note = no.value.trim();
+  if (da) sh.date = da.value; if (du) sh.dur = cleanInt(du.value);
 }
 function readItemFields() {
   const it = S.sheet.item; const g = id => { const e = $('#' + id); return e ? e.value : undefined; };
@@ -3060,7 +3242,7 @@ function readSettingsFields() {
 }
 function backupObj() {
   return { app: 'repsmith', schema: SCHEMA, version: VERSION, exportedAt: new Date().toISOString(),
-    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements, flags: S.flags, calib: S.calib, maxes: S.maxes };
+    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements, flags: S.flags, calib: S.calib, maxes: S.maxes, runs: S.runs };
 }
 async function importBackup(text) {
   let o;
@@ -3074,6 +3256,7 @@ async function importBackup(text) {
     S.notes = obj(o.notes); S.customExercises = arr(o.customExercises);
     S.active = o.active && Array.isArray(o.active.items) ? o.active : null;
     S.measurements = arr(o.measurements); S.flags = arr(o.flags); S.calib = arr(o.calib); S.maxes = obj(o.maxes);
+    S.runs = arr(o.runs).filter(r => r && r.distM > 0 && r.paceSec > 0);
     rebuildExercises(); normTemplates();
     await persist(...KEYS); toast(t('imported')); go('today');
   }, { yes: t('confirm') });
@@ -3113,6 +3296,7 @@ document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
   if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : el.dataset.san === 'list' ? el.value.replace(/[^0-9.,;\-\/ ]/g, '') : el.dataset.san === 'reps' ? el.value.replace(/[^0-9+\-]/g, '') : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (f === 'run' && S.sheet && S.sheet.d) { S.sheet.d[el.dataset.k] = el.value; const c = $('#run-calc'); if (c) c.textContent = runCalcText(S.sheet.d); return; }
   if (f === 'gear-pl' && S.sheet && S.sheet.g) { const g = S.sheet.g; g.plates[g.unit][el.dataset.p] = Math.min(10, parseInt(el.value || '0', 10) || 0); return; }
   if (f === 'gear-bar' && S.sheet && S.sheet.g) { S.sheet.g.bars[el.dataset.c] = el.value; return; }
   if (f === 'cy' && S.sheet && S.sheet.c) { const k = el.dataset.k; if (k === 'weeks') S.sheet.c.weeks = el.value; else S.sheet.c.deload[k] = el.value; return; }
