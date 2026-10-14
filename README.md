@@ -1,4 +1,4 @@
-# Repsmith v0.10.1
+# Repsmith v0.10.2
 
 Autor: Adrian Drożdżyński
 
@@ -26,11 +26,11 @@ Ten sam link wysyłasz znajomym.
 2. Przycisk **Udostępnij** → **Dodaj do ekranu początkowego**.
 3. Uruchamiaj zawsze z ikony na ekranie, nie z przeglądarki. Dane aplikacji z ikony nie są czyszczone automatycznie, dane strony otwieranej w Safari mogą zniknąć po kilku tygodniach nieużywania.
 
-Ograniczenia iOS: brak wibracji na koniec przerwy, brak dźwięku przy zablokowanym ekranie i po zminimalizowaniu appki. Od v0.8.1 dźwięk próbuje przejść mimo wyciszenia (tryb odtwarzania mediów na czas przerwy), ale to zależy od wersji iOS. Sprawdź w Ustawieniach przyciskiem **Test dźwięku**. W trybie mediów muzyka z innej appki może się na chwilę zatrzymać.
+Ograniczenia iOS: brak wibracji na koniec przerwy, brak dźwięku przy zablokowanym ekranie i po zminimalizowaniu appki. Od v0.10.2 sygnał przerwy domyślnie nakłada się na muzykę z innych aplikacji (Spotify itp.) i jej nie zatrzymuje, ale przełącznik trybu cichego go wycisza. W Ustawieniach → Dźwięk możesz wybrać "Mimo trybu cichego": sygnał słychać zawsze, ale iPhone może zatrzymać muzykę na czas przerwy. Sprawdź przyciskiem **Test dźwięku**.
 
 ## Aktualizacja
 
-Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.10.2`).
+Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem aplikacja pobierze nową wersję. Po każdej zmianie podbij `CACHE` w `sw.js` (np. `repsmith-v0.10.3`).
 
 ## Sprawdzenie wersji
 

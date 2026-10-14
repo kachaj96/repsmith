@@ -98,6 +98,9 @@ Spokojniejszy wygląd i momenty nagrody.
 - Ikona notatki przy każdym ćwiczeniu na treningu (z kropką, gdy notatka istnieje).
 - Kolumna "Poprzednio" pokazuje też RPE z poprzedniego razu, jeśli było wpisane.
 
+## v0.10.2 – zrobione
+- iPhone: rest timer nie zatrzymuje już muzyki z innych aplikacji. Cicha pętla audio (tryb odtwarzania) jest teraz opcją "Mimo trybu cichego" w Ustawieniach, domyślnie sygnał miesza się z muzyką.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").
