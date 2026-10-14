@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.10.1';
+const VERSION = '0.10.2';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -402,6 +402,7 @@ Object.assign(STR.pl, {
   runFixPace: 'Zostaw tempo, przelicz czas', runFixTime: 'Zostaw czas, przelicz tempo',
   doneRec: n => plural(n, 'rekord', 'rekordy', 'rekordów'), doneFirst: 'Pierwszy zapis tego treningu', doneVsLast: 'vs ostatnio', doneWeek: n => `${n}. trening w tym tygodniu`, doneStreak: n => (n === 1 ? 'tydzień z rzędu' : 'tyg. z rzędu'), doneDetails: 'Szczegóły', doneClose: 'Gotowe',
   runDoneTitle: 'Dobry bieg', runDonePace: (p, avg, d) => (d > 0 ? `Tempo ${p}/km, ${d} s szybciej niż Twoja średnia z 30 dni (${avg}).` : d < 0 ? `Tempo ${p}/km, ${-d} s wolniej niż Twoja średnia z 30 dni (${avg}).` : `Tempo ${p}/km, tak jak Twoja średnia z 30 dni.`), runDoneLongest: 'Najdłuższy bieg w tym miesiącu.', runDoneWeek: (n, km) => `W tym tygodniu: ${n}× biegu, ${km} km.`,
+  audioMode: 'Dźwięk a muzyka', audioMix: 'Obok muzyki', audioLoud: 'Mimo trybu cichego', audioModeD: 'Obok muzyki: sygnał przerwy nakłada się na Spotify i inne aplikacje, nic nie zatrzymuje, ale iPhone wycisza go przełącznikiem trybu cichego. Mimo trybu cichego: sygnał słychać zawsze, ale iPhone może zatrzymać muzykę na czas przerwy.',
   progSince: (d, x) => `${x} kg od ${d}`, planSettings: 'Ustawienia planu', secWorkout: 'Trening', secSound: 'Dźwięk', secData: 'Dane i kopia',
   focusMode: 'Tryb skupienia', focusModeD: 'Na treningu otwarte jest tylko bieżące ćwiczenie, reszta zwija się do jednej linii.', calmMode: 'Tryb spokojny', calmModeD: 'Bez wibracji, animacji nagród i ekranu podsumowania po treningu.',
   runNotePh: 'Jak się biegło, trasa, pogoda...', runNone: 'Brak biegów. Zapisz pierwszy.', runDelQ: 'Usunąć ten bieg?', runDelete: 'Usuń bieg',
@@ -419,6 +420,7 @@ Object.assign(STR.en, {
   runFixPace: 'Keep pace, recalculate time', runFixTime: 'Keep time, recalculate pace',
   doneRec: n => (n === 1 ? 'record' : 'records'), doneFirst: 'First log of this workout', doneVsLast: 'vs last time', doneWeek: n => `Workout ${n} this week`, doneStreak: n => (n === 1 ? 'week streak' : 'wk streak'), doneDetails: 'Details', doneClose: 'Done',
   runDoneTitle: 'Nice run', runDonePace: (p, avg, d) => (d > 0 ? `Pace ${p}/km, ${d} s faster than your 30-day average (${avg}).` : d < 0 ? `Pace ${p}/km, ${-d} s slower than your 30-day average (${avg}).` : `Pace ${p}/km, same as your 30-day average.`), runDoneLongest: 'Longest run this month.', runDoneWeek: (n, km) => `This week: ${n} ${n === 1 ? 'run' : 'runs'}, ${km} km.`,
+  audioMode: 'Sound and music', audioMix: 'Alongside music', audioLoud: 'Even in silent mode', audioModeD: 'Alongside music: the rest beep plays over Spotify and other apps without stopping them, but the iPhone silent switch mutes it. Even in silent mode: the beep always plays, but the iPhone may pause your music during the rest.',
   progSince: (d, x) => `${x} kg since ${d}`, planSettings: 'Plan settings', secWorkout: 'Workout', secSound: 'Sound', secData: 'Data and backup',
   focusMode: 'Focus mode', focusModeD: 'During a workout only the current exercise is open, the rest collapse to one line.', calmMode: 'Calm mode', calmModeD: 'No vibration, reward animations or post-workout summary screen.',
   runNotePh: 'How it went, route, weather...', runNone: 'No runs yet. Log your first one.', runDelQ: 'Delete this run?', runDelete: 'Delete run',
@@ -986,11 +988,14 @@ function weekCount() {
 let audioCtx = null, silentEl = null, audioUnlocked = false;
 /* tiny silent WAV (0.5 s) used to keep iOS in "media playback" mode while a rest timer runs */
 const SILENT_WAV = (() => { const n = 4000, b = new Uint8Array(44 + n); const w = (o, v, l) => { for (let i = 0; i < l; i++) b[o + i] = (v >> (8 * i)) & 255; }; [...'RIFF'].forEach((c, i) => b[i] = c.charCodeAt(0)); w(4, 36 + n, 4); [...'WAVEfmt '].forEach((c, i) => b[8 + i] = c.charCodeAt(0)); w(16, 16, 4); w(20, 1, 2); w(22, 1, 2); w(24, 8000, 4); w(28, 8000, 4); w(32, 1, 2); w(34, 8, 2); [...'data'].forEach((c, i) => b[36 + i] = c.charCodeAt(0)); w(40, n, 4); for (let i = 44; i < b.length; i++) b[i] = 128; let bin = ''; b.forEach(x => bin += String.fromCharCode(x)); return 'data:audio/wav;base64,' + btoa(bin); })();
+/* default: beeps mix with whatever is playing (Spotify etc). 'loud' keeps the old silent-loop trick so sound also plays with the silent switch on, which makes iOS pause other audio */
+const loudAudio = () => S.settings.audioMode === 'loud';
 function audioSession(type) { try { if (navigator.audioSession) navigator.audioSession.type = type; } catch (e) {} }
 /* short haptic tick; off in calm mode */
 function buzz(pattern) { if (S.settings.calm === true) return; try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (e) {} }
 function ensureAudio() {
   try {
+    if (!loudAudio()) audioSession('ambient');
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state !== 'running') audioCtx.resume();
     if (!audioUnlocked) { // play one silent buffer inside a user gesture, this is what unlocks iOS
@@ -1000,11 +1005,11 @@ function ensureAudio() {
 }
 function silentLoop(on) {
   try {
-    if (on) {
+    if (on && loudAudio()) {
       audioSession('playback');
       if (!silentEl) { silentEl = new Audio(SILENT_WAV); silentEl.loop = true; silentEl.setAttribute('playsinline', ''); silentEl.volume = 0.01; }
       const p = silentEl.play(); if (p && p.catch) p.catch(() => {});
-    } else { if (silentEl) silentEl.pause(); audioSession('auto'); }
+    } else { if (silentEl) silentEl.pause(); audioSession(loudAudio() ? 'auto' : 'ambient'); }
   } catch (e) {}
 }
 ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (!audioCtx || audioCtx.state !== 'running') ensureAudio(); }, { passive: true }));
@@ -2360,6 +2365,7 @@ function renderSheet() {
       <button class="btn block" data-a="gear-open">${esc(t('gearTitle'))}</button><button class="btn block" data-a="plates-open" data-v="">${esc(t('plateCalc'))}</button>`;
     const sound = `<div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
       <div><label>${esc(t('soundVol'))}</label><div class="chips">${['low', 'mid', 'high'].map(v => `<button class="chip ${(st.vol || 'high') === v ? 'on' : ''}" data-a="vol" data-v="${v}">${esc(t('vol' + v[0].toUpperCase() + v.slice(1)))}</button>`).join('')}</div></div>
+      <div><label>${esc(t('audioMode'))}</label><div class="chips"><button class="chip ${!loudAudio() ? 'on' : ''}" data-a="audio-mode" data-v="mix">${esc(t('audioMix'))}</button><button class="chip ${loudAudio() ? 'on' : ''}" data-a="audio-mode" data-v="loud">${esc(t('audioLoud'))}</button></div><div class="small muted" style="margin-top:6px">${esc(t('audioModeD'))}</div></div>
       <button class="btn block" data-a="sound-test">${esc(t('soundTest'))}</button><div class="small muted">${esc(t('soundHint'))}</div>`;
     const coach = `<div><label>${esc(t('readinessSet'))}</label>${onoff('readiness', st.readiness !== false)}</div>
       <div><label>${esc(t('flagsSet'))}</label>${onoff('flagsOn', st.flagsOn !== false)}</div>
@@ -3106,6 +3112,7 @@ const A = {
 
   /* settings */
   vol: el => { readSettingsFields(); S.settings.vol = el.dataset.v; persist('settings'); renderSheet(); ensureAudio(); beep(); },
+  'audio-mode': el => { S.settings.audioMode = el.dataset.v === 'loud' ? 'loud' : 'mix'; persist('settings'); silentLoop(false); ensureAudio(); renderSheet(); },
   'sound-test': () => { ensureAudio(); silentLoop(true); if (!audioCtx) return toast('Audio niedostępne'); const was = S.settings.sound; S.settings.sound = true; beep(); S.settings.sound = was; setTimeout(() => { if (!S.timer) silentLoop(false); }, 1500); },
   sound: el => { readSettingsFields(); S.settings.sound = el.dataset.v === '1'; persist('settings'); renderSheet(); if (S.settings.sound) { ensureAudio(); tick(); } },
   lang: el => { readSettingsFields(); S.settings.lang = el.dataset.v; document.documentElement.lang = S.settings.lang; persist('settings'); render(); },
