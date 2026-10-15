@@ -101,6 +101,11 @@ Spokojniejszy wygląd i momenty nagrody.
 ## v0.10.2 – zrobione
 - iPhone: rest timer nie zatrzymuje już muzyki z innych aplikacji. Cicha pętla audio (tryb odtwarzania) jest teraz opcją "Mimo trybu cichego" w Ustawieniach, domyślnie sygnał miesza się z muzyką.
 
+## v0.10.3 – zrobione
+- Nowy plan w bibliotece (Bloki siłowe): **Bench + góra, 12 tyg.** Poniedziałek ciężki bench, środa OHP/plecy/nogi, piątek wariant benchu i ręce, test 1RM w tygodniu 12. Ćwiczenia dodatkowe w niskich zakresach (6-8) z podwójną progresją, izolacje wyżej, superserie. Back-offy na 93% top setu z większą liczbą powtórzeń, taper bez ciężkiego spoto, rozgrzewka dolnych pleców w notatce pierwszego ćwiczenia.
+- Plan z biblioteki zachowuje superserie (pole `group` było gubione przy budowaniu szablonu).
+- Edytor tygodni nie kasuje już nadpisań powtórzeń i % backoffu z tygodniowej tabeli planu.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").
