@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.10.2';
+const VERSION = '0.10.3';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -2471,6 +2471,8 @@ function wkRowsFrom(it, x) {
   }
   return rows;
 }
+/* week overrides the sheet has no column for; they survive editing */
+const WK_KEEP = ['cue', 'test', 'backoffReps', 'backoffPct'];
 /* sheet rows -> it.wk; returns an error string or null */
 function wkApplyRows(sh) {
   const it = sh.back.item; const [a, b] = TGT_LIM[tgtKind(it.exId)];
@@ -2490,11 +2492,11 @@ function wkApplyRows(sh) {
     // a value equal to the base is not an override (so later base edits still apply to that week)
     if (o.sets === it.sets) delete o.sets; if (o.reps === it.reps) delete o.reps; if (o.pct != null && o.pct === it.pct) delete o.pct;
     if (o.rpe != null && o.rpe === it.rpe && (it.rpeMax == null || it.rpeMax === it.rpe)) { delete o.rpe; delete o.rpeMax; } if (o.backoffSets === it.backoffSets) delete o.backoffSets;
-    const keep = it.wk && it.wk[w] ? Object.fromEntries(['cue', 'test'].filter(k => it.wk[w][k] != null).map(k => [k, it.wk[w][k]])) : {};
+    const keep = it.wk && it.wk[w] ? Object.fromEntries(WK_KEEP.filter(k => it.wk[w][k] != null).map(k => [k, it.wk[w][k]])) : {};
     if (Object.keys(o).length || Object.keys(keep).length) out[w] = { ...keep, ...o };
   }
   // test markers on weeks the sheet does not show as rows still survive
-  for (const [w, o] of Object.entries(it.wk || {})) if (!out[w] && (o.cue || o.test)) out[w] = Object.fromEntries(['cue', 'test'].filter(k => o[k] != null).map(k => [k, o[k]]));
+  for (const [w, o] of Object.entries(it.wk || {})) if (!out[w] && WK_KEEP.some(k => o[k] != null && o[k] !== '')) out[w] = Object.fromEntries(WK_KEEP.filter(k => o[k] != null).map(k => [k, o[k]]));
   if (Object.keys(out).length) it.wk = out; else delete it.wk;
   return null;
 }

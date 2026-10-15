@@ -1,4 +1,4 @@
-# Repsmith v0.10.2
+# Repsmith v0.10.3
 
 Autor: Adrian Drożdżyński
 
@@ -46,6 +46,7 @@ Ustawienia → na dole numer wersji. Jeśli po aktualizacji widać starą: zamkn
 - `data/exercises.json` – baza 159 ćwiczeń (nazwy PL/EN, wzorzec ruchu, mięśnie główne i pomocnicze, sprzęt, typ, jednostronne, sposób rejestracji).
 - `app.js` – interfejs i logika dziennika, bez frameworków i bez kroku budowania.
 - `plans.js` – biblioteka 25 planów, pytania kreatora, pakiety dodatkowe i zamiany (generowane z blueprintu planów).
+- `blocks.js` – cztery bloki siłowe o stałej długości (4, 8 i 12 tygodni oraz "Bench + góra, 12 tyg.") z tabelami tygodniowymi.
 - `coach.js` – selektor planu, budowanie planu, silnik progresji, objętość, sygnały, bloki i deload.
 - `runs.js` – dziennik biegów: walidacja dystansu, tempa, czasu i tętna, statystyki tygodniowe i rekordy.
 - `bodymap.js` – sylwetka mięśni z [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter), licencja MIT, © 2022 ELABBASSI Hicham (pełna treść w `LICENSES.md`).

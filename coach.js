@@ -204,6 +204,7 @@ function factory(H) {
       warmups: it.warmups || 0, rest: it.rest, method: it.method, kind: it.kind,
       backoffSets: it.backoffSets || 2, backoffReps: it.backoffReps || '', backoffPct: it.backoffPct || H.settings().backoffPct };
     if (it.cue) o.cue = it.cue;
+    if (it.group) o.group = it.group;
     if (it.pack) o.pack = true;
     if (it.pct) { o.pct = it.pct; o.rpe = null; o.rpeMax = null; }
     if (it.wk) o.wk = JSON.parse(JSON.stringify(it.wk));
@@ -489,7 +490,7 @@ function factory(H) {
     return { type, week, len, deload, early, cut, loadCut, ramp, weeksTotal, fixed, weeks: fixed ? c.weeks : null, finished, done, cycle: c };
   }
   /* template item as it runs in a given week of a fixed plan */
-  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'cue', 'test'];
+  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'backoffPct', 'cue', 'test'];
   function weekItem(it, week) {
     const o = week && it.wk && it.wk[week];
     if (!o) return it;
