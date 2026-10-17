@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.10.3';
+const VERSION = '0.10.4';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -25,7 +25,7 @@ const STR = {
     topbackInfo: 'Jedna ciężka seria (top set) na zadane RPE, potem lżejsze serie (backoff) na procent ciężaru z top setu.\n\nTop set mówi, jak jesteś dziś dysponowany, a backoffy dokładają objętość bez zajeżdżania się. Dobre do bojów głównych: przysiad, wyciskanie, martwy ciąg, OHP.',
     warmup: 'Rozgrz.', work: 'Seria', top: 'Top set', backoff: 'Backoff',
     prev: 'Poprzednio', kg: 'kg', plusKg: '+kg', time: 'Czas (s)', dist: 'Dyst. (m)',
-    addSet: '+ Dodaj serię', removeSet: 'Usuń ostatnią serię', finish: 'Zakończ', finishWorkout: 'Zakończ trening',
+    addSet: '+ Dodaj serię', removeSet: 'Usuń ostatnią serię', setMenuAria: 'Menu serii', setMenuHint: 'Do upadku ustawia RPE 10, jeśli pole jest puste. Drop set nie liczy się do rekordów, e1RM i podpowiedzi ciężaru.', setWarm: 'Oznacz jako rozgrzewkę', setWork: 'Oznacz jako zwykłą serię', setFail: 'Do upadku', setFailOff: 'Zdejmij znacznik upadku', setDrop: 'Drop set', setDropOff: 'Zdejmij znacznik drop setu', setNote: 'Notatka do serii', setNotePh: 'Np. bujanie na końcu, plecy 2/10', setDel: 'Usuń serię', failTag: 'upadek', dropTag: 'drop', histAria: 'Historia ćwiczenia', histNone: 'Brak wcześniejszych treningów z tym ćwiczeniem.', histMore: 'Pełny postęp', histE1: 'Ostatnie e1RM', finish: 'Zakończ', finishWorkout: 'Zakończ trening',
     discard: 'Odrzuć trening', discardQ: 'Odrzucić trening? Wpisane serie przepadną.',
     finishQ: n => n ? `Zostały niezaznaczone serie (${n}). Zakończyć? Niezaznaczone nie zapiszą się.` : 'Zakończyć i zapisać trening?',
     restTimer: 'Przerwa', skip: 'Pomiń', subs: 'Zamienniki', subsTitle: 'Zamień ćwiczenie',
@@ -104,7 +104,7 @@ const STR = {
     topbackInfo: 'One heavy set (top set) at a target RPE, then lighter sets (backoff) at a percentage of the top set weight.\n\nThe top set tells you how you perform today, the backoffs add volume without burning you out. Good for main lifts: squat, bench, deadlift, OHP.',
     warmup: 'Warm-up', work: 'Set', top: 'Top set', backoff: 'Backoff',
     prev: 'Previous', kg: 'kg', plusKg: '+kg', time: 'Time (s)', dist: 'Dist. (m)',
-    addSet: '+ Add set', removeSet: 'Remove last set', finish: 'Finish', finishWorkout: 'Finish workout',
+    addSet: '+ Add set', removeSet: 'Remove last set', setMenuAria: 'Set menu', setMenuHint: 'To failure sets RPE 10 if the field is empty. A drop set does not count towards records, e1RM and load suggestions.', setWarm: 'Mark as warm-up', setWork: 'Mark as normal set', setFail: 'To failure', setFailOff: 'Remove failure mark', setDrop: 'Drop set', setDropOff: 'Remove drop set mark', setNote: 'Set note', setNotePh: 'E.g. swung at the end, back 2/10', setDel: 'Delete set', failTag: 'failure', dropTag: 'drop', histAria: 'Exercise history', histNone: 'No earlier workouts with this exercise.', histMore: 'Full progress', histE1: 'Latest e1RM', finish: 'Finish', finishWorkout: 'Finish workout',
     discard: 'Discard workout', discardQ: 'Discard this workout? Logged sets will be lost.',
     finishQ: n => n ? `${n} set(s) not checked off. Finish anyway? Unchecked sets are not saved.` : 'Finish and save the workout?',
     restTimer: 'Rest', skip: 'Skip', subs: 'Swap', subsTitle: 'Swap exercise',
@@ -443,6 +443,7 @@ const I = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
   swap: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>',
   info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+  hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/><path d="M12 8v4l3 2"/></svg>',
   down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>',
   left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -661,7 +662,7 @@ function loadOf(ex, set, bw) {
   if (ex.logging === 'BWX') { if (!(bw > 0)) return null; const l = bw + (num(set.weight) || 0); return l > 0 ? l : null; }
   return null;
 }
-function prEligible(ex, set, bw) { return canPR(ex) && set.kind !== 'warmup' && loadOf(ex, set, bw) > 0 && num(set.reps) > 0; }
+function prEligible(ex, set, bw) { return canPR(ex) && set.kind !== 'warmup' && !set.drop && loadOf(ex, set, bw) > 0 && num(set.reps) > 0; }
 /* eligible sets of an exercise, oldest first: [{load, reps, rpe, set, at, sesId}] */
 function entriesFor(exId, opts = {}) {
   const ex = S.ex.get(exId); const out = [];
@@ -1268,6 +1269,19 @@ function vPlan() {
 }
 
 /* ---------- view: workout ---------- */
+/* the sets of one exercise from its last finished workouts, newest first: [{ s: session, sets: done working sets }] */
+function exerciseHistory(exId, n) {
+  return S.sessions.slice().sort((a, b) => b.startedAt - a.startedAt)
+    .map(s => { const it = s.items.find(i => i.exId === exId); return it ? { s, sets: it.sets.filter(x => x.done && x.kind !== 'warmup') } : null; })
+    .filter(h => h && h.sets.length).slice(0, n);
+}
+/* a unilateral set is logged as a left/right pair: marks and deletes apply to both sides */
+function setPair(it, s) {
+  const ex = S.ex.get(it.exId);
+  if (!(ex && ex.unilateral) || !s.side) return [s];
+  const i = it.sets.indexOf(s), o = it.sets[s.side === 'L' ? i + 1 : i - 1];
+  return o && o.side && o.side !== s.side && o.kind === s.kind ? [s, o] : [s];
+}
 function setGrid(it) {
   const ex = S.ex.get(it.exId) || { logging: 'W' };
   const prevItem = previousFor(it.exId, S.active.startedAt);
@@ -1300,7 +1314,7 @@ function setGrid(it) {
     else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
     return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
-      <span class="kind ${s.kind === 'top' ? 'top' : ''}">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>
+      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + kindLbl)}"><span class="kl">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>${s.fail ? `<span class="side-tag set-flag">${esc(t('failTag'))}</span>` : ''}${s.drop ? `<span class="side-tag set-flag">${esc(t('dropTag'))}</span>` : ''}${s.note ? '<span class="side-tag set-flag" aria-hidden="true">✎</span>' : ''}</button>
       <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}${p && normRpe(p.rpe) ? `<small>@${esc(fmtN(normRpe(p.rpe)))}</small>` : ''}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
@@ -1414,8 +1428,9 @@ function vWorkout() {
     const prSets = it.sets.filter(x => x.pr && x.pr.length);
     const prCard = prSets.length ? `<div class="pr-card ${S._justPR === it.id ? 'pop' : ''}"><b>PR</b><span>${esc(fmtSet(prSets[prSets.length - 1], ex))} · ${esc(prLabel([...new Set(prSets.flatMap(x => x.pr))]))}</span></div>` : '';
     return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
-      <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}</div>
-      <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><span class="ex-tools"><button class="icon-btn note-ic ${note && note.text ? 'has' : ''}" data-a="note" data-v="${esc(it.exId)}" aria-label="${esc(t('note'))}">${I.note}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div>
+      <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}${ex && ex.primary && ex.primary[0] ? ` <span class="mtag">${esc(muscleName(ex.primary[0]))}</span>` : ''}</div>
+      <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><span class="ex-tools"><button class="icon-btn" data-a="ex-hist" data-v="${esc(it.exId)}" aria-label="${esc(t('histAria'))}">${I.hist}</button><button class="icon-btn note-ic ${note && note.text ? 'has' : ''}" data-a="note" data-v="${esc(it.exId)}" aria-label="${esc(t('note'))}">${I.note}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div>
+      ${ex ? `<div class="ex-sub">${esc(equipName(ex.equipment))}</div>` : ''}
       ${prCard}
       ${it.sug || hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
       ${sugLine(it)}
@@ -2281,6 +2296,14 @@ function renderSheet() {
     body = runSheet(sh);
   } else if (sh.type === 'measure') {
     body = measureSheet(sh);
+  } else if (sh.type === 'setNote') {
+    body = `${head(t('setNote'))}<div><label for="sn">${esc(t('note'))}</label><textarea id="sn" rows="3" maxlength="200" placeholder="${esc(t('setNotePh'))}">${esc(sh.text || '')}</textarea></div><div class="btn-row">${sh.text ? `<button class="btn danger" data-a="setnote-del">${esc(t('delete'))}</button>` : ''}<button class="btn primary" data-a="setnote-save">${esc(t('save'))}</button></div>`;
+  } else if (sh.type === 'exHist') {
+    const hx = S.ex.get(sh.exId); const hist = exerciseHistory(sh.exId, 5);
+    const e1 = canPR(hx) ? lastE1rm(sh.exId, Infinity) : null;
+    body = `${head(exName(sh.exId))}${e1 ? `<div class="muted small">${esc(t('histE1'))}: <b>${esc(fmtN(Math.round(e1 * 10) / 10))} kg</b></div>` : ''}
+      ${hist.length ? `<div class="card">${hist.map(h => `<div class="row"><span class="grow"><span class="name">${esc(fmtDate(h.s.startedAt, { day: 'numeric', month: 'short' }))}${h.s.name ? ` · ${esc(h.s.name)}` : ''}</span><br><span class="meta">${esc(h.sets.map(x => fmtSet(x, hx) + (normRpe(x.rpe) ? '@' + fmtN(normRpe(x.rpe)) : '') + (x.fail ? ' (' + t('failTag') + ')' : '') + (x.drop ? ' (' + t('dropTag') + ')' : '')).join(' · '))}</span></span></div>`).join('')}</div>
+      <button class="btn block" data-a="hist-progress" data-v="${esc(sh.exId)}">${esc(t('histMore'))}</button>` : `<div class="muted">${esc(t('histNone'))}</div>`}`;
   } else if (sh.type === 'rename') {
     body = `${head(t('rename'))}<div><label for="rn">${esc(t('workoutName'))}</label><input id="rn" value="${esc(sh.name)}" maxlength="60"></div><button class="btn primary block" data-a="rename-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'summary') {
@@ -2323,7 +2346,7 @@ function renderSheet() {
   } else if (sh.type === 'rest') {
     body = `${head(t('rest'))}<div>${fld('rest-val', t('rest'), sh.val)}</div><div class="chips">${[60, 90, 120, 150, 180, 240, 300].map(v => `<button class="chip ${v === sh.val ? 'on' : ''}" data-a="rest-pick" data-v="${v}">${fmtClock(v)}</button>`).join('')}</div><button class="btn primary block" data-a="rest-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'menu') {
-    body = `${head(sh.title)}${sh.items.map(m => `<button class="btn block ${m.danger ? 'danger' : ''}" data-a="menu-pick" data-v="${m.id}">${esc(m.label)}</button>`).join('')}`;
+    body = `${head(sh.title)}${sh.hint ? `<div class="muted small">${esc(sh.hint)}</div>` : ''}${sh.items.map(m => `<button class="btn block ${m.danger ? 'danger' : ''}" data-a="menu-pick" data-v="${m.id}">${esc(m.label)}</button>`).join('')}`;
   } else if (sh.type === 'exDetail') {
     const e = S.ex.get(sh.exId);
     const n = S.notes[sh.exId];
@@ -2793,6 +2816,31 @@ const A = {
     pushSets(it.sets, ex, kind, 1, last ? last.target : null);
     saveActive(); render();
   },
+  'set-menu': el => {
+    const it = findItem(el.dataset.i); const s = it && it.sets.find(x => x.id === el.dataset.s); if (!s) return;
+    const pair = setPair(it, s); const each = f => pair.forEach(f);
+    const refresh = x => { if (x.done) x.pr = x.kind === 'warmup' ? [] : detectPR(it.exId, x); };
+    const items = [
+      ...(s.kind === 'work' || s.kind === 'warmup' ? [{ id: 'kind', label: s.kind === 'warmup' ? t('setWork') : t('setWarm') }] : []),
+      ...(s.kind !== 'warmup' ? [{ id: 'fail', label: s.fail ? t('setFailOff') : t('setFail') }, { id: 'drop', label: s.drop ? t('setDropOff') : t('setDrop') }] : []),
+      { id: 'note', label: t('setNote') },
+      { id: 'del', label: t('setDel'), danger: true }];
+    openSheet({ type: 'menu', title: exName(it.exId), hint: t('setMenuHint'), items, handlers: {
+      kind: () => { each(x => { x.kind = x.kind === 'warmup' ? 'work' : 'warmup'; if (x.kind === 'warmup') { delete x.fail; delete x.drop; } refresh(x); }); saveActive(); render(); },
+      fail: () => { each(x => { if (x.fail) { delete x.fail; if (x.rpeAuto && x.rpe === '10') x.rpe = ''; delete x.rpeAuto; } else { x.fail = true; if (x.rpe === '' || x.rpe == null) { x.rpe = '10'; x.rpeAuto = true; } } refresh(x); }); saveActive(); render(); },
+      drop: () => { each(x => { if (x.drop) delete x.drop; else x.drop = true; refresh(x); }); saveActive(); render(); },
+      note: () => openSheet({ type: 'setNote', itemId: it.id, setId: s.id, text: s.note || '' }),
+      del: () => { const ids = pair.map(x => x.id); it.sets = it.sets.filter(x => !ids.includes(x.id)); saveActive(); render(); },
+    } });
+  },
+  'setnote-save': () => {
+    const it = findItem(S.sheet.itemId); const s = it && it.sets.find(x => x.id === S.sheet.setId);
+    if (s) { const v = ($('#sn').value || '').trim().slice(0, 200); if (v) s.note = v; else delete s.note; saveActive(); }
+    closeSheet(); render();
+  },
+  'setnote-del': () => { const it = findItem(S.sheet.itemId); const s = it && it.sets.find(x => x.id === S.sheet.setId); if (s) { delete s.note; saveActive(); } closeSheet(); render(); },
+  'ex-hist': el => openSheet({ type: 'exHist', exId: el.dataset.v }),
+  'hist-progress': el => { const id = el.dataset.v; S.prog = S.prog || { tab: 'strength', exId: null, week: 0, metric: 'weight' }; S.prog.tab = 'strength'; S.prog.exId = id; go('progress'); },
   'del-set': el => { const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId); it.sets.splice(-(ex && ex.unilateral ? 2 : 1)); saveActive(); render(); },
   'prog-tab': el => { S.prog.tab = el.dataset.v; render(); },
   'prog-ex': el => { S.prog.tab = 'strength'; S.prog.exId = el.dataset.v; render(); window.scrollTo(0, 0); },

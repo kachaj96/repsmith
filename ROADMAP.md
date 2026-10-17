@@ -106,6 +106,13 @@ Spokojniejszy wygląd i momenty nagrody.
 - Plan z biblioteki zachowuje superserie (pole `group` było gubione przy budowaniu szablonu).
 - Edytor tygodni nie kasuje już nadpisań powtórzeń i % backoffu z tygodniowej tabeli planu.
 
+## v0.10.4 – zrobione
+Pomysły z przeglądu innej aplikacji do treningów, bez zmiany wyglądu (jeden akcent zostaje).
+- Karta ćwiczenia w treningu: sprzęt pod nazwą i neutralny znacznik głównej partii.
+- Menu serii (dotknij nazwy serii): zwykła seria albo rozgrzewka, "do upadku" (ustawia RPE 10, jeśli puste), drop set, notatka do serii, usunięcie serii (przy ćwiczeniach jednostronnych obu stron). Znaczniki widać przy serii.
+- Drop set nie liczy się do rekordów, e1RM, podpowiedzi ciężaru ani sygnału zmęczenia.
+- Ikona historii na karcie ćwiczenia: ostatnie 5 treningów z tym ćwiczeniem (serie, RPE, upadek, drop), ostatnie e1RM i skrót do pełnego postępu.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

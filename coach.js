@@ -252,7 +252,7 @@ function factory(H) {
     if (sig) { const same = list.filter(x => x.it.sig === sig); if (same.length) return same; }
     return list;
   }
-  const doneWork = it => it.sets.filter(x => x.done && x.kind !== 'warmup' && x.kind !== 'calib' && x.side !== 'R');
+  const doneWork = it => it.sets.filter(x => x.done && x.kind !== 'warmup' && x.kind !== 'calib' && !x.drop && x.side !== 'R');
   const w = x => H.num(x.weight);
   const rpeOf = (x, dflt) => { const q = H.normRpe(x.rpe); return q == null ? dflt : q; };
 
@@ -383,7 +383,7 @@ function factory(H) {
     const e = EX(it.exId); if (!e || (e.logging !== 'W' && e.logging !== 'BWX')) return null;
     let best = null;
     for (const x of it.sets) {
-      if (!x.done || x.kind === 'warmup' || x.pend) continue;
+      if (!x.done || x.kind === 'warmup' || x.drop || x.pend) continue;
       const load = H.loadOf(e, x, H.sessionBw(s)); const reps = H.num(x.reps);
       if (!(load > 0 && reps > 0)) continue;
       const v = H.e1rm(load, reps, x.rpe); if (v && (!best || v > best)) best = v;
