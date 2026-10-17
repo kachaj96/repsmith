@@ -502,3 +502,13 @@ button.linkish.mute { color: var(--muted); }
   body.calm .pr-card, body.calm .done-hero .big, body.calm .tally .m, body.calm .tally .sl { animation: none; stroke-dashoffset: 0; }
 }
 @keyframes rs-draw { to { stroke-dashoffset: 0; } }
+
+/* v0.10.4: card meta, set menu */
+.mtag { display: inline-block; font-size: 11px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 8px; padding: 1px 8px; margin-left: 6px; text-transform: none; letter-spacing: 0; vertical-align: 1px; }
+.ex-sub { font-size: 14px; color: var(--muted); margin-top: -2px; }
+.ex-sub::first-letter, .mtag::first-letter { text-transform: uppercase; }
+.kind-btn { display: block; background: none; border: 0; padding: 0; margin: 0; min-height: 44px; width: 100%; text-align: left; color: inherit; font: inherit; font-weight: 600; font-size: 14px; line-height: 1.1; white-space: nowrap; }
+.kind-btn:not(.top) { font-weight: 600; }
+.kind-btn .kl::after { content: '\22EE'; margin-left: 3px; color: var(--muted); opacity: .55; font-weight: 400; }
+.side-tag.set-flag { display: block; margin: 1px 0 0; font-size: 10px; line-height: 1.1; color: var(--text); opacity: .8; text-transform: uppercase; letter-spacing: .04em; }
+.kind-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
