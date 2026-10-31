@@ -185,7 +185,7 @@ function factory(H) {
       const chosen = [order[0].i];
       for (const o of order.slice(1)) { if (chosen.length === 2) break; if (days.length >= 4 && Math.abs(o.i - chosen[0]) === 1) continue; chosen.push(o.i); }
       if (chosen.length < 2 && order[1]) chosen.push(order[1].i);
-      const trial = days.map((d, i) => (chosen.includes(i) ? { ...d, items: [...d.items, ...adapt(packItems(key, d, lag), a).filter(p => !d.items.some(x => x.exId === p.exId))] } : d));
+      const trial = days.map((d, i) => (chosen.includes(i) ? { ...d, items: [...d.items, ...adapt(packItems(key, d, lag), a)] } : d));
       const over = Object.values(tallyDays(trial, plan.perWeek).muscles).some(v => v > 20.01);
       if (over) addonInfo = { dropped: true, minutes: opts.addon };
       else { days = trial; addonInfo = { minutes: opts.addon, days: chosen }; }
@@ -204,7 +204,6 @@ function factory(H) {
       warmups: it.warmups || 0, rest: it.rest, method: it.method, kind: it.kind,
       backoffSets: it.backoffSets || 2, backoffReps: it.backoffReps || '', backoffPct: it.backoffPct || H.settings().backoffPct };
     if (it.cue) o.cue = it.cue;
-    if (it.group) o.group = it.group;
     if (it.pack) o.pack = true;
     if (it.pct) { o.pct = it.pct; o.rpe = null; o.rpeMax = null; }
     if (it.wk) o.wk = JSON.parse(JSON.stringify(it.wk));
@@ -252,7 +251,7 @@ function factory(H) {
     if (sig) { const same = list.filter(x => x.it.sig === sig); if (same.length) return same; }
     return list;
   }
-  const doneWork = it => it.sets.filter(x => x.done && x.kind !== 'warmup' && x.kind !== 'calib' && !x.drop && x.side !== 'R');
+  const doneWork = it => it.sets.filter(x => x.done && x.kind !== 'warmup' && x.kind !== 'calib' && x.side !== 'R');
   const w = x => H.num(x.weight);
   const rpeOf = (x, dflt) => { const q = H.normRpe(x.rpe); return q == null ? dflt : q; };
 
@@ -383,7 +382,7 @@ function factory(H) {
     const e = EX(it.exId); if (!e || (e.logging !== 'W' && e.logging !== 'BWX')) return null;
     let best = null;
     for (const x of it.sets) {
-      if (!x.done || x.kind === 'warmup' || x.drop || x.pend) continue;
+      if (!x.done || x.kind === 'warmup' || x.pend) continue;
       const load = H.loadOf(e, x, H.sessionBw(s)); const reps = H.num(x.reps);
       if (!(load > 0 && reps > 0)) continue;
       const v = H.e1rm(load, reps, x.rpe); if (v && (!best || v > best)) best = v;
@@ -490,7 +489,7 @@ function factory(H) {
     return { type, week, len, deload, early, cut, loadCut, ramp, weeksTotal, fixed, weeks: fixed ? c.weeks : null, finished, done, cycle: c };
   }
   /* template item as it runs in a given week of a fixed plan */
-  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'backoffPct', 'cue', 'test'];
+  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'cue', 'test'];
   function weekItem(it, week) {
     const o = week && it.wk && it.wk[week];
     if (!o) return it;
