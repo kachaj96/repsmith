@@ -1,0 +1,13 @@
+"title","start_time","end_time","description","exercise_title","superset_id","exercise_notes","set_index","set_type","weight_kg","reps","distance_km","duration_seconds","rpe"
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Bench Press (Barbell)",,"Grip: narrow",0,"warmup",40,8,,,
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Bench Press (Barbell)",,"Grip: narrow",1,"normal",80,5,,,8
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Bench Press (Barbell)",,"Grip: narrow",2,"normal",80,5,,,9
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Bench Press (Barbell)",,"Grip: narrow",3,"dropset",60,10,,,
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Pull Up (Weighted)",0,"",0,"normal",10,8,,,8.5
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Face Pull",0,"",0,"normal",20,15,,,
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Zercher Squat",,"Elbow pads",0,"normal",70,6,,,7
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Side Plank",,"",0,"normal",,,,30,
+"Upper A","2 Mar 2026, 07:01","2 Mar 2026, 07:53","Felt good, ""fresh""","Farmers Walk",,"",0,"normal",75,,0.04,,
+"Upper A","9 Mar 2026, 07:00","9 Mar 2026, 07:50","","Bench Press (Barbell)",,"Grip: medium",0,"normal",85,5,,,8.5
+"Upper A","9 Mar 2026, 07:00","9 Mar 2026, 07:50","","Bench Press (Barbell)",,"Grip: medium",1,"failure",85,4,,,10
+"Upper A","9 Mar 2026, 07:00","9 Mar 2026, 07:50","","Zercher Squat",,"",0,"normal",72.5,6,,,8
