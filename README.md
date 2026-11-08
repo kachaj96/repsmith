@@ -1,4 +1,4 @@
-# Repsmith v0.11.0
+# Repsmith v0.11.1
 
 Autor: Adrian Drożdżyński
 
@@ -47,6 +47,9 @@ Ten sam kod jest też zwykłą aplikacją na Androida (Capacitor 8), identyfikat
 - Budowa lokalna: `npm ci && npm run cap:sync`, potem `android/gradlew assembleRelease` (wymaga Android SDK).
 
 ## Wygląd
+
+Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-system-v1/`, ten sam katalog w repo Runsmith): wspólne tokeny z aliasami `--smith-*`, ta sama nawigacja z pigułką aktywnej zakładki, promienie, przyciski i ruch. Test `tests/unit/smith_test.js` pilnuje zgodności wartości, `tests/visual/shots.mjs` robi zrzuty ekranów przy 320-768 px.
+
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
 

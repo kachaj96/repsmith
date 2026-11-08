@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.11.0';
+const VERSION = '0.11.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
