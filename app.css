@@ -9,12 +9,16 @@
   --surface: #FFFFFF;
   --field: #EEF1F3;
   --line: #E4E8EC;
-  --text: #12161B;
-  --muted: #56606B;
+  --text: #151A21;
+  --muted: #56606D;
   --accent: #A84B24;
   --accent-soft: #FBE9E1;
   --on-accent: #FFFFFF;
   --error: #B8322A;
+  --error-soft: #FDE7E4;
+  --warn: #8F4F00;
+  --warn-soft: #FCEFD9;
+  --raised: #E3E7EB;
   --ok: #22663D;
   --ok-soft: #E2F2E8;
   --edge: #7E8893; /* control outline, at least 3:1 on bg, surface and field */
@@ -34,12 +38,16 @@
     --surface: #161A1F;
     --field: #20262D;
     --line: #2A3139;
-    --text: #ECEFF2;
+    --text: #E9EDF1;
     --muted: #A3ADB8;
     --accent: #FF9F70;
     --accent-soft: #3A2117;
     --on-accent: #1A0E08;
-    --error: #FF8A95;
+    --error: #FF9A8F;
+    --error-soft: #43201D;
+    --warn: #F2B866;
+    --warn-soft: #3A2A12;
+    --raised: #2A3139;
     --ok: #7FD39F;
     --ok-soft: #16301F;
     --edge: #6B7580;
@@ -55,6 +63,20 @@
     --bouncy: linear(0, .0101, .0393 2.5%, .1544 5.3%, .6834 15.7%, .8879 21.1%, 1.0179 26.6%, 1.0611 30.4%, 1.0791 34.2%, 1.0787 37.2%, 1.0567 42%, 1.0026 52.8%, .9853 59.4%, .9834 65.3%, .9998 85.4%, 1);
   }
 }
+/* Smith Design System v1 aliases (smith-design-system-v1/smith-tokens-v1.css): every --smith-* name points at
+   Repsmith's own token, so old names keep working. tests/unit/smith_test.js checks the values against the reference. */
+:root {
+  --smith-bg: var(--bg); --smith-surface: var(--surface); --smith-surface-muted: var(--field); --smith-surface-elevated: var(--raised);
+  --smith-text: var(--text); --smith-text-secondary: var(--muted); --smith-border-subtle: var(--line); --smith-border-strong: var(--edge);
+  --smith-positive: var(--ok); --smith-positive-soft: var(--ok-soft); --smith-danger: var(--error); --smith-danger-soft: var(--error-soft);
+  --smith-warning: var(--warn); --smith-warning-soft: var(--warn-soft); --smith-glass: var(--glass); --smith-scrim: var(--scrim); --smith-shadow: var(--shadow);
+  --smith-accent: var(--accent); --smith-accent-soft: var(--accent-soft); --smith-on-accent: var(--on-accent);
+  --smith-font-display: var(--display); --smith-font-body: var(--body);
+  --smith-radius-control: 12px; --smith-radius-card: 22px; --smith-radius-modal: 24px; --smith-radius-pill: 999px;
+  --smith-motion-fast: 120ms; --smith-motion-standard: 220ms; --smith-motion-deliberate: 300ms;
+}
+@media (prefers-reduced-motion: reduce) { :root { --smith-motion-fast: 0ms; --smith-motion-standard: 0ms; --smith-motion-deliberate: 0ms; } }
+
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
