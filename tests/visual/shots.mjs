@@ -29,7 +29,14 @@ for (const scheme of ['light', 'dark']) for (const w of WIDTHS) {
   await c('button[data-a=nav][data-v=plans]'); await c('button[data-a=nav][data-v=planlib]'); await c("button[data-a=plib-open][data-v='HEAVY-3']"); await c('button[data-a=plib-use]');
   const shot = async name => {
     await p.waitForTimeout(350);
-    const a = await p.evaluate(() => ({ over: document.documentElement.scrollWidth - innerWidth, navClip: [...document.querySelectorAll('.nav button')].filter(n => n.scrollWidth > n.clientWidth + 1).length }));
+    const a = await p.evaluate(() => {
+      const on = document.querySelector('.nav button.on'), soft = getComputedStyle(document.documentElement).getPropertyValue('--accent-soft').trim();
+      const brand = document.querySelector('.topbar .brand');
+      return { over: document.documentElement.scrollWidth - innerWidth, navClip: [...document.querySelectorAll('.nav button')].filter(n => n.scrollWidth > n.clientWidth + 1).length,
+        pill: !on || (on.getAttribute('aria-current') === 'page' && getComputedStyle(on).backgroundColor !== 'rgba(0, 0, 0, 0)'), brand: !!brand && brand.innerText.includes('Repsmith') && !!brand.querySelector('svg'), soft };
+    });
+    if (!a.pill) { bad++; console.log(`FAIL ${scheme} ${w} ${name}: active tab has no pill or aria-current`); }
+    if (!['workout', 'dialog', 'settings'].includes(name) && !a.brand) { bad++; console.log(`FAIL ${scheme} ${w} ${name}: no brand lockup`); }
     if (a.over > 0 || a.navClip) { bad++; console.log(`FAIL ${scheme} ${w} ${name}: overflow ${a.over}px, clipped nav labels ${a.navClip}`); }
     await p.screenshot({ path: join(out, `${scheme}-${w}-${name}.png`), fullPage: w === 360 || w === 390 });
   };

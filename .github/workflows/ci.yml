@@ -33,6 +33,10 @@ jobs:
             echo "$out" | grep -qE "^FAIL|Traceback" && fail=1
           done
           exit $fail
+      - name: Screens at 320-768 px, light and dark (overflow, nav, brand lockup)
+        run: |
+          npm i --no-save playwright@1.63.0
+          node tests/visual/shots.mjs "$RUNNER_TEMP/shots"
 
   android:
     needs: test
