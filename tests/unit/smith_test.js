@@ -6,7 +6,7 @@ const vars = (src, sel, prefix) => { const i = src.indexOf(sel); if (i < 0) thro
 const norm = v => v.toLowerCase().replace(/\s+/g, '');
 const light = { ...vars(ref, ':root,', 'smith-'), ...vars(ref, '[data-smith-product="repsmith"] {', 'smith-') };
 const dark = { ...light, ...vars(ref, '[data-smith-theme="dark"] {', 'smith-'), ...vars(ref, '[data-smith-product="repsmith"][data-smith-theme="dark"]', 'smith-') };
-const own = { light: vars(css, ':root {\n  --bg', ''), dark: { ...vars(css, ':root {\n  --bg', ''), ...vars(css, '@media (prefers-color-scheme: dark) {\n  :root {', '') } };
+const own = { light: vars(css, ':root {\n  --bg', ''), dark: { ...vars(css, ':root {\n  --bg', ''), ...vars(css, '@media (prefers-color-scheme: dark) {\n  :root:not([data-theme="light"]) {', '') } };
 const MAP = { bg: 'bg', surface: 'surface', 'surface-muted': 'field', 'surface-elevated': 'raised', text: 'text', 'text-secondary': 'muted', 'border-subtle': 'line', 'border-strong': 'edge', positive: 'ok', 'positive-soft': 'ok-soft', danger: 'error', 'danger-soft': 'error-soft', warning: 'warn', 'warning-soft': 'warn-soft', glass: 'glass', scrim: 'scrim', shadow: 'shadow', accent: 'accent', 'accent-soft': 'accent-soft', 'on-accent': 'on-accent' };
 for (const [theme, want] of [['light', light], ['dark', dark]]) for (const [s, o] of Object.entries(MAP)) {
   ok(want[s] !== undefined, `--smith-${s} in the reference`);
@@ -14,4 +14,6 @@ for (const [theme, want] of [['light', light], ['dark', dark]]) for (const [s, o
   ok(css.includes(`--smith-${s}: var(--${o})`), `alias --smith-${s} -> --${o}`);
 }
 ok(fs.readFileSync(A('index.html'), 'utf8').includes('data-smith-product="repsmith"'), 'page names the product');
+const forced = vars(css, ':root[data-theme="dark"] {', '');
+for (const [s, o] of Object.entries(MAP)) ok(forced[o] !== undefined && norm(forced[o]) === norm(dark[s]), `forced dark theme --${o} = reference --smith-${s}`);
 console.log(`smith tests: ${P} pass, ${F} fail`); process.exit(F ? 1 : 0);

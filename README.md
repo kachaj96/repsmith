@@ -1,4 +1,4 @@
-# Repsmith v0.11.1
+# Repsmith v0.12.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,13 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.12.0
+
+- Biegi przeniesione do Runsmith: zniknęły z Historii, Postępu i ekranu Dziś. Zapisane wcześniej biegi zostają w danych i w kopii JSON (nic nie jest kasowane), tylko nie są pokazywane.
+- Plan: **Pomiń trening** (plan przechodzi do następnego dnia, pominięcie liczy się do tygodnia bloku, nie trafia do historii, można je cofnąć) i **Podgląd planu** (wszystkie dni z ćwiczeniami na bieżący tydzień, następny dzień zaznaczony).
+- Kalendarz w Historii zawsze dostępny (ikona w nagłówku), wygląd jak w Runsmith.
+- Rodzina z Runsmith: wspólny zestaw ikon (`smith-design-system-v1/smith-icons.json`), nagłówek podekranu „wstecz + tytuł”, data pod tytułem, pola formularzy, przełączniki segmentowe w ustawieniach, wybór motywu (systemowy, jasny, ciemny), dialog potwierdzenia bez X z czerwoną akcją usuwania.
 
 ## Dane
 

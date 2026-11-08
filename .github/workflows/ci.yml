@@ -26,7 +26,7 @@ jobs:
           pip install playwright==1.63.0
           python -m playwright install --with-deps chromium
           fail=0
-          for f in e2e0104 e2e062 e2e063 e2e09 e2e093 e2e_week; do
+          for f in e2e0104 e2e062 e2e063 e2e09 e2e093 e2e_week e2e012; do
             echo "== $f"
             out=$(python tests/e2e/$f.py 2>&1) || fail=1
             echo "$out" | grep -E "^FAIL|Traceback|pass," || true

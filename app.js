@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.11.1';
+const VERSION = '0.12.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -433,24 +433,24 @@ const L = () => (S.settings.lang === 'en' ? 1 : 0);
 
 /* ---------- icons ---------- */
 const I = {
-  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>',
-  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>',
-  list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>',
-  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
-  dumbbell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
-  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-5"/></svg>',
-  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>',
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  dumbbell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/><path d="M15 6h4v4"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
   swap: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>',
   info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
-  hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/><path d="M12 8v4l3 2"/></svg>',
+  hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/><path d="M12 8v4l3 2"/></svg>',
   down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>',
-  left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
-  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>',
   up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
-  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
-  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
-  note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
   tally: '<svg viewBox="0 0 108 108" aria-hidden="true"><rect width="108" height="108" rx="26" fill="var(--accent)"/><g transform="translate(54 54) skewX(-9) translate(-54 -54) scale(.9)" fill="none" stroke="var(--on-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="11"><path d="M38 34v52"/><path d="M60 34v52"/><path d="M82 34v52"/><path d="M27 75l66-30"/></g></svg>',
 };
@@ -471,11 +471,15 @@ const fmtDur = ms => { const s = Math.max(0, Math.floor(ms / 1000)); const h = M
 const fmtClock = sec => { const s = Math.max(0, Math.round(sec)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 const fmtDate = (ts, opts = { weekday: 'long', day: 'numeric', month: 'short' }) => new Intl.DateTimeFormat(S.settings.lang === 'en' ? 'en-GB' : 'pl-PL', opts).format(new Date(ts));
 const clone = o => JSON.parse(JSON.stringify(o));
+/* the screen date under the title, as in Runsmith: "Niedziela, 8 listopada" */
+const longDate = ts => { const x = fmtDate(ts, { weekday: 'long', day: 'numeric', month: 'long' }); return x.charAt(0).toUpperCase() + x.slice(1); };
 /* Hevy CSV import, the one-step undo and the safer backup import, ported from 0.9.3 */
+Object.assign(STR.pl, { themeLbl: 'Motyw', theme_system: 'Systemowy', theme_light: 'Jasny', theme_dark: 'Ciemny', skipTpl: 'Pomiń trening', skipQ: d => `Pominąć „${d}”? Plan przejdzie do następnego treningu, a pominięcie liczy się do tygodnia bloku. Nic nie trafi do historii.`, skipped: d => `Pominięto: ${d}`, skipUndo: 'Cofnij pominięcie', skipUndone: 'Pominięcie cofnięte', planView: 'Podgląd planu', pvNext: 'Następny', pvSkipped: 'pominięty', pvEdit: 'Edytuj plan', pvWeek: (w, n) => `Tydzień ${w} z ${n}`, pvDeload: 'tydzień lżejszy' });
 Object.assign(STR.pl, {
   importQ2: (n, when, cur) => `Wczytać kopię z ${when} (treningów: ${n})? Zastąpi wszystkie dane w appce (teraz treningów: ${cur}). Poprzedni stan zachowam, cofniesz to w Ustawieniach.`,
   importNewer: (a, b) => `Ta kopia pochodzi z nowszej wersji appki (schemat ${a}, ta appka zna ${b}). Zaktualizuj appkę i spróbuj ponownie.`,
 });
+Object.assign(STR.en, { themeLbl: 'Theme', theme_system: 'System', theme_light: 'Light', theme_dark: 'Dark', skipTpl: 'Skip workout', skipQ: d => `Skip "${d}"? The plan moves on to the next workout and the skip counts towards the block week. Nothing goes into the history.`, skipped: d => `Skipped: ${d}`, skipUndo: 'Undo skip', skipUndone: 'Skip undone', planView: 'Plan overview', pvNext: 'Next', pvSkipped: 'skipped', pvEdit: 'Edit plan', pvWeek: (w, n) => `Week ${w} of ${n}`, pvDeload: 'lighter week' });
 Object.assign(STR.en, {
   importQ2: (n, when, cur) => `Load the backup from ${when} (workouts: ${n})? It replaces all data in the app (workouts now: ${cur}). I keep the previous state, you can undo this in Settings.`,
   importNewer: (a, b) => `This backup comes from a newer version of the app (schema ${a}, this app knows ${b}). Update the app and try again.`,
@@ -581,6 +585,12 @@ async function nativeShareFile(name, data, encoding) {
   const w = await C.nativePromise('Filesystem', 'writeFile', Object.assign({ path: name, data, directory: 'CACHE' }, encoding ? { encoding } : {}));
   try { await C.nativePromise('Share', 'share', { title: name, url: w.uri, dialogTitle: name }); return true; }
   catch (e) { if (/cancel/i.test(String((e && e.message) || e))) return false; throw e; }
+}
+/* light / dark / system, as in Runsmith; mirrored to localStorage so the first paint (index.html) is already right */
+function applyTheme() {
+  const th = S.settings.theme === 'light' || S.settings.theme === 'dark' ? S.settings.theme : null;
+  if (th) document.documentElement.dataset.theme = th; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('repsmith.theme', th || 'system'); } catch (e) {}
 }
 function hideSplash() {
   const el = document.getElementById('splash'); if (!el) return;
@@ -967,9 +977,21 @@ function weekChips(id, n, sel, c) {
 const pwOf = (id, bi) => { const v = S.pw && S.pw[id]; return v && v <= (bi.weeks || 1) ? v : (bi.finished ? 1 : bi.week); };
 const resolvedDays = (days, w) => (w ? days.map(d => ({ ...d, items: d.items.map(it => C.weekItem(it, w)).filter(it => !skipped(it)) })) : days);
 function activeTemplate() { return S.templates.find(x => x.id === S.settings.activeTemplateId) || null; }
+/* a skipped planned workout (tpl.skips: [{ at, dayId }]) moves the plan on like a done one, without a session */
+const lastSkip = tpl => (tpl && tpl.skips && tpl.skips.length ? tpl.skips.reduce((a, b) => (b.at > a.at ? b : a)) : null);
+/* "Skipped: <day> · Undo" while the skip is the latest thing that happened in this plan */
+function skipNote(tpl) {
+  const sk = lastSkip(tpl); if (!sk) return '';
+  const lastS = S.sessions.filter(s => s.templateId === tpl.id).reduce((m, s) => Math.max(m, s.startedAt), 0);
+  if (lastS > sk.at) return '';
+  const d = tpl.days.find(x => x.id === sk.dayId);
+  return `<div class="slim"><span>${esc(t('skipped', d ? d.name : '?'))}</span><span class="slim-act"><button class="linkish" data-a="skip-undo">${esc(t('skipUndo'))}</button></span></div>`;
+}
 function nextDay(tpl) {
   if (!tpl || !tpl.days.length) return null;
-  const last = S.sessions.filter(s => s.templateId === tpl.id).sort((a, b) => b.startedAt - a.startedAt)[0];
+  const lastS = S.sessions.filter(s => s.templateId === tpl.id).sort((a, b) => b.startedAt - a.startedAt)[0];
+  const sk = lastSkip(tpl);
+  const last = sk && (!lastS || sk.at > lastS.startedAt) ? { dayId: sk.dayId } : lastS;
   if (!last) return tpl.days[0];
   const i = tpl.days.findIndex(d => d.id === last.dayId);
   return tpl.days[(i + 1) % tpl.days.length] || tpl.days[0];
@@ -1202,6 +1224,7 @@ function render() {
     default: html = vToday();
   }
   app.innerHTML = html + (S.view === 'workout' || S.view === 'wizard' ? '' : nav());
+  backBar(app.firstElementChild);
   if (S._navAnim && app.firstElementChild) app.firstElementChild.classList.add('enter');
   S._navAnim = false; S._justDone = null; S._justPR = null;
   renderTimer();
@@ -1209,10 +1232,20 @@ function render() {
   syncWake();
   if (S.view === 'library') { const i = $('#libq'); if (i && S._libFocus) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
 }
+/* Smith sub-screen header (as Runsmith): back button and the screen title on one line. The views still render
+   "back · parent label · spacer" above an h1; this moves the h1 into that bar and drops the parent label. */
+function backBar(scr) {
+  const tb = scr && scr.querySelector(':scope > .topbar');
+  if (!tb || tb.querySelector('.brand')) return;
+  const back = tb.firstElementChild, h = tb.nextElementSibling;
+  if (!back || !back.matches('button.icon-btn') || !h || h.tagName !== 'H1') return;
+  for (const e of [...tb.children]) if (e !== back && (e.classList.contains('eyebrow') || (e.tagName === 'SPAN' && !e.children.length && !e.textContent.trim()))) e.remove();
+  back.after(h); tb.classList.add('backbar');
+}
 function nav() {
   const tab = { today: 'today', done: 'today', plans: 'plans', plan: 'plans', wizard: 'plans', wizres: 'plans', planlib: 'plans', planprev: 'plans', history: 'history', session: 'history', library: 'library', progress: 'progress' }[S.view];
   const b = (v, icon, label) => `<button class="${tab === v ? 'on' : ''}" data-a="nav" data-v="${v}" aria-current="${tab === v ? 'page' : 'false'}">${I[icon]}${esc(t(label))}</button>`;
-  return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'home', 'today')}${b('plans', 'list', 'plans')}${b('progress', 'chart', 'progress')}${b('history', 'clock', 'history')}${b('library', 'dumbbell', 'library')}</div></nav>`;
+  return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'home', 'today')}${b('plans', 'list', 'plans')}${b('progress', 'chart', 'progress')}${b('history', 'hist', 'history')}${b('library', 'dumbbell', 'library')}</div></nav>`;
 }
 function topbar(right = '') {
   return `<div class="topbar"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${right}<button class="icon-btn" data-a="settings" aria-label="${esc(t('settings'))}">${I.gear}</button></div></div>`;
@@ -1253,7 +1286,7 @@ function backupCard() {
   const due = backupDue(); if (!due) return '';
   return `<div class="slim"><span>${esc(t('bkRemind', due.n, due.d))}</span><span class="slim-act"><button class="linkish" data-a="bk-now">${esc(t('bkNow'))}</button><button class="linkish mute" data-a="bk-later">${esc(t('bkLater'))}</button></span></div>`;
 }
-const quietRow = (empty = true) => `<div class="quiet">${empty ? `<button data-a="start-free">${esc(t('emptyWorkout'))}</button>` : ''}<button data-a="run-new">${esc(t('runLog'))}</button></div>`;
+const quietRow = (empty = true) => `<div class="quiet">${empty ? `<button data-a="start-free">${esc(t('emptyWorkout'))}</button>` : ''}</div>`;
 function weekBar(tpl, wc) {
   const target = tpl ? (tpl.perWeek || tpl.days.length) : 0;
   if (target) return `<div class="week-row"><div class="progress">${Array.from({ length: target }, (_, i) => `<span class="${i < wc ? 'on' : ''}"></span>`).join('')}</div><div class="lbl"><span>${esc(t('thisWeek'))}</span><span>${esc(t('ofWorkouts', Math.min(wc, target), target))}</span></div></div>`;
@@ -1266,21 +1299,23 @@ function vToday() {
   let main = '';
   const tbi = tpl ? C.blockInfo(tpl) : null;
   if (tpl && day && tbi && tbi.finished && !S.active) {
-    main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(tpl.name)}</h1></div>${endCard(tpl, tbi)}
+    main = `<div><h1>${esc(tpl.name)}</h1><div class="eyebrow dateline">${esc(longDate(now()))}</div></div>${endCard(tpl, tbi)}
       ${quietRow()}`;
   } else if (tpl && day) {
     const items = day.items.map(it => wkItem(it, tbi)).filter(it => !skipped(it));
     const rows = items.slice(0, 5).map(it => `<div class="row"><span class="name grow">${esc(exName(it.exId))}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('');
     const more = items.length > 5 ? `<div class="row"><span class="meta">+ ${items.length - 5}</span></div>` : '';
     const bi = tbi;
-    main = `<div class="hero"><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(day.name)}</h1><div class="sub">${esc(tpl.name)} · ${esc(t('exercisesN', items.length))}${bi ? ' · ' + esc(weekLabel(bi)) : ''}${bi && bi.deload ? ` <span class="tag p">${esc(dlLabel(bi))}</span>` : ''}</div></div>
+    main = `<div class="hero"><h1>${esc(day.name)}</h1><div class="eyebrow dateline">${esc(longDate(now()))}</div><div class="sub">${esc(tpl.name)} · ${esc(t('exercisesN', items.length))}${bi ? ' · ' + esc(weekLabel(bi)) : ''}${bi && bi.deload ? ` <span class="tag p">${esc(dlLabel(bi))}</span>` : ''}</div></div>
       ${weekBar(tpl, wc)}
       ${coachCards(tpl, bi)}
       ${items.length ? `<div class="card">${rows}${more}</div>` : `<div class="empty">${esc(t('planEmptyDay'))}</div>`}
       ${S.active ? '' : `<button class="btn primary block" data-a="start-day">${esc(t('startWorkout'))}</button>${quietRow()}`}
+      ${S.active ? '' : `<div class="btn-row plan-acts"><button class="btn" data-a="skip-day" data-v="${day.id}">${esc(t('skipTpl'))}</button><button class="btn" data-a="plan-view">${esc(t('planView'))}</button></div>`}
+      ${skipNote(tpl)}
       ${tpl.days.length > 1 ? `<div class="chips" role="group" aria-label="${esc(t('day'))}">${tpl.days.map(d => `<button class="chip ${d.id === day.id ? 'on' : ''}" data-a="pick-day" data-v="${d.id}">${esc(d.name)}</button>`).join('')}</div>` : ''}`;
   } else {
-    main = `<div><div class="eyebrow">${esc(fmtDate(now()))}</div><h1>${esc(t('freeTitle'))}</h1><div class="sub" style="margin-top:8px">${esc(t('freeText'))}</div></div>
+    main = `<div><h1>${esc(t('freeTitle'))}</h1><div class="eyebrow dateline">${esc(longDate(now()))}</div><div class="sub" style="margin-top:8px">${esc(t('freeText'))}</div></div>
       ${S.active ? '' : `<div><button class="btn primary block" data-a="start-free">${esc(t('startFree'))}</button><div class="muted small" style="margin-top:8px;text-align:center">${esc(t('startFreeHint'))}</div></div>`}
       ${S.active ? '' : quietRow(false)}
       ${S.active ? '' : recentCard()}
@@ -1744,7 +1779,7 @@ function calView() {
   const inMonth = S.sessions.filter(s => { const d = new Date(s.startedAt); return d.getFullYear() === y && d.getMonth() === m; });
   const sets = inMonth.reduce((n, s) => n + sessionStats(s).sets, 0);
   const lang = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
-  const wd = [...Array(7)].map((_, i) => new Intl.DateTimeFormat(lang, { weekday: 'narrow' }).format(new Date(2024, 0, 1 + i)));
+  const wd = [...Array(7)].map((_, i) => new Intl.DateTimeFormat(lang, { weekday: 'short' }).format(new Date(2024, 0, 1 + i)));
   const todayK = dayKey(now());
   let cells = '';
   for (let i = 0; i < lead; i++) cells += '<span class="cal-c empty"></span>';
@@ -1763,10 +1798,10 @@ function runRow(r) {
   return `<button class="list-btn row" data-a="run-edit" data-v="${r.id}"><span class="grow"><span class="name">${esc(r.name)}</span><br><span class="meta" style="white-space:normal">${esc(meta)}</span>${r.note ? `<span class="run-note">${esc(r.note)}</span>` : ''}</span>${r.felt ? `<span class="diff-badge" aria-label="${esc(t('difficultyShort'))} ${r.felt}/10">${r.felt}<small>/10</small></span>` : ''}</button>`;
 }
 function vHistory() {
-  const tab = S.histTab === 'runs' ? 'runs' : 'workouts';
+  const tab = 'workouts'; // runs moved out of Repsmith (0.12): old runs stay in the data and the backup, not on screen
   const mode = S.histMode === 'cal' ? 'cal' : 'list';
-  const tabs = tabsBar([['workouts', t('workouts')], ['runs', t('runs')]], tab, 'hist-tab');
-  const tools = `<div class="head-tools">${tab === 'workouts' && S.sessions.length ? `<button class="icon-btn" data-a="hist-mode" data-v="${mode === 'cal' ? 'list' : 'cal'}" aria-label="${esc(mode === 'cal' ? t('calList') : t('calCal'))}">${mode === 'cal' ? I.list : I.cal}</button>` : ''}<button class="icon-btn" data-a="${tab === 'runs' ? 'run-new' : 'past-workout'}" aria-label="${esc(tab === 'runs' ? t('runLog') : t('pastWorkout'))}">${I.plus}</button></div>`;
+  const tabs = '';
+  const tools = `<div class="head-tools">${tab === 'workouts' ? `<button class="icon-btn" data-a="hist-mode" data-v="${mode === 'cal' ? 'list' : 'cal'}" aria-label="${esc(mode === 'cal' ? t('calList') : t('calCal'))}">${mode === 'cal' ? I.list : I.cal}</button>` : ''}<button class="icon-btn" data-a="${tab === 'runs' ? 'run-new' : 'past-workout'}" aria-label="${esc(tab === 'runs' ? t('runLog') : t('pastWorkout'))}">${I.plus}</button></div>`;
   let body;
   if (tab === 'runs') {
     const list = [...S.runs].sort((a, b) => b.date - a.date).map(runRow).join('');
@@ -1999,7 +2034,8 @@ function progressExercises() {
 }
 function vProgress() {
   const pg = S.prog || (S.prog = { tab: 'strength', exId: null, week: 0, metric: 'weight' });
-  const seg = tabsBar([['strength', t('strength')], ['runs', t('runs')], ['body', t('body')]], pg.tab, 'prog-tab');
+  if (pg.tab === 'runs') pg.tab = 'strength';
+  const seg = tabsBar([['strength', t('strength')], ['body', t('body')]], pg.tab, 'prog-tab');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('progress'))}</h1>${seg}${pg.tab === 'body' ? vBody() : pg.tab === 'runs' ? vRuns() : vStrength()}</main>`;
 }
 function vStrength() {
@@ -2196,7 +2232,7 @@ function renderSheet() {
   let body = '';
   const head = (title) => `<div class="sheet-head"><h2>${esc(title)}</h2><button class="icon-btn" data-a="sheet-close" aria-label="${esc(t('close'))}">${I.x}</button></div>`;
   if (sh.type === 'confirm') {
-    body = `${head(sh.title || t('confirm'))}<p style="margin:0">${esc(sh.text)}</p><div class="btn-row"><button class="btn" data-a="sheet-close">${esc(t('cancel'))}</button><button class="btn ${sh.danger ? 'danger' : 'primary'}" data-a="confirm-yes">${esc(sh.yes || t('confirm'))}</button></div>`;
+    body = `<div class="sheet-head"><h2>${esc(sh.title || t('confirm'))}</h2></div><p style="margin:0">${esc(sh.text)}</p><div class="btn-row"><button class="btn" data-a="sheet-close">${esc(t('cancel'))}</button><button class="btn ${sh.danger ? 'danger' : 'primary'}" data-a="confirm-yes">${esc(sh.yes || t('confirm'))}</button></div>`;
   } else if (sh.type === 'picker') {
     const q = sh.q || '';
     body = `${head(t('addExercise'))}<input id="pickq" type="search" data-f="pick-q" placeholder="${esc(t('search'))}" value="${esc(q)}" autocomplete="off" aria-label="${esc(t('search'))}">
@@ -2475,17 +2511,30 @@ function renderSheet() {
       ${chk.length ? `<div><label>${esc(t('hvCheck'))} (${chk.length})</label><div class="card">${chk.map(x => row(x.g, x.i)).join('')}</div>${chk.some(x => sh.map[x.g.name] === '__new') ? `<div class="muted small" style="margin-top:6px">${esc(t('hvNewHint'))}</div>` : ''}</div>` : ''}
       ${auto.length ? `<details><summary class="btn block" style="text-align:left">${esc(t('hvAuto', auto.length))}</summary><div class="card" style="margin-top:8px">${auto.map(x => row(x.g, x.i)).join('')}</div></details>` : ''}
       <button class="btn primary block" data-a="hv-go">${esc(t('hvGo'))}</button>`;
+  } else if (sh.type === 'planview') {
+    const tp = activeTemplate();
+    if (!tp) body = `${head(t('planView'))}<div class="empty">${esc(t('noPlanTitle'))}</div>`;
+    else {
+      const bi = C.blockInfo(tp), nx = nextDay(tp), sk = lastSkip(tp);
+      const wk = bi ? [bi.len ? t('pvWeek', bi.week, bi.len) : weekLabel(bi), bi.deload ? t('pvDeload') : ''].filter(Boolean).join(' · ') : '';
+      const dayCard = d => {
+        const items = d.items.map(it => wkItem(it, bi)).filter(it => !skipped(it));
+        const tags = `${nx && d.id === nx.id ? `<span class="tag p">${esc(t('pvNext'))}</span>` : ''}${sk && sk.dayId === d.id && skipNote(tp) !== '' ? `<span class="tag">${esc(t('pvSkipped'))}</span>` : ''}`;
+        return `<div class="card pv-day${nx && d.id === nx.id ? ' next' : ''}"><div class="row"><span class="name grow"><b>${esc(d.name)}</b></span>${tags}</div>${items.map(it => `<div class="row"><span class="name grow">${esc(exName(it.exId))}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('') || `<div class="row"><span class="meta">${esc(t('planEmptyDay'))}</span></div>`}</div>`;
+      };
+      body = `${head(t('planView'))}<div><div style="font:800 20px var(--display)">${esc(tp.name)}</div>${wk ? `<div class="sub">${esc(wk)}</div>` : ''}</div>${tp.days.map(dayCard).join('')}<button class="btn block" data-a="pv-edit">${esc(t('pvEdit'))}</button>`;
+    }
   } else if (sh.type === 'settings') {
     const st = S.settings;
-    const onoff = (k, on) => `<div class="chips"><button class="chip ${on ? 'on' : ''}" data-a="set-flag" data-k="${k}" data-v="1">${esc(t('on'))}</button><button class="chip ${!on ? 'on' : ''}" data-a="set-flag" data-k="${k}" data-v="0">${esc(t('off'))}</button></div>`;
+    const onoff = (k, on) => `<div class="chips seg1"><button class="chip ${on ? 'on' : ''}" data-a="set-flag" data-k="${k}" data-v="1">${esc(t('on'))}</button><button class="chip ${!on ? 'on' : ''}" data-a="set-flag" data-k="${k}" data-v="0">${esc(t('off'))}</button></div>`;
     const workout = `<div><label>${esc(t('focusMode'))}</label>${onoff('focus', st.focus === true)}<div class="muted small" style="margin-top:6px">${esc(t('focusModeD'))}</div></div>
       <div><label>${esc(t('calmMode'))}</label>${onoff('calm', st.calm === true)}<div class="muted small" style="margin-top:6px">${esc(t('calmModeD'))}</div></div>
       <div class="grid2">${fld('st-restC', t('defaultRestC'), st.restC)}${fld('st-restI', t('defaultRestI'), st.restI)}${fld('st-increment', t('increment'), fmtN(st.increment))}${fld('st-backoffPct', t('defaultBackoff'), st.backoffPct)}</div>
-      ${'wakeLock' in navigator ? `<div><label>${esc(t('wakeSet'))}</label><div class="chips"><button class="chip ${st.wake !== false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="1">${esc(t('wakeOn'))}</button><button class="chip ${st.wake === false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="0">${esc(t('wakeOff'))}</button></div></div>` : `<div class="muted small">${esc(t('wakeNo'))}</div>`}
+      ${'wakeLock' in navigator ? `<div><label>${esc(t('wakeSet'))}</label><div class="chips seg1"><button class="chip ${st.wake !== false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="1">${esc(t('wakeOn'))}</button><button class="chip ${st.wake === false ? 'on' : ''}" data-a="set-flag" data-k="wake" data-v="0">${esc(t('wakeOff'))}</button></div></div>` : `<div class="muted small">${esc(t('wakeNo'))}</div>`}
       <button class="btn block" data-a="gear-open">${esc(t('gearTitle'))}</button><button class="btn block" data-a="plates-open" data-v="">${esc(t('plateCalc'))}</button>`;
-    const sound = `<div><label>${esc(t('sounds'))}</label><div class="chips"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
-      <div><label>${esc(t('soundVol'))}</label><div class="chips">${['low', 'mid', 'high'].map(v => `<button class="chip ${(st.vol || 'high') === v ? 'on' : ''}" data-a="vol" data-v="${v}">${esc(t('vol' + v[0].toUpperCase() + v.slice(1)))}</button>`).join('')}</div></div>
-      <div><label>${esc(t('audioMode'))}</label><div class="chips"><button class="chip ${!loudAudio() ? 'on' : ''}" data-a="audio-mode" data-v="mix">${esc(t('audioMix'))}</button><button class="chip ${loudAudio() ? 'on' : ''}" data-a="audio-mode" data-v="loud">${esc(t('audioLoud'))}</button></div><div class="small muted" style="margin-top:6px">${esc(t('audioModeD'))}</div></div>
+    const sound = `<div><label>${esc(t('sounds'))}</label><div class="chips seg1"><button class="chip ${st.sound !== false ? 'on' : ''}" data-a="sound" data-v="1">${esc(t('on'))}</button><button class="chip ${st.sound === false ? 'on' : ''}" data-a="sound" data-v="0">${esc(t('off'))}</button></div></div>
+      <div><label>${esc(t('soundVol'))}</label><div class="chips seg1">${['low', 'mid', 'high'].map(v => `<button class="chip ${(st.vol || 'high') === v ? 'on' : ''}" data-a="vol" data-v="${v}">${esc(t('vol' + v[0].toUpperCase() + v.slice(1)))}</button>`).join('')}</div></div>
+      <div><label>${esc(t('audioMode'))}</label><div class="chips seg1"><button class="chip ${!loudAudio() ? 'on' : ''}" data-a="audio-mode" data-v="mix">${esc(t('audioMix'))}</button><button class="chip ${loudAudio() ? 'on' : ''}" data-a="audio-mode" data-v="loud">${esc(t('audioLoud'))}</button></div><div class="small muted" style="margin-top:6px">${esc(t('audioModeD'))}</div></div>
       <button class="btn block" data-a="sound-test">${esc(t('soundTest'))}</button><div class="small muted">${esc(t('soundHint'))}</div>`;
     const coach = `<div><label>${esc(t('readinessSet'))}</label>${onoff('readiness', st.readiness !== false)}</div>
       <div><label>${esc(t('flagsSet'))}</label>${onoff('flagsOn', st.flagsOn !== false)}</div>
@@ -2500,7 +2549,8 @@ function renderSheet() {
       <button class="btn block" data-a="rpe-table">${esc(t('rpeTable'))}</button>
       ${FEEDBACK_EMAIL ? `<button class="btn block" data-a="feedback">${esc(t('feedbackBtn'))}</button>` : ''}`;
     body = `${head(t('settings'))}
-      <div><label>${esc(t('language'))}</label><div class="chips"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
+      <div><label>${esc(t('themeLbl'))}</label><div class="chips seg1">${['system', 'light', 'dark'].map(v => `<button class="chip ${(st.theme || 'system') === v ? 'on' : ''}" data-a="theme" data-v="${v}" aria-pressed="${(st.theme || 'system') === v}">${esc(t('theme_' + v))}</button>`).join('')}</div></div>
+      <div><label>${esc(t('language'))}</label><div class="chips seg1"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
       ${disc('set-workout', t('secWorkout'), workout)}${disc('set-sound', t('secSound'), sound)}${disc('set-coach', t('coachSec'), coach)}${disc('set-data', t('secData'), data)}
       <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('bodyCredit'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
@@ -2771,6 +2821,13 @@ const A = {
   },
   'plan-mode': () => { const tp = S.templates.find(x => x.id === S.viewArg); tp.mode = planMode(tp) === 'simple' ? 'advanced' : 'simple'; tp.updatedAt = now(); saveTemplates(); render(); },
   'open-plan': el => go('plan', el.dataset.v),
+  'skip-day': el => {
+    const tpl = activeTemplate(); if (!tpl) return; const day = tpl.days.find(d => d.id === el.dataset.v); if (!day) return;
+    ask(t('skipQ', day.name), () => { tpl.skips = [...(tpl.skips || []), { at: now(), dayId: day.id }]; tpl.updatedAt = now(); S._pickedDay = null; saveTemplates(); toast(t('skipped', day.name)); render(); }, { yes: t('skipTpl') });
+  },
+  'skip-undo': () => { const tpl = activeTemplate(); const sk = lastSkip(tpl); if (!sk) return; tpl.skips = tpl.skips.filter(x => x !== sk); tpl.updatedAt = now(); saveTemplates(); toast(t('skipUndone')); render(); },
+  'plan-view': () => openSheet({ type: 'planview' }),
+  'pv-edit': () => { const tpl = activeTemplate(); closeSheet(); if (tpl) go('plan', tpl.id); },
   'plan-activate': () => { S.settings.activeTemplateId = S.viewArg; persist('settings'); render(); },
   'plan-add-day': () => {
     const tp = S.templates.find(x => x.id === S.viewArg);
@@ -3270,6 +3327,7 @@ const A = {
     const ids = new Set((u.data.sessions || []).map(x => x.id)); const lost = S.sessions.filter(x => !ids.has(x.id)).length;
     ask(t('undoQ', d, lost), async () => { await applyBackup(u.data); await DB.set('undo', null); S._undo = null; toast(t('undone')); go('today'); }, { yes: t('confirm') });
   },
+  theme: el => { S.settings.theme = el.dataset.v; persist('settings'); applyTheme(); renderSheet(); },
   'sound-test': () => { ensureAudio(); silentLoop(true); if (!audioCtx) return toast('Audio niedostępne'); const was = S.settings.sound; S.settings.sound = true; beep(); S.settings.sound = was; setTimeout(() => { if (!S.timer) silentLoop(false); }, 1500); },
   sound: el => { readSettingsFields(); S.settings.sound = el.dataset.v === '1'; persist('settings'); renderSheet(); if (S.settings.sound) { ensureAudio(); tick(); } },
   lang: el => { readSettingsFields(); S.settings.lang = el.dataset.v; document.documentElement.lang = S.settings.lang; persist('settings'); render(); },
@@ -3731,6 +3789,7 @@ async function boot() {
   if (normTemplates()) persist('templates');
   document.documentElement.lang = S.settings.lang;
   document.body.classList.toggle('calm', S.settings.calm === true);
+  applyTheme();
   if (S.active) S.view = 'workout';
   try { if (navigator.storage && navigator.storage.persisted) navigator.storage.persisted().then(v => { S._persisted = v; }); if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(v => { S._persisted = !!v; }).catch(() => {}); } catch (e) {}
   render();

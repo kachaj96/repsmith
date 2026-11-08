@@ -471,7 +471,8 @@ function factory(H) {
     let week, len, weeksTotal, finished = false, done = 0;
     if (fixed) {
       const per = Math.max(1, tpl.perWeek || (tpl.days || []).length || 1);
-      done = H.sessions().filter(s => s.templateId === tpl.id && s.startedAt >= c.start && s.startedAt < at).length;
+      done = H.sessions().filter(s => s.templateId === tpl.id && s.startedAt >= c.start && s.startedAt < at).length
+        + (tpl.skips || []).filter(k => k.at >= c.start && k.at < at).length; // skipped planned workouts count as used slots
       const raw = Math.floor(done / per) + 1 + c.shift;
       week = Math.max(1, raw);
       if (week > c.weeks) { finished = true; week = c.weeks; }
