@@ -113,7 +113,7 @@ try:
     # ---------- strength block from the library ----------
     click(p, "button[data-a=nav][data-v=plans]"); click(p, "button[data-a=nav][data-v=planlib]")
     click(p, "button[data-a=plib-goal][data-v=Peak]")
-    ok(p.locator("button[data-a=plib-open]").count() == 3, "library: 3 strength blocks")
+    ok(p.locator("button[data-a=plib-open]").count() == 4, "library: 4 strength blocks")
     click(p, "button[data-a=plib-open][data-v=PEAK-12]")
     tx = main(p)
     ok("1RM" in tx and p.locator("button[data-a=pw-pick]").count() == 12 and p.locator("button[data-a=pw-pick].dl").count() == 2, "preview: 1RM note, 12 week chips, 2 deloads")

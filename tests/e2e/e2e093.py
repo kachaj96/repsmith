@@ -5,6 +5,11 @@ FIX = _os.path.join(_HERE, "..", "fixtures", "hevy_sample.csv")
 from playwright.sync_api import sync_playwright
 srv = subprocess.Popen([sys.executable, "-m", "http.server", "8783", "-d", _APP], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)
 errs = []; P = F = 0
+def settings(p):
+    # 0.10+ groups the settings in collapsible sections: open them all first
+    p.locator("button[data-a=settings]").first.click(); p.wait_for_timeout(150)
+    p.evaluate("() => document.querySelectorAll('.sheet details').forEach(d => { d.open = true; })")
+
 def ok(c, m):
     global P, F
     if c: P += 1; print("PASS", m)
@@ -33,50 +38,38 @@ try:
     ok(p.evaluate("() => window.Repsmith.persist('settings')") is True, "persist ok again")
     p.wait_for_timeout(100); ok(p.locator("#savebar").count() == 0, "banner clears after a good save")
     # --- hevy import needs a safety copy
-    click(p, "button[data-a=settings]"); p.set_input_files("#hevyfile", FIX); p.wait_for_selector(".hv-r")
+    settings(p); p.set_input_files("#hevyfile", FIX); p.wait_for_selector(".hv-r")
     p.evaluate("() => { window.__failPut = true; }"); click(p, "button[data-a=hv-go]"); p.wait_for_timeout(300)
     ok(n(p) == 0, "import refused when the safety copy cannot be saved")
     ok("niczego nie zmieniam" in p.locator("body").inner_text(), "message says nothing changed")
     p.evaluate("() => { window.__failPut = false; }")
     click(p, "button[data-a=hv-go]"); p.wait_for_timeout(500)
     ok(n(p) == 2, "import works with the safety copy")
-    # today order: main action above the backup banner
-    p.evaluate("() => { const R = window.Repsmith; for (let i = 0; i < 12; i++) { const o = JSON.parse(JSON.stringify(R.S.sessions[0])); o.id = 'bk' + i; o.startedAt -= (i + 1) * 864e5; R.S.sessions.push(o); } R.S.settings.lastBackup = 0; }")
-    click(p, "button[data-a=nav][data-v=today]"); p.wait_for_timeout(200)
-    y = p.evaluate("() => { const a = document.querySelector('[data-a=start-free]'), b = document.querySelector('.banner.coach'); return [a && a.getBoundingClientRect().top, b && b.getBoundingClientRect().top]; }")
-    ok(y[0] is not None and y[1] is not None and y[0] < y[1], f"start button above the backup banner {y}")
-    p.screenshot(path=f"{_OUT}/93-today.png")
-    p.evaluate("() => { const R = window.Repsmith; R.S.sessions = R.S.sessions.filter(s => !s.id.startsWith('bk')); }")
-    # history row
-    click(p, "button[data-a=nav][data-v=history]"); p.wait_for_timeout(200)
-    h = p.locator(".list-btn.row").first.inner_text()
-    ok("rekord" in h and "Bench Press" not in h or "Wyciskanie" in h, f"history row has record word and exercises: {h!r}")
-    ok(p.locator(".hist-ex").count() == 2, "history shows main exercises")
-    p.screenshot(path=f"{_OUT}/93-history.png")
+    # (0.9.3-only layout checks for the Today backup banner and the history row are not part of 0.11, which keeps the 0.10 layout)
     # undo hevy
-    click(p, "button[data-a=settings]")
+    settings(p)
     ok(p.locator("button[data-a=undo-import]").count() == 1, "undo button after import")
     p.evaluate("() => { const R = window.Repsmith; R.S.sessions.push({ id: 'x1', name: 'later', startedAt: Date.now(), endedAt: Date.now() + 1000, items: [], notes: [] }); }")
     click(p, "button[data-a=undo-import]"); p.wait_for_timeout(200)
     tx = p.locator(".sheet").inner_text(); ok("znikną" in tx, f"undo says what is lost: {tx[:120]!r}")
     click(p, "button[data-a=confirm-yes]"); p.wait_for_timeout(400)
     ok(n(p) == 0 and p.evaluate("() => window.Repsmith.S.customExercises.length") == 0, "undo restores the state before the import")
-    click(p, "button[data-a=settings]"); ok(p.locator("button[data-a=undo-import]").count() == 0, "undo button gone after use")
+    settings(p); ok(p.locator("button[data-a=undo-import]").count() == 0, "undo button gone after use")
     click(p, "button[data-a=sheet-close]")
     # --- backup file import
-    click(p, "button[data-a=settings]"); p.set_input_files("#hevyfile", FIX); p.wait_for_selector(".hv-r"); click(p, "button[data-a=hv-go]"); p.wait_for_timeout(400)
+    settings(p); p.set_input_files("#hevyfile", FIX); p.wait_for_selector(".hv-r"); click(p, "button[data-a=hv-go]"); p.wait_for_timeout(400)
     bk = p.evaluate("() => { const o = window.Repsmith.backupObj(); return o; }")
     old = dict(bk); old["sessions"] = bk["sessions"][:1]; old["exportedAt"] = "2026-01-05T10:00:00.000Z"
     f1 = _os.path.join(_tf.gettempdir(), "bk_old.json"); open(f1, "w").write(json.dumps(old))
     new = dict(bk); new["schema"] = 99; f2 = _os.path.join(_tf.gettempdir(), "bk_new.json"); open(f2, "w").write(json.dumps(new))
-    click(p, "button[data-a=settings]"); p.set_input_files("#importfile", f2); p.wait_for_timeout(300)
+    settings(p); p.set_input_files("#importfile", f2); p.wait_for_timeout(300)
     ok("nowszej wersji" in p.locator("body").inner_text() and n(p) == 2, "backup from a newer schema is refused")
-    click(p, "button[data-a=settings]") if p.locator(".sheet").count() == 0 else None
+    settings(p) if p.locator(".sheet").count() == 0 else None
     p.set_input_files("#importfile", f1); p.wait_for_timeout(300)
     tx = p.locator(".sheet").inner_text(); ok("5 sty 2026" in tx and "teraz treningów: 2" in tx, f"confirm names date and counts: {tx[:150]!r}")
     click(p, "button[data-a=confirm-yes]"); p.wait_for_timeout(400)
     ok(n(p) == 1, "older backup loaded")
-    click(p, "button[data-a=settings]"); click(p, "button[data-a=undo-import]"); click(p, "button[data-a=confirm-yes]"); p.wait_for_timeout(400)
+    settings(p); click(p, "button[data-a=undo-import]"); click(p, "button[data-a=confirm-yes]"); p.wait_for_timeout(400)
     ok(n(p) == 2, "undo brings back the state before loading the backup")
     # --- sizes and contrast on real screens
     def minfont():
@@ -85,7 +78,7 @@ try:
         if p.locator(f"button[data-a=nav][data-v={v}]").count(): click(p, f"button[data-a=nav][data-v={v}]")
         m = minfont(); ok(m[0] >= 12, f"smallest text on {v}: {m}")
         ok(p.evaluate("() => document.documentElement.scrollWidth <= innerWidth"), f"no horizontal overflow on {v}")
-    click(p, "button[data-a=settings]"); m = minfont(); ok(m[0] >= 12, f"smallest text in settings: {m}")
+    settings(p); m = minfont(); ok(m[0] >= 12, f"smallest text in settings: {m}")
     cr = p.evaluate("""() => { const lum = c => { const [r, g, b] = c.match(/\\d+/g).map(Number).map(x => { x /= 255; return x <= .03928 ? x / 12.92 : ((x + .055) / 1.055) ** 2.4; }); return .2126 * r + .7152 * g + .0722 * b; };
       const ratio = (a, b) => { const [h, l] = [lum(a), lum(b)].sort((x, y) => y - x); return (h + .05) / (l + .05); };
       const i = document.querySelector('.sheet input, .sheet select'); const cs = getComputedStyle(i); const bg = getComputedStyle(document.body).backgroundColor;

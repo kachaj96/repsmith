@@ -1,4 +1,4 @@
-# Repsmith v0.10.4
+# Repsmith v0.11.0
 
 Autor: Adrian Drożdżyński
 
@@ -35,6 +35,20 @@ Podmień zmienione pliki w repozytorium. Przy kolejnym otwarciu z internetem apl
 ## Sprawdzenie wersji
 
 Ustawienia → na dole numer wersji. Jeśli po aktualizacji widać starą: zamknij aplikację całkowicie (z listy ostatnich aplikacji) i otwórz ponownie z internetem.
+
+## Aplikacja na Androida (APK), od v0.11.0
+
+Ten sam kod jest też zwykłą aplikacją na Androida (Capacitor 8), identyfikator `dev.kachaj96.repsmith`. APK buduje CI (GitHub Actions) przy każdym pushu.
+
+- **Dane nie przechodzą same z wersji w przeglądarce do APK** (to dwa osobne magazyny na telefonie). Przed przesiadką: w PWA Ustawienia → **Pobierz kopię (JSON)**, potem w APK Ustawienia → **Wczytaj kopię z pliku**.
+- W APK kopia i obraz karty treningu zapisują się przez systemowe **Udostępnij** (Dysk, Pliki, mail). Service worker działa tylko w PWA.
+- Podpis: klucz `repsmith-release.jks` (alias `repsmith`) trzymasz w menedżerze haseł. W repo są tylko sekrety Actions: `REPSMITH_KEYSTORE_BASE64`, `REPSMITH_KEYSTORE_PASSWORD`, `REPSMITH_KEY_ALIAS`, `REPSMITH_KEY_PASSWORD`. Bez nich CI buduje niepodpisany APK release. Zgubienie klucza oznacza, że kolejnej wersji nie da się zainstalować jako aktualizacji.
+- Ikony: `NODE_PATH=<node_modules z playwright> node scripts/gen-icons.mjs` (PWA i Android, ta sama konstrukcja co Runsmith).
+- Budowa lokalna: `npm ci && npm run cap:sync`, potem `android/gradlew assembleRelease` (wymaga Android SDK).
+
+## Wygląd
+
+Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
 
 ## Dane
 

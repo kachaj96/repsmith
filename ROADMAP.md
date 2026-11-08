@@ -59,16 +59,59 @@ Do sprawdzenia w praktyce:
 - iPhone: odstęp od notcha/wyspy i paska home (safe-area) na ekranach, w arkuszach i przy timerze przerwy.
 - Dźwięk: odblokowanie audio przy pierwszym dotknięciu, tryb mediów na czas przerwy, głośniejsze odliczanie 3-2-1 i trzy tony na koniec, wybór głośności, przycisk Test dźwięku.
 
-## v0.9.0 – zrobione
-- Import historii z Hevy (CSV/TSV): kg i lb, daty po angielsku, polsku i w innych językach, rozgrzewki, dropsety, supersety, RPE, dystans i czas, notatki ćwiczeń. Podgląd i ręczne dopasowanie ćwiczeń, nieznane jako własne ćwiczenia, ochrona przed dublami.
-- Do zrobienia po feedbacku: import ze Strong, wykresy progresji, eksport do CSV.
+## v0.8.2 – zrobione
+Poprawki po przeglądzie kodu.
+- Zamiana ćwiczenia w trakcie treningu: zapisane serie zostają przy starym ćwiczeniu, reszta idzie do nowego, bez starej podpowiedzi ciężaru.
+- Zakończenie lub odrzucenie treningu zatrzymuje timer i cichą pętlę audio. Timer przerwy dzwoni też poza ekranem treningu.
+- Blok dodatkowy nie dubluje już ćwiczeń po zamianach.
+- Service worker zapisuje tylko poprawne odpowiedzi i po 4 s bez sieci bierze kopię z pamięci.
+- "Powtórz trening" zachowuje %1RM, serie łączone i tryb oceny wysiłku.
+- Rekordy (PR) w późniejszych treningach przeliczają się po edycji lub usunięciu starego treningu.
+- Import kopii sprawdza strukturę danych i schemat. Błąd zapisu w IndexedDB pokazuje ostrzeżenie.
+- Mniejsze: dodanie serii po kalibracji, nazwa nowego dnia w planie.
 
-## v0.9.1 do v0.9.3 – zrobione (audyt względem QE Standard)
-- Zapis: błąd zapisu do bazy pokazuje stały baner z przyciskiem kopii (wcześniej `persist` połykał błąd, a toast mówił "zapisano").
-- Import kopii: kontrola schematu (nowsza kopia jest odrzucana), potwierdzenie z datą i liczbą treningów, automatyczna kopia bezpieczeństwa przed importem (bez niej import się nie wykona), "Cofnij ostatni import" w Ustawieniach. To samo dla importu z Hevy.
-- Fonty Barlow lokalnie (licencja OFL), zero zapytań poza własny host. Test sprawdza, że wersja w app.js, sw.js i README jest ta sama, a wszystko, co appka ładuje, jest w SHELL.
-- UX: ekran Dziś (przycisk startu przed banerem kopii, mniejszy nagłówek), Historia (główne ćwiczenia w wierszu, "2 rekordy" zamiast "PR 2"), obrysy pól i przycisków 3:1, najmniejszy tekst 12 px, arkusz "Skąd te liczby" rozdziela wyniki badań od ustawień appki.
-- Nie sprawdzone: WebKit i prawdziwy Android (w środowisku jest tylko Chromium), dźwięk przy wyciszeniu na iOS 26.6, import Hevy na telefonie, mailto z przycisku uwag.
+## v0.9.0 – zrobione
+- Dziennik biegów: przycisk "Zapisz bieg" na ekranie Dziś. Biegi są osobno od ćwiczeń, nie trafiają do biblioteki.
+- Pola: nazwa, rodzaj (spokojny, długi), data (także wsteczna), dystans (km lub m, wynik zawsze w km z 2 miejscami), tempo, czas, tętno, ocena 1-10. Pola przyjmują tylko cyfry.
+- Sprawdzanie zgodności: czas wpisany ręcznie musi pasować do dystansu i tempa, w przeciwnym razie błąd z dwoma szybkimi poprawkami (przelicz czas albo tempo).
+- Historia: przełącznik Treningi | Biegi. Postęp: zakładka Biegi z dystansem tygodniowo, wykresami tempa i tętna, rekordami.
+- Wcześniejsze treningi: data i czas trwania przy zakończeniu i edycji treningu, przycisk "Zapisz wcześniejszy trening" w Historii.
+- Kopia zapasowa obejmuje biegi.
+- Dalej: interwały i inne rodzaje biegów (model danych ma już pole rodzaju).
+
+## v0.9.1 – zrobione
+- Notatka do biegu (do 500 znaków), widoczna w historii biegów.
+
+## v0.10.0 – zrobione
+Spokojniejszy wygląd i momenty nagrody.
+- Jeden akcent: pomarańcz tylko dla głównego przycisku, zaznaczenia nawigacji, wykonanej serii, rekordów i wykresów. Aktywne chipy i przełączniki są jasną powierzchnią, ocena treningu jest szara.
+- Skala czcionek: 11 / 14 / 17 / 22 / 28 / 40 / 56 px. Duże litery tylko w nagłówkach i głównym przycisku.
+- Dziś: nazwa dnia, tydzień jako kropki, lista ćwiczeń, jeden duży przycisk. "Pusty trening" i "Zapisz bieg" jako cichy rząd. Przypomnienie o kopii to wąska linia na dole.
+- Trening: pusta notatka znika, dodatkowe akcje (metoda, kalibracja, talerze, zamiana, notatka) w menu "...". Karta rekordu (PR) pod nazwą ćwiczenia, różnica ciężaru względem ostatniego razu w podpowiedzi.
+- Tryb skupienia (Ustawienia, domyślnie wyłączony): otwarte tylko bieżące ćwiczenie, po skończeniu przechodzi do następnego.
+- Tryb spokojny (Ustawienia, domyślnie wyłączony): bez wibracji, animacji nagród i ekranu podsumowania.
+- Po treningu ekran podsumowania: rekordy albo objętość z porównaniem do ostatniego razu, kreski tygodnia jak w logo, seria tygodni. Po biegu krótkie podsumowanie z tempem na tle średniej z 30 dni.
+- Historia: jeden przełącznik (Treningi | Biegi), kalendarz i dodawanie jako ikony. Postęp: jeden duży wynik na ćwiczenie, rekordy, objętość i ostatnie rekordy zwinięte.
+- Plan: akcje wiersza w menu "...", ustawienia planu i objętość zwinięte. Ustawienia w sekcjach.
+
+## v0.10.1 – zrobione
+- Ikona notatki przy każdym ćwiczeniu na treningu (z kropką, gdy notatka istnieje).
+- Kolumna "Poprzednio" pokazuje też RPE z poprzedniego razu, jeśli było wpisane.
+
+## v0.10.2 – zrobione
+- iPhone: rest timer nie zatrzymuje już muzyki z innych aplikacji. Cicha pętla audio (tryb odtwarzania) jest teraz opcją "Mimo trybu cichego" w Ustawieniach, domyślnie sygnał miesza się z muzyką.
+
+## v0.10.3 – zrobione
+- Nowy plan w bibliotece (Bloki siłowe): **Bench + góra, 12 tyg.** Poniedziałek ciężki bench, środa OHP/plecy/nogi, piątek wariant benchu i ręce, test 1RM w tygodniu 12. Ćwiczenia dodatkowe w niskich zakresach (6-8) z podwójną progresją, izolacje wyżej, superserie. Back-offy na 93% top setu z większą liczbą powtórzeń, taper bez ciężkiego spoto, rozgrzewka dolnych pleców w notatce pierwszego ćwiczenia.
+- Plan z biblioteki zachowuje superserie (pole `group` było gubione przy budowaniu szablonu).
+- Edytor tygodni nie kasuje już nadpisań powtórzeń i % backoffu z tygodniowej tabeli planu.
+
+## v0.10.4 – zrobione
+Pomysły z przeglądu innej aplikacji do treningów, bez zmiany wyglądu (jeden akcent zostaje).
+- Karta ćwiczenia w treningu: sprzęt pod nazwą i neutralny znacznik głównej partii.
+- Menu serii (dotknij nazwy serii): zwykła seria albo rozgrzewka, "do upadku" (ustawia RPE 10, jeśli puste), drop set, notatka do serii, usunięcie serii (przy ćwiczeniach jednostronnych obu stron). Znaczniki widać przy serii.
+- Drop set nie liczy się do rekordów, e1RM, podpowiedzi ciężaru ani sygnału zmęczenia.
+- Ikona historii na karcie ćwiczenia: ostatnie 5 treningów z tym ćwiczeniem (serie, RPE, upadek, drop), ostatnie e1RM i skrót do pełnego postępu.
 
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).

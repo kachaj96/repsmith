@@ -1,0 +1,6 @@
+{
+  "appId": "dev.kachaj96.repsmith",
+  "appName": "Repsmith",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}

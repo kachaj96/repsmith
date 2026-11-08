@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Repsmith</title>
 <meta name="description" content="Dziennik treningowy: plany, serie, RPE, top set i backoff.">
-<meta name="theme-color" content="#130F18">
+<meta name="theme-color" content="#F4F5F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B0E11" media="(prefers-color-scheme: dark)">
 <meta name="author" content="Adrian Drożdżyński">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta name="apple-mobile-web-app-title" content="Repsmith">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
+<div id="splash" aria-hidden="true"><svg class="sp-tile" viewBox="0 0 108 108" width="108" height="108"><rect width="108" height="108" rx="26" fill="var(--accent)"/><g transform="translate(54 54) skewX(-9) translate(-54 -54) scale(.9)" fill="none" stroke="var(--on-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="11"><path pathLength="1" style="--i:0" d="M38 34v52"/><path pathLength="1" style="--i:1" d="M60 34v52"/><path pathLength="1" style="--i:2" d="M82 34v52"/><path pathLength="1" style="--i:3.6" d="M27 75l66-30"/></g></svg><div class="sp-name">Repsmith</div></div>
 <div id="app"><main class="screen"><div class="eyebrow">Repsmith</div></main></div>
 <noscript>Repsmith potrzebuje włączonego JavaScriptu.</noscript>
 <script src="bodymap.js"></script>
@@ -24,6 +26,7 @@
 <script src="gear.js"></script>
 <script src="hevy.js"></script>
 <script src="coach.js"></script>
+<script src="runs.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

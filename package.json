@@ -1,0 +1,20 @@
+{
+  "name": "repsmith",
+  "version": "0.11.0",
+  "private": true,
+  "description": "Repsmith: dziennik treningowy siłowni. PWA i aplikacja na Androida (Capacitor). Autor: Adrian Drożdżyński.",
+  "scripts": {
+    "build:web": "node scripts/build-web.mjs",
+    "test": "node scripts/run-unit.mjs",
+    "cap:sync": "node scripts/build-web.mjs && cap sync android"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/share": "^8.0.3"
+  }
+}
