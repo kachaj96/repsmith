@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.12.0';
+const VERSION = '0.13.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -452,7 +452,7 @@ const I = {
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
-  tally: '<svg viewBox="0 0 108 108" aria-hidden="true"><rect width="108" height="108" rx="26" fill="var(--accent)"/><g transform="translate(54 54) skewX(-9) translate(-54 -54) scale(.9)" fill="none" stroke="var(--on-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="11"><path d="M38 34v52"/><path d="M60 34v52"/><path d="M82 34v52"/><path d="M27 75l66-30"/></g></svg>',
+  tally: '<svg viewBox="0 0 1024 1024" aria-hidden="true"><rect width="1024" height="1024" rx="229" fill="#9C421D"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M414.5 291.8L293.7 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M585.6 291.8L468.6 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M758.4 291.8L641.5 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="80.5" stroke-linecap="round" d="M179.1 605.8L843.9 441.9"/></svg>',
 };
 
 /* ---------- helpers ---------- */
@@ -591,11 +591,6 @@ function applyTheme() {
   const th = S.settings.theme === 'light' || S.settings.theme === 'dark' ? S.settings.theme : null;
   if (th) document.documentElement.dataset.theme = th; else delete document.documentElement.dataset.theme;
   try { localStorage.setItem('repsmith.theme', th || 'system'); } catch (e) {}
-}
-function hideSplash() {
-  const el = document.getElementById('splash'); if (!el) return;
-  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), reduce ? 0 : 300); }, reduce ? 0 : Math.max(0, 1000 - performance.now()));
 }
 const FEEDBACK_EMAIL = 'repsmithapp@gmail.com'; // set to a real address to show the feedback button
 const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes', 'runs'];
@@ -3771,6 +3766,8 @@ document.addEventListener('keydown', ev => {
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && S.active) saveActive(); syncWake(); });
 
 /* ---------- boot ---------- */
+/* the start screen (splash.js) leaves when this init AND its animation are both done; a failed init still lets the animation finish */
+function settleSplash(outcome) { if (window.__splash) window.__splash.settle(outcome); }
 async function loadData() {
   if (window.REPSMITH_DATA) return window.REPSMITH_DATA;
   const r = await fetch('data/exercises.json');
@@ -3793,7 +3790,7 @@ async function boot() {
   if (S.active) S.view = 'workout';
   try { if (navigator.storage && navigator.storage.persisted) navigator.storage.persisted().then(v => { S._persisted = v; }); if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(v => { S._persisted = !!v; }).catch(() => {}); } catch (e) {}
   render();
-  hideSplash();
+  settleSplash('ready');
   if ('serviceWorker' in navigator && location.protocol === 'https:' && !window.REPSMITH_DATA && !NATIVE) {
     try {
       navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
@@ -3807,11 +3804,12 @@ async function boot() {
 }
 window.Repsmith = { S, A, C, CD, substitutes, e1rm, rpePct, prEvents, weeklyVolume, weekStart, bodyweightAt, normTarget, normItem, initItemSheet, applyItemTargets, defaultItem, render, persist, backupObj, oneRm, startTimer, stopTimer };
 boot().catch(err => {
-  hideSplash();
+  settleSplash('failed');
   const pl = (navigator.language || 'pl').startsWith('pl');
   const app = document.getElementById('app');
   if (app) app.innerHTML = `<main class="screen"><div class="eyebrow">Repsmith</div><h1 class="mid">${pl ? 'Nie udało się uruchomić' : 'Could not start'}</h1>
     <p class="sub">${pl ? 'Brakuje pliku z bazą ćwiczeń <b>data/exercises.json</b> albo nie da się go wczytać. Sprawdź, czy w repozytorium jest folder <b>data</b> z tym plikiem oraz folder <b>icons</b>.' : 'The exercise file <b>data/exercises.json</b> is missing or cannot be read. Check that the repository has a <b>data</b> folder with this file and an <b>icons</b> folder.'}</p>
-    <p class="muted small">${esc(String(err && err.message || err))}</p></main>`;
+    <p class="muted small">${esc(String(err && err.message || err))}</p>
+    <button class="btn" type="button" onclick="location.reload()">${pl ? 'Spróbuj ponownie' : 'Try again'}</button></main>`;
 });
 })();

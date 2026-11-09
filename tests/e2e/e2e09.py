@@ -3,6 +3,7 @@ _HERE = _os.path.dirname(_os.path.abspath(__file__)); _APP = _os.path.abspath(_o
 _OUT = _os.path.join(_tf.gettempdir(), "repsmith-shots"); _os.makedirs(_OUT, exist_ok=True)
 FIX = _os.environ.get("HEVY_FILE") or _os.path.join(_HERE, "..", "fixtures", "hevy_sample.csv")
 from playwright.sync_api import sync_playwright
+import _nosplash  # noqa: F401  (the start animation is tested in e2e_splash.py)
 srv = subprocess.Popen([sys.executable, "-m", "http.server", "8782", "-d", _APP], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)
 errs = []; P = F = 0
 def ok(c, m):

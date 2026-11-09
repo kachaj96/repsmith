@@ -15,12 +15,45 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script>try { var th = localStorage.getItem('repsmith.theme'); if (th === 'light' || th === 'dark') document.documentElement.dataset.theme = th; } catch (e) {}</script>
+<script>try { if (sessionStorage.getItem('smith.splash') === 'played') document.documentElement.dataset.splash = 'skip'; } catch (e) {}</script>
 <link rel="stylesheet" href="app.css">
+<style>
+/* Start screen (Smith Motion Language, docs/MOTION.md), same timeline as Runsmith. Painted with the page; splash.js decides when it leaves.
+   ms: tile 0-420, symbol 300-1040 (masks drawn along the real shapes), wordmark 940-1240, hold to 1600, then a 260 ms fade. */
+:root { --sp-spring: cubic-bezier(.2, .9, .25, 1.04); --sp-std: cubic-bezier(.4, 0, .2, 1); --sp-out: cubic-bezier(.2, 0, 0, 1); }
+#splash { position: fixed; inset: 0; z-index: 100; display: grid; place-content: center; justify-items: center; gap: 22px; background: var(--bg); transition: opacity .26s var(--sp-std); }
+#splash.out { opacity: 0; pointer-events: none; }
+html[data-splash="skip"] #splash { display: none; }
+#splash .sp-tile { width: 120px; height: 120px; display: block; animation: sp-tile .42s var(--sp-spring) both; }
+#splash .sp-rv { stroke-dasharray: 1.05; stroke-dashoffset: 1.05; animation: sp-draw var(--t) var(--d) var(--sp-std) forwards; }
+#splash .sp-name { margin: 0; font: 800 26px/1 var(--display); letter-spacing: -.02em; color: var(--text); opacity: 0; animation: sp-name .3s .94s var(--sp-out) forwards; }
+#splash .sp-end { position: absolute; width: 0; height: 0; animation: sp-end 1.6s linear both; }
+#splash .sp-hint { position: absolute; left: 0; right: 0; bottom: 11%; margin: 0; padding: 0 28px; text-align: center; font: 600 14px/1.4 var(--body, system-ui); color: var(--muted); }
+#splash .sp-hint[hidden] { display: none; }
+#splash .sp-retry { display: block; margin: 12px auto 0; min-height: 44px; padding: 0 20px; border: 1.5px solid var(--accent); border-radius: 12px; background: none; color: var(--accent); font: 700 15px var(--body, system-ui); }
+#splash.paused * { animation-play-state: paused; }
+@keyframes sp-tile { 0% { opacity: 0; transform: scale(.88); } 35% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+@keyframes sp-draw { to { stroke-dashoffset: 0; } }
+@keyframes sp-name { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes sp-end { from { opacity: .99; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  #splash .sp-tile, #splash .sp-name, #splash .sp-rv, #splash .sp-end { animation: none; }
+  #splash .sp-rv { stroke-dashoffset: 0; }
+  #splash .sp-name { opacity: 1; }
+  #splash { transition-duration: .12s; }
+}
+</style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><svg class="sp-tile" viewBox="0 0 108 108" width="108" height="108"><rect width="108" height="108" rx="26" fill="var(--accent)"/><g transform="translate(54 54) skewX(-9) translate(-54 -54) scale(.9)" fill="none" stroke="var(--on-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="11"><path pathLength="1" style="--i:0" d="M38 34v52"/><path pathLength="1" style="--i:1" d="M60 34v52"/><path pathLength="1" style="--i:2" d="M82 34v52"/><path pathLength="1" style="--i:3.6" d="M27 75l66-30"/></g></svg><div class="sp-name">Repsmith</div></div>
-<div id="app"><main class="screen"><div class="eyebrow">Repsmith</div></main></div>
+<div id="splash" role="status" aria-label="Repsmith">
+<!-- splash-art:start --><svg class="sp-tile" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false"><defs><mask id="sp-m-bar1" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><path class="sp-rv" pathLength="1" fill="none" stroke="#fff" stroke-width="132.6" style="--d:300ms;--t:300ms" d="M432 227.9L276.2 796.6"/></mask><mask id="sp-m-bar2" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><path class="sp-rv" pathLength="1" fill="none" stroke="#fff" stroke-width="132.6" style="--d:430ms;--t:300ms" d="M602.6 227.7L451.6 796.7"/></mask><mask id="sp-m-bar3" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><path class="sp-rv" pathLength="1" fill="none" stroke="#fff" stroke-width="132.6" style="--d:560ms;--t:300ms" d="M775.4 227.7L624.5 796.7"/></mask><mask id="sp-m-diag" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><path class="sp-rv" pathLength="1" fill="none" stroke="#fff" stroke-width="132.6" style="--d:760ms;--t:280ms" d="M114.8 621.6L908.3 426.1"/></mask></defs><rect width="1024" height="1024" rx="229" fill="#9C421D"/><g mask="url(#sp-m-bar1)"><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M414.5 291.8L293.7 732.7"/></g><g mask="url(#sp-m-bar2)"><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M585.6 291.8L468.6 732.7"/></g><g mask="url(#sp-m-bar3)"><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M758.4 291.8L641.5 732.7"/></g><g mask="url(#sp-m-diag)"><path fill="none" stroke="#FFFFFF" stroke-width="80.5" stroke-linecap="round" d="M179.1 605.8L843.9 441.9"/></g></svg><!-- splash-art:end -->
+<p class="sp-name">Repsmith</p>
+<i class="sp-end" aria-hidden="true"></i>
+<p class="sp-hint" aria-live="polite" hidden></p>
+</div>
+<div id="app" inert><main class="screen"><div class="eyebrow">Repsmith</div></main></div>
 <noscript>Repsmith potrzebuje włączonego JavaScriptu.</noscript>
+<script src="splash.js"></script>
 <script src="bodymap.js"></script>
 <script src="plans.js"></script>
 <script src="blocks.js"></script>

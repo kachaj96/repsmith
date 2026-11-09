@@ -1,5 +1,6 @@
 import os as _os, tempfile as _tf, subprocess, sys, time
 from playwright.sync_api import sync_playwright
+import _nosplash  # noqa: F401  (the start animation is tested in e2e_splash.py)
 _APP = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", ".."))
 srv = subprocess.Popen([sys.executable, "-m", "http.server", "8775", "-d", _APP], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)
 P = F = 0; errs = []

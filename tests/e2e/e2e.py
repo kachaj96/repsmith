@@ -3,6 +3,7 @@ _HERE = _os.path.dirname(_os.path.abspath(__file__)); _APP = _os.path.abspath(_o
 _OUT = _os.path.join(_tf.gettempdir(), "repsmith-shots"); _os.makedirs(_OUT, exist_ok=True)
 import json, subprocess, sys, time, os
 from playwright.sync_api import sync_playwright
+import _nosplash  # noqa: F401  (the start animation is tested in e2e_splash.py)
 
 APP = _APP
 SHOTS = _OUT

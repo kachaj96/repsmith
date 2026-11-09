@@ -1,4 +1,4 @@
-# Repsmith v0.12.0
+# Repsmith v0.13.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,12 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.13.0
+
+- Nowe logo z projektu graficznego: miedziany kafel, trzy pochylone kreski przecięte ukośną linią. Jedna geometria (`scripts/brand.mjs`) daje wszystkie pliki: `design/` (logo, monochromatyczne, sam znak, warstwy adaptacyjne), `icons/` (PWA, maskable, monochrome), ikony launchera Androida i znak w nagłówku aplikacji. `node scripts/gen-icons.mjs` odtwarza je wszystkie.
+- Nowa animacja startu (`splash.js`, szczegóły w `docs/MOTION.md`): kafel, kreski pojawiające się po kolei, ukośna linia na końcu, nazwa, krótkie przytrzymanie logo i wygaszenie. Całość trwa ok. 1,9 s i **zawsze gra do końca** przed pokazaniem ekranu głównego, także gdy aplikacja wczyta się szybciej. Wolny start nie restartuje animacji (po 5 s pojawia się komunikat, po 12 s przycisk ponowienia), błąd startu nie zawiesza ekranu. Bez animacji przy `prefers-reduced-motion`. Gra tylko przy prawdziwym uruchomieniu, nie przy zmianie zakładki ani powrocie z tła.
+- Android 12+: systemowy ekran startowy to tylko kolor tła (bez ikony), więc logo jest rysowane raz, bez błysku między systemowym a własnym ekranem.
 
 ## Zmiany w v0.12.0
 

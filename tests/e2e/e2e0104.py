@@ -1,6 +1,7 @@
 """v0.10.4: equipment line and muscle tag on the card, set menu (failure, drop, warm-up, note, delete), exercise history sheet."""
 import os as _os, tempfile as _tf, subprocess, sys, time
 from playwright.sync_api import sync_playwright
+import _nosplash  # noqa: F401  (the start animation is tested in e2e_splash.py)
 _APP = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", ".."))
 _OUT = _os.path.join(_tf.gettempdir(), "repsmith-shots"); _os.makedirs(_OUT, exist_ok=True)
 srv = subprocess.Popen([sys.executable, "-m", "http.server", "8790", "-d", _APP], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)

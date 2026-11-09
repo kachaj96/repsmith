@@ -675,19 +675,6 @@ input, select, textarea { border-radius: 12px; }
 }
 @keyframes rs-fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
-/* start screen: the tally draws itself, then fades (removed by app.js once the first screen is drawn) */
-#splash { position: fixed; inset: 0; z-index: 100; display: grid; place-content: center; justify-items: center; gap: 16px; background: var(--bg); pointer-events: none; transition: opacity .28s ease, transform .28s ease; }
-#splash.out { opacity: 0; transform: scale(1.03); }
-#splash .sp-tile { width: 108px; height: 108px; border-radius: 26px; box-shadow: 0 14px 34px -14px color-mix(in srgb, var(--accent) 55%, transparent); }
-#splash .sp-name { font: 800 22px var(--display); letter-spacing: -.02em; color: var(--text); }
-@media (prefers-reduced-motion: no-preference) {
-  #splash .sp-tile { animation: sp-in .6s var(--bouncy) both; }
-  #splash .sp-tile path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: rs-draw .26s cubic-bezier(.45, 0, .2, 1) forwards; animation-delay: calc(.18s + var(--i) * .14s); }
-  #splash .sp-name { animation: sp-name .35s .45s ease-out both; }
-}
-@keyframes sp-in { from { opacity: 0; transform: scale(.86); } }
-@keyframes sp-name { from { opacity: 0; transform: translateY(6px); } }
-
 .savebar { position: fixed; top: calc(8px + var(--sat)); left: 8px; right: 8px; z-index: 70; max-width: 544px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--surface); border: 1.5px solid var(--error); border-radius: var(--r); padding: 10px 12px; font-size: 14px; box-shadow: var(--shadow); }
 input, select, textarea { border-color: var(--edge); }
 input:focus, select:focus, textarea:focus { border-color: var(--accent); }
