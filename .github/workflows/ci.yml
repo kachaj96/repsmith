@@ -49,6 +49,13 @@ jobs:
         with: { node-version: 22, cache: npm }
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper/dists
+            ~/.gradle/caches
+          key: gradle-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle', 'android/variables.gradle') }}
+          restore-keys: gradle-
       - run: npm ci
       - run: npm run cap:sync
 
@@ -76,7 +83,10 @@ jobs:
           REPSMITH_KEYSTORE_PASSWORD: ${{ secrets.REPSMITH_KEYSTORE_PASSWORD }}
           REPSMITH_KEY_ALIAS: ${{ secrets.REPSMITH_KEY_ALIAS }}
           REPSMITH_KEY_PASSWORD: ${{ secrets.REPSMITH_KEY_PASSWORD }}
-        run: ./gradlew --no-daemon assembleRelease
+        run: |
+          # downloads (the Gradle distribution, dependencies) sometimes fail with a 5xx on the host side: retry before giving up
+          for i in 1 2 3 4; do ./gradlew --no-daemon assembleRelease && exit 0; echo "::warning::build attempt $i failed, retrying"; sleep $((i * 20)); done
+          exit 1
 
       - name: Name the apk
         id: apk
