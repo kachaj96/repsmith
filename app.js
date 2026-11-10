@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.13.1';
+const VERSION = '0.13.2';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -1807,50 +1807,69 @@ function vHistory() {
   }
   return `<main class="screen">${topbar()}${resumeBanner()}<div class="head-row"><h1 class="mid">${esc(t('history'))}</h1>${tools}</div>${tabs}${body}</main>`;
 }
+/* The shareable card in Smith Design System v1: the family tile and mark, Manrope titles, soft surface cards (22 px radius at phone scale),
+   sentence-case labels, a PR pill, and the colours of the current theme. */
+let _brandStrokes = null;
+function brandStrokes() {   // the mark's strokes from the same markup as the in-app logo (I.tally), so the card can never drift from it
+  if (!_brandStrokes) _brandStrokes = [...I.tally.matchAll(/<path[^>]*stroke-width="([\d.]+)"[^>]*d="([^"]+)"/g)].map(m => ({ w: +m[1], p: new Path2D(m[2]) }));
+  return _brandStrokes;
+}
 function drawCard() {
   const cv = $('#card-cv'); const sh = S.sheet; if (!cv || !sh) return;
   const s = S.sessions.find(x => x.id === sh.sesId); if (!s) return;
-  const cs = getComputedStyle(document.documentElement), v = n => (cs.getPropertyValue(n) || '').trim();
-  const bg = v('--bg') || '#1d1220', ac = v('--accent') || '#FF9F70', tx = v('--text') || '#F3ECF1', mu = v('--muted') || '#b9a9b6', su = v('--surface') || '#2a1c2e';
-  const body = getComputedStyle(document.body).fontFamily || 'sans-serif';
-  const disp = v('--display') || body;
+  const cs = getComputedStyle(document.documentElement), v = (n, d) => (cs.getPropertyValue(n) || '').trim() || d;
+  const bg = v('--bg', '#0B0E11'), ac = v('--accent', '#FF9F70'), onAc = v('--on-accent', '#1a0e08'), tx = v('--text', '#E9EDF1'), mu = v('--muted', '#A3ADB8'), su = v('--surface', '#161A1F'), line = v('--line', 'rgba(255,255,255,.10)');
+  const body = v('--body', 'Inter, system-ui, sans-serif'), disp = v('--display', 'Manrope, Inter, system-ui, sans-serif');
   const c = cv.getContext('2d'), W = 1080, H = 1350, lang = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
+  if (document.fonts && document.fonts.ready && !drawCard._fonts) { drawCard._fonts = true; Promise.all([document.fonts.load(`800 40px ${disp}`), document.fonts.load(`500 30px ${body}`)]).then(() => { if (S.sheet && S.sheet.type === 'card') drawCard(); }).catch(() => {}); }
   c.clearRect(0, 0, W, H); c.fillStyle = bg; c.fillRect(0, 0, W, H);
-  const g = c.createRadialGradient(W, 0, 0, W, 0, 900); g.addColorStop(0, 'rgba(255,159,112,.20)'); g.addColorStop(1, 'rgba(255,159,112,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
-  // logo
-  c.fillStyle = tx; for (let i = 0; i < 4; i++) { c.beginPath(); c.roundRect(60 + i * 20, 60, 10, 62, 5); c.fill(); }
-  c.strokeStyle = ac; c.lineWidth = 11; c.lineCap = 'round'; c.beginPath(); c.moveTo(52, 108); c.lineTo(148, 62); c.stroke();
-  c.fillStyle = tx; c.font = `700 40px ${disp}`; c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillText('Repsmith', 178, 92);
+  const g = c.createRadialGradient(W, 0, 0, W, 0, 820); g.addColorStop(0, ac + '30'); g.addColorStop(1, ac + '00'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  // brand lockup: the copper tile with the white mark (scripts/brand.mjs geometry), then the name
+  const tile = 96, tx0 = 60, ty0 = 56;
+  c.fillStyle = '#9C421D'; c.beginPath(); c.roundRect(tx0, ty0, tile, tile, tile * .224); c.fill();
+  c.save(); c.translate(tx0, ty0); c.scale(tile / 1024, tile / 1024); c.strokeStyle = '#FFFFFF'; c.lineCap = 'round'; c.lineJoin = 'round';
+  brandStrokes().forEach(st => { c.lineWidth = st.w; c.stroke(st.p); }); c.restore();
+  c.fillStyle = tx; c.font = `800 44px ${disp}`; c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillText('Repsmith', tx0 + tile + 24, ty0 + tile / 2 + 2);
   const fit = (txt, max, size, wt, fam) => { let z = size; do { c.font = `${wt} ${z}px ${fam}`; z -= 2; } while (c.measureText(txt).width > max && z > 24); };
-  c.fillStyle = tx; fit(s.name, W - 120, 84, 800, disp); c.textBaseline = 'alphabetic'; c.fillText(s.name, 60, 250);
-  c.fillStyle = mu; c.font = `500 34px ${body}`; c.fillText(fmtDate(s.startedAt, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }), 60, 304);
-  // stats
+  c.fillStyle = tx; fit(s.name, W - 120, 88, 800, disp); c.textBaseline = 'alphabetic'; c.fillText(s.name, 60, 290);
+  c.fillStyle = mu; c.font = `500 34px ${body}`; c.fillText(fmtDate(s.startedAt, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }), 60, 346);
+  // key values, big and in Manrope
   const st = sessionStats(s), prs = s.items.reduce((n, it) => n + it.sets.filter(x => x.pr && x.pr.length).length, 0);
   const cells = [[fmtDur(s.endedAt - s.startedAt), t('duration')], [String(st.sets), t('setsDone')]];
   if (!sh.hide) cells.push([st.vol.toLocaleString(lang) + ' kg', t('volume')]); else if (prs) cells.push([String(prs), 'PR']);
   const cw = (W - 120 - 24 * (cells.length - 1)) / cells.length;
   cells.forEach((cl, i) => {
-    const x = 60 + i * (cw + 24); c.fillStyle = su; c.beginPath(); c.roundRect(x, 360, cw, 170, 28); c.fill();
-    c.fillStyle = ac; fit(cl[0], cw - 30, 56, 800, disp); c.fillText(cl[0], x + 28, 450);
-    c.fillStyle = mu; c.font = `500 28px ${body}`; c.fillText(cl[1], x + 28, 498);
+    const x = 60 + i * (cw + 24); c.fillStyle = su; c.beginPath(); c.roundRect(x, 396, cw, 176, 44); c.fill();
+    c.fillStyle = ac; fit(cl[0], cw - 56, 60, 800, disp); c.fillText(cl[0], x + 30, 490);
+    c.fillStyle = mu; c.font = `500 28px ${body}`; c.fillText(cl[1], x + 30, 540);
   });
-  // top exercises by volume
+  // top exercises by volume, on one soft card
   const rows = s.items.map(it => {
     const ex = S.ex.get(it.exId); const done = it.sets.filter(x => x.done && x.kind !== 'warmup');
     let best = null, bv = -1;
     for (const x of done) { const sc = (num(x.weight) || 0) * (num(x.reps) || 0) || (num(x.reps) || num(x.time) || 0); if (sc > bv) { bv = sc; best = x; } }
     return { name: exName(it.exId), n: done.length, best, ex, pr: done.some(x => x.pr && x.pr.length), vol: done.reduce((a, x) => a + (num(x.weight) || 0) * (num(x.reps) || 0), 0) };
   }).filter(r => r.n).sort((a, b) => b.vol - a.vol);
-  c.fillStyle = mu; c.font = `700 28px ${body}`; c.fillText(t('cardTop').toUpperCase(), 60, 610);
-  const max = 6, show = rows.slice(0, max); let y = 650;
-  show.forEach(r => {
-    c.fillStyle = tx; fit(r.name, 560, 38, 700, body); c.fillText(r.name, 60, y + 50);
+  const max = 6, show = rows.slice(0, max), rowH = 84;
+  c.fillStyle = tx; c.font = `800 36px ${disp}`; c.fillText(t('cardTop'), 60, 650);
+  const cardTop = 680, cardH = show.length * rowH + 28;
+  c.fillStyle = su; c.beginPath(); c.roundRect(60, cardTop, W - 120, cardH, 44); c.fill();
+  show.forEach((r, i) => {
+    const y = cardTop + 14 + i * rowH, cy = y + rowH / 2;
     const right = sh.hide ? `${r.n} × ` + t('setsDone').toLowerCase() : (r.best ? fmtSet(r.best, r.ex) : '');
-    c.textAlign = 'right'; c.fillStyle = r.pr ? ac : mu; c.font = `600 34px ${body}`; c.fillText((r.pr ? 'PR  ' : '') + (sh.hide ? '' : '') + right, W - 60, y + 50); c.textAlign = 'left';
-    c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(60, y + 78, W - 120, 2); y += 100;
+    c.font = `700 34px ${disp}`; c.textAlign = 'right'; const rw = c.measureText(right).width;
+    c.fillStyle = r.pr ? ac : mu; c.textBaseline = 'middle'; c.fillText(right, W - 60 - 36, cy + 2);
+    let pillW = 0;
+    if (r.pr) { c.font = `800 24px ${body}`; pillW = c.measureText('PR').width + 32; const px = W - 60 - 36 - rw - 20 - pillW; c.fillStyle = ac; c.beginPath(); c.roundRect(px, cy - 20, pillW, 40, 14); c.fill(); c.fillStyle = onAc; c.textAlign = 'center'; c.fillText('PR', px + pillW / 2, cy + 2); pillW += 20; }
+    c.textAlign = 'left'; c.fillStyle = tx; fit(r.name, W - 120 - 72 - rw - pillW - 24, 36, 700, body); c.fillText(r.name, 60 + 36, cy + 2);
+    if (i < show.length - 1) { c.fillStyle = line; c.fillRect(60 + 36, y + rowH - 1, W - 120 - 72, 2); }
   });
-  if (rows.length > max) { c.fillStyle = mu; c.font = `500 30px ${body}`; c.fillText(`+${rows.length - max} ${t('cardMore')}`, 60, y + 40); }
-  c.fillStyle = mu; c.font = `500 28px ${body}`; c.textAlign = 'center'; c.fillText('repsmith', W / 2, H - 50); c.textAlign = 'left';
+  c.textBaseline = 'alphabetic';
+  if (rows.length > max) { c.fillStyle = mu; c.font = `500 30px ${body}`; c.fillText(`+${rows.length - max} ${t("cardMore")}`, 60, cardTop + cardH + 46); }
+  // footer: the small lockup
+  const fy = H - 76, fs = 44; c.fillStyle = '#9C421D'; c.beginPath(); c.roundRect(W / 2 - 104, fy, fs, fs, fs * .224); c.fill();
+  c.save(); c.translate(W / 2 - 104, fy); c.scale(fs / 1024, fs / 1024); c.strokeStyle = '#FFFFFF'; c.lineCap = 'round'; brandStrokes().forEach(k => { c.lineWidth = k.w; c.stroke(k.p); }); c.restore();
+  c.fillStyle = mu; c.font = `700 30px ${disp}`; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText('Repsmith', W / 2 - 104 + fs + 14, fy + fs / 2 + 2); c.textBaseline = 'alphabetic';
 }
 function tallySvg(n) {
   let idx = 0, out = '';

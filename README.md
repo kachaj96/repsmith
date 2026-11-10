@@ -1,4 +1,4 @@
-# Repsmith v0.13.1
+# Repsmith v0.13.2
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,10 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.13.2
+
+- Karta do udostępnienia (Shareable card) w Smith Design System v1: nowe logo (miedziany kafel z kreskami, ta sama geometria co ikona), Manrope w tytułach i liczbach, miękkie kafle 22 px, etykiety bez wersalików, znacznik PR jako pigułka, lista ćwiczeń na jednej karcie z liniami podziału, kolory aktualnego motywu (jasny lub ciemny). Poprzednia wersja miała stare logo (cztery kreski z ukośną linią) i wersaliki.
 
 ## Zmiany w v0.13.1
 
