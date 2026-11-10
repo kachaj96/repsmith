@@ -1,4 +1,4 @@
-# Repsmith v0.13.0
+# Repsmith v0.13.1
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,10 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.13.1
+
+- Wiersz serii: poprzednia seria jest pokazana w całości (ciężar×powtórzenia i RPE, bez ucinania do „97.5...”), a znacznik PR jest w osobnej linii pod nazwą serii i nie nakrywa kolumny „Previous”.
 
 ## Zmiany w v0.13.0
 

@@ -741,3 +741,15 @@ body { line-height: 1.5; }
 .screen { gap: 16px; }
 .btn, .btn.primary { font-size: 16px; font-weight: 600; }
 .btn.small { font-size: 14px; }
+
+/* set rows: the previous set is shown in full and the PR badge never overlaps its neighbours (v0.13.1) */
+.set-head, .set { grid-template-columns: 66px minmax(66px, 1.25fr) minmax(54px, 1.1fr) minmax(34px, .75fr) minmax(34px, .7fr) 44px; column-gap: 5px; }
+.set .prev { font-size: 13px; overflow: visible; text-overflow: clip; letter-spacing: -.01em; }
+.set .prev small { font-size: 12px; margin-top: 1px; }
+.kind-btn { white-space: normal; }
+.kind-btn .pr-badge { display: block; width: fit-content; margin: 2px 0 0; }
+.set .kind { min-width: 0; }
+@media (max-width: 370px) {
+  .set-head, .set { grid-template-columns: 56px minmax(58px, 1.25fr) minmax(52px, 1.25fr) minmax(34px, .8fr) minmax(32px, .75fr) 44px; column-gap: 4px; }
+  .kind-btn { font-size: 13px; }
+}

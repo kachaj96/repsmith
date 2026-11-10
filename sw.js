@@ -1,5 +1,5 @@
 /* Repsmith service worker: app shell offline, network-first for the shell so updates arrive. */
-const CACHE = 'repsmith-v0.13.0';
+const CACHE = 'repsmith-v0.13.1';
 const NET_WAIT = 4000;
 const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'splash.js', 'bodymap.js', 'plans.js', 'blocks.js', 'gear.js', 'hevy.js', 'coach.js', 'runs.js', 'data/exercises.json', 'manifest.webmanifest', 'fonts/inter-latin-wght-normal.woff2', 'fonts/inter-latin-ext-wght-normal.woff2', 'fonts/manrope-latin-wght-normal.woff2', 'fonts/manrope-latin-ext-wght-normal.woff2',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
