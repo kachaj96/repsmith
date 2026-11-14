@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.13.2';
+const VERSION = '0.14.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -258,6 +258,18 @@ Object.assign(STR.pl, {
   calibChip: 'Kalibracja RPE', calibTitle: 'Seria kalibracyjna',
   calibText: 'Po rozgrzewce weź ciężar na około 8 powtórzeń. Rób powtórzenia, aż uznasz, że zostały 2 w zapasie. Zapamiętaj tę liczbę i rób dalej, ile się da w dobrej technice. Stop przy zmianie techniki.\n\nAplikacja porówna Twój strzał z rzeczywistością.',
   calibSafety: 'Nie rób tego na ciężkim przysiadzie bez asekuracji. Wyciskanie z asekuracją, maszyna albo suwnica są bezpieczniejsze.',
+  waveTitle: 'Baza fali (WB)', waveStartText: 'Podaj ciężar odniesienia w wyciskaniu leżąc. Z niego liczę bazę fali (WB), od której idą wszystkie procenty w tym planie. WB to ostrożna liczba, nie rekord życiowy.',
+  waveKind1: 'Zaliczone 1RM', waveKind2: 'e1RM (wyliczone)', waveKindD1: 'Prawdziwe 1RM zaliczone w wyciskaniu zawodniczym (pauza, ten sam chwyt). WB = 1RM zaokrąglone w dół do kroku.', waveKindD2: 'WB = e1RM × 0,975, zaokrąglone w dół do kroku. To hipoteza programu, nie pomiar.',
+  waveKg: 'Ciężar (kg)', waveStep: 'Krok bazy (kg)', waveStepD: 'O tyle rośnie baza, gdy cykl to potwierdzi. Domyślnie 2,5 kg, przy dużych ciężarach możesz dać mniej.', waveRes: kg => `Baza fali: ${kg} kg`, waveResNone: 'Wpisz ciężar, a policzę bazę.',
+  waveHint: 'Kilogramy w sesji to zakres z bazy: zaczynasz od dolnej wartości, a RPE wygrywa z procentem. Wyciskanie nigdy do 0 RIR.', waveSafety: 'Rack z zabezpieczeniami albo asekuracja, zwłaszcza przy serii kontrolnej i teście. Ból, nowe objawy neurologiczne albo uraz o niejasnej przyczynie: nie zmieniaj RPE ani procentów, skonsultuj się ze specjalistą. Aplikacja nie diagnozuje.',
+  waveErr: 'Podaj ciężar od 20 do 400 kg.', waveErrStep: 'Krok bazy: od 0,5 do 10 kg.', waveCreate: 'Utwórz plan', waveSave: 'Zapisz', waveBadge: kg => `WB ${kg} kg`,
+  waveToday: (a, p, wb) => `${a} kg · ${p}% WB ${wb}`, waveBo: a => `back-off ${a} kg`, waveLow: 'Start od dolnej wartości. RPE wygrywa z procentem.', waveAmrapLine: 'Seria kontrolna: AMRAP @9, koniec przy ok. 1 powtórzeniu w zapasie.', waveNoBase: 'Brak bazy fali, więc nie policzę kilogramów.',
+  waveEndTitle: 'Koniec cyklu', waveEndText: 'Zaczynasz kolejny cykl z nową bazą?', waveEndBtn: 'Nowa baza i cykl', waveNextTitle: 'Kolejny cykl', waveNow: kg => `Obecna baza: ${kg} kg`, waveProp: kg => `Propozycja bazy: ${kg} kg`,
+  waveCtl: (kg, r, rpe, e) => `Seria kontrolna: ${kg} kg × ${r} @${rpe}${e ? `, e1RM ${e} kg` : ''}`, waveCtlNone: 'Brak zapisanej serii kontrolnej (piątek, tydzień 3). Baza zostaje bez zmian.', waveSgl: (kg, rpe) => `Singiel z poniedziałku T3: ${kg} kg @${rpe}`,
+  waveOwn: 'Twoja baza (kg)', waveOwnD: 'Zawsze możesz wpisać własną liczbę. Baza zmienia się tylko na wejściu w nowy cykl.', waveComp: 'Seria kontrolna była nieporównywalna (inny chwyt, pauza, RIR albo problem zdrowotny)', waveAmrapPct: 'Seria kontrolna, % bazy', waveStart2: 'Zacznij nowy cykl',
+  waveWhy_undecided: 'Nierozstrzygnięte: baza bez zmian (seria nieporównywalna, brak danych albo dane sprzeczne).', waveWhy_first: 'Pierwszy cykl, brak odniesienia: baza zostaje, a ten wynik jest punktem wyjścia.', waveWhy_small: 'Zmiana niewielka: baza bez zmian, obserwuj kolejny cykl.',
+  waveWhy_singleLow: 'Seria kontrolna lepsza, ale singiel z poniedziałku T3 był poniżej planu albo cięższy niż zakładany RPE: baza bez zmian.', waveWhy_weak: 'Seria kontrolna słabsza, singiel stabilny: baza bez zmian. Sprawdź zmęczenie, sen i warunki.', waveWhy_weakBoth: 'Seria kontrolna i singiel słabsze: baza bez zmian. Najpierw regeneracja, akcesoria, jedzenie i technika, nie od razu obniżanie bazy.',
+  waveWhy_up: d => `Baza o ${fmtN(d.step)} kg wyżej: seria kontrolna lepsza, singiel potwierdza. To hipoteza programu.`, waveHintUp: pct => `AMRAP wyszedł powyżej 7 powtórzeń: rozważ serię kontrolną przy ${fmtN(pct)}% w następnej fali.`, waveHintDown: pct => `AMRAP wyszedł poniżej 4 powtórzeń: rozważ serię kontrolną przy ${fmtN(pct)}% w następnej fali.`, waveStarted: 'Nowy cykl, tydzień 1',
   calibW: 'Ciężar (kg)', calibGuess: 'Powtórzenia, gdy uznałeś, że zostały 2', calibTotal: 'Powtórzenia łącznie', calibSave: 'Zapisz serię',
   calibErr: 'Wpisz ciężar i oba powtórzenia (łącznie co najmniej tyle, ile przy strzale).',
   calibRes: e => `Pomyłka: ${e} ${plural(e, 'powtórzenie', 'powtórzenia', 'powtórzeń')}.`,
@@ -368,6 +380,18 @@ Object.assign(STR.en, {
   calibChip: 'RPE calibration', calibTitle: 'Calibration set',
   calibText: 'After warming up, take a load you can do about 8 reps with. Do reps until you believe 2 are left. Remember that number, then keep going as long as form holds. Stop at a form change.\n\nThe app compares your call with what really happened.',
   calibSafety: 'Do not do this on a heavy squat without safeties. A bench with safeties, a machine or a leg press is safer.',
+  waveTitle: 'Wave base (WB)', waveStartText: 'Enter your reference weight for the bench press. I derive the wave base (WB) from it, and every percentage in this plan is counted from WB. WB is a cautious number, not a personal record.',
+  waveKind1: 'Made 1RM', waveKind2: 'e1RM (calculated)', waveKindD1: 'A true 1RM made in the competition bench (pause, same grip). WB = the 1RM rounded down to the step.', waveKindD2: 'WB = e1RM × 0.975, rounded down to the step. A hypothesis of the program, not a measurement.',
+  waveKg: 'Weight (kg)', waveStep: 'Base step (kg)', waveStepD: 'How much the base grows when a cycle confirms it. 2.5 kg by default, use less at heavy weights.', waveRes: kg => `Wave base: ${kg} kg`, waveResNone: 'Enter a weight and I will work out the base.',
+  waveHint: 'Weights in the session are a range from the base: start at the lower value, RPE beats the percentage. Never to 0 RIR on the bench.', waveSafety: 'A rack with safeties or a spotter, especially for the control set and a test. Pain, new neurological symptoms or an injury of unclear cause: do not change RPE or percentages, see a specialist. The app does not diagnose.',
+  waveErr: 'Enter a weight from 20 to 400 kg.', waveErrStep: 'Base step: 0.5 to 10 kg.', waveCreate: 'Create plan', waveSave: 'Save', waveBadge: kg => `WB ${kg} kg`,
+  waveToday: (a, p, wb) => `${a} kg · ${p}% WB ${wb}`, waveBo: a => `back-off ${a} kg`, waveLow: 'Start at the lower value. RPE beats the percentage.', waveAmrapLine: 'Control set: AMRAP @9, stop at about 1 rep in reserve.', waveNoBase: 'No wave base, so I cannot work out the weights.',
+  waveEndTitle: 'End of the cycle', waveEndText: 'Start the next cycle with a new base?', waveEndBtn: 'New base and cycle', waveNextTitle: 'Next cycle', waveNow: kg => `Current base: ${kg} kg`, waveProp: kg => `Proposed base: ${kg} kg`,
+  waveCtl: (kg, r, rpe, e) => `Control set: ${kg} kg × ${r} @${rpe}${e ? `, e1RM ${e} kg` : ''}`, waveCtlNone: 'No control set logged (Friday, week 3). The base stays as it is.', waveSgl: (kg, rpe) => `Monday single in week 3: ${kg} kg @${rpe}`,
+  waveOwn: 'Your base (kg)', waveOwnD: 'You can always enter your own number. The base changes only when a new cycle starts.', waveComp: 'The control set was not comparable (different grip, pause, RIR or a health problem)', waveAmrapPct: 'Control set, % of base', waveStart2: 'Start the new cycle',
+  waveWhy_undecided: 'Undecided: base unchanged (set not comparable, data missing or contradicting).', waveWhy_first: 'First cycle, nothing to compare with: the base stays and this result is the starting point.', waveWhy_small: 'A small change: base unchanged, watch the next cycle.',
+  waveWhy_singleLow: 'Better control set, but the Monday single in week 3 was below plan or harder than the target RPE: base unchanged.', waveWhy_weak: 'Weaker control set, stable single: base unchanged. Check fatigue, sleep and conditions.', waveWhy_weakBoth: 'Control set and single are weaker: base unchanged. Recovery, accessories, food and technique first, do not lower the base right away.',
+  waveWhy_up: d => `Base up by ${fmtN(d.step)} kg: better control set, the single confirms it. A hypothesis of the program.`, waveHintUp: pct => `The AMRAP went above 7 reps: consider the control set at ${fmtN(pct)}% in the next wave.`, waveHintDown: pct => `The AMRAP went below 4 reps: consider the control set at ${fmtN(pct)}% in the next wave.`, waveStarted: 'New cycle, week 1',
   calibW: 'Load (kg)', calibGuess: 'Reps when you thought 2 were left', calibTotal: 'Total reps', calibSave: 'Save set',
   calibErr: 'Enter the load and both rep counts (total at least as many as the call).',
   calibRes: e => `Off by ${e} rep${e === 1 ? '' : 's'}.`,
@@ -705,6 +729,7 @@ function repModesFor(exId, mth) {
 }
 function efModesFor(exId) { return logOf(exId) === 'W' ? ['rpe', 'rrange', 'pct'] : ['rpe', 'rrange']; }
 function intensityShort(it) {
+  if (it.wv) { const r = it.rpe != null ? (it.rpeMax != null && it.rpeMax > it.rpe ? ` @${fmtN(it.rpe)}-${fmtN(it.rpeMax)}` : ` @${fmtN(it.rpe)}`) : ''; return `${r} · ${it.wv[0] === it.wv[1] ? fmtN(it.wv[0]) : fmtN(it.wv[0]) + '-' + fmtN(it.wv[1])}% WB`; }
   if (it.pct) return ` @${fmtN(it.pct)}%`;
   if (it.rpe == null) return '';
   return it.rpeMax != null && it.rpeMax > it.rpe ? ` @${fmtN(it.rpe)}-${fmtN(it.rpeMax)}` : ` @${fmtN(it.rpe)}`;
@@ -865,7 +890,9 @@ function pushSets(arr, ex, kind, count, target) {
 }
 /* template item -> session item. mods: cut (0..1), extraSets, extraBackoff, rpeCap, loadPct, cues */
 function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
-  const ex = S.ex.get(it.exId);
+  const ex0 = S.ex.get(it.exId);
+  const ex = it.single && ex0 && ex0.unilateral ? { ...ex0, unilateral: false } : ex0; // one row per set for both sides (single flag)
+  const waveR = it.wv && ctx.wave ? C.wave(it, ctx.wave) : null;
   const method = C.methodOf(it), kind = C.kindOf(it);
   let nWork = it.sets || 1, nBack = it.backoffSets || 0;
   if (mods.extraSets) nWork += mods.extraSets;
@@ -878,7 +905,7 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   pushSets(sets, ex, 'warmup', it.warmups || 0, null);
   if (it.scheme === 'topback') {
     pushSets(sets, ex, 'top', 1, { reps: it.reps, rpe, rpeMax, pct });
-    pushSets(sets, ex, 'backoff', nBack, { reps: it.backoffReps || String(it.reps).replace('+', ''), rpe: null });
+    pushSets(sets, ex, 'backoff', nBack, { reps: it.backoffReps || String(it.reps).replace('+', ''), rpe: it.boRpe ?? null, rpeMax: it.boRpe != null ? (it.boRpeMax ?? it.boRpe) : null });
   } else {
     pushSets(sets, ex, 'work', nWork, { reps: it.reps, rpe, rpeMax, pct });
   }
@@ -893,7 +920,8 @@ function sessionItemFromTemplate(it, mods = {}, ctx = {}) {
   if (cues.length) out.cues = cues;
   if (it.noprog) out.noprog = true;
   if (it.test) out.test = true;
-  const sug = it.noprog ? null : C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
+  if (waveR) out.wave = waveR;
+  const sug = it.noprog || it.wv ? null : C.suggest({ exId: it.exId, method, reps: it.reps, rpe, rpeMax: rpeMax ?? rpe, scheme: it.scheme, sets: nWork, pct }, { before: ctx.at || now(), sig, effort: ctx.effort });
   if (sug) { if (sug.load != null && mods.loadPct) sug.load = roundLoad(it.exId, sug.load * mods.loadPct); out.sug = sug; }
   return out;
 }
@@ -937,7 +965,7 @@ function dlSummary(c) {
 function cycleSummary(tp) {
   const c = C.cycleOf(tp);
   if (!c) return `${t('cycSumRepeat')} · ${t('dlSumNone')}`;
-  if (c.type === 'fixed') { const bi = C.blockInfo(tp); return `${t('cycWeeksN', c.weeks)} · ${bi.finished ? t('cycDone') : t('cycWeekOf', bi.week, c.weeks)} · ${dlSummary(c)}`; }
+  if (c.type === 'fixed') { const bi = C.blockInfo(tp); return `${t('cycWeeksN', c.weeks)} · ${bi.finished ? t('cycDone') : t('cycWeekOf', bi.week, c.weeks)} · ${tp.wave ? t('waveBadge', fmtN(tp.wave.wb)) : dlSummary(c)}`; }
   return `${t('cycSumRepeat')} · ${dlSummary(c)}`;
 }
 /* best test-week result per lift since the cycle started */
@@ -958,7 +986,36 @@ function testResults(tp, c) {
   }
   return out;
 }
+/* ---------- wave plan (Bench Priority): base from a 1RM or e1RM, review after week 4 ---------- */
+const round1 = v => (v == null ? null : Math.round(v * 10) / 10);
+function waveReview(tp, comparable = true) {
+  const w = tp.wave, c = tp.cycle || {};
+  let ctl = null, sgl = null;
+  for (const ss of S.sessions.filter(x => x.templateId === tp.id && x.startedAt >= (c.start || 0)).sort((a, b) => a.startedAt - b.startedAt)) {
+    for (const it of ss.items) {
+      if (!it.wave) continue;
+      const top = it.sets.find(x => x.kind === 'top' && x.done && num(x.weight) > 0 && num(x.reps) != null);
+      if (!top) continue;
+      const kg = num(top.weight), reps = num(top.reps), rpe = normRpe(top.rpe);
+      if (it.wave.amrap) ctl = { kg, reps, rpe: rpe ?? 9, e1: round1(e1rm(kg, reps, rpe ?? 9)) };
+      else if (ss.week && ss.week.week === 3 && it.exId === 'bench-press' && String(it.reps) === '1') sgl = { kg, plannedKg: it.wave.lo, rpe, targetRpe: it.rpe };
+    }
+  }
+  const prevH = [...(w.hist || [])].reverse().find(h => h.ctl && !h.comp);
+  const res = C.nextBase({ wb: w.wb, step: w.step || 2.5, cur: ctl, prev: prevH ? prevH.ctl : null, single: sgl, comparable });
+  return { ctl, sgl, res, hint: ctl ? C.amrapHint(ctl.reps, w.amrapPct) : null };
+}
+function waveResText(sh) {
+  const kg = num(String(sh.kg).replace(',', '.')), step = num(String(sh.step).replace(',', '.')) || 2.5;
+  const wb = kg > 0 ? C.waveBase(sh.kind, kg, step) : null;
+  return wb ? t('waveRes', fmtN(wb)) : t('waveResNone');
+}
+function waveEndCard(tp) {
+  return `<div class="info"><h3>${esc(t('waveEndTitle'))}</h3><div>${esc(t('waveEndText'))}</div>
+    <div class="btn-row wrap"><button class="btn small primary" data-a="wave-next" data-v="${tp.id}">${esc(t('waveEndBtn'))}</button><button class="btn small ghost" data-a="nav" data-v="plans">${esc(t('endPlans'))}</button></div></div>`;
+}
 function endCard(tp, bi) {
+  if (tp.wave) return waveEndCard(tp);
   const res = testResults(tp, bi.cycle);
   const ids = Object.keys(res);
   const rows = ids.map(id => { const o = oneRm(id); const r = res[id]; return `<div class="row"><span class="grow"><span class="name">${esc(exName(id))}: ${esc(fmtN(r.kg))} kg</span><br><span class="meta">${r.r > 1 ? esc(t('testFrom', fmtN(r.w), r.r)) + ' · ' : ''}${esc(o ? t('testWas', fmtN(o.kg)) : t('testNoMax'))}</span></span><button class="btn small" data-a="test-save" data-v="${esc(id)}">${esc(t('testSave'))}</button></div>`; }).join('');
@@ -998,7 +1055,7 @@ function startSession(tpl, day, opts = {}) {
   const notes = [];
   if (bi && bi.deload) notes.push(t('cueDeload', bi.cycle.deload.sets, bi.cycle.deload.load));
   else if (tpl && tpl.fatigueNext) notes.push(t('cueFatigue', S.settings.fatigueCut ?? 30));
-  const items = day ? day.items.map(it => wkItem(it, bi)).filter(it => !skipped(it)).map(it => sessionItemFromTemplate(it, tpl ? planMods(tpl, it, bi, opts.ready) : {}, { effort, at })) : [];
+  const items = day ? day.items.map(it => wkItem(it, bi)).filter(it => !skipped(it)).map(it => sessionItemFromTemplate(it, tpl ? planMods(tpl, it, bi, opts.ready) : {}, { effort, at, wave: tpl && tpl.wave })) : [];
   S.active = {
     id: uid(), name: day ? day.name : t('freeWorkout'), templateId: tpl ? tpl.id : null, dayId: day ? day.id : null,
     startedAt: at, endedAt: null, items, bw: bodyweightAt(at), effort, ready: opts.ready ?? null, notes,
@@ -1416,6 +1473,7 @@ function setGrid(it) {
     else if (it.sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
     if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundLoad(it.exId, sug.load * (it.backoffPct || 90) / 100));
     if (s.kind === 'backoff' && topDone) phW = fmtN(roundLoad(it.exId, num(topDone.weight) * (it.backoffPct || 90) / 100));
+    if (it.wave && s.kind !== 'warmup') phW = fmtN((s.kind === 'backoff' && it.wave.bo ? it.wave.bo : it.wave).lo);
     const phRpe = s.target && s.target.rpe ? (s.target.rpeMax > s.target.rpe ? `${fmtN(s.target.rpe)}-${fmtN(s.target.rpeMax)}` : fmtN(s.target.rpe)) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
     const kindLbl = { warmup: t('warmup'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff'), calib: t('calib') }[s.kind];
     const side = (s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '') + (amrap ? '<span class="side-tag amrap">AMRAP</span>' : '');
@@ -1431,7 +1489,15 @@ function setGrid(it) {
   }).join('');
   return `<div class="sets"><div class="set-head"><span>${esc(t('sets'))}</span><span>${esc(t('prev'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
 }
+function waveLine(it) {
+  const w = it.wave, r = (a, b) => (a === b ? fmtN(a) : `${fmtN(a)}-${fmtN(b)}`);
+  const parts = [`<b>${esc(t('sugToday'))}: ${esc(t('waveToday', r(w.lo, w.hi), r(w.pLo, w.pHi), fmtN(w.wb)))}</b>`];
+  if (w.bo) parts.push(esc(t('waveBo', r(w.bo.lo, w.bo.hi))));
+  parts.push(esc(t(w.amrap ? 'waveAmrapLine' : 'waveLow')));
+  return `<div class="sug">${parts.join(' · ')}</div>`;
+}
 function sugLine(it) {
+  if (it.wave) return waveLine(it);
   const g = it.sug; if (!g) return '';
   const ex = S.ex.get(it.exId) || {};
   let delta = null;
@@ -1448,6 +1514,7 @@ function sugLine(it) {
 }
 
 function canCalib(it) {
+  if (it.wave) return false;
   if (C.kindOf(it) !== 'main' || logOf(it.exId) !== 'W') return false;
   if (it.sets.some(s => s.kind === 'calib')) return false;
   return !S.calib.some(c => c.exId === it.exId && c.at > now() - 42 * 864e5);
@@ -1584,7 +1651,7 @@ function flagActions(f) {
   return b('ok', t('act_ok'), 'ghost');
 }
 function deloadOffer(tpl, bi) {
-  if (!tpl || !C.cycleOf(tpl) || !bi || bi.deload || bi.finished || S.settings.flagsOn === false) return null;
+  if (!tpl || tpl.wave || !C.cycleOf(tpl) || !bi || bi.deload || bi.finished || S.settings.flagsOn === false) return null;
   const dAt = (tpl.cycle && tpl.cycle.deloadAt) || (tpl.block && tpl.block.deloadAt) || 0;
   const since = now() - 7 * 864e5;
   const types = new Set(S.flags.filter(f => f.at >= since && FLAG_TYPES_DELOAD.has(f.type) && !(dAt && f.at <= dAt)).map(f => f.type));
@@ -2405,6 +2472,35 @@ function renderSheet() {
       ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="orm-save">${esc(t('save'))}</button>
       ${m ? `<button class="btn block ghost" data-a="orm-clear">${esc(t('ormClear'))}</button>` : ''}`;
+  } else if (sh.type === 'wave') {
+    const st = sh.mode === 'start';
+    const num2 = (k, lbl, val, extra = '') => `<div><label for="wv-${k}">${esc(lbl)}</label><input id="wv-${k}" data-f="wave" data-k="${k}" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="6" value="${esc(val ?? '')}"${extra}></div>`;
+    if (st) {
+      body = `${head(t('waveTitle'))}<div class="muted small">${esc(t('waveStartText'))}</div>
+        <div class="chips" role="group" aria-label="${esc(t('waveTitle'))}">${['1rm', 'e1rm'].map(k => `<button class="chip ${sh.kind === k ? 'on' : ''}" data-a="wave-kind" data-v="${k}" aria-pressed="${sh.kind === k}">${esc(t(k === '1rm' ? 'waveKind1' : 'waveKind2'))}</button>`).join('')}</div>
+        <div class="muted small">${esc(t(sh.kind === '1rm' ? 'waveKindD1' : 'waveKindD2'))}</div>
+        <div class="grid2">${num2('kg', t('waveKg'), sh.kg)}${num2('step', t('waveStep'), sh.step)}</div>
+        <div class="muted small">${esc(t('waveStepD'))}</div>
+        <div class="info"><b id="wave-res">${esc(waveResText(sh))}</b></div>
+        <div class="muted small">${esc(t('waveHint'))}</div><div class="err" style="background:none;padding:0">${esc(t('waveSafety'))}</div>
+        ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+        <button class="btn primary block" data-a="wave-start-save">${esc(t('waveCreate'))}</button>`;
+    } else {
+      const tp = S.templates.find(x => x.id === sh.tpId); const rev = sh.rev;
+      const r = rev.res, line = [t('waveNow', fmtN(tp.wave.wb))];
+      body = `${head(t('waveNextTitle'))}<div class="muted small">${esc(t('waveEndText'))}</div>
+        <div class="info"><div>${esc(line[0])}</div>
+          <div>${esc(rev.ctl ? t('waveCtl', fmtN(rev.ctl.kg), rev.ctl.reps, fmtN(rev.ctl.rpe), rev.ctl.e1 ? fmtN(rev.ctl.e1) : '') : t('waveCtlNone'))}</div>
+          ${rev.sgl ? `<div>${esc(t('waveSgl', fmtN(rev.sgl.kg), rev.sgl.rpe != null ? fmtN(rev.sgl.rpe) : '?'))}</div>` : ''}
+          <b>${esc(t('waveProp', fmtN(r.wb)))}</b><div class="muted small">${esc(t('waveWhy_' + r.why, r.d || {}))}</div>
+          ${rev.hint ? `<div class="muted small">${esc(t(rev.hint.dir === 'up' ? 'waveHintUp' : 'waveHintDown', rev.hint.pct))}</div>` : ''}</div>
+        <label class="check-row"><input type="checkbox" data-a="wave-comp" ${sh.comp ? 'checked' : ''}> ${esc(t('waveComp'))}</label>
+        <div class="grid2">${num2('own', t('waveOwn'), sh.own)}${num2('pct', t('waveAmrapPct'), sh.pct)}</div>
+        <div class="grid2">${num2('step', t('waveStep'), sh.step)}<div></div></div>
+        <div class="muted small">${esc(t('waveOwnD'))}</div>
+        ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+        <button class="btn primary block" data-a="wave-next-save">${esc(t('waveStart2'))}</button>`;
+    }
   } else if (sh.type === 'ready') {
     body = `${head(t('readyTitle'))}<div class="muted small">${esc(t('readyText'))}</div>
       <div class="diff ready" role="group" aria-label="${esc(t('readyTitle'))}">${[1, 2, 3, 4, 5].map(v => `<button data-a="ready-pick" data-v="${v}">${v}</button>`).join('')}</div>
@@ -2926,6 +3022,34 @@ const A = {
     const nm = reconcileItem(sh, 'ef'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
     renderSheet();
   },
+  'wave-kind': el => { S.sheet.kind = el.dataset.v; renderSheet(); },
+  'wave-start-save': () => {
+    const sh = S.sheet; const kg = num(String(sh.kg).replace(',', '.')), step = num(String(sh.step).replace(',', '.')) || 2.5;
+    if (!(kg >= 20 && kg <= 400)) { sh.err = t('waveErr'); renderSheet(); return; }
+    if (!(step >= 0.5 && step <= 10)) { sh.err = t('waveErrStep'); renderSheet(); return; }
+    const p = window.RepsmithCoach.planById(sh.planId); const wb = C.waveBase(sh.kind, kg, step);
+    if (!p || !(wb > 0)) { sh.err = t('waveErr'); renderSheet(); return; }
+    const tpl = C.buildTemplate(p, {}, { effort: S.settings.effortDefault || 'rir' });
+    tpl.wave = { wb, step, amrapPct: C.WAVE_AMRAP, hist: [{ at: now(), start: true, kind: sh.kind, kg, wb }] };
+    S.sheet = null; renderSheet(); adoptTemplate(tpl, null);
+  },
+  'wave-next': el => {
+    const tp = S.templates.find(x => x.id === el.dataset.v); if (!tp || !tp.wave) return;
+    const rev = waveReview(tp, true);
+    openSheet({ type: 'wave', mode: 'next', tpId: tp.id, rev, comp: false, own: fmtN(rev.res.wb), pct: fmtN(rev.hint ? rev.hint.pct : tp.wave.amrapPct || C.WAVE_AMRAP), step: fmtN(tp.wave.step || 2.5) });
+  },
+  'wave-comp': el => { const sh = S.sheet; const tp = S.templates.find(x => x.id === sh.tpId); sh.comp = el.checked; sh.rev = waveReview(tp, !sh.comp); sh.own = fmtN(sh.rev.res.wb); renderSheet(); },
+  'wave-next-save': () => {
+    const sh = S.sheet; const tp = S.templates.find(x => x.id === sh.tpId); if (!tp || !tp.wave) return;
+    const own = num(String(sh.own).replace(',', '.')), pct = num(String(sh.pct).replace(',', '.')), step = num(String(sh.step).replace(',', '.'));
+    if (!(own >= 20 && own <= 400) || !(pct >= 60 && pct <= 95)) { sh.err = t('waveErr'); renderSheet(); return; }
+    if (!(step >= 0.5 && step <= 10)) { sh.err = t('waveErrStep'); renderSheet(); return; }
+    const rev = sh.rev;
+    tp.wave.hist.push({ at: now(), wb: tp.wave.wb, next: own, rule: rev.res.rule, why: rev.res.why, manual: own !== rev.res.wb, comp: !!sh.comp, ctl: rev.ctl ? { ...rev.ctl, weaker: !!rev.res.weaker } : null, sgl: rev.sgl || null });
+    tp.wave.wb = own; tp.wave.amrapPct = pct; tp.wave.step = step;
+    tp.cycle.start = now(); tp.cycle.shift = 0; tp.cycle.deloadUntil = 0; tp.updatedAt = now();
+    persist('templates'); closeSheet(); toast(t('waveStarted')); render();
+  },
   'orm-open': el => { if (S.sheet && S.sheet.type === 'item') readItemFields(); const back = S.sheet && S.sheet.type === 'item' ? S.sheet : null; openSheet({ type: 'orm', exId: el.dataset.v, back }); },
   'orm-save': () => {
     const v = num(cleanDec(($('#orm-kg') || {}).value || '').replace(',', '.'));
@@ -3261,7 +3385,7 @@ const A = {
   'wiz-use': () => { const st = wizState(); st.tpl.cap = st.res.cap; adoptTemplate(st.tpl, S.wiz.a); },
   'plib-goal': el => { S.plib.goal = el.dataset.v; render(); },
   'plib-open': el => go('planprev', el.dataset.v),
-  'plib-use': el => { const p = window.RepsmithCoach.planById(el.dataset.v); adoptTemplate(C.buildTemplate(p, {}, { effort: S.settings.effortDefault || 'rir' }), null); },
+  'plib-use': el => { const p = window.RepsmithCoach.planById(el.dataset.v); if (p.wave) { openSheet({ type: 'wave', mode: 'start', planId: p.id, kind: '1rm', kg: '', step: '2.5' }); return; } adoptTemplate(C.buildTemplate(p, {}, { effort: S.settings.effortDefault || 'rir' }), null); },
   'plan-effort': el => { const tp = S.templates.find(x => x.id === S.viewArg); tp.effort = el.dataset.v; tp.updatedAt = now(); persist('templates'); render(); },
   'plan-lag': el => {
     const tp = S.templates.find(x => x.id === S.viewArg); const m = el.dataset.v; let lag = tp.lag || [];
@@ -3726,6 +3850,7 @@ document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
   if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : el.dataset.san === 'list' ? el.value.replace(/[^0-9.,;\-\/ ]/g, '') : el.dataset.san === 'reps' ? el.value.replace(/[^0-9+\-]/g, '') : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (f === 'wave' && S.sheet && S.sheet.type === 'wave') { S.sheet[el.dataset.k] = el.value; const r = $('#wave-res'); if (r) r.textContent = waveResText(S.sheet); return; }
   if (f === 'run' && S.sheet && S.sheet.d) { S.sheet.d[el.dataset.k] = el.value; const c = $('#run-calc'); if (c) c.textContent = runCalcText(S.sheet.d); return; }
   if (f === 'gear-pl' && S.sheet && S.sheet.g) { const g = S.sheet.g; g.plates[g.unit][el.dataset.p] = Math.min(10, parseInt(el.value || '0', 10) || 0); return; }
   if (f === 'gear-bar' && S.sheet && S.sheet.g) { S.sheet.g.bars[el.dataset.c] = el.value; return; }

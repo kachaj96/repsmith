@@ -181,7 +181,78 @@ const BENCH12 = {
   ],
 };
 
-for (const p of [PEAK4, PEAK8, PEAK12, BENCH12]) {
+/* ---------- 4-week wave: bench priority (based on the HARDSET method) ----------
+   Fixed 4-week cycle, 3 sessions (Mon/Wed/Fri), repeated without end. Only the bench has the wave layout: loads are a percentage range of the
+   wave base (WB, set at plan start from a made 1RM or an e1RM; see coach.wave). Week 4 is lighter by calendar (a named exception), the accessories stay as they are.
+   Every bench item is a top set plus back-off sets (single + 2 back-offs on Monday, 1 + 1 on Wed/Fri); T3 Friday starts with an AMRAP at 82.5% of WB.
+   All percentages and RPE values are hypotheses of the program, RPE wins over the percentage. */
+const waveCue = (pl, en) => cue(pl, en);
+const WB_NOTE = ['Kilogramy liczone z bazy fali (WB), to zakres: zaczynasz od dolnej wartości, a RPE wygrywa z procentem. Rack z zabezpieczeniami albo asekuracja, nigdy 0 RIR.', 'Kilograms come from the wave base (WB) and are a range: start at the lower value, RPE beats the percentage. Rack with safeties or a spotter, never 0 RIR.'];
+function waveItem(base, rows, extra = {}) {
+  const it = { exId: 'bench-press', scheme: 'topback', method: 'P2', kind: 'main', noprog: true, sets: 1, reps: '1', rpe: 7, rpeMax: 7, backoffSets: 2, backoffReps: '5', backoffPct: 100, rest: 240, warmups: 3, ...base, ...extra };
+  it.wk = week12(rows, it);
+  // week12 drops values equal to the base, but an overridden rpe without rpeMax would collapse the range
+  rows.forEach((r, i) => { const o = it.wk[i + 1]; if (r && o && o.rpe != null && o.rpeMax == null) o.rpeMax = r.rpeMax; if (r && o && o.boRpe != null && o.boRpeMax == null) o.boRpeMax = r.boRpeMax; });
+  return it;
+}
+const wvMon = waveItem({ wv: [88, 90], wvBo: [75, 78], boRpe: 7, boRpeMax: 7, cue: waveCue(WB_NOTE[0], WB_NOTE[1]) }, [
+  null,
+  { rpe: 7.5, rpeMax: 7.5, wv: [90, 91], backoffReps: '4', wvBo: [78, 81], boRpe: 7, boRpeMax: 8 },
+  { rpe: 8, rpeMax: 8, wv: [91, 93], backoffReps: '3', wvBo: [82, 85], boRpe: 7, boRpeMax: 8 },
+  { rpe: 6, rpeMax: 7, wv: [85, 88], backoffReps: '4', wvBo: [73, 77], boRpe: 6, boRpeMax: 7 },
+]);
+const wvWed = waveItem({ exId: 'paused-bench-press', reps: '5', rpe: 6, rpeMax: 7, wv: [70, 74], backoffSets: 1, backoffReps: '5', wvBo: [70, 74], boRpe: 6, boRpeMax: 7, rest: 180, warmups: 2,
+  cue: waveCue('Pauza 2 s na klatce, ten sam chwyt co w zawodach. ' + WB_NOTE[0], 'A 2 s pause on the chest, the same grip as in competition. ' + WB_NOTE[1]) }, [
+  null,
+  { reps: '4', rpe: 6.5, rpeMax: 7.5, wv: [73, 77], backoffReps: '4', wvBo: [73, 77], boRpe: 6.5, boRpeMax: 7.5 },
+  { reps: '3', rpe: 7, rpeMax: 7.5, wv: [77, 80], backoffReps: '3', wvBo: [77, 80], boRpe: 7, boRpeMax: 7.5 },
+  { reps: '4', rpe: 6, rpeMax: 6, wv: [68, 73], backoffReps: '4', wvBo: [68, 73], boRpe: 6, boRpeMax: 6 },
+]);
+const wvFri = waveItem({ reps: '6', rpe: 7, rpeMax: 7, wv: [73, 76], backoffSets: 1, backoffReps: '6', wvBo: [73, 76], boRpe: 7, boRpeMax: 7, rest: 180,
+  cue: waveCue(WB_NOTE[0], WB_NOTE[1]) }, [
+  null,
+  { reps: '5', rpe: 7, rpeMax: 8, wv: [76, 80], backoffReps: '5', wvBo: [76, 80], boRpe: 7, boRpeMax: 8 },
+  { reps: '4+', rpe: 9, rpeMax: 9, backoffReps: '4', wvBo: [72.5, 75], boRpe: 6, boRpeMax: 7, rest: 270, warmups: 4,
+    cue: waveCue('Seria kontrolna (AMRAP @9): ten sam chwyt i pauza co w zawodach, 4-5 min odpoczynku przed serią, koniec przy ok. 1 powtórzeniu w zapasie albo wcześniej, gdy siada technika. Bez celowej nieudanej próby, bez ciężkiego singla tego dnia. Rack z zabezpieczeniami albo asekuracja. Potem jedna łatwa seria 1×4 i koniec wyciskania. Zapisz ciężar, powtórzenia, RPE i czy technika oraz pauza były w normie.', 'Control set (AMRAP @9): the same grip and pause as in competition, rest 4-5 min before the set, stop at about 1 rep in reserve or earlier if technique breaks. No deliberate miss, no heavy single that day. Rack with safeties or a spotter. Then one easy set of 4 and done with the bench. Log the weight, reps, RPE and whether technique and pause were normal.') },
+  { reps: '5', rpe: 6, rpeMax: 7, wv: [70, 75], backoffReps: '5', wvBo: [70, 75], boRpe: 6, boRpeMax: 7 },
+]);
+const acc2 = (exId, reps, rpe, rpeMax, extra = {}) => bi12(exId, { kind: exId === 'hack-squat' || exId === 'romanian-deadlift' || exId === 'reverse-lunge' || /row|pulldown/.test(exId) ? 'comp' : 'iso', reps, rpe, rpeMax, rest: /row|pulldown|hack|romanian|lunge/.test(exId) ? 120 : 90, sets: 2 }, [], extra);
+
+const BENCHPRIO = {
+  id: 'BENCH-PRIO-W4', goal: 'Peak', days: 3, perWeek: 3, reqCap: 60, needs1RM: false, wave: true,
+  name: ['Bench Priority (HARDSET), fala 4 tyg.', 'Bench Priority (HARDSET), 4-week wave'],
+  for: ['Program specjalistyczny dla osoby z priorytetem wyciskania leżąc, oparty na metodzie HARDSET. Trzy treningi w tygodniu (Pn, Śr, Pt), cykl 4 tygodni powtarzany bez końca, wyciskanie w układzie fali, reszta zwykłe akcesoria Repsmith. Wymaga ciężaru odniesienia (prawdziwe 1RM albo e1RM) na starcie i racka z zabezpieczeniami albo asekuracji.', 'A specialist program for a lifter who prioritises the bench press, based on the HARDSET method. Three sessions a week (Mon, Wed, Fri), a 4-week cycle repeated without end, the bench in a wave layout and the rest ordinary Repsmith accessories. It needs a reference weight (a made 1RM or an e1RM) at the start and a rack with safeties or a spotter.'],
+  design: ['Poniedziałek: singiel i dwa back-offy w wyciskaniu zawodniczym. Środa: wyciskanie z pauzą 2 s. Piątek: objętość, a w tygodniu 3 seria kontrolna (AMRAP @9 przy 82,5% bazy), która po 4. tygodniu służy do propozycji nowej bazy fali. Tydzień 4 jest lżejszy z kalendarza i dotyczy tylko wyciskania, akcesoria zostają. Razem 35 serii, czas treningu to założenie do sprawdzenia w praktyce.\n\nSkąd te liczby: procenty bazy fali, RPE, seria kontrolna i krok bazy (domyślnie 2,5 kg) to hipotezy programu do sprawdzenia w praktyce, nie wyniki badań. Procent jest punktem startowym, a RPE granicą: gdy się rozjeżdżają, wygrywa RPE i technika. Baza fali to nie rekord życiowy.', 'Monday: a single and two back-offs in the competition bench. Wednesday: the bench with a 2 s pause. Friday: volume, and in week 3 a control set (AMRAP @9 at 82.5% of the base) that after week 4 drives the proposal for the next wave base. Week 4 is lighter by calendar and concerns the bench only, the accessories stay. 35 sets in total, the session length is an assumption to check in practice.\n\nWhere the numbers come from: the percentages of the wave base, RPE, the control set and the base step (2.5 kg by default) are hypotheses of the program to check in practice, not research results. The percentage is a starting point and RPE is the limit: when they disagree, RPE and technique win. The wave base is not a personal record.'],
+  warning: ['Ból, nowe objawy neurologiczne albo uraz o niejasnej przyczynie: nie zmieniaj RPE ani procentów, tylko skonsultuj się ze specjalistą. Aplikacja nie diagnozuje.', 'Pain, new neurological symptoms or an injury of unclear cause: do not change RPE or percentages, see a specialist. The app does not diagnose.'],
+  cycle: { type: 'fixed', weeks: 4, deload: { mode: 'none', every: 5, weeks: [], sets: 0, load: 0 } },
+  sessions: [
+    { name: ['Ciężki bench (singiel)', 'Heavy bench (single)'], items: [
+      wvMon,
+      acc2('machine-chest-supported-row', '6-10', 9, 10),
+      acc2('hack-squat', '6-10', 8, 9),
+      acc2('cable-lateral-raise', '12-20', 9, 10),
+      acc2('cable-curl', '8-12', 9, 10),
+    ] },
+    { name: ['Bench z pauzą', 'Paused bench'], items: [
+      wvWed,
+      acc2('romanian-deadlift', '6-10', 8, 9),
+      acc2('lat-pulldown', '6-10', 9, 10),
+      acc2('pec-deck', '8-12', 9, 10),
+      acc2('triceps-pushdown', '8-12', 8, 9),
+      acc2('cable-lateral-raise', '12-20', 9, 10),
+    ] },
+    { name: ['Objętość i seria kontrolna', 'Volume and control set'], items: [
+      wvFri,
+      acc2('reverse-lunge', '8', 8, 9, { single: true }),
+      acc2('chest-supported-t-bar-row', '6-10', 9, 10),
+      acc2('seated-leg-curl', '8-12', 9, 10),
+      acc2('preacher-curl', '8-12', 9, 10),
+      acc2('overhead-cable-triceps-extension', '10-15', 8, 9),
+    ] },
+  ],
+};
+
+for (const p of [PEAK4, PEAK8, PEAK12, BENCH12, BENCHPRIO]) {
   if (!P.plans.some(x => x.id === p.id)) P.plans.push(p);
 }
 P.goalName.Peak = ['Bloki siłowe', 'Strength blocks'];

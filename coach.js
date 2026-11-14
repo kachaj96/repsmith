@@ -20,7 +20,7 @@ const estMax = p => Math.max(...p.sessions.map(s => sessionMinutes(s.items)));
 const planById = id => DATA.plans.find(p => p.id === id) || null;
 
 /* ---------- selector (plans file 5.2, validated against the 240-row fixture) ---------- */
-function fits(p, d, cap) { return p.days <= d && cap >= p.reqCap && estMax(p) <= cap + TRIM_ALLOWANCE; }
+function fits(p, d, cap) { return !p.wave && p.days <= d && cap >= p.reqCap && estMax(p) <= cap + TRIM_ALLOWANCE; }
 function pick(goal, d, cap, below) {
   let c = DATA.plans.filter(p => p.goal === goal && fits(p, d, cap));
   if (below) c = c.filter(p => p.days < below.days || (p.days === below.days && estMax(p) < estMax(below)));
@@ -207,6 +207,13 @@ function factory(H) {
     if (it.group) o.group = it.group;
     if (it.pack) o.pack = true;
     if (it.pct) { o.pct = it.pct; o.rpe = null; o.rpeMax = null; }
+    // wave plans (percent of the plan's wave base, see wave())
+    if (it.wv) o.wv = it.wv.slice();
+    if (it.wvBo) o.wvBo = it.wvBo.slice();
+    if (it.amrap) o.amrap = true;
+    if (it.boRpe != null) { o.boRpe = it.boRpe; o.boRpeMax = it.boRpeMax ?? it.boRpe; }
+    if (it.noprog) o.noprog = true;
+    if (it.single) o.single = true;
     if (it.wk) o.wk = JSON.parse(JSON.stringify(it.wk));
     return o;
   }
@@ -491,7 +498,7 @@ function factory(H) {
     return { type, week, len, deload, early, cut, loadCut, ramp, weeksTotal, fixed, weeks: fixed ? c.weeks : null, finished, done, cycle: c };
   }
   /* template item as it runs in a given week of a fixed plan */
-  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'backoffPct', 'cue', 'test'];
+  const WK_KEYS = ['sets', 'reps', 'pct', 'rpe', 'rpeMax', 'backoffSets', 'backoffReps', 'backoffPct', 'cue', 'test', 'wv', 'wvBo', 'boRpe', 'boRpeMax'];
   function weekItem(it, week) {
     const o = week && it.wk && it.wk[week];
     if (!o) return it;
@@ -502,7 +509,53 @@ function factory(H) {
     return out;
   }
 
-  return { cycleOf, isDeloadWeek, weekItem, DATA, derive, pick, planById, estMax, sessionMinutes, nsets, buildTemplate, tallyDays, lagging, suggest, methodOf, kindOf, range,
+  /* ---------- wave plans (Bench Priority): loads are a percentage range of the plan's wave base (WB), not of a 1RM ----------
+     WB is a cautious number chosen for the plan. It is NOT a record and not the latest e1RM. Kilograms are rounded to the nearest plate step. */
+  const WAVE_AMRAP = 82.5;
+  /* it: week item with wv [lo, hi] (and wvBo for the back-off sets), w: { wb, amrapPct }. null when the item has no wave loads or WB is unknown */
+  function wave(it, w) {
+    if (!it || !it.wv || !w || !(w.wb > 0)) return null;
+    const k = p => rnd(it.exId, w.wb * p / 100);
+    const am = !!it.amrap || /\+$/.test(String(it.reps || ''));
+    const [a, b] = am ? [w.amrapPct || WAVE_AMRAP, w.amrapPct || WAVE_AMRAP] : it.wv;
+    const out = { lo: k(a), hi: k(Math.max(a, b)), pLo: a, pHi: Math.max(a, b), wb: w.wb, amrap: am };
+    if (it.wvBo) out.bo = { lo: k(it.wvBo[0]), hi: k(Math.max(...it.wvBo)), pLo: it.wvBo[0], pHi: Math.max(...it.wvBo) };
+    return out;
+  }
+  const floorTo = (v, step) => Math.floor(v / step + 1e-9) * step;
+  /* wave base from what the lifter gives: a made competition 1RM (rounded down) or an e1RM (x 0.975, rounded down; a hypothesis of the program) */
+  function waveBase(kind, kg, step = 2.5) {
+    const v = +kg; if (!(v > 0)) return null;
+    return Math.round((kind === 'e1rm' ? floorTo(v * 0.975, step) : floorTo(v, step)) * 100) / 100;
+  }
+  /* what to do with the base after week 4 (rules 1-6 of the program, all of them hypotheses to check in practice).
+     cur / prev: control set { kg, reps, rpe, e1, weaker? } or null; single: Monday of week 3 { kg, plannedKg, rpe, targetRpe } or null;
+     comparable: false when the lifter says the grip, pause or health made the control set not comparable. Never lowers the base by itself. */
+  function nextBase({ wb, step = 2.5, cur, prev, single, comparable = true }) {
+    const hold = (rule, why, d = {}) => ({ wb, rule, why, up: false, weaker: false, d });
+    if (!cur || !(cur.kg > 0) || !(cur.reps >= 0) || comparable === false) return hold(1, 'undecided');
+    if (!prev || !(prev.kg > 0)) return hold(3, 'first');
+    const singleKnown = single && single.kg > 0 && single.rpe != null && single.targetRpe != null;
+    const singleOk = !!singleKnown && single.kg >= single.plannedKg && single.rpe <= single.targetRpe + 0.5;
+    const e1 = x => x.e1 || null;
+    const thr = cur.kg / 30;
+    const same = cur.kg === prev.kg && (cur.rpe ?? 9) === (prev.rpe ?? 9);
+    const better = same ? cur.reps >= prev.reps + 1 : !!(e1(cur) && e1(prev) && e1(cur) - e1(prev) >= thr - 1e-9);
+    const worse = same ? cur.reps < prev.reps : !!(e1(cur) && e1(prev) && e1(prev) - e1(cur) >= thr - 1e-9);
+    if (better && singleOk) return { wb: Math.round((wb + step) * 100) / 100, rule: 2, why: 'up', up: true, weaker: false, d: { step } };
+    if (better && !singleKnown) return hold(1, 'undecided');
+    if (worse) return { ...hold(prev.weaker || !singleOk ? 6 : 5, prev.weaker || !singleOk ? 'weakBoth' : 'weak', { twice: !!prev.weaker }), weaker: true };
+    return hold(4, better ? 'singleLow' : 'small');
+  }
+  /* the control set (4-7 reps is the target): a hint to move its weight in the next wave, in steps of 2.5 percentage points */
+  function amrapHint(reps, pct = WAVE_AMRAP) {
+    if (!(reps >= 0)) return null;
+    if (reps > 7) return { pct: Math.round((pct + 2.5) * 10) / 10, dir: 'up' };
+    if (reps < 4) return { pct: Math.round((pct - 2.5) * 10) / 10, dir: 'down' };
+    return null;
+  }
+
+  return { wave, waveBase, nextBase, amrapHint, WAVE_AMRAP, cycleOf, isDeloadWeek, weekItem, DATA, derive, pick, planById, estMax, sessionMinutes, nsets, buildTemplate, tallyDays, lagging, suggest, methodOf, kindOf, range,
     windowVolume, zone, evaluate, blockInfo, stepFor, history, isHard, adapt };
 }
 

@@ -113,6 +113,12 @@ Pomysły z przeglądu innej aplikacji do treningów, bez zmiany wyglądu (jeden 
 - Drop set nie liczy się do rekordów, e1RM, podpowiedzi ciężaru ani sygnału zmęczenia.
 - Ikona historii na karcie ćwiczenia: ostatnie 5 treningów z tym ćwiczeniem (serie, RPE, upadek, drop), ostatnie e1RM i skrót do pełnego postępu.
 
+## v0.14.0 – zrobione (etap 1)
+Plan "Bench Priority (HARDSET), fala 4 tyg." w bibliotece planów.
+- Cykl 4 tygodni, 3 treningi (Pn, Śr, Pt), 35 serii, powtarzany bez końca. Wyciskanie w układzie fali z kilogramami z bazy fali (WB), akcesoria według zwykłych zasad.
+- Baza z zaliczonego 1RM (w dół do kroku) albo z e1RM (x 0,975, w dół do kroku, hipoteza). Seria kontrolna AMRAP w piątek tygodnia 3, po tygodniu 4 propozycja nowej bazy (reguły 1-6, baza sama nie spada) i ręczna zmiana.
+- Do zrobienia (etap 2): korekty w trakcie cyklu ("za lekko" 2,5 i 5%, "za ciężko"), arkusz porównywalności serii kontrolnej, moduł Zawody i Test 1RM z terminarzem pod datę, obsługa opuszczonych treningów specyficzna dla fali.
+
 ## Później
 - Szacowanie MEV/MRV z danych użytkownika (blueprint objętości, sekcja 6).
 - Kalibracja jako korekta podpowiedzi RPE ("zwykle kończysz 1,5 powt. dalej").

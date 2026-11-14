@@ -1088,6 +1088,24 @@
    "logging": "W"
   },
   {
+   "id": "machine-chest-supported-row",
+   "name_en": "Machine Chest-Supported Row",
+   "name_pl": "Wiosłowanie z podparciem klatki na maszynie",
+   "pattern": "HPULL",
+   "primary": [
+    "UB",
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "RD"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
    "id": "inverted-row",
    "name_en": "Inverted Row",
    "name_pl": "Wiosłowanie australijskie",

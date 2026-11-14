@@ -1,4 +1,4 @@
-# Repsmith v0.13.2
+# Repsmith v0.14.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,14 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.14.0
+
+- Nowy plan w bibliotece: **Bench Priority (HARDSET), fala 4 tyg.** (Pn, Śr, Pt, cykl stałej długości powtarzany bez końca). Oparty na metodzie HARDSET, program specjalistyczny dla osoby z priorytetem wyciskania leżąc. Wyciskanie ma układ fali (singiel i back-offy w poniedziałek, wyciskanie z pauzą w środę, objętość i seria kontrolna AMRAP w piątek tygodnia 3), reszta to zwykłe akcesoria Repsmith (35 serii).
+- Przy starcie planu podajesz zaliczone 1RM albo e1RM. Z tego powstaje baza fali (WB), nie rekord życiowy. Kilogramy w sesji to zakresy z bazy, w polu wpisujesz od dolnej wartości, a RPE wygrywa z procentem. Baza trzymana jest w planie, nie w maksach.
+- Po tygodniu 4 aplikacja pyta, czy zaczynasz kolejny cykl z nową bazą, i proponuje ją według reguł 1-6 (baza nigdy sama nie spada). Możesz wpisać własną bazę, krok bazy (domyślnie 2,5 kg) i procent serii kontrolnej.
+- Nowe ćwiczenie: wiosłowanie z podparciem klatki na maszynie.
+- Parametry fali, serii kontrolnej i kroku bazy to hipotezy programu do sprawdzenia w praktyce. Etap 1 nie ma jeszcze korekt w trakcie cyklu, arkusza porównywalności serii kontrolnej ani modułu zawodów i testu 1RM.
 
 ## Zmiany w v0.13.2
 
