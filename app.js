@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.14.0';
+const VERSION = '0.15.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -258,6 +258,14 @@ Object.assign(STR.pl, {
   calibChip: 'Kalibracja RPE', calibTitle: 'Seria kalibracyjna',
   calibText: 'Po rozgrzewce weź ciężar na około 8 powtórzeń. Rób powtórzenia, aż uznasz, że zostały 2 w zapasie. Zapamiętaj tę liczbę i rób dalej, ile się da w dobrej technice. Stop przy zmianie techniki.\n\nAplikacja porówna Twój strzał z rzeczywistością.',
   calibSafety: 'Nie rób tego na ciężkim przysiadzie bez asekuracji. Wyciskanie z asekuracją, maszyna albo suwnica są bezpieczniejsze.',
+  mediaHasPhoto: 'ma zdjęcie', mediaHasVideo: 'ma wideo', mediaShow: n => `Zdjęcia i wideo: ${n}`, mediaAdd: n => `Dodaj zdjęcie albo wideo: ${n}`, mediaPhotos: 'Zdjęcia', mediaZoom: i => `Zdjęcie ${i}, pełny ekran`, mediaZoomClose: 'Zamknij zdjęcie',
+  mediaSwipe: n => `${n} zdjęcia: przesuń palcem, dotknij, aby powiększyć.`, mediaTap: 'Dotknij, aby powiększyć.', mediaVideo: 'Wideo', mediaFrom: s => `od ${s}`, mediaOpensOut: 'otwiera się w aplikacji YouTube albo przeglądarce', mediaPlanNote: 'Wskazówka z planu',
+  mediaEditBtn: 'Edytuj media', mediaBack: 'Wróć do serii', mediaTitle: 'Zdjęcia i wideo', mediaEveryPlan: 'widać je w każdym planie i w historii', mediaPhotosN: n => `Zdjęcia (do ${n})`, mediaAddPhoto: 'Dodaj zdjęcie', mediaDelImg: i => `Usuń zdjęcie ${i}`,
+  mediaPhotoHint: 'Z galerii albo aparatu. Zapisane w tym telefonie i w kopii zapasowej, zmniejszone do ok. 1280 px.', mediaCap: 'Notatka do zdjęć (np. ustawienie siedziska)', mediaLinks: 'Linki do wideo', mediaDelLink: i => `Usuń link ${i}`,
+  mediaUrl: 'Wklej link (YouTube albo inny adres https) i opcjonalnie start (m:ss)', mediaStart: 'Start (m:ss)', mediaTitlePh: 'Nazwa linku (opcjonalnie)', mediaAddLink: 'Dodaj link', mediaNetNote: 'Wideo wymaga internetu i otwiera się poza aplikacją. Zdjęcia działają offline.',
+  mediaDone: 'Gotowe', mediaDelQ: 'Usunąć to zdjęcie? Zniknie z aplikacji i z kolejnych kopii zapasowych.', mediaDelYes: 'Usuń zdjęcie', mediaErrUrl: 'Link musi zaczynać się od https://', mediaErrT: 'Start wpisz jako m:ss albo w sekundach.',
+  mediaErrImg: 'Nie udało się wczytać zdjęcia. Spróbuj innego pliku.', mediaMaxImg: n => `Maksymalnie ${n} zdjęcia na ćwiczenie.`,
+  mpackQ: (n, e) => `Dodać ${n} zdjęć do ${e} ćwiczeń? Twoje treningi i plany zostają bez zmian, istniejące zdjęcia też.`, mpackDone: n => `Dodano zdjęcia: ${n}`,
   waveTitle: 'Baza fali (WB)', waveStartText: 'Podaj ciężar odniesienia w wyciskaniu leżąc. Z niego liczę bazę fali (WB), od której idą wszystkie procenty w tym planie. WB to ostrożna liczba, nie rekord życiowy.',
   waveKind1: 'Zaliczone 1RM', waveKind2: 'e1RM (wyliczone)', waveKindD1: 'Prawdziwe 1RM zaliczone w wyciskaniu zawodniczym (pauza, ten sam chwyt). WB = 1RM zaokrąglone w dół do kroku.', waveKindD2: 'WB = e1RM × 0,975, zaokrąglone w dół do kroku. To hipoteza programu, nie pomiar.',
   waveKg: 'Ciężar (kg)', waveStep: 'Krok bazy (kg)', waveStepD: 'O tyle rośnie baza, gdy cykl to potwierdzi. Domyślnie 2,5 kg, przy dużych ciężarach możesz dać mniej.', waveRes: kg => `Baza fali: ${kg} kg`, waveResNone: 'Wpisz ciężar, a policzę bazę.',
@@ -380,6 +388,14 @@ Object.assign(STR.en, {
   calibChip: 'RPE calibration', calibTitle: 'Calibration set',
   calibText: 'After warming up, take a load you can do about 8 reps with. Do reps until you believe 2 are left. Remember that number, then keep going as long as form holds. Stop at a form change.\n\nThe app compares your call with what really happened.',
   calibSafety: 'Do not do this on a heavy squat without safeties. A bench with safeties, a machine or a leg press is safer.',
+  mediaHasPhoto: 'has a photo', mediaHasVideo: 'has a video', mediaShow: n => `Photos and video: ${n}`, mediaAdd: n => `Add a photo or video: ${n}`, mediaPhotos: 'Photos', mediaZoom: i => `Photo ${i}, full screen`, mediaZoomClose: 'Close photo',
+  mediaSwipe: n => `${n} photos: swipe, tap to enlarge.`, mediaTap: 'Tap to enlarge.', mediaVideo: 'Video', mediaFrom: s => `from ${s}`, mediaOpensOut: 'opens in the YouTube app or the browser', mediaPlanNote: 'Plan note',
+  mediaEditBtn: 'Edit media', mediaBack: 'Back to sets', mediaTitle: 'Photos and video', mediaEveryPlan: 'shown in every plan and in history', mediaPhotosN: n => `Photos (up to ${n})`, mediaAddPhoto: 'Add photo', mediaDelImg: i => `Remove photo ${i}`,
+  mediaPhotoHint: 'From the gallery or the camera. Saved on this phone and in the backup, reduced to about 1280 px.', mediaCap: 'Photo note (e.g. seat setting)', mediaLinks: 'Video links', mediaDelLink: i => `Remove link ${i}`,
+  mediaUrl: 'Paste a link (YouTube or any https address) and an optional start (m:ss)', mediaStart: 'Start (m:ss)', mediaTitlePh: 'Link name (optional)', mediaAddLink: 'Add link', mediaNetNote: 'Videos need the internet and open outside the app. Photos work offline.',
+  mediaDone: 'Done', mediaDelQ: 'Remove this photo? It disappears from the app and from later backups.', mediaDelYes: 'Remove photo', mediaErrUrl: 'The link must start with https://', mediaErrT: 'Enter the start as m:ss or in seconds.',
+  mediaErrImg: 'Could not read the photo. Try another file.', mediaMaxImg: n => `At most ${n} photos per exercise.`,
+  mpackQ: (n, e) => `Add ${n} photos to ${e} exercises? Your workouts and plans stay as they are, existing photos too.`, mpackDone: n => `Photos added: ${n}`,
   waveTitle: 'Wave base (WB)', waveStartText: 'Enter your reference weight for the bench press. I derive the wave base (WB) from it, and every percentage in this plan is counted from WB. WB is a cautious number, not a personal record.',
   waveKind1: 'Made 1RM', waveKind2: 'e1RM (calculated)', waveKindD1: 'A true 1RM made in the competition bench (pause, same grip). WB = the 1RM rounded down to the step.', waveKindD2: 'WB = e1RM × 0.975, rounded down to the step. A hypothesis of the program, not a measurement.',
   waveKg: 'Weight (kg)', waveStep: 'Base step (kg)', waveStepD: 'How much the base grows when a cycle confirms it. 2.5 kg by default, use less at heavy weights.', waveRes: kg => `Wave base: ${kg} kg`, waveResNone: 'Enter a weight and I will work out the base.',
@@ -473,6 +489,7 @@ const I = {
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>',
   up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
   cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
@@ -617,7 +634,7 @@ function applyTheme() {
   try { localStorage.setItem('repsmith.theme', th || 'system'); } catch (e) {}
 }
 const FEEDBACK_EMAIL = 'repsmithapp@gmail.com'; // set to a real address to show the feedback button
-const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes', 'runs'];
+const KEYS = ['settings', 'templates', 'sessions', 'notes', 'customExercises', 'active', 'measurements', 'flags', 'calib', 'maxes', 'runs', 'media'];
 /* resolves true when every key reached the database; a failure shows a standing banner with a backup button (from 0.9.3) */
 const persist = async (...keys) => { const r = await Promise.all(keys.map(k => DB.set(k, clone(S[k])))); const ok = r.every(Boolean); setSaveFail(!ok); return ok; };
 function setSaveFail(bad) {
@@ -633,7 +650,7 @@ function setSaveFail(bad) {
 const S = {
   settings: { lang: (navigator.language || 'pl').startsWith('pl') ? 'pl' : 'en', restC: 180, restI: 90, increment: 2.5, backoffPct: 90, activeTemplateId: null, sides: { arm: false, thigh: false },
     readiness: true, flagsOn: true, deloadEvery: 5, regressPct: 5, fatigueCut: 30, effortDefault: 'rir' },
-  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [], maxes: {}, runs: [],
+  templates: [], sessions: [], notes: {}, customExercises: [], active: null, measurements: [], flags: [], calib: [], maxes: {}, runs: [], media: {},
   data: null, ex: new Map(),
   view: 'today', viewArg: null, sheet: null, timer: null, toast: null, openSec: {}, focusId: null,
 };
@@ -986,6 +1003,79 @@ function testResults(tp, c) {
   }
   return out;
 }
+/* ---------- exercise media (0.15): photos (data URLs) and video links, kept per exercise, part of the backup ---------- */
+const MEDIA_MAX_IMG = 4, MEDIA_MAX_LINK = 4;
+const mediaOf = exId => { const m = S.media && S.media[exId]; return m && ((m.imgs && m.imgs.length) || (m.links && m.links.length)) ? m : null; };
+function cleanMedia(o) {
+  const out = {};
+  for (const [id, m] of Object.entries(o || {})) {
+    if (!m || typeof m !== 'object') continue;
+    const imgs = (Array.isArray(m.imgs) ? m.imgs : []).filter(x => x && typeof x.src === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(x.src)).slice(0, MEDIA_MAX_IMG).map(x => ({ id: String(x.id || uid()), src: x.src, at: +x.at || 0 }));
+    const links = (Array.isArray(m.links) ? m.links : []).filter(x => x && /^https:\/\/\S+$/.test(String(x.url || ''))).slice(0, MEDIA_MAX_LINK).map(x => ({ id: String(x.id || uid()), url: String(x.url), title: String(x.title || '').slice(0, 80), t: Math.max(0, parseInt(x.t, 10) || 0) }));
+    const cap = String(m.cap || '').slice(0, 200);
+    if (imgs.length || links.length || cap) out[id] = { imgs, links, cap };
+  }
+  return out;
+}
+const mediaIcon = exId => { const m = mediaOf(exId); if (!m) return ''; return m.imgs.length ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="${esc(t('mediaHasPhoto'))}"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>` : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="${esc(t('mediaHasVideo'))}"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg>`; };
+function mediaThumb(exId) {
+  const m = mediaOf(exId), name = exName(exId);
+  if (m && m.imgs.length) return `<button class="ex-thumb" data-a="media-open" data-v="${esc(exId)}" aria-label="${esc(t('mediaShow', name))}"><img src="${m.imgs[0].src}" alt="">${m.imgs.length > 1 ? `<span class="cnt">${m.imgs.length}</span>` : ''}</button>`;
+  if (m) return `<button class="ex-thumb empty" data-a="media-open" data-v="${esc(exId)}" aria-label="${esc(t('mediaShow', name))}">${mediaIcon(exId)}</button>`;
+  return `<button class="ex-thumb empty" data-a="media-edit" data-v="${esc(exId)}" aria-label="${esc(t('mediaAdd', name))}">${I.plus}</button>`;
+}
+/* "1:05" / "65" / "1m5s" -> seconds; YouTube links get their start time from ?t= */
+function linkStart(url, typed) {
+  const v = String(typed || '').trim();
+  if (v) { const m = v.match(/^(\d+):(\d{1,2})$/); if (m) return +m[1] * 60 + +m[2]; if (/^\d+$/.test(v)) return +v; }
+  const q = String(url).match(/[?&#]t=(?:(\d+)m)?(\d+)s?/); return q ? (+(q[1] || 0)) * 60 + +q[2] : 0;
+}
+function linkUrl(l) {
+  if (!l.t) return l.url;
+  try { const u = new URL(l.url); if (/(^|\.)youtube\.com$|(^|\.)youtu\.be$/.test(u.hostname)) { u.searchParams.set('t', l.t + 's'); return u.toString(); } } catch (e) {}
+  return l.url;
+}
+const linkHost = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
+const fmtStart = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+/* a photo from the gallery or camera -> JPEG data URL, longest side 1280 px, transparent areas on a light background */
+async function shrinkImage(file, max = 1280) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.max(1, Math.round(img.naturalWidth * k)), h = Math.max(1, Math.round(img.naturalHeight * k));
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d'); g.fillStyle = '#F4F5F6'; g.fillRect(0, 0, w, h); g.drawImage(img, 0, 0, w, h);
+    return c.toDataURL('image/jpeg', 0.82);
+  } finally { URL.revokeObjectURL(url); }
+}
+async function mediaAddFiles(exId, files) {
+  const m = S.media[exId] || (S.media[exId] = { imgs: [], links: [], cap: '' });
+  let added = 0, bad = 0;
+  for (const f of files) {
+    if (m.imgs.length >= MEDIA_MAX_IMG) break;
+    try { m.imgs.push({ id: uid(), src: await shrinkImage(f), at: now() }); added++; } catch (e) { bad++; }
+  }
+  await persist('media');
+  if (S.sheet && S.sheet.type === 'mediaEdit') { S.sheet.err = bad ? t('mediaErrImg') : (files.length > added ? t('mediaMaxImg', MEDIA_MAX_IMG) : ''); renderSheet(); }
+  render();
+}
+function importMediaPack(o) {
+  const pack = cleanMedia(o.media);
+  const ids = Object.keys(pack).filter(id => S.ex.has(id));
+  const n = ids.reduce((a, id) => a + pack[id].imgs.length, 0);
+  if (!ids.length) { toast(t('importErr')); return; }
+  ask(t('mpackQ', n, ids.length), async () => {
+    for (const id of ids) {
+      const m = S.media[id] || (S.media[id] = { imgs: [], links: [], cap: '' });
+      for (const im of pack[id].imgs) if (m.imgs.length < MEDIA_MAX_IMG && !m.imgs.some(x => x.id === im.id || x.src === im.src)) m.imgs.push(im);
+      for (const l of pack[id].links) if (m.links.length < MEDIA_MAX_LINK && !m.links.some(x => x.url === l.url)) m.links.push(l);
+      if (!m.cap && pack[id].cap) m.cap = pack[id].cap;
+    }
+    await persist('media'); toast(t('mpackDone', n)); render();
+  }, { yes: t('confirm') });
+}
+
 /* ---------- wave plan (Bench Priority): base from a 1RM or e1RM, review after week 4 ---------- */
 const round1 = v => (v == null ? null : Math.round(v * 10) / 10);
 function waveReview(tp, comparable = true) {
@@ -1355,7 +1445,7 @@ function vToday() {
       ${quietRow()}`;
   } else if (tpl && day) {
     const items = day.items.map(it => wkItem(it, tbi)).filter(it => !skipped(it));
-    const rows = items.slice(0, 5).map(it => `<div class="row"><span class="name grow">${esc(exName(it.exId))}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('');
+    const rows = items.slice(0, 5).map(it => `<div class="row two"><span class="name nm">${esc(exName(it.exId))}${mediaIcon(it.exId)}</span><span class="meta">${esc(schemeShort(it))}</span></div>`).join('');
     const more = items.length > 5 ? `<div class="row"><span class="meta">+ ${items.length - 5}</span></div>` : '';
     const bi = tbi;
     main = `<div class="hero"><h1>${esc(day.name)}</h1><div class="eyebrow dateline">${esc(longDate(now()))}</div><div class="sub">${esc(tpl.name)} · ${esc(t('exercisesN', items.length))}${bi ? ' · ' + esc(weekLabel(bi)) : ''}${bi && bi.deload ? ` <span class="tag p">${esc(dlLabel(bi))}</span>` : ''}</div></div>
@@ -1607,7 +1697,7 @@ function vWorkout() {
     const prCard = prSets.length ? `<div class="pr-card ${S._justPR === it.id ? 'pop' : ''}"><b>PR</b><span>${esc(fmtSet(prSets[prSets.length - 1], ex))} · ${esc(prLabel([...new Set(prSets.flatMap(x => x.pr))]))}</span></div>` : '';
     return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
       <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}${ex && ex.primary && ex.primary[0] ? ` <span class="mtag">${esc(muscleName(ex.primary[0]))}</span>` : ''}</div>
-      <div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<div class="ex-name" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</div><span class="ex-tools"><button class="icon-btn" data-a="ex-hist" data-v="${esc(it.exId)}" aria-label="${esc(t('histAria'))}">${I.hist}</button><button class="icon-btn note-ic ${note && note.text ? 'has' : ''}" data-a="note" data-v="${esc(it.exId)}" aria-label="${esc(t('note'))}">${I.note}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div>
+      <div class="ex-head">${L ? '' : mediaThumb(it.exId)}<div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<button class="ex-name" data-a="${mediaOf(it.exId) ? 'media-open' : 'media-edit'}" data-v="${esc(it.exId)}" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</button><span class="ex-tools"><button class="icon-btn" data-a="ex-hist" data-v="${esc(it.exId)}" aria-label="${esc(t('histAria'))}">${I.hist}</button><button class="icon-btn note-ic ${note && note.text ? 'has' : ''}" data-a="note" data-v="${esc(it.exId)}" aria-label="${esc(t('note'))}">${I.note}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div></div>
       ${ex ? `<div class="ex-sub">${esc(equipName(ex.equipment))}</div>` : ''}
       ${prCard}
       ${it.sug || hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
@@ -2472,6 +2562,29 @@ function renderSheet() {
       ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="orm-save">${esc(t('save'))}</button>
       ${m ? `<button class="btn block ghost" data-a="orm-clear">${esc(t('ormClear'))}</button>` : ''}`;
+  } else if (sh.type === 'media') {
+    const m = mediaOf(sh.exId) || { imgs: [], links: [], cap: '' }; const ex = S.ex.get(sh.exId) || {};
+    const plan = sh.cue ? `<div class="info"><div class="eyebrow small">${esc(t('mediaPlanNote'))}</div><div>${esc(sh.cue)}</div></div>` : '';
+    body = `${head(exName(sh.exId))}<div class="muted small">${esc([equipName(ex.equipment), (ex.primary || []).map(muscleName).join(', ')].filter(Boolean).join(' · '))}</div>
+      ${m.imgs.length ? `<div class="media-strip" aria-label="${esc(t('mediaPhotos'))}">${m.imgs.map((im, i) => `<button data-a="media-zoom" data-v="${esc(sh.exId)}" data-k="${i}" aria-label="${esc(t('mediaZoom', i + 1))}"><img src="${im.src}" alt="${esc(exName(sh.exId))}"></button>`).join('')}</div>
+        <div class="muted small">${esc(m.imgs.length > 1 ? t('mediaSwipe', m.imgs.length) : t('mediaTap'))}</div>` : ''}
+      ${m.cap ? `<div>${esc(m.cap)}</div>` : ''}
+      ${m.links.map(l => `<a class="media-link" href="${esc(linkUrl(l))}" target="_blank" rel="noopener noreferrer"><span class="play">${I.play}</span><span class="grow"><b>${esc(l.title || t('mediaVideo'))}</b><span class="muted small">${esc(linkHost(l.url))}${l.t ? ' · ' + esc(t('mediaFrom', fmtStart(l.t))) : ''} · ${esc(t('mediaOpensOut'))}</span></span></a>`).join('')}
+      ${plan}
+      <div class="btn-row"><button class="btn" data-a="media-edit" data-v="${esc(sh.exId)}">${esc(t('mediaEditBtn'))}</button><button class="btn primary" data-a="sheet-close">${esc(t('mediaBack'))}</button></div>`;
+  } else if (sh.type === 'mediaEdit') {
+    const m = S.media[sh.exId] || { imgs: [], links: [], cap: '' };
+    body = `${head(t('mediaTitle'))}<div class="muted small">${esc(exName(sh.exId))} · ${esc(t('mediaEveryPlan'))}</div>
+      <div><label>${esc(t('mediaPhotosN', MEDIA_MAX_IMG))}</label><div class="media-grid">${m.imgs.map((im, i) => `<div class="cell"><img src="${im.src}" alt=""><button class="x" data-a="media-del-img" data-v="${esc(im.id)}" aria-label="${esc(t('mediaDelImg', i + 1))}">${I.x}</button></div>`).join('')}${m.imgs.length < MEDIA_MAX_IMG ? `<label class="add" for="media-file">${I.plus}<span>${esc(t('mediaAddPhoto'))}</span></label><input id="media-file" type="file" accept="image/*" multiple hidden>` : ''}</div>
+        <div class="muted small" style="margin-top:6px">${esc(t('mediaPhotoHint'))}</div></div>
+      <div><label for="media-cap">${esc(t('mediaCap'))}</label><input id="media-cap" data-f="media-cap" maxlength="200" autocomplete="off" value="${esc(m.cap || '')}"></div>
+      <div><label>${esc(t('mediaLinks'))}</label>${m.links.map((l, i) => `<div class="row"><span class="grow"><span class="name">${esc(l.title || t('mediaVideo'))}</span><br><span class="meta">${esc(linkHost(l.url))}${l.t ? ' · ' + esc(t('mediaFrom', fmtStart(l.t))) : ''}</span></span><button class="icon-btn" data-a="media-del-link" data-v="${esc(l.id)}" aria-label="${esc(t('mediaDelLink', i + 1))}">${I.x}</button></div>`).join('')}
+        ${m.links.length < MEDIA_MAX_LINK ? `<label for="media-url" class="muted small">${esc(t('mediaUrl'))}</label><div class="grid2"><input id="media-url" inputmode="url" autocomplete="off" placeholder="https://youtu.be/…" value="${esc(sh.url || '')}"><input id="media-t" inputmode="numeric" autocomplete="off" placeholder="0:00" aria-label="${esc(t('mediaStart'))}" value="${esc(sh.t || '')}"></div>
+        <input id="media-title" autocomplete="off" maxlength="80" placeholder="${esc(t('mediaTitlePh'))}" aria-label="${esc(t('mediaTitlePh'))}" value="${esc(sh.title || '')}" style="margin-top:8px">
+        <button class="btn small" data-a="media-add-link" style="margin-top:8px">${esc(t('mediaAddLink'))}</button>` : ''}</div>
+      <div class="muted small">${esc(t('mediaNetNote'))}</div>
+      ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
+      <button class="btn primary block" data-a="media-done">${esc(t('mediaDone'))}</button>`;
   } else if (sh.type === 'wave') {
     const st = sh.mode === 'start';
     const num2 = (k, lbl, val, extra = '') => `<div><label for="wv-${k}">${esc(lbl)}</label><input id="wv-${k}" data-f="wave" data-k="${k}" data-san="dec" inputmode="decimal" autocomplete="off" maxlength="6" value="${esc(val ?? '')}"${extra}></div>`;
@@ -2903,7 +3016,7 @@ const saveActive = () => persist('active');
 const A = {
   nav: el => go(el.dataset.v),
   settings: () => openSheet({ type: 'settings' }),
-  'sheet-close': () => { if (S.sheet && (S.sheet.type === 'why' || S.sheet.type === 'weeks') && S.sheet.back) openSheet(S.sheet.back); else closeSheet(); },
+  'sheet-close': () => { if (S.sheet && S.sheet.type === 'mediaEdit') { A['media-done'](); return; } if (S.sheet && (S.sheet.type === 'why' || S.sheet.type === 'weeks' || S.sheet.type === 'confirm') && S.sheet.back) openSheet(S.sheet.back); else closeSheet(); },
   scrim: (el, ev) => { if (ev.target === el) closeSheet(); },
   'confirm-yes': () => { const f = S._onYes; closeSheet(); if (f) f(); },
   'menu-pick': el => { const f = S.sheet && S.sheet.handlers && S.sheet.handlers[el.dataset.v]; closeSheet(); if (f) f(); },
@@ -3022,6 +3135,22 @@ const A = {
     const nm = reconcileItem(sh, 'ef'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
     renderSheet();
   },
+  'media-open': el => { const it = S.active && S.active.items.find(x => x.exId === el.dataset.v); openSheet({ type: 'media', exId: el.dataset.v, cue: it && it.cues && it.cues[0] ? it.cues[0] : '' }); },
+  'media-edit': el => { const back = S.sheet && S.sheet.type === 'media' ? S.sheet : null; openSheet({ type: 'mediaEdit', exId: el.dataset.v, back }); },
+  'media-del-img': el => { const back = S.sheet; const m = S.media[back.exId]; if (!m) return; ask(t('mediaDelQ'), async () => { m.imgs = m.imgs.filter(x => x.id !== el.dataset.v); await persist('media'); openSheet(back); render(); }, { yes: t('mediaDelYes'), danger: true, back }); },
+  'media-del-link': async el => { const m = S.media[S.sheet.exId]; if (!m) return; m.links = m.links.filter(x => x.id !== el.dataset.v); await persist('media'); renderSheet(); render(); },
+  'media-add-link': async () => {
+    const sh = S.sheet; const url = (($('#media-url') || {}).value || '').trim(), tt = ($('#media-t') || {}).value || '', title = (($('#media-title') || {}).value || '').trim();
+    sh.url = url; sh.t = tt; sh.title = title;
+    if (!/^https:\/\/[^\s/]+\.[^\s]+$/.test(url)) { sh.err = t('mediaErrUrl'); renderSheet(); return; }
+    if (tt && !/^(\d+|\d+:\d{1,2})$/.test(tt.trim())) { sh.err = t('mediaErrT'); renderSheet(); return; }
+    const m = S.media[sh.exId] || (S.media[sh.exId] = { imgs: [], links: [], cap: '' });
+    m.links.push({ id: uid(), url, title: title.slice(0, 80), t: linkStart(url, tt) });
+    sh.url = sh.t = sh.title = ''; sh.err = '';
+    await persist('media'); renderSheet(); render();
+  },
+  'media-done': async () => { const sh = S.sheet; const m = S.media[sh.exId]; if (m && !m.imgs.length && !m.links.length && !m.cap) delete S.media[sh.exId]; await persist('media'); if (sh.back && mediaOf(sh.exId)) openSheet({ ...sh.back }); else closeSheet(); render(); },
+  'media-zoom': el => { const m = mediaOf(el.dataset.v); if (!m) return; const im = m.imgs[+el.dataset.k]; if (!im) return; const z = document.createElement('button'); z.className = 'media-zoom'; z.setAttribute('aria-label', t('mediaZoomClose')); z.innerHTML = `<img src="${im.src}" alt="">`; z.addEventListener('click', () => z.remove()); document.body.appendChild(z); z.focus(); },
   'wave-kind': el => { S.sheet.kind = el.dataset.v; renderSheet(); },
   'wave-start-save': () => {
     const sh = S.sheet; const kg = num(String(sh.kg).replace(',', '.')), step = num(String(sh.step).replace(',', '.')) || 2.5;
@@ -3718,7 +3847,7 @@ function readSettingsFields() {
 }
 function backupObj() {
   return { app: 'repsmith', schema: SCHEMA, version: VERSION, exportedAt: new Date().toISOString(),
-    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements, flags: S.flags, calib: S.calib, maxes: S.maxes, runs: S.runs };
+    settings: S.settings, templates: S.templates, sessions: S.sessions, notes: S.notes, customExercises: S.customExercises, active: S.active, measurements: S.measurements, flags: S.flags, calib: S.calib, maxes: S.maxes, runs: S.runs, media: S.media };
 }
 /* one-step safety copy kept in the database (key "undo", not part of a backup file) */
 async function snapshotUndo(reason) {
@@ -3736,6 +3865,7 @@ async function applyBackup(o) {
   S.active = o.active && Array.isArray(o.active.items) ? o.active : null;
   S.measurements = arr(o.measurements); S.flags = arr(o.flags); S.calib = arr(o.calib); S.maxes = obj(o.maxes);
   S.runs = arr(o.runs).filter(r => r && r.distM > 0 && r.paceSec > 0);
+  if (o.media && typeof o.media === 'object') S.media = cleanMedia(o.media); // a backup from before 0.15 keeps the photos already on the phone
   rebuildExercises(); normTemplates();
   await persist(...KEYS);
 }
@@ -3807,6 +3937,7 @@ async function hevyCommit() {
 async function importBackup(text) {
   let o;
   try { o = JSON.parse(text); } catch (e) { o = null; }
+  if (o && o.app === 'repsmith' && o.kind === 'media-pack' && o.media && typeof o.media === 'object') { importMediaPack(o); return; }
   if (!o || o.app !== 'repsmith' || !Array.isArray(o.sessions)) { toast(t('importErr')); return; }
   if (o.schema != null && o.schema > SCHEMA) { toast(t('importNewer', o.schema, SCHEMA)); return; }
   const when = o.exportedAt && !isNaN(Date.parse(o.exportedAt)) ? fmtDate(Date.parse(o.exportedAt), { day: 'numeric', month: 'short', year: 'numeric' }) : '?';
@@ -3850,6 +3981,7 @@ document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;
   if (!f) return;
   if (el.dataset.san) { const cv = el.dataset.san === 'int' ? cleanInt(el.value) : el.dataset.san === 'list' ? el.value.replace(/[^0-9.,;\-\/ ]/g, '') : el.dataset.san === 'reps' ? el.value.replace(/[^0-9+\-]/g, '') : cleanDec(el.value); if (cv !== el.value) el.value = cv; }
+  if (f === 'media-cap' && S.sheet && S.sheet.type === 'mediaEdit') { const m = S.media[S.sheet.exId] || (S.media[S.sheet.exId] = { imgs: [], links: [], cap: '' }); m.cap = el.value.slice(0, 200); return; }
   if (f === 'wave' && S.sheet && S.sheet.type === 'wave') { S.sheet[el.dataset.k] = el.value; const r = $('#wave-res'); if (r) r.textContent = waveResText(S.sheet); return; }
   if (f === 'run' && S.sheet && S.sheet.d) { S.sheet.d[el.dataset.k] = el.value; const c = $('#run-calc'); if (c) c.textContent = runCalcText(S.sheet.d); return; }
   if (f === 'gear-pl' && S.sheet && S.sheet.g) { const g = S.sheet.g; g.plates[g.unit][el.dataset.p] = Math.min(10, parseInt(el.value || '0', 10) || 0); return; }
@@ -3896,6 +4028,8 @@ document.addEventListener('change', ev => {
   if (el.dataset.f === 'hv-map' && S.sheet && S.sheet.type === 'hevy') { S.sheet.map[S.sheet.groups[+el.dataset.i].name] = el.value; return; }
   if (el.id === 'hevyfile' && el.files && el.files[0]) {
     const r = new FileReader(); r.onload = () => hevyOpen(String(r.result)); r.readAsText(el.files[0]); el.value = '';
+  } else if (el.id === 'media-file' && el.files && el.files.length && S.sheet && S.sheet.type === 'mediaEdit') {
+    const files = [...el.files]; el.value = ''; mediaAddFiles(S.sheet.exId, files);
   } else if (el.id === 'importfile' && el.files && el.files[0]) {
     const r = new FileReader(); r.onload = () => importBackup(String(r.result)); r.readAsText(el.files[0]); el.value = '';
   } else if (el.id && el.id.startsWith('st-')) readSettingsFields();

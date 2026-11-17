@@ -1,4 +1,4 @@
-# Repsmith v0.14.0
+# Repsmith v0.15.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,14 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.15.0
+
+- Bardziej kompaktowy tekst: tytuł dnia 28 px, nazwy ćwiczeń 15 px, opisy 13 px, niższe wiersze. Na ekranie Dziś opis serii jest pod nazwą, więc długi opis (np. w planie fali) nie łamie już nazwy ćwiczenia w środku słowa.
+- Zdjęcia i wideo przy ćwiczeniu: w treningu miniatura i nazwa ćwiczenia otwierają podgląd (zdjęcia do powiększenia, notatka, linki do wideo). Do 4 zdjęć z galerii albo aparatu i do 4 linków (YouTube z czasem startu albo inny adres https) na ćwiczenie. Media są przypięte do ćwiczenia, widać je w każdym planie.
+- Zdjęcia zapisują się w telefonie i w kopii zapasowej JSON. Wideo otwiera się poza aplikacją i wymaga internetu.
+- Import paczki zdjęć (plik JSON z `"kind": "media-pack"`) przez zwykły przycisk importu kopii. Dodaje zdjęcia, nic nie kasuje.
+- Nowe ćwiczenie: ściąganie z góry na maszynie (Machine Lat Pulldown).
 
 ## Zmiany w v0.14.0
 

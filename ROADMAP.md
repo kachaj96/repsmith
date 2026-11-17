@@ -113,6 +113,10 @@ Pomysły z przeglądu innej aplikacji do treningów, bez zmiany wyglądu (jeden 
 - Drop set nie liczy się do rekordów, e1RM, podpowiedzi ciężaru ani sygnału zmęczenia.
 - Ikona historii na karcie ćwiczenia: ostatnie 5 treningów z tym ćwiczeniem (serie, RPE, upadek, drop), ostatnie e1RM i skrót do pełnego postępu.
 
+## v0.15.0 – zrobione
+- Kompaktowa skala tekstu (zatwierdzony mockup), opis serii pod nazwą na ekranie Dziś.
+- Zdjęcia i linki do wideo per ćwiczenie: podgląd w treningu, edycja, kopia zapasowa, import paczki zdjęć.
+
 ## v0.14.0 – zrobione (etap 1)
 Plan "Bench Priority (HARDSET), fala 4 tyg." w bibliotece planów.
 - Cykl 4 tygodni, 3 treningi (Pn, Śr, Pt), 35 serii, powtarzany bez końca. Wyciskanie w układzie fali z kilogramami z bazy fali (WB), akcesoria według zwykłych zasad.

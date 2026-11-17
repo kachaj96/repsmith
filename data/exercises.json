@@ -820,6 +820,23 @@
    "logging": "W"
   },
   {
+   "id": "machine-lat-pulldown",
+   "name_en": "Machine Lat Pulldown",
+   "name_pl": "Ściąganie z góry na maszynie",
+   "pattern": "VPULL",
+   "primary": [
+    "LAT"
+   ],
+   "secondary": [
+    "BI",
+    "UB"
+   ],
+   "equipment": "MACH",
+   "type": "compound",
+   "unilateral": false,
+   "logging": "W"
+  },
+  {
    "id": "close-grip-lat-pulldown",
    "name_en": "Close-Grip Lat Pulldown",
    "name_pl": "Ściąganie wyciągu górnego wąskim chwytem neutralnym",
