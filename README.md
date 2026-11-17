@@ -1,4 +1,4 @@
-# Repsmith v0.15.0
+# Repsmith v0.16.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,11 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.16.0
+
+- Biblioteka ćwiczeń: zdjęcia, notatka i linki widać w karcie ćwiczenia, tam też je dodajesz i edytujesz. Ćwiczenia z mediami mają ikonkę na liście.
+- Udostępnianie planu: menu planu, Udostępnij plan. Powstaje plik JSON z dniami, ćwiczeniami, seriami i ustawieniami cyklu, opcjonalnie ze zdjęciami ćwiczeń. Bez treningów, wyników, maksów i notatek. Druga osoba wczytuje go przez Wczytaj kopię z pliku: plan dochodzi jako nowy i aktywny, jej dane zostają. Własne ćwiczenia z planu przechodzą razem z nim. W planie fali baza (WB) nie jest przekazywana, druga osoba podaje swoje 1RM albo e1RM.
 
 ## Zmiany w v0.15.0
 

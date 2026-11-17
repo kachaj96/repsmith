@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.15.0';
+const VERSION = '0.16.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -258,6 +258,11 @@ Object.assign(STR.pl, {
   calibChip: 'Kalibracja RPE', calibTitle: 'Seria kalibracyjna',
   calibText: 'Po rozgrzewce weź ciężar na około 8 powtórzeń. Rób powtórzenia, aż uznasz, że zostały 2 w zapasie. Zapamiętaj tę liczbę i rób dalej, ile się da w dobrej technice. Stop przy zmianie techniki.\n\nAplikacja porówna Twój strzał z rzeczywistością.',
   calibSafety: 'Nie rób tego na ciężkim przysiadzie bez asekuracji. Wyciskanie z asekuracją, maszyna albo suwnica są bezpieczniejsze.',
+  mediaAddBtn: 'Dodaj zdjęcie albo wideo', planShare: 'Udostępnij plan', planShareWhat: 'plik JSON do wysłania i wczytania w Repsmith na innym telefonie',
+  planShareNot: 'W pliku są dni, ćwiczenia, serie i ustawienia cyklu. Nie ma Twoich treningów, wyników, maksów ani notatek.', planShareWave: 'Baza fali (WB) zostaje u Ciebie: osoba, która wczyta plan, poda własne 1RM albo e1RM.',
+  planShareMedia: n => `Dołącz zdjęcia i linki ćwiczeń z planu (zdjęcia: ${n})`, planShareSize: kb => `Rozmiar pliku: ok. ${kb} KB`, planShareHow: 'Druga osoba wczytuje plik w Ustawieniach: Wczytaj kopię z pliku. Plan dochodzi jako nowy, jej dane zostają.',
+  planShareGo: 'Wyślij plik', planShared: 'Plan zapisany do wysłania', planImpQ: (n, d, i) => `Dodać plan „${n}” (${d} dni)${i ? ` i zdjęcia ćwiczeń (${i})` : ''}? Zostanie aktywnym planem. Twoje treningi i inne plany zostają bez zmian.`, planImpYes: 'Dodaj plan',
+  planImpSkip: n => `Pominięto ćwiczenia, których nie ma w tej wersji aplikacji: ${n}`,
   mediaHasPhoto: 'ma zdjęcie', mediaHasVideo: 'ma wideo', mediaShow: n => `Zdjęcia i wideo: ${n}`, mediaAdd: n => `Dodaj zdjęcie albo wideo: ${n}`, mediaPhotos: 'Zdjęcia', mediaZoom: i => `Zdjęcie ${i}, pełny ekran`, mediaZoomClose: 'Zamknij zdjęcie',
   mediaSwipe: n => `${n} zdjęcia: przesuń palcem, dotknij, aby powiększyć.`, mediaTap: 'Dotknij, aby powiększyć.', mediaVideo: 'Wideo', mediaFrom: s => `od ${s}`, mediaOpensOut: 'otwiera się w aplikacji YouTube albo przeglądarce', mediaPlanNote: 'Wskazówka z planu',
   mediaEditBtn: 'Edytuj media', mediaBack: 'Wróć do serii', mediaTitle: 'Zdjęcia i wideo', mediaEveryPlan: 'widać je w każdym planie i w historii', mediaPhotosN: n => `Zdjęcia (do ${n})`, mediaAddPhoto: 'Dodaj zdjęcie', mediaDelImg: i => `Usuń zdjęcie ${i}`,
@@ -388,6 +393,11 @@ Object.assign(STR.en, {
   calibChip: 'RPE calibration', calibTitle: 'Calibration set',
   calibText: 'After warming up, take a load you can do about 8 reps with. Do reps until you believe 2 are left. Remember that number, then keep going as long as form holds. Stop at a form change.\n\nThe app compares your call with what really happened.',
   calibSafety: 'Do not do this on a heavy squat without safeties. A bench with safeties, a machine or a leg press is safer.',
+  mediaAddBtn: 'Add a photo or video', planShare: 'Share plan', planShareWhat: 'a JSON file to send and load into Repsmith on another phone',
+  planShareNot: 'The file holds the days, exercises, sets and cycle settings. It does not hold your workouts, results, maxes or notes.', planShareWave: 'The wave base (WB) stays with you: the person who loads the plan enters their own 1RM or e1RM.',
+  planShareMedia: n => `Include the photos and links of the plan exercises (photos: ${n})`, planShareSize: kb => `File size: about ${kb} KB`, planShareHow: 'The other person loads the file in Settings: Load backup from file. The plan is added as a new one, their data stays.',
+  planShareGo: 'Send file', planShared: 'Plan ready to send', planImpQ: (n, d, i) => `Add the plan "${n}" (${d} days)${i ? ` and exercise photos (${i})` : ''}? It becomes the active plan. Your workouts and other plans stay as they are.`, planImpYes: 'Add plan',
+  planImpSkip: n => `Skipped exercises this app version does not have: ${n}`,
   mediaHasPhoto: 'has a photo', mediaHasVideo: 'has a video', mediaShow: n => `Photos and video: ${n}`, mediaAdd: n => `Add a photo or video: ${n}`, mediaPhotos: 'Photos', mediaZoom: i => `Photo ${i}, full screen`, mediaZoomClose: 'Close photo',
   mediaSwipe: n => `${n} photos: swipe, tap to enlarge.`, mediaTap: 'Tap to enlarge.', mediaVideo: 'Video', mediaFrom: s => `from ${s}`, mediaOpensOut: 'opens in the YouTube app or the browser', mediaPlanNote: 'Plan note',
   mediaEditBtn: 'Edit media', mediaBack: 'Back to sets', mediaTitle: 'Photos and video', mediaEveryPlan: 'shown in every plan and in history', mediaPhotosN: n => `Photos (up to ${n})`, mediaAddPhoto: 'Add photo', mediaDelImg: i => `Remove photo ${i}`,
@@ -1037,6 +1047,14 @@ function linkUrl(l) {
 }
 const linkHost = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
 const fmtStart = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+/* photos, note and links of one exercise (preview sheet and exercise library) */
+function mediaBlock(exId) {
+  const m = mediaOf(exId); if (!m) return '';
+  return `${m.imgs.length ? `<div class="media-strip" aria-label="${esc(t('mediaPhotos'))}">${m.imgs.map((im, i) => `<button data-a="media-zoom" data-v="${esc(exId)}" data-k="${i}" aria-label="${esc(t('mediaZoom', i + 1))}"><img src="${im.src}" alt="${esc(exName(exId))}"></button>`).join('')}</div>
+      <div class="muted small">${esc(m.imgs.length > 1 ? t('mediaSwipe', m.imgs.length) : t('mediaTap'))}</div>` : ''}
+    ${m.cap ? `<div>${esc(m.cap)}</div>` : ''}
+    ${m.links.map(l => `<a class="media-link" href="${esc(linkUrl(l))}" target="_blank" rel="noopener noreferrer"><span class="play">${I.play}</span><span class="grow"><b>${esc(l.title || t('mediaVideo'))}</b><span class="muted small">${esc(linkHost(l.url))}${l.t ? ' · ' + esc(t('mediaFrom', fmtStart(l.t))) : ''} · ${esc(t('mediaOpensOut'))}</span></span></a>`).join('')}`;
+}
 /* a photo from the gallery or camera -> JPEG data URL, longest side 1280 px, transparent areas on a light background */
 async function shrinkImage(file, max = 1280) {
   const url = URL.createObjectURL(file);
@@ -1075,6 +1093,61 @@ function importMediaPack(o) {
     await persist('media'); toast(t('mpackDone', n)); render();
   }, { yes: t('confirm') });
 }
+
+/* ---------- plan sharing (0.16): one plan as a JSON file, imported as a new plan on another phone ---------- */
+function planExportObj(tp, withMedia) {
+  const p = clone(tp);
+  for (const k of ['id', 'skips', 'adjust', 'fatigueNext', 'reviewSnooze', 'answers', 'createdAt', 'updatedAt', 'stallEntry']) delete p[k];
+  if (p.cycle) { delete p.cycle.start; delete p.cycle.shift; delete p.cycle.deloadUntil; delete p.cycle.deloadAt; }
+  if (p.block) { delete p.block.start; delete p.block.deloadUntil; delete p.block.deloadAt; }
+  if (p.wave) p.wave = { step: p.wave.step || 2.5, amrapPct: p.wave.amrapPct || C.WAVE_AMRAP }; // the base is personal: the other person sets their own
+  const ids = [...new Set(p.days.flatMap(d => d.items.map(i => i.exId)))];
+  const custom = S.customExercises.filter(e => ids.includes(e.id));
+  const media = {};
+  if (withMedia) for (const id of ids) { const m = mediaOf(id); if (m) media[id] = clone(m); }
+  return { app: 'repsmith', kind: 'plan', version: 1, appVersion: VERSION, exportedAt: new Date().toISOString(), plan: p, customExercises: custom, media };
+}
+const planMediaCount = tp => [...new Set(tp.days.flatMap(d => d.items.map(i => i.exId)))].reduce((a, id) => { const m = mediaOf(id); return a + (m ? m.imgs.length : 0); }, 0);
+async function saveJsonFile(name, obj) {
+  const txt = JSON.stringify(obj);
+  if (NATIVE) return nativeShareFile(name, txt, 'utf8');
+  const blob = new Blob([txt], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  return true;
+}
+const fileSlug = v => String(v || 'plan').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/Ł/g, 'L').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase().slice(0, 40) || 'plan';
+function importPlan(o) {
+  const p = o.plan;
+  if (!p || !Array.isArray(p.days) || !p.days.length) { toast(t('importErr')); return; }
+  const custom = (Array.isArray(o.customExercises) ? o.customExercises : []).filter(e => e && typeof e.id === 'string' && e.id.startsWith('custom-') && e.name_pl && e.name_en && Array.isArray(e.primary));
+  const known = id => S.ex.has(id) || custom.some(e => e.id === id);
+  const items = p.days.flatMap(d => (Array.isArray(d.items) ? d.items : []));
+  const unknown = items.filter(i => !i || !known(i.exId)).length;
+  const media = cleanMedia(o.media || {}); const nImg = Object.values(media).reduce((a, m) => a + m.imgs.length, 0);
+  const name = String(p.name || t('newPlan')).slice(0, 80);
+  ask(t('planImpQ', name, p.days.length, nImg), async () => {
+    for (const e of custom) if (!S.customExercises.some(x => x.id === e.id)) S.customExercises.push({ ...e, createdAt: now(), updatedAt: now() });
+    rebuildExercises();
+    const tp = { ...clone(p), id: uid(), name, createdAt: now(), updatedAt: now(), skips: [], adjust: {} };
+    tp.days = p.days.map(d => ({ id: uid(), name: String(d.name || '').slice(0, 80), items: (d.items || []).filter(i => i && S.ex.has(i.exId)).map(i => ({ ...clone(i), id: uid() })) }));
+    if (tp.cycle) { tp.cycle.start = now(); tp.cycle.shift = 0; tp.cycle.deloadUntil = 0; }
+    if (tp.block) tp.block.start = now();
+    for (const [id, m] of Object.entries(media)) {
+      if (!S.ex.has(id)) continue;
+      const cur = S.media[id] || (S.media[id] = { imgs: [], links: [], cap: '' });
+      for (const im of m.imgs) if (cur.imgs.length < MEDIA_MAX_IMG && !cur.imgs.some(x => x.id === im.id || x.src === im.src)) cur.imgs.push(im);
+      for (const l of m.links) if (cur.links.length < MEDIA_MAX_LINK && !cur.links.some(x => x.url === l.url)) cur.links.push(l);
+      if (!cur.cap && m.cap) cur.cap = m.cap;
+    }
+    await persist('customExercises', 'media');
+    normTemplatesOf(tp);
+    if (unknown) toast(t('planImpSkip', unknown));
+    if (tp.wave) { const w = tp.wave; delete tp.wave; openSheet({ type: 'wave', mode: 'start', planId: tp.planId, kind: '1rm', kg: '', step: fmtN(w.step || 2.5), amrapPct: w.amrapPct, importTpl: tp }); return; }
+    adoptTemplate(tp, null);
+  }, { yes: t('planImpYes') });
+}
+function normTemplatesOf(tp) { for (const d of tp.days) for (const it of d.items) normItem(it); }
 
 /* ---------- wave plan (Bench Priority): base from a 1RM or e1RM, review after week 4 ---------- */
 const round1 = v => (v == null ? null : Math.round(v * 10) / 10);
@@ -2094,7 +2167,7 @@ function filteredExercises(q, pat, mus) {
     .sort((a, b) => exName(a.id).localeCompare(exName(b.id), S.settings.lang));
 }
 function exRows(list, action, extra = '') {
-  return list.map(e => `<button class="list-btn row" data-a="${action}" data-v="${esc(e.id)}" ${extra}><span class="grow"><span class="name">${esc(exName(e.id))}</span><br><span class="meta">${esc(e.primary.map(muscleName).join(', '))} · ${esc(equipName(e.equipment))}</span></span>${S.notes[e.id] && S.notes[e.id].text ? `<span class="tag">${esc(t('note'))}</span>` : ''}</button>`).join('');
+  return list.map(e => `<button class="list-btn row" data-a="${action}" data-v="${esc(e.id)}" ${extra}><span class="grow"><span class="name nm">${esc(exName(e.id))}${mediaIcon(e.id)}</span><br><span class="meta">${esc(e.primary.map(muscleName).join(', '))} · ${esc(equipName(e.equipment))}</span></span>${S.notes[e.id] && S.notes[e.id].text ? `<span class="tag">${esc(t('note'))}</span>` : ''}</button>`).join('');
 }
 /* body map wrapper: front/back silhouette with Repsmith labels */
 function bm(opts, extraCls = '') {
@@ -2562,14 +2635,20 @@ function renderSheet() {
       ${sh.err ? `<div class="err" role="alert">${esc(sh.err)}</div>` : ''}
       <button class="btn primary block" data-a="orm-save">${esc(t('save'))}</button>
       ${m ? `<button class="btn block ghost" data-a="orm-clear">${esc(t('ormClear'))}</button>` : ''}`;
+  } else if (sh.type === 'planShare') {
+    const tp = S.templates.find(x => x.id === sh.tpId); const n = planMediaCount(tp);
+    const kb = Math.round(JSON.stringify(planExportObj(tp, sh.withMedia)).length / 1024);
+    body = `${head(t('planShare'))}<div class="muted small">${esc(tp.name)} · ${esc(t('planShareWhat'))}</div>
+      <div class="info"><div>${esc(t('planShareNot'))}</div>${tp.wave ? `<div class="muted small" style="margin-top:6px">${esc(t('planShareWave'))}</div>` : ''}</div>
+      ${n ? `<label class="check-row"><input type="checkbox" data-a="plan-share-media" ${sh.withMedia ? 'checked' : ''}> ${esc(t('planShareMedia', n))}</label>` : ''}
+      <div class="muted small">${esc(t('planShareSize', kb))}</div>
+      <div class="muted small">${esc(t('planShareHow'))}</div>
+      <button class="btn primary block" data-a="plan-share-go">${esc(t('planShareGo'))}</button>`;
   } else if (sh.type === 'media') {
     const m = mediaOf(sh.exId) || { imgs: [], links: [], cap: '' }; const ex = S.ex.get(sh.exId) || {};
     const plan = sh.cue ? `<div class="info"><div class="eyebrow small">${esc(t('mediaPlanNote'))}</div><div>${esc(sh.cue)}</div></div>` : '';
     body = `${head(exName(sh.exId))}<div class="muted small">${esc([equipName(ex.equipment), (ex.primary || []).map(muscleName).join(', ')].filter(Boolean).join(' · '))}</div>
-      ${m.imgs.length ? `<div class="media-strip" aria-label="${esc(t('mediaPhotos'))}">${m.imgs.map((im, i) => `<button data-a="media-zoom" data-v="${esc(sh.exId)}" data-k="${i}" aria-label="${esc(t('mediaZoom', i + 1))}"><img src="${im.src}" alt="${esc(exName(sh.exId))}"></button>`).join('')}</div>
-        <div class="muted small">${esc(m.imgs.length > 1 ? t('mediaSwipe', m.imgs.length) : t('mediaTap'))}</div>` : ''}
-      ${m.cap ? `<div>${esc(m.cap)}</div>` : ''}
-      ${m.links.map(l => `<a class="media-link" href="${esc(linkUrl(l))}" target="_blank" rel="noopener noreferrer"><span class="play">${I.play}</span><span class="grow"><b>${esc(l.title || t('mediaVideo'))}</b><span class="muted small">${esc(linkHost(l.url))}${l.t ? ' · ' + esc(t('mediaFrom', fmtStart(l.t))) : ''} · ${esc(t('mediaOpensOut'))}</span></span></a>`).join('')}
+      ${mediaBlock(sh.exId)}
       ${plan}
       <div class="btn-row"><button class="btn" data-a="media-edit" data-v="${esc(sh.exId)}">${esc(t('mediaEditBtn'))}</button><button class="btn primary" data-a="sheet-close">${esc(t('mediaBack'))}</button></div>`;
   } else if (sh.type === 'mediaEdit') {
@@ -2693,6 +2772,8 @@ function renderSheet() {
     const subs = substitutes(sh.exId, 3);
     body = `${head(exName(sh.exId))}
       <div class="muted small">${esc(L() ? e.name_pl : e.name_en)}</div>
+      ${mediaBlock(e.id)}
+      <button class="btn block" data-a="media-edit" data-v="${esc(e.id)}">${esc(mediaOf(e.id) ? t('mediaEditBtn') : t('mediaAddBtn'))}</button>
       ${bm({ prim: e.primary, sec: e.secondary, aria: e.primary.map(muscleName).join(', ') }, 'compact')}
       <div class="bm-legend"><span><i style="background:var(--accent)"></i>${esc(t('primary'))}</span><span><i style="background:var(--bm-sec)"></i>${esc(t('secondary'))}</span></div>
       <div><label>${esc(t('primary'))}</label>${e.primary.map(m => `<span class="tag p">${esc(muscleName(m))}</span>`).join('')}</div>
@@ -3061,9 +3142,10 @@ const A = {
   },
   'plan-menu': () => {
     const tp = S.templates.find(x => x.id === S.viewArg);
-    openSheet({ type: 'menu', title: tp.name, items: [{ id: 'mode', label: planMode(tp) === 'simple' ? t('modeToAdv') : t('modeToSimple') }, { id: 'dup', label: S.settings.lang === 'en' ? 'Duplicate plan' : 'Duplikuj plan' }, { id: 'del', label: t('deletePlan'), danger: true }],
+    openSheet({ type: 'menu', title: tp.name, items: [{ id: 'mode', label: planMode(tp) === 'simple' ? t('modeToAdv') : t('modeToSimple') }, { id: 'dup', label: S.settings.lang === 'en' ? 'Duplicate plan' : 'Duplikuj plan' }, { id: 'share', label: t('planShare') }, { id: 'del', label: t('deletePlan'), danger: true }],
       handlers: {
         mode: () => A['plan-mode'](),
+        share: () => openSheet({ type: 'planShare', tpId: tp.id, withMedia: planMediaCount(tp) > 0 }),
         dup: () => { const c = clone(tp); c.id = uid(); c.name += ' (2)'; c.days.forEach(d => { d.id = uid(); d.items.forEach(i => { i.id = uid(); }); }); S.templates.push(c); saveTemplates(); go('plan', c.id); },
         del: () => ask(t('deletePlan') + '?', () => { S.templates = S.templates.filter(x => x.id !== tp.id); if (S.settings.activeTemplateId === tp.id) { S.settings.activeTemplateId = S.templates[0] ? S.templates[0].id : null; persist('settings'); } saveTemplates(); go('plans'); }, { danger: true, yes: t('delete') }),
       } });
@@ -3135,8 +3217,13 @@ const A = {
     const nm = reconcileItem(sh, 'ef'); if (nm) toast(t('methodSwitched', t('m_' + nm)));
     renderSheet();
   },
+  'plan-share-media': el => { S.sheet.withMedia = el.checked; renderSheet(); },
+  'plan-share-go': async () => {
+    const tp = S.templates.find(x => x.id === S.sheet.tpId); if (!tp) return;
+    try { if (await saveJsonFile(`repsmith-plan-${fileSlug(tp.name)}.json`, planExportObj(tp, S.sheet.withMedia))) { closeSheet(); toast(t('planShared')); } } catch (e) { toast(String((e && e.message) || e)); }
+  },
   'media-open': el => { const it = S.active && S.active.items.find(x => x.exId === el.dataset.v); openSheet({ type: 'media', exId: el.dataset.v, cue: it && it.cues && it.cues[0] ? it.cues[0] : '' }); },
-  'media-edit': el => { const back = S.sheet && S.sheet.type === 'media' ? S.sheet : null; openSheet({ type: 'mediaEdit', exId: el.dataset.v, back }); },
+  'media-edit': el => { const back = S.sheet && (S.sheet.type === 'media' || S.sheet.type === 'exDetail') ? S.sheet : null; openSheet({ type: 'mediaEdit', exId: el.dataset.v, back }); },
   'media-del-img': el => { const back = S.sheet; const m = S.media[back.exId]; if (!m) return; ask(t('mediaDelQ'), async () => { m.imgs = m.imgs.filter(x => x.id !== el.dataset.v); await persist('media'); openSheet(back); render(); }, { yes: t('mediaDelYes'), danger: true, back }); },
   'media-del-link': async el => { const m = S.media[S.sheet.exId]; if (!m) return; m.links = m.links.filter(x => x.id !== el.dataset.v); await persist('media'); renderSheet(); render(); },
   'media-add-link': async () => {
@@ -3149,17 +3236,17 @@ const A = {
     sh.url = sh.t = sh.title = ''; sh.err = '';
     await persist('media'); renderSheet(); render();
   },
-  'media-done': async () => { const sh = S.sheet; const m = S.media[sh.exId]; if (m && !m.imgs.length && !m.links.length && !m.cap) delete S.media[sh.exId]; await persist('media'); if (sh.back && mediaOf(sh.exId)) openSheet({ ...sh.back }); else closeSheet(); render(); },
+  'media-done': async () => { const sh = S.sheet; const m = S.media[sh.exId]; if (m && !m.imgs.length && !m.links.length && !m.cap) delete S.media[sh.exId]; await persist('media'); if (sh.back && (sh.back.type === 'exDetail' || mediaOf(sh.exId))) openSheet({ ...sh.back }); else closeSheet(); render(); },
   'media-zoom': el => { const m = mediaOf(el.dataset.v); if (!m) return; const im = m.imgs[+el.dataset.k]; if (!im) return; const z = document.createElement('button'); z.className = 'media-zoom'; z.setAttribute('aria-label', t('mediaZoomClose')); z.innerHTML = `<img src="${im.src}" alt="">`; z.addEventListener('click', () => z.remove()); document.body.appendChild(z); z.focus(); },
   'wave-kind': el => { S.sheet.kind = el.dataset.v; renderSheet(); },
   'wave-start-save': () => {
     const sh = S.sheet; const kg = num(String(sh.kg).replace(',', '.')), step = num(String(sh.step).replace(',', '.')) || 2.5;
     if (!(kg >= 20 && kg <= 400)) { sh.err = t('waveErr'); renderSheet(); return; }
     if (!(step >= 0.5 && step <= 10)) { sh.err = t('waveErrStep'); renderSheet(); return; }
-    const p = window.RepsmithCoach.planById(sh.planId); const wb = C.waveBase(sh.kind, kg, step);
+    const p = window.RepsmithCoach.planById(sh.planId) || (sh.importTpl ? {} : null); const wb = C.waveBase(sh.kind, kg, step);
     if (!p || !(wb > 0)) { sh.err = t('waveErr'); renderSheet(); return; }
-    const tpl = C.buildTemplate(p, {}, { effort: S.settings.effortDefault || 'rir' });
-    tpl.wave = { wb, step, amrapPct: C.WAVE_AMRAP, hist: [{ at: now(), start: true, kind: sh.kind, kg, wb }] };
+    const tpl = sh.importTpl || C.buildTemplate(p, {}, { effort: S.settings.effortDefault || 'rir' });
+    tpl.wave = { wb, step, amrapPct: sh.amrapPct || C.WAVE_AMRAP, hist: [{ at: now(), start: true, kind: sh.kind, kg, wb }] };
     S.sheet = null; renderSheet(); adoptTemplate(tpl, null);
   },
   'wave-next': el => {
@@ -3937,6 +4024,7 @@ async function hevyCommit() {
 async function importBackup(text) {
   let o;
   try { o = JSON.parse(text); } catch (e) { o = null; }
+  if (o && o.app === 'repsmith' && o.kind === 'plan') { importPlan(o); return; }
   if (o && o.app === 'repsmith' && o.kind === 'media-pack' && o.media && typeof o.media === 'object') { importMediaPack(o); return; }
   if (!o || o.app !== 'repsmith' || !Array.isArray(o.sessions)) { toast(t('importErr')); return; }
   if (o.schema != null && o.schema > SCHEMA) { toast(t('importNewer', o.schema, SCHEMA)); return; }

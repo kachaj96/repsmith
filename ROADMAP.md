@@ -113,6 +113,10 @@ Pomysły z przeglądu innej aplikacji do treningów, bez zmiany wyglądu (jeden 
 - Drop set nie liczy się do rekordów, e1RM, podpowiedzi ciężaru ani sygnału zmęczenia.
 - Ikona historii na karcie ćwiczenia: ostatnie 5 treningów z tym ćwiczeniem (serie, RPE, upadek, drop), ostatnie e1RM i skrót do pełnego postępu.
 
+## v0.16.0 – zrobione
+- Media w bibliotece ćwiczeń (podgląd, dodawanie, edycja).
+- Eksport jednego planu do pliku i import jako nowy plan (bez danych osobistych, opcjonalnie ze zdjęciami).
+
 ## v0.15.0 – zrobione
 - Kompaktowa skala tekstu (zatwierdzony mockup), opis serii pod nazwą na ekranie Dziś.
 - Zdjęcia i linki do wideo per ćwiczenie: podgląd w treningu, edycja, kopia zapasowa, import paczki zdjęć.
