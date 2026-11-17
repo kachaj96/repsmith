@@ -1934,7 +1934,7 @@
   {
    "id": "triceps-pushdown",
    "name_en": "Triceps Pushdown",
-   "name_pl": "Prostowanie ramion na wyciągu z liną",
+   "name_pl": "Prostowanie ramion na wyciągu górnym",
    "pattern": "TRIEXT",
    "primary": [
     "TRI"
