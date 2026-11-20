@@ -30,7 +30,7 @@ try:
     p.locator('button[data-a=ready-pick][data-v="4"]').click(); p.wait_for_timeout(500)
     txt = p.locator("main").inner_text()
     ok("105-107,5 kg" in txt and "88-90% WB 120" in txt, "Monday week 1: single range from WB")
-    ok("back-off 90-92,5 kg" in txt, "back-off range shown")
+    ok("potem 90-92,5 kg" in txt, "range of the lighter sets shown")
     ok(p.evaluate("() => { const a = window.Repsmith.S.active; const it = a.items[0]; return it.sets.filter(s => s.kind === 'top').length === 1 && it.sets.filter(s => s.kind === 'backoff').length === 2; }"), "bench: 1 top + 2 back-off sets")
     ph = p.evaluate("() => [...document.querySelectorAll('button.fv[data-k=weight]')].map(i => i.dataset.ph)")
     ok("105" in ph and "90" in ph, "weights prefilled with the lower value (105 / 90)")

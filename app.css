@@ -972,3 +972,15 @@ button.ex-name { min-height: 26px; padding: 0; }
   .con-chips button { font-size: 13px; }
 }
 .con-acts .btn:first-child { font-size: 14px; white-space: nowrap; padding: 0 8px; }
+/* 0.18.1: one console, three tabs (value, value, RPE) */
+button.ct.rp { border: 1.5px solid transparent; color: var(--text); padding: 0; cursor: pointer; font: inherit; }
+button.ct.rp.on, .ct.on { border-color: var(--accent); background: var(--surface); }
+.con-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.con-grid button { min-height: 46px; border: 1.5px solid transparent; border-radius: 10px; background: var(--field); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 2px; }
+.con-grid button b { font-family: var(--display); font-weight: 800; font-size: 17px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.con-grid button small { font-size: 10.5px; color: var(--muted); line-height: 1.1; }
+.con-grid button.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.con-grid button.on small { color: var(--on-accent); opacity: .85; }
+.con-grid.three { grid-template-rows: 1fr; }
+.con-grid.three button { min-height: 150px; font-weight: 600; font-size: 15px; }
+.sets .set.warm .kl, .sets .set.warm .fv { opacity: .7; }

@@ -32,6 +32,8 @@ try:
     card = p.locator(".ex-card").first
     # 3. previous result: recorded sets only, missing RPE shown as @-
     prevs = card.locator(".set .prev").all_inner_texts()
+    tags = card.locator(".kind-btn .kl").all_inner_texts()
+    ok(tags == ["1", "2", "3", "4", "5", "6"], f"sets numbered 1..6, no set-type names ({tags})")
     ok(prevs[3] == "102,5×1 @7,5" and prevs[4] == "92,5×5 @–" and prevs[5] == "–", f"previous: with RPE, without RPE, unconfirmed set not used ({prevs[3:6]})")
     ok("bez RPE" in (card.locator(".set .prev").nth(4).get_attribute("aria-label") or ""), "missing RPE is read out as 'bez RPE'")
     ok(p.locator(".ex-card").nth(1).locator(".set .prev").first.inner_text() == "–", "no history: dash, nothing invented")
@@ -74,9 +76,16 @@ try:
     # 8. logging: type values incl. a decimal three-digit weight
     card.locator("button.fv[data-k=weight]").nth(3).click(); p.wait_for_timeout(100)
     ok(p.locator("#con").count() == 1 and p.locator("#con .con-pad").count() == 1, "tapping the weight opens the set console with the number pad")
+    p.locator(".ex-card").first.locator("button.fv.rpe").nth(4).click(); p.wait_for_timeout(80)
+    ok(p.locator("#con .ct").count() == 3 and p.locator("#con .con-grid").count() == 1 and p.locator("#con .ct.rp.on").count() == 1, "tapping RPE opens the same console on the RPE tab")
+    card.locator("button.fv[data-k=weight]").nth(3).click(); p.wait_for_timeout(80)
     for k in "102.5": p.locator(f'#con button[data-a=con-key][data-v="{k}"]').click()
     ok(p.locator("#con .ct.on .mid b").inner_text() == "102,5", "typed value shows in the console")
-    p.locator("#con button[data-a=con-pad-done]").click(); p.locator("#con button[data-a=con-rpe][data-v='8']").click()
+    p.locator("#con button[data-a=con-pad][data-k=rpe]").click(); p.wait_for_timeout(80)
+    ok(p.locator("#con .con-grid button").count() == 9 and p.locator("#con .ct").count() == 3, "RPE is a tab of the same console (kg, reps, RPE stay on screen)")
+    p.locator("#con button[data-a=con-rpe][data-v='8']").click()
+    p.locator("#con button[data-a=con-pad][data-k=reps]").click(); p.wait_for_timeout(80)
+    ok(p.locator("#con .con-pad").count() == 1, "and back to the number pad from the reps tab")
     w = card.locator("button.fv[data-k=weight]").nth(3)
     ok(w.evaluate("e => e.scrollWidth <= e.clientWidth") and w.inner_text() == "102,5", "102,5 fits in the weight cell at 360 px")
     p.locator("#con button[data-a=con-log]").click(); p.wait_for_timeout(200)

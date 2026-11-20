@@ -1,4 +1,4 @@
-# Repsmith v0.18.0
+# Repsmith v0.18.1
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,11 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.18.1
+
+- Serie mają tylko numery (1, 2, 3…, przy ćwiczeniach jednostronnych 1L/1P). Bez nazw typu top set, back-off czy rozgrzewka: co robisz w danej serii, wynika z celu w wierszu (powtórzenia, RPE) i z linii celu na kaflu, np. „Cel 1×1 @7 · 2×5 @7”. Rozgrzewki są wyszarzone.
+- Konsola serii ma trzy zakładki: kg, powtórzenia i RPE. Dotknięcie RPE otwiera tę samą konsolę na zakładce RPE (siatka 6–10 z opisem, ile powtórzeń w zapasie), dotknięcie kg albo powtórzeń wraca do klawiatury. Wcześniej z klawiatury nie dało się przejść na RPE, a RPE otwierało inny widok.
 
 ## Zmiany w v0.18.0
 

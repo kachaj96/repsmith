@@ -27,7 +27,6 @@ try:
     p.locator("#con button[data-a=con-log]").click(); p.wait_for_timeout(150)
     ok(p.evaluate("() => window.Repsmith.S.active.items[1].sets[0].time") == "45", "time saved: 45 s")
     p.locator(".ex-card").nth(2).locator("button.fv[data-k=weight]").first.click(); p.wait_for_timeout(100)
-    p.locator("#con button[data-a=con-pad-done]").click()
     for _ in range(2): p.locator("#con button[data-a=con-step][data-k=weight][data-v='-2.5']").click()
     ok(p.evaluate("() => window.Repsmith.S.active.items[2].sets[0].weight") == "-5", "bodyweight exercise: assisted (negative extra kg) allowed with the stepper")
     p.locator("#con button[data-a=con-close]").click()
@@ -42,7 +41,8 @@ try:
     ok(p.evaluate("() => window.Repsmith.S.con && window.Repsmith.S.con.s") == "g11", "superset: back to the first exercise for round 2")
     # fixed effort shows feel chips instead of RPE numbers
     p.evaluate("() => { const S = window.Repsmith.S; S.active.effort = 'fixed'; window.Repsmith.render(); }"); p.wait_for_timeout(100)
-    ok(p.locator("#con .con-chips.three button").count() == 3, "fixed effort: easy / as planned / hard")
+    p.locator("#con button[data-a=con-pad][data-k=rpe]").click(); p.wait_for_timeout(80)
+    ok(p.locator("#con .con-grid.three button").count() == 3, "fixed effort: easy / as planned / hard on the RPE tab")
     p.locator("#con button[data-a=con-feel][data-v=hard]").click(); p.wait_for_timeout(100)
     ok(p.evaluate("() => window.Repsmith.S.active.items[3].sets[1].rpe") == "9.5", "hard = target RPE + 1.5")
     # collapse: a finished exercise folds to one line

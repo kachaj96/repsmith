@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.18.0';
+const VERSION = '0.18.1';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -258,6 +258,7 @@ Object.assign(STR.pl, {
   calibChip: 'Kalibracja RPE', calibTitle: 'Seria kalibracyjna',
   calibText: 'Po rozgrzewce weź ciężar na około 8 powtórzeń. Rób powtórzenia, aż uznasz, że zostały 2 w zapasie. Zapamiętaj tę liczbę i rób dalej, ile się da w dobrej technice. Stop przy zmianie techniki.\n\nAplikacja porówna Twój strzał z rzeczywistością.',
   calibSafety: 'Nie rób tego na ciężkim przysiadzie bez asekuracji. Wyciskanie z asekuracją, maszyna albo suwnica są bezpieczniejsze.',
+  warmupL: 'rozgrzewka', feelS: 'odczucie', rir0: 'do upadku', rirMaybe: 'może 1', rirN: n => `${n} w zapasie`,
   setS: 'Seria', tagW: 'R', tagTop: 'Top', tagB: 'B', tagK: 'K', leftS: 'L', rightS: 'P', restS: 'Przerwa', platesS: 'Talerze', setsDoneOf: (a, b) => `${a}/${b} serii`,
   tgtLbl: 'Cel', tgtShort: r => `cel ${r}`, colSum: (a, b) => `${a}/${b} serii`, expand: 'Rozwiń', collapse: 'Zwiń', exMenu: 'Menu ćwiczenia',
   conLess: 'Mniej:', conMore: 'Więcej:', conType: 'Wpisz', conDel: 'Usuń cyfrę', conPadDone: 'Gotowe', conSame: 'Jak ostatnio', prevS: 'Poprz.', conSave: 'Zapisz zmiany', conLog: n => `Zapisz serię ${n}`,
@@ -288,7 +289,7 @@ Object.assign(STR.pl, {
   waveKg: 'Ciężar (kg)', waveStep: 'Krok bazy (kg)', waveStepD: 'O tyle rośnie baza, gdy cykl to potwierdzi. Domyślnie 2,5 kg, przy dużych ciężarach możesz dać mniej.', waveRes: kg => `Baza fali: ${kg} kg`, waveResNone: 'Wpisz ciężar, a policzę bazę.',
   waveHint: 'Kilogramy w sesji to zakres z bazy: zaczynasz od dolnej wartości, a RPE wygrywa z procentem. Wyciskanie nigdy do 0 RIR.', waveSafety: 'Rack z zabezpieczeniami albo asekuracja, zwłaszcza przy serii kontrolnej i teście. Ból, nowe objawy neurologiczne albo uraz o niejasnej przyczynie: nie zmieniaj RPE ani procentów, skonsultuj się ze specjalistą. Aplikacja nie diagnozuje.',
   waveErr: 'Podaj ciężar od 20 do 400 kg.', waveErrStep: 'Krok bazy: od 0,5 do 10 kg.', waveCreate: 'Utwórz plan', waveSave: 'Zapisz', waveBadge: kg => `WB ${kg} kg`,
-  waveToday: (a, p, wb) => `${a} kg · ${p}% WB ${wb}`, waveBo: a => `back-off ${a} kg`, waveLow: 'Start od dolnej wartości. RPE wygrywa z procentem.', waveAmrapLine: 'Seria kontrolna: AMRAP @9, koniec przy ok. 1 powtórzeniu w zapasie.', waveNoBase: 'Brak bazy fali, więc nie policzę kilogramów.',
+  waveToday: (a, p, wb) => `${a} kg · ${p}% WB ${wb}`, waveBo: a => `potem ${a} kg`, waveLow: 'Start od dolnej wartości. RPE wygrywa z procentem.', waveAmrapLine: 'Seria kontrolna: AMRAP @9, koniec przy ok. 1 powtórzeniu w zapasie.', waveNoBase: 'Brak bazy fali, więc nie policzę kilogramów.',
   waveEndTitle: 'Koniec cyklu', waveEndText: 'Zaczynasz kolejny cykl z nową bazą?', waveEndBtn: 'Nowa baza i cykl', waveNextTitle: 'Kolejny cykl', waveNow: kg => `Obecna baza: ${kg} kg`, waveProp: kg => `Propozycja bazy: ${kg} kg`,
   waveCtl: (kg, r, rpe, e) => `Seria kontrolna: ${kg} kg × ${r} @${rpe}${e ? `, e1RM ${e} kg` : ''}`, waveCtlNone: 'Brak zapisanej serii kontrolnej (piątek, tydzień 3). Baza zostaje bez zmian.', waveSgl: (kg, rpe) => `Singiel z poniedziałku T3: ${kg} kg @${rpe}`,
   waveOwn: 'Twoja baza (kg)', waveOwnD: 'Zawsze możesz wpisać własną liczbę. Baza zmienia się tylko na wejściu w nowy cykl.', waveComp: 'Seria kontrolna była nieporównywalna (inny chwyt, pauza, RIR albo problem zdrowotny)', waveAmrapPct: 'Seria kontrolna, % bazy', waveStart2: 'Zacznij nowy cykl',
@@ -405,6 +406,7 @@ Object.assign(STR.en, {
   calibChip: 'RPE calibration', calibTitle: 'Calibration set',
   calibText: 'After warming up, take a load you can do about 8 reps with. Do reps until you believe 2 are left. Remember that number, then keep going as long as form holds. Stop at a form change.\n\nThe app compares your call with what really happened.',
   calibSafety: 'Do not do this on a heavy squat without safeties. A bench with safeties, a machine or a leg press is safer.',
+  warmupL: 'warm-up', feelS: 'feel', rir0: 'to failure', rirMaybe: 'maybe 1', rirN: n => `${n} in reserve`,
   setS: 'Set', tagW: 'W', tagTop: 'Top', tagB: 'B', tagK: 'C', leftS: 'L', rightS: 'R', restS: 'Rest', platesS: 'Plates', setsDoneOf: (a, b) => `${a}/${b} sets`,
   tgtLbl: 'Target', tgtShort: r => `target ${r}`, colSum: (a, b) => `${a}/${b} sets`, expand: 'Expand', collapse: 'Collapse', exMenu: 'Exercise menu',
   conLess: 'Less:', conMore: 'More:', conType: 'Type', conDel: 'Delete digit', conPadDone: 'Done', conSame: 'Same as last', prevS: 'Prev.', conSave: 'Save changes', conLog: n => `Log set ${n}`,
@@ -435,7 +437,7 @@ Object.assign(STR.en, {
   waveKg: 'Weight (kg)', waveStep: 'Base step (kg)', waveStepD: 'How much the base grows when a cycle confirms it. 2.5 kg by default, use less at heavy weights.', waveRes: kg => `Wave base: ${kg} kg`, waveResNone: 'Enter a weight and I will work out the base.',
   waveHint: 'Weights in the session are a range from the base: start at the lower value, RPE beats the percentage. Never to 0 RIR on the bench.', waveSafety: 'A rack with safeties or a spotter, especially for the control set and a test. Pain, new neurological symptoms or an injury of unclear cause: do not change RPE or percentages, see a specialist. The app does not diagnose.',
   waveErr: 'Enter a weight from 20 to 400 kg.', waveErrStep: 'Base step: 0.5 to 10 kg.', waveCreate: 'Create plan', waveSave: 'Save', waveBadge: kg => `WB ${kg} kg`,
-  waveToday: (a, p, wb) => `${a} kg · ${p}% WB ${wb}`, waveBo: a => `back-off ${a} kg`, waveLow: 'Start at the lower value. RPE beats the percentage.', waveAmrapLine: 'Control set: AMRAP @9, stop at about 1 rep in reserve.', waveNoBase: 'No wave base, so I cannot work out the weights.',
+  waveToday: (a, p, wb) => `${a} kg · ${p}% WB ${wb}`, waveBo: a => `then ${a} kg`, waveLow: 'Start at the lower value. RPE beats the percentage.', waveAmrapLine: 'Control set: AMRAP @9, stop at about 1 rep in reserve.', waveNoBase: 'No wave base, so I cannot work out the weights.',
   waveEndTitle: 'End of the cycle', waveEndText: 'Start the next cycle with a new base?', waveEndBtn: 'New base and cycle', waveNextTitle: 'Next cycle', waveNow: kg => `Current base: ${kg} kg`, waveProp: kg => `Proposed base: ${kg} kg`,
   waveCtl: (kg, r, rpe, e) => `Control set: ${kg} kg × ${r} @${rpe}${e ? `, e1RM ${e} kg` : ''}`, waveCtlNone: 'No control set logged (Friday, week 3). The base stays as it is.', waveSgl: (kg, rpe) => `Monday single in week 3: ${kg} kg @${rpe}`,
   waveOwn: 'Your base (kg)', waveOwnD: 'You can always enter your own number. The base changes only when a new cycle starts.', waveComp: 'The control set was not comparable (different grip, pause, RIR or a health problem)', waveAmrapPct: 'Control set, % of base', waveStart2: 'Start the new cycle',
@@ -1582,7 +1584,7 @@ function vToday() {
 }
 function schemeShort(it, simple) {
   const u = targetUnit(it.exId);
-  if (it.scheme === 'topback') return `top ${it.reps}${u}${intensityShort(it)} + ${it.backoffSets}×${it.backoffReps || String(it.reps).replace('+', '')}${u}`;
+  if (it.scheme === 'topback') return `1 × ${it.reps}${u}${intensityShort(it)} + ${it.backoffSets} × ${it.backoffReps || String(it.reps).replace('+', '')}${u}`;
   return `${it.sets} × ${it.reps}${u}${simple ? '' : intensityShort(it)}`;
 }
 
@@ -1681,12 +1683,22 @@ function setPh(it, idx, c = gridCtx(it)) {
 /* fields a set logs, by how the exercise is logged */
 const setFields = log => (log === 'T' ? ['time'] : log === 'WD' ? ['weight', 'dist'] : ['weight', 'reps']);
 const fieldUnit = (k, log) => ({ weight: log === 'BWX' ? t('plusKg') : t('kg'), reps: t('reps'), time: t('time'), dist: t('dist') }[k]);
-const setNo = (it, s) => it.sets.filter((x, j) => j <= it.sets.indexOf(s) && x.kind === s.kind && x.side === s.side).length;
-function setTag(it, s) {
-  const n = setNo(it, s); const side = s.side ? (s.side === 'L' ? t('leftS') : t('rightS')) : '';
-  return ({ warmup: t('tagW') + n, top: t('tagTop'), backoff: t('tagB') + n, calib: t('tagK'), work: String(it.sets.filter((x, j) => j <= it.sets.indexOf(s) && x.kind === 'work' && x.side === s.side).length) }[s.kind] || String(n)) + side;
+/* sets are numbered in order; the plan's targets on each row tell a heavy single from lighter sets (0.18.1) */
+const setNo = (it, s) => { const side = s.side || null; return it.sets.filter((x, j) => j <= it.sets.indexOf(s) && (x.side || null) === side).length; };
+function setTag(it, s) { return String(setNo(it, s)) + (s.side ? (s.side === 'L' ? t('leftS') : t('rightS')) : ''); }
+function setLabel(it, s) { return t('work') + ' ' + setNo(it, s) + (s.side ? ' · ' + (s.side === 'L' ? t('left') : t('right')) : '') + (s.kind === 'warmup' ? ' · ' + t('warmupL') : ''); }
+/* the plan's targets for the card: "1×1 @7 · 2×5 @7-8", warm-ups left out */
+function targetSummary(it) {
+  const parts = [];
+  for (const s of it.sets) {
+    if (s.kind === 'warmup' || s.side === 'R' || !s.target || !s.target.reps) continue;
+    const r = s.target.rpe != null ? ` @${fmtN(s.target.rpe)}${s.target.rpeMax != null && s.target.rpeMax > s.target.rpe ? '–' + fmtN(s.target.rpeMax) : ''}` : s.target.pct ? ` · ${fmtN(s.target.pct)}%` : '';
+    const key = String(s.target.reps).replace('+', '+') + targetUnit(it.exId) + r;
+    const last = parts[parts.length - 1];
+    if (last && last.key === key) last.n++; else parts.push({ key, n: 1 });
+  }
+  return parts.map(x => `${x.n}×${x.key}`).join(' · ');
 }
-function setLabel(it, s) { return { warmup: t('warmup'), work: t('work') + ' ' + setNo(it, s), top: t('top'), backoff: t('backoff') + ' ' + setNo(it, s), calib: t('calib') }[s.kind] + (s.side ? ' · ' + (s.side === 'L' ? t('left') : t('right')) : ''); }
 function prevShort(p, ex, s) {
   if (!p) return '–';
   const log = ex.logging; const r = normRpe(p.rpe);
@@ -1719,26 +1731,30 @@ function conHtml() {
   const c = S.con; const it = c && findItem(c.i); const s = it && it.sets.find(x => x.id === c.s);
   if (!s) { S.con = null; return ''; }
   const idx = it.sets.indexOf(s), ex = S.ex.get(it.exId) || { logging: 'W' }, log = ex.logging, ph = setPh(it, idx), fields = setFields(log);
-  const step = k => (k === 'weight' ? (S.settings.increment || 2.5) : k === 'reps' ? 1 : k === 'time' ? 5 : 5);
-  const shown = k => (c.pad && c.f === k && c.buf != null ? (c.buf || '0').replace('.', S.settings.lang === 'pl' ? ',' : '.') : s[k] !== '' && s[k] != null ? fmtN(num(s[k])) : (ph[k] || '–'));
-  const isPh = k => !(c.pad && c.f === k && c.buf != null) && !(s[k] !== '' && s[k] != null);
-  const tile = k => `<div class="ct ${c.pad && c.f === k ? 'on' : ''}"><button class="pm" data-a="con-step" data-k="${k}" data-v="${-step(k)}" aria-label="${esc(t('conLess') + ' ' + fieldUnit(k, log))}">−</button><button class="mid" data-a="con-pad" data-k="${k}" aria-label="${esc(t('conType') + ' ' + fieldUnit(k, log))}"><b class="${isPh(k) ? 'ph' : ''}">${esc(shown(k))}</b><small>${esc(fieldUnit(k, log))}</small></button><button class="pm" data-a="con-step" data-k="${k}" data-v="${step(k)}" aria-label="${esc(t('conMore') + ' ' + fieldUnit(k, log))}">+</button></div>`;
+  const step = k => (k === 'weight' ? (S.settings.increment || 2.5) : k === 'reps' ? 1 : 5);
+  const typing = k => c.f === k && c.buf != null && c.buf !== '';
+  const shown = k => (typing(k) ? c.buf.replace('.', S.settings.lang === 'pl' ? ',' : '.') : s[k] !== '' && s[k] != null ? fmtN(num(s[k])) : (ph[k] || '–'));
+  const isPh = k => !typing(k) && !(s[k] !== '' && s[k] != null);
+  const tile = k => `<div class="ct ${c.f === k ? 'on' : ''}"><button class="pm" data-a="con-step" data-k="${k}" data-v="${-step(k)}" aria-label="${esc(t('conLess') + ' ' + fieldUnit(k, log))}">−</button><button class="mid" data-a="con-pad" data-k="${k}" aria-pressed="${c.f === k}" aria-label="${esc(fieldUnit(k, log))}"><b class="${isPh(k) ? 'ph' : ''}">${esc(shown(k))}</b><small>${esc(fieldUnit(k, log))}</small></button><button class="pm" data-a="con-step" data-k="${k}" data-v="${step(k)}" aria-label="${esc(t('conMore') + ' ' + fieldUnit(k, log))}">+</button></div>`;
   const feel = S.active.effort === 'fixed' && s.target && s.target.rpe != null;
   const r = normRpe(s.rpe);
-  const rpeTile = `<div class="ct rp"><div class="mid"><b class="${r == null ? 'ph' : ''}">${r == null ? esc(ph.rpe || '–') : fmtN(r)}</b><small>RPE</small></div></div>`;
-  const pad = `<div class="con-pad" role="group" aria-label="${esc(t('conType'))}">${['7', '8', '9', 'del', '4', '5', '6', '.', '1', '2', '3', '0'].map(k => `<button data-a="con-key" data-v="${k}" ${k === 'del' ? `aria-label="${esc(t('conDel'))}"` : ''}>${k === 'del' ? '⌫' : k}</button>`).join('')}</div>`;
-  const chips = feel ? `<div class="con-chips three" role="group" aria-label="${esc(t('feelTitle'))}">${['easy', 'ok', 'hard'].map(f => `<button class="${s.feel === f ? 'on' : ''}" data-a="con-feel" data-v="${f}">${esc(t('feel_' + f))}</button>`).join('')}</div>`
-    : `<div class="con-chips" role="group" aria-label="RPE">${[6, 7, 7.5, 8, 8.5, 9, 9.5, 10].map(v => `<button class="${r === v ? 'on' : ''}" data-a="con-rpe" data-v="${v}" aria-pressed="${r === v}">${fmtN(v)}</button>`).join('')}</div>`;
+  const rpeTile = `<button class="ct rp ${c.f === 'rpe' ? 'on' : ''}" data-a="con-pad" data-k="rpe" aria-pressed="${c.f === 'rpe'}"><span class="mid"><b class="${r == null ? 'ph' : ''}">${r == null ? esc(ph.rpe || '–') : fmtN(r)}</b><small>${feel ? esc(t('feelS')) : 'RPE'}</small></span></button>`;
+  const H = (STR[S.settings.lang] || STR.pl).rpeHints || {};
+  const body = c.f === 'rpe'
+    ? (feel ? `<div class="con-grid three" role="group" aria-label="${esc(t('feelTitle'))}">${['easy', 'ok', 'hard'].map(f => `<button class="${s.feel === f ? 'on' : ''}" data-a="con-feel" data-v="${f}">${esc(t('feel_' + f))}</button>`).join('')}</div>`
+      : `<div class="con-grid" role="group" aria-label="RPE">${[6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10].map(v => `<button class="${r === v ? 'on' : ''}" data-a="con-rpe" data-v="${v}" aria-pressed="${r === v}"><b>${fmtN(v)}</b><small>${esc(rirLabel(v))}</small></button>`).join('')}</div>`)
+    : `<div class="con-pad" role="group" aria-label="${esc(t('conType'))}">${['7', '8', '9', 'del', '4', '5', '6', '.', '1', '2', '3', '0'].map(k => `<button data-a="con-key" data-v="${k}" ${k === 'del' ? `aria-label="${esc(t('conDel'))}"` : ''}>${k === 'del' ? '⌫' : k}</button>`).join('')}</div>`;
   const p = ph.p;
   return `<div class="con" id="con" role="group" aria-label="${esc(exName(it.exId) + ', ' + setLabel(it, s))}">
     <div class="con-ctx"><span class="grow"><b>${esc(exName(it.exId))}</b> · ${esc(setLabel(it, s))}</span><button class="icon-btn" data-a="con-close" aria-label="${esc(t('close'))}">${I.x}</button></div>
-    <div class="con-prev">${esc(p ? `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ' · RPE ' + fmtN(normRpe(p.rpe)) : ' · ' + t('prevNoRpe')}` : t('prevNone'))}${it.reps ? ` · ${esc(t('tgtShort', it.reps + targetUnit(it.exId)))}` : ''}</div>
+    <div class="con-prev">${esc(p ? `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ' · RPE ' + fmtN(normRpe(p.rpe)) : ' · ' + t('prevNoRpe')}` : t('prevNone'))}${s.target && s.target.reps ? ` · ${esc(t('tgtShort', s.target.reps + targetUnit(it.exId) + (s.target.rpe != null ? ' @' + fmtN(s.target.rpe) + (s.target.rpeMax > s.target.rpe ? '–' + fmtN(s.target.rpeMax) : '') : '')))}` : ''}</div>
     <div class="con-vals ${fields.length === 1 ? 'one' : ''}">${fields.map(tile).join('')}${rpeTile}</div>
-    ${c.pad ? pad : chips}
-    <div class="con-acts"><button class="btn" data-a="${c.pad ? 'con-pad-done' : 'con-same'}" ${!c.pad && !p ? 'disabled' : ''}>${esc(c.pad ? t('conPadDone') : t('conSame'))}</button><button class="btn primary" data-a="con-log">${I.check}${esc(s.done ? t('conSave') : t('conLog', setTag(it, s)))}</button></div></div>`;
+    ${body}
+    <div class="con-acts"><button class="btn" data-a="con-same" ${!p ? 'disabled' : ''}>${esc(t('conSame'))}</button><button class="btn primary" data-a="con-log">${I.check}${esc(s.done ? t('conSave') : t('conLog', setTag(it, s)))}</button></div></div>`;
 }
+const rirLabel = v => (v >= 10 ? t('rir0') : v >= 9.5 ? t('rirMaybe') : t('rirN', String(Math.round((10 - v) * 2) / 2).replace('.', S.settings.lang === 'pl' ? ',' : '.')));
 function conCommit() {
-  const c = S.con; if (!c || !c.pad || c.buf == null) return;
+  const c = S.con; if (!c || c.f === 'rpe' || c.buf == null) return;
   const it = findItem(c.i); const s = it && it.sets.find(x => x.id === c.s);
   if (s && c.buf !== '') { s[c.f] = cleanField(c.f, c.buf).replace(',', '.'); if (s.done) s.pr = detectPR(it.exId, s); }
   c.buf = null; saveActive();
@@ -1893,7 +1909,7 @@ function vWorkout() {
     const med = pref('showMedia') && !L, cuesOn = pref('showCues');
     const col = !L && exCollapsed(it);
     const doneN = it.sets.filter(x => x.done).length;
-    const meta = [g ? `<span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : '', ex && ex.primary && ex.primary[0] ? esc(muscleName(ex.primary[0])) : '', ex ? esc(equipName(ex.equipment)) : '', cuesOn && (it.method || it.scheme === 'topback') ? esc(it.method ? methodName(it.method) : t('topback')) : ''].filter(Boolean).join(' · ');
+    const meta = [g ? `<span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : '', ex && ex.primary && ex.primary[0] ? esc(muscleName(ex.primary[0])) : '', ex ? esc(equipName(ex.equipment)) : '', cuesOn && it.method && it.method !== 'P1' ? esc(methodName(it.method)) : ''].filter(Boolean).join(' · ');
     const nameEl = L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>`
       : med ? `<button class="ex-name" data-a="${mediaOf(it.exId) ? 'media-open' : 'media-edit'}" data-v="${esc(it.exId)}">${esc(exName(it.exId))}</button>` : `<h3 class="ex-name">${esc(exName(it.exId))}</h3>`;
     const cueTxt = cuesOn && it.cues && it.cues.length ? it.cues : [];
@@ -1906,7 +1922,7 @@ function vWorkout() {
       ${col ? '' : `${prCard}
       ${pref('showSug') && !it.sug && !hasHistory(it.exId, a.startedAt) ? `<div class="muted small">${esc(t('firstTime'))}</div>` : ''}
       ${sugLine(it)}
-      ${it.reps ? `<div class="ex-tgt">${esc(t('tgtLbl'))} <b>${esc(it.reps + targetUnit(it.exId))}</b>${esc(rpeT)}</div>` : ''}
+      ${(tsum => tsum ? `<div class="ex-tgt">${esc(t('tgtLbl'))} <b>${esc(tsum)}</b></div>` : it.reps ? `<div class="ex-tgt">${esc(t('tgtLbl'))} <b>${esc(it.reps + targetUnit(it.exId))}</b>${esc(rpeT)}</div>` : '')(targetSummary(it))}
       ${cueTxt.length ? `<details class="fold cues-d"><summary><span class="lbl">${esc(t('cuesLbl'))}</span><span class="peek">${esc(cueTxt[0])}</span></summary><div class="cues">${cueTxt.map(c => `<div>${esc(c)}</div>`).join('')}</div></details>` : ''}
       ${note && note.text ? `<details class="fold note-d"><summary><span class="lbl">${esc(t('note'))}</span><span class="peek">${esc(note.text)}</span></summary><div class="note-full">${esc(note.text)}</div><button class="btn small ghost" data-a="note" data-v="${esc(it.exId)}">${esc(t('edit'))}</button></details>` : ''}
       ${it.pct ? `<div class="ex-meta"><button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button></div>` : ''}
@@ -3450,21 +3466,22 @@ const A = {
   'con-open': el => {
     conCommit();
     const k = el.dataset.k;
-    S.con = { i: el.dataset.i, s: el.dataset.s, f: k && k !== 'rpe' ? k : null, pad: !!(k && k !== 'rpe'), buf: k && k !== 'rpe' ? '' : null };
-    if (!S.con.f) { const it = findItem(el.dataset.i); S.con.f = setFields((S.ex.get(it.exId) || {}).logging)[0]; }
+    S.con = { i: el.dataset.i, s: el.dataset.s, f: k || null, buf: k && k !== 'rpe' ? '' : null };
+    if (!S.con.f) { const it = findItem(el.dataset.i); S.con.f = setFields((S.ex.get(it.exId) || {}).logging)[0]; S.con.buf = ''; }
     render(); scrollToSet(el.dataset.s);
   },
   'con-close': () => { conCommit(); S.con = null; render(); },
-  'con-pad': el => { conCommit(); S.con.f = el.dataset.k; S.con.pad = true; S.con.buf = ''; render(); },
-  'con-pad-done': () => { conCommit(); S.con.pad = false; render(); },
+  'con-pad': el => { conCommit(); S.con.f = el.dataset.k; S.con.buf = el.dataset.k === 'rpe' ? null : ''; render(); },
   'con-key': el => {
     const c = S.con; let b = c.buf ?? ''; const k = el.dataset.v;
+    if (c.f === 'rpe') return;
     if (k === 'del') b = b.slice(0, -1); else if (k === '.') { if (c.f !== 'reps' && !b.includes('.')) b = (b || '0') + '.'; } else if (b.length < 6) b = b === '0' ? k : b + k;
     c.buf = b; render();
   },
   'con-step': el => {
     conCommit();
     const it = findItem(S.con.i); const s = it.sets.find(x => x.id === S.con.s); const k = el.dataset.k;
+    S.con.f = k; S.con.buf = '';
     const ph = setPh(it, it.sets.indexOf(s));
     const base = num(s[k]) ?? num(String(ph[k] || '').replace(',', '.')) ?? 0;
     let v = Math.max(0, Math.round((base + +el.dataset.v) * 100) / 100);

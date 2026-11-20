@@ -170,7 +170,7 @@ try:
     ok("Górna granica" in p.locator(".sheet").inner_text(), "backoff 6-5 rejected")
     p.locator("#tg-bkhi").fill("8"); click(p, "button[data-a=item-save]")
     ok(p.evaluate("() => window.Repsmith.S.templates.at(-1).days[0].items[0].backoffReps") == "6-8", "backoff 6-8 saved")
-    ok("2×6-8" in p.locator("button[data-a=edit-item] .meta").first.inner_text(), "plan row shows 2×6-8: " + p.locator("button[data-a=edit-item] .meta").first.inner_text())
+    ok("2 × 6-8" in p.locator("button[data-a=edit-item] .meta").first.inner_text(), "plan row shows 2×6-8: " + p.locator("button[data-a=edit-item] .meta").first.inner_text())
     click(p, "button[data-a=edit-item] >> nth=0")
     ok(p.locator("button[data-a=bk-mode][data-v=range].on").count() == 1 and p.locator("#tg-bkhi").input_value() == "8", "backoff range reopens in range mode")
     p.screenshot(path=f"{SH}/06-backoff.png", full_page=True); noov(p, "backoff sheet")
