@@ -29,8 +29,9 @@ try:
     cards = p.locator(".ex-card")
     ok(cards.count() == 5, f"5 cards: {cards.count()}")
     c1 = cards.nth(1)
-    ok("hantle" in c1.locator(".ex-sub").inner_text().lower(), "equipment line: " + c1.locator(".ex-sub").inner_text())
-    ok(c1.locator(".mtag").count() == 1, "muscle tag: " + c1.locator(".mtag").inner_text())
+    eb = c1.locator(".ex-eb").inner_text().lower()
+    ok("hantle" in eb, "equipment in the card header (0.17): " + eb)
+    ok(eb.count("·") >= 2, "muscle and equipment in one header line: " + eb)
     p.screenshot(path=f"{_OUT}/01-card.png")
     # history sheet
     c1.locator("button[data-a=ex-hist]").click(); p.wait_for_timeout(200)

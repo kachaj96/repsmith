@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.16.0';
+const VERSION = '0.17.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -258,6 +258,14 @@ Object.assign(STR.pl, {
   calibChip: 'Kalibracja RPE', calibTitle: 'Seria kalibracyjna',
   calibText: 'Po rozgrzewce weź ciężar na około 8 powtórzeń. Rób powtórzenia, aż uznasz, że zostały 2 w zapasie. Zapamiętaj tę liczbę i rób dalej, ile się da w dobrej technice. Stop przy zmianie techniki.\n\nAplikacja porówna Twój strzał z rzeczywistością.',
   calibSafety: 'Nie rób tego na ciężkim przysiadzie bez asekuracji. Wyciskanie z asekuracją, maszyna albo suwnica są bezpieczniejsze.',
+  viewTitle: 'Widok treningu', viewMode: 'Tryb', view_simple: 'Prosty', view_advanced: 'Zaawansowany',
+  view_simpleD: 'Tylko to, co potrzebne do zapisu: ćwiczenie, seria, poprzedni wynik, pola i zatwierdzenie.', view_advancedD: 'Do tego podpowiedzi ciężaru, automatyczna przerwa, wskazówki planu i zdjęcia.',
+  viewCustom: 'Własne ustawienia: wybierz tryb, żeby wrócić do zestawu.', viewWhere: 'To samo ustawienie jest w Ustawieniach, sekcja Widok treningu. Twoje treningi się nie zmieniają.',
+  v_autoRest: 'Przerwa startuje sama', v_autoRestD: 'Po zatwierdzeniu serii rusza odliczanie. Wyłączone: start przyciskiem z czasem przerwy pod seriami.',
+  v_showSug: 'Podpowiedzi ciężaru', v_showSugD: 'Ciężar i progresja na dziś. Wyłączone: w polach widzisz poprzedni wynik.',
+  v_showCues: 'Wskazówki i opisy', v_showCuesD: 'Wskazówki planu i metoda progresji. Twoje notatki są zawsze widoczne.',
+  v_showMedia: 'Zdjęcia i wideo w treningu', v_showMediaD: 'Miniatury przy ćwiczeniach. Biblioteka ćwiczeń pokazuje je zawsze.',
+  setPrevHead: 'Poprzednio', prevNone: 'Brak poprzedniego wyniku', prevNoRpe: 'bez RPE', warmupS: 'Rozgrz.', addSetS: '+ Seria', removeSetS: 'Usuń ostatnią', restStart: 'Start przerwy', cuesLbl: 'Wskazówki',
   mediaAddBtn: 'Dodaj zdjęcie albo wideo', planShare: 'Udostępnij plan', planShareWhat: 'plik JSON do wysłania i wczytania w Repsmith na innym telefonie',
   planShareNot: 'W pliku są dni, ćwiczenia, serie i ustawienia cyklu. Nie ma Twoich treningów, wyników, maksów ani notatek.', planShareWave: 'Baza fali (WB) zostaje u Ciebie: osoba, która wczyta plan, poda własne 1RM albo e1RM.',
   planShareMedia: n => `Dołącz zdjęcia i linki ćwiczeń z planu (zdjęcia: ${n})`, planShareSize: kb => `Rozmiar pliku: ok. ${kb} KB`, planShareHow: 'Druga osoba wczytuje plik w Ustawieniach: Wczytaj kopię z pliku. Plan dochodzi jako nowy, jej dane zostają.',
@@ -393,6 +401,14 @@ Object.assign(STR.en, {
   calibChip: 'RPE calibration', calibTitle: 'Calibration set',
   calibText: 'After warming up, take a load you can do about 8 reps with. Do reps until you believe 2 are left. Remember that number, then keep going as long as form holds. Stop at a form change.\n\nThe app compares your call with what really happened.',
   calibSafety: 'Do not do this on a heavy squat without safeties. A bench with safeties, a machine or a leg press is safer.',
+  viewTitle: 'Workout view', viewMode: 'Mode', view_simple: 'Simple', view_advanced: 'Advanced',
+  view_simpleD: 'Only what logging needs: exercise, set, previous result, fields and confirm.', view_advancedD: 'Plus weight suggestions, automatic rest, plan tips and photos.',
+  viewCustom: 'Your own settings: pick a mode to go back to a preset.', viewWhere: 'The same setting is in Settings, Workout view. Your workouts do not change.',
+  v_autoRest: 'Rest starts by itself', v_autoRestD: 'Confirming a set starts the countdown. Off: start it with the rest button under the sets.',
+  v_showSug: 'Weight suggestions', v_showSugD: 'Today\'s weight and progression. Off: the fields show your previous result.',
+  v_showCues: 'Tips and descriptions', v_showCuesD: 'Plan tips and the progression method. Your notes always show.',
+  v_showMedia: 'Photos and video in the workout', v_showMediaD: 'Thumbnails next to exercises. The exercise library always shows them.',
+  setPrevHead: 'Previous', prevNone: 'No previous result', prevNoRpe: 'no RPE', warmupS: 'Warm-up', addSetS: '+ Set', removeSetS: 'Remove last', restStart: 'Start rest', cuesLbl: 'Tips',
   mediaAddBtn: 'Add a photo or video', planShare: 'Share plan', planShareWhat: 'a JSON file to send and load into Repsmith on another phone',
   planShareNot: 'The file holds the days, exercises, sets and cycle settings. It does not hold your workouts, results, maxes or notes.', planShareWave: 'The wave base (WB) stays with you: the person who loads the plan enters their own 1RM or e1RM.',
   planShareMedia: n => `Include the photos and links of the plan exercises (photos: ${n})`, planShareSize: kb => `File size: about ${kb} KB`, planShareHow: 'The other person loads the file in Settings: Load backup from file. The plan is added as a new one, their data stays.',
@@ -1243,7 +1259,7 @@ function matchPrev(prevItem, item, idx) {
   if (!prevItem) return null;
   const set = item.sets[idx];
   const ord = item.sets.slice(0, idx + 1).filter(s => s.kind === set.kind && s.side === set.side).length - 1;
-  const cands = prevItem.sets.filter(s => s.kind === set.kind && s.side === set.side);
+  const cands = prevItem.sets.filter(s => s.kind === set.kind && (s.side || null) === (set.side || null) && s.done !== false);
   return cands[ord] || null;
 }
 function fmtSet(s, ex) {
@@ -1351,6 +1367,20 @@ function beep() {
   try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
   if (!audioCtx || !soundOn()) return;
   try { ensureAudio(); const m = volMul(); tone(880, 0, 0.2, 0.6 * m); tone(1175, 0.22, 0.2, 0.6 * m); tone(1568, 0.44, 0.45, 0.7 * m); } catch (e) {}
+}
+/* ---------- training view (0.17): two presets over four independent switches ----------
+   A preset only writes the four switches; the label shown is the preset that matches them, otherwise "custom".
+   Missing keys mean "on", so users of earlier versions keep what they had (the advanced view). */
+const VIEW_KEYS = ['autoRest', 'showSug', 'showCues', 'showMedia'];
+const VIEW_PRESET = { simple: { autoRest: false, showSug: false, showCues: false, showMedia: false }, advanced: { autoRest: true, showSug: true, showCues: true, showMedia: true } };
+const pref = k => S.settings[k] !== false;
+const viewMode = () => Object.keys(VIEW_PRESET).find(m => VIEW_KEYS.every(k => pref(k) === VIEW_PRESET[m][k])) || 'custom';
+function viewBlock() {
+  const m = viewMode();
+  const row = (k) => `<div class="vrow"><div class="grow"><div class="vl">${esc(t('v_' + k))}</div><div class="muted small">${esc(t('v_' + k + 'D'))}</div></div><button class="switch ${pref(k) ? 'on' : ''}" role="switch" aria-checked="${pref(k)}" aria-label="${esc(t('v_' + k))}" data-a="view-flag" data-k="${k}"><span></span></button></div>`;
+  return `<div><label>${esc(t('viewMode'))}</label><div class="chips seg1" role="group" aria-label="${esc(t('viewMode'))}">${['simple', 'advanced'].map(k => `<button class="chip ${m === k ? 'on' : ''}" data-a="view-mode" data-v="${k}" aria-pressed="${m === k}">${esc(t('view_' + k))}</button>`).join('')}</div>
+    <div class="muted small" style="margin-top:6px">${esc(m === 'custom' ? t('viewCustom') : t('view_' + m + 'D'))}</div></div>
+    <div class="vlist">${VIEW_KEYS.map(row).join('')}</div>`;
 }
 function startTimer(sec) { if (soundOn()) { ensureAudio(); silentLoop(true); } S.timer = { endAt: now() + sec * 1000, total: sec, fired: false, lastTick: null }; clearTimeout(S._timerHide); renderTimer(); }
 function adjustTimer(d) {
@@ -1560,7 +1590,7 @@ function vNewPlan() {
 }
 const planMode = tp => (tp && tp.mode === 'simple' ? 'simple' : 'advanced');
 function vPlans() {
-  const list = S.templates.map(tp => `<button class="list-btn row" data-a="open-plan" data-v="${tp.id}"><span class="grow"><span class="name">${esc(tp.name)}</span><br><span class="meta">${tp.days.length} × ${esc(t('day').toLowerCase())}</span></span>${tp.id === S.settings.activeTemplateId ? `<span class="tag p">${esc(t('active'))}</span>` : ''}</button>`).join('');
+  const list = S.templates.map(tp => `<button class="list-btn row" data-a="open-plan" data-v="${tp.id}"><span class="grow"><span class="name">${esc(tp.name)}</span><br><span class="meta">${esc(t('perWeek', tp.perWeek || tp.days.length))}${tp.cycle && tp.cycle.type === 'fixed' ? ' · ' + esc(t('cycWeeksN', tp.cycle.weeks)) : ''}</span></span>${tp.id === S.settings.activeTemplateId ? `<span class="tag p">${esc(t('active'))}</span>` : ''}</button>`).join('');
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('plans'))}</h1>
     ${S.templates.length ? `<div class="card">${list}</div>` : `<div class="info"><h3>${esc(t('plansEmptyTitle'))}</h3><div>${esc(t('plansEmptyText'))}</div></div>`}
     <button class="btn primary block" data-a="wiz-start">${esc(t('pickPlanWizard'))}</button>
@@ -1620,8 +1650,10 @@ function setGrid(it) {
   const c2 = log === 'T' ? t('time') : log === 'BWX' ? t('plusKg') : t('kg');
   const c3 = log === 'T' ? '' : log === 'WD' ? t('dist') : t('reps');
   const topDone = it.sets.find(s => s.kind === 'top' && s.done && num(s.weight));
-  const lastE = log === 'W' ? lastE1rm(it.exId, S.active.startedAt) : null;
-  const sug = it.sug && it.sug.load != null ? it.sug : null;
+  const showSug = pref('showSug');
+  const lastE = log === 'W' && showSug ? lastE1rm(it.exId, S.active.startedAt) : null;
+  const sug = showSug && it.sug && it.sug.load != null ? it.sug : null;
+  const cur = it.sets.findIndex(x => !x.done);
   const rows = it.sets.map((s, idx) => {
     const p = matchPrev(prevItem, it, idx);
     let phW = p ? fmtN(num(p.weight)) : '';
@@ -1632,25 +1664,27 @@ function setGrid(it) {
     }
     let phR = p ? (p.reps || '') : tgt;
     if (sug && (s.kind === 'work' || s.kind === 'top')) phW = fmtN(sug.load);
-    if (it.sug && it.sug.reps && s.kind === 'work') { const k = it.sets.slice(0, idx + 1).filter(x => x.kind === 'work' && x.side === s.side).length - 1; if (it.sug.reps[k] != null) phR = String(it.sug.reps[k]); }
-    else if (it.sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
+    if (sug && it.sug.reps && s.kind === 'work') { const k = it.sets.slice(0, idx + 1).filter(x => x.kind === 'work' && x.side === s.side).length - 1; if (it.sug.reps[k] != null) phR = String(it.sug.reps[k]); }
+    else if (sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
     if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundLoad(it.exId, sug.load * (it.backoffPct || 90) / 100));
-    if (s.kind === 'backoff' && topDone) phW = fmtN(roundLoad(it.exId, num(topDone.weight) * (it.backoffPct || 90) / 100));
-    if (it.wave && s.kind !== 'warmup') phW = fmtN((s.kind === 'backoff' && it.wave.bo ? it.wave.bo : it.wave).lo);
+    if (s.kind === 'backoff' && topDone && showSug) phW = fmtN(roundLoad(it.exId, num(topDone.weight) * (it.backoffPct || 90) / 100));
+    if (it.wave && s.kind !== 'warmup' && showSug) phW = fmtN((s.kind === 'backoff' && it.wave.bo ? it.wave.bo : it.wave).lo);
     const phRpe = s.target && s.target.rpe ? (s.target.rpeMax > s.target.rpe ? `${fmtN(s.target.rpe)}-${fmtN(s.target.rpeMax)}` : fmtN(s.target.rpe)) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
-    const kindLbl = { warmup: t('warmup'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff'), calib: t('calib') }[s.kind];
+    const kindLbl = { warmup: t('warmupS'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff'), calib: t('calib') }[s.kind];
     const side = (s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '') + (amrap ? '<span class="side-tag amrap">AMRAP</span>' : '');
     const f = (field, val, ph, cls = '') => `<input class="${cls}" inputmode="${field === 'reps' ? 'numeric' : 'decimal'}" autocomplete="off" enterkeyhint="next" aria-label="${esc(field)}" data-f="set" data-i="${it.id}" data-s="${s.id}" data-k="${field}" value="${esc(val)}" placeholder="${esc(ph)}">`;
     let a, b;
     if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
     else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
     else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
-    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
-      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + kindLbl)}"><span class="kl">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}</span>${s.fail ? `<span class="side-tag set-flag">${esc(t('failTag'))}</span>` : ''}${s.drop ? `<span class="side-tag set-flag">${esc(t('dropTag'))}</span>` : ''}${s.note ? '<span class="side-tag set-flag" aria-hidden="true">✎</span>' : ''}</button>
-      <span class="prev">${esc(p ? fmtSet(p, ex) : '–')}${p && normRpe(p.rpe) ? `<small>@${esc(fmtN(normRpe(p.rpe)))}</small>` : ''}</span>${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
+    const prevTxt = !p ? '–' : (log === 'W' || log === 'BWX' || log === 'R') && s.kind !== 'warmup' && normRpe(p.rpe) == null ? `${fmtSet(p, ex)} @–` : `${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ' @' + fmtN(normRpe(p.rpe)) : ''}`;
+    const prevAria = !p ? t('prevNone') : `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ', RPE ' + fmtN(normRpe(p.rpe)) : ', ' + t('prevNoRpe')}`;
+    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${idx === cur ? 'cur' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
+      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + kindLbl)}"><span class="kl">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}${s.fail ? `<span class="side-tag set-flag">${esc(t('failTag'))}</span>` : ''}${s.drop ? `<span class="side-tag set-flag">${esc(t('dropTag'))}</span>` : ''}${s.note ? '<span class="side-tag set-flag" aria-hidden="true">✎</span>' : ''}</span><span class="prev" aria-label="${esc(prevAria)}">${esc(prevTxt)}</span></button>
+      ${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
-  return `<div class="sets"><div class="set-head"><span>${esc(t('sets'))}</span><span>${esc(t('prev'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
+  return `<div class="sets"><div class="set-head"><span>${esc(t('setPrevHead'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
 }
 function waveLine(it) {
   const w = it.wave, r = (a, b) => (a === b ? fmtN(a) : `${fmtN(a)}-${fmtN(b)}`);
@@ -1660,6 +1694,7 @@ function waveLine(it) {
   return `<div class="sug">${parts.join(' · ')}</div>`;
 }
 function sugLine(it) {
+  if (!pref('showSug')) return '';
   if (it.wave) return waveLine(it);
   const g = it.sug; if (!g) return '';
   const ex = S.ex.get(it.exId) || {};
@@ -1768,26 +1803,30 @@ function vWorkout() {
     }
     const prSets = it.sets.filter(x => x.pr && x.pr.length);
     const prCard = prSets.length ? `<div class="pr-card ${S._justPR === it.id ? 'pop' : ''}"><b>PR</b><span>${esc(fmtSet(prSets[prSets.length - 1], ex))} · ${esc(prLabel([...new Set(prSets.flatMap(x => x.pr))]))}</span></div>` : '';
+    const med = pref('showMedia') && !L, cuesOn = pref('showCues');
+    const eyebrow = [`${n + 1} / ${a.items.length}`, g ? `<span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : '', ex && ex.primary && ex.primary[0] ? esc(muscleName(ex.primary[0])) : '', ex ? esc(equipName(ex.equipment)) : '', cuesOn && (it.method || it.scheme === 'topback') ? esc(it.method ? methodName(it.method) : t('topback')) : ''].filter(Boolean).join(' · ');
+    const nameEl = L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>`
+      : med ? `<button class="ex-name" data-a="${mediaOf(it.exId) ? 'media-open' : 'media-edit'}" data-v="${esc(it.exId)}">${esc(exName(it.exId))}</button>` : `<h3 class="ex-name">${esc(exName(it.exId))}</h3>`;
+    const cueTxt = cuesOn && it.cues && it.cues.length ? it.cues : [];
+    const restChip = pref('autoRest') ? `<button class="chip" data-a="rest-edit" data-i="${it.id}" aria-label="${esc(t('rest'))}">${I.clock.replace('<svg ', '<svg width="16" height="16" ')} ${esc(fmtClock(it.rest || 0))}</button>`
+      : `<button class="chip" data-a="rest-start" data-i="${it.id}" aria-label="${esc(t('restStart'))}">${I.play.replace('<svg ', '<svg width="14" height="14" ')} ${esc(fmtClock(it.rest || 0))}</button>`;
     return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
-      <div class="eyebrow small">${n + 1} / ${a.items.length}${g ? ` · <span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : ''}${ex && ex.primary && ex.primary[0] ? ` <span class="mtag">${esc(muscleName(ex.primary[0]))}</span>` : ''}</div>
-      <div class="ex-head">${L ? '' : mediaThumb(it.exId)}<div class="ex-name-row" data-lp="${it.id}">${L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>` : ''}<button class="ex-name" data-a="${mediaOf(it.exId) ? 'media-open' : 'media-edit'}" data-v="${esc(it.exId)}" ${L ? 'hidden' : ''}>${esc(exName(it.exId))}</button><span class="ex-tools"><button class="icon-btn" data-a="ex-hist" data-v="${esc(it.exId)}" aria-label="${esc(t('histAria'))}">${I.hist}</button><button class="icon-btn note-ic ${note && note.text ? 'has' : ''}" data-a="note" data-v="${esc(it.exId)}" aria-label="${esc(t('note'))}">${I.note}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div></div>
-      ${ex ? `<div class="ex-sub">${esc(equipName(ex.equipment))}</div>` : ''}
+      <div class="ex-head">${med ? mediaThumb(it.exId) : ''}<div class="ex-titles"><div class="eyebrow small ex-eb">${eyebrow}</div><div class="ex-name-row" data-lp="${it.id}">${nameEl}</div></div>
+        <span class="ex-tools"><button class="icon-btn" data-a="ex-hist" data-v="${esc(it.exId)}" aria-label="${esc(t('histAria'))}">${I.hist}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div>
       ${prCard}
-      ${it.sug || hasHistory(it.exId, a.startedAt) ? '' : `<div class="muted small">${esc(t('firstTime'))}</div>`}
+      ${pref('showSug') && !it.sug && !hasHistory(it.exId, a.startedAt) ? `<div class="muted small">${esc(t('firstTime'))}</div>` : ''}
       ${sugLine(it)}
-      ${it.cues && it.cues.length ? `<div class="cues">${it.cues.map(c => `<div>${esc(c)}</div>`).join('')}</div>` : ''}
-      <div class="ex-meta"><span>${esc(it.method ? methodName(it.method) : it.scheme === 'topback' ? t('topback') : t('straight'))}</span>
-        <button class="chip" data-a="rest-edit" data-i="${it.id}">${I.clock.replace('<svg ', '<svg width="18" height="18" ')} ${it.rest} s</button>
-        ${it.pct ? `<button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button>` : ''}</div>
-      ${note && note.text ? `<button class="note-box" data-a="note" data-v="${esc(it.exId)}"><span class="lbl">${esc(t('note'))}</span>${esc(note.text)}</button>` : ''}
+      ${cueTxt.length ? `<details class="fold cues-d"><summary><span class="lbl">${esc(t('cuesLbl'))}</span><span class="peek">${esc(cueTxt[0])}</span></summary><div class="cues">${cueTxt.map(c => `<div>${esc(c)}</div>`).join('')}</div></details>` : ''}
+      ${note && note.text ? `<details class="fold note-d"><summary><span class="lbl">${esc(t('note'))}</span><span class="peek">${esc(note.text)}</span></summary><div class="note-full">${esc(note.text)}</div><button class="btn small ghost" data-a="note" data-v="${esc(it.exId)}">${esc(t('edit'))}</button></details>` : ''}
+      ${it.pct ? `<div class="ex-meta"><button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button></div>` : ''}
       ${setGrid(it)}
-      <div class="set-actions"><button class="btn small" data-a="add-set" data-i="${it.id}">${esc(t('addSet'))}</button>${it.sets.length ? `<button class="btn small ghost" data-a="del-set" data-i="${it.id}">${esc(t('removeSet'))}</button>` : ''}</div>
+      <div class="set-actions"><button class="btn small" data-a="add-set" data-i="${it.id}">${esc(t('addSetS'))}</button>${it.sets.length ? `<button class="btn small ghost" data-a="del-set" data-i="${it.id}">${esc(t('removeSetS'))}</button>` : ''}<span class="grow"></span>${restChip}</div>
     </section>`;
   }).join('');
   return `<main class="screen workout">${linkBar()}
     <div class="wk-head"><button class="icon-btn" data-a="nav" data-v="today" aria-label="${esc(t('back'))}">${I.down}</button>
       <div class="wk-title"><button class="t" data-a="rename" style="background:none;border:0;padding:0;max-width:100%" aria-label="${esc(t('rename'))}">${esc(a.name)} <span class="muted" aria-hidden="true">✎</span></button><div class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</div></div>
-      <button class="btn small ghost" data-a="finish">${esc(t('finish'))}</button></div>
+      <button class="icon-btn" data-a="wk-view" aria-label="${esc(t('viewTitle'))}">${I.gear}</button><button class="btn small ghost" data-a="finish">${esc(t('finish'))}</button></div>
     ${a.notes && a.notes.length ? `<div class="info wk-notes">${a.notes.map(n => `<div>${esc(n)}</div>`).join('')}</div>` : ''}
     ${cards || `<div class="empty">${esc(t('addExercise'))}</div>`}
     <div class="workout-foot"><button class="btn block" data-a="session-add-ex">${esc(t('addExercise'))}</button>
@@ -2194,7 +2233,7 @@ function vLibrary() {
   return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('library'))}</h1>
     <div><label for="libq" class="sr">${esc(t('search'))}</label><input id="libq" type="search" data-f="lib-q" placeholder="${esc(t('search'))}" value="${esc(st.q)}" autocomplete="off"></div>
     <div class="chips">${bodyToggle()}</div>
-    ${S.settings.showBody !== false ? bm({ sel: st.mus, interactive: true, aria: t('muscleGroup') }) : ''}
+    ${S.settings.showBody !== false ? bm({ sel: st.mus, interactive: true, aria: t('muscleGroup') }, 'compact lib') : ''}
     ${filterBar(st, 'lib')}
     <button class="btn block" data-a="custom-new">${esc(t('addCustom'))}</button>
     <div class="card" id="liblist">${exRows(list, 'ex-detail')}</div></main>`;
@@ -2762,6 +2801,8 @@ function renderSheet() {
     const n = S.notes[sh.exId];
     body = `${head(exName(sh.exId))}<div><label for="notearea">${esc(t('note'))}</label><textarea id="notearea" rows="5" placeholder="${esc(t('notePh'))}">${esc(n ? n.text : '')}</textarea></div><div class="muted small">${esc(t('noteHint'))}</div>
       <div class="btn-row">${n && n.text ? `<button class="btn danger" data-a="note-del">${esc(t('delete'))}</button>` : ''}<button class="btn primary" data-a="note-save">${esc(t('save'))}</button></div>`;
+  } else if (sh.type === 'wkView') {
+    body = `${head(t('viewTitle'))}${viewBlock()}<div class="muted small">${esc(t('viewWhere'))}</div>`;
   } else if (sh.type === 'rest') {
     body = `${head(t('rest'))}<div>${fld('rest-val', t('rest'), sh.val)}</div><div class="chips">${[60, 90, 120, 150, 180, 240, 300].map(v => `<button class="chip ${v === sh.val ? 'on' : ''}" data-a="rest-pick" data-v="${v}">${fmtClock(v)}</button>`).join('')}</div><button class="btn primary block" data-a="rest-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'menu') {
@@ -2855,7 +2896,7 @@ function renderSheet() {
     body = `${head(t('settings'))}
       <div><label>${esc(t('themeLbl'))}</label><div class="chips seg1">${['system', 'light', 'dark'].map(v => `<button class="chip ${(st.theme || 'system') === v ? 'on' : ''}" data-a="theme" data-v="${v}" aria-pressed="${(st.theme || 'system') === v}">${esc(t('theme_' + v))}</button>`).join('')}</div></div>
       <div><label>${esc(t('language'))}</label><div class="chips seg1"><button class="chip ${st.lang === 'pl' ? 'on' : ''}" data-a="lang" data-v="pl">Polski</button><button class="chip ${st.lang === 'en' ? 'on' : ''}" data-a="lang" data-v="en">English</button></div></div>
-      ${disc('set-workout', t('secWorkout'), workout)}${disc('set-sound', t('secSound'), sound)}${disc('set-coach', t('coachSec'), coach)}${disc('set-data', t('secData'), data)}
+      ${disc('set-view', t('viewTitle'), viewBlock())}${disc('set-workout', t('secWorkout'), workout)}${disc('set-sound', t('secSound'), sound)}${disc('set-coach', t('coachSec'), coach)}${disc('set-data', t('secData'), data)}
       <div class="credits"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${esc(t('madeBy'))}</div><div class="muted small">${esc(t('bodyCredit'))}</div><div class="muted small">${esc(t('version'))} ${VERSION} · ${esc(DB.ok ? t('dataLocal') : t('storageOff'))}</div></div>`;
   }
   el.innerHTML = `<div class="scrim ${fresh ? 'enter' : ''}" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
@@ -3310,7 +3351,7 @@ const A = {
       const items = S.active.items, ix = items.indexOf(it), sIdx = it.sets.indexOf(s);
       const later = it.group ? items.slice(ix + 1).filter(x => x.group === it.group) : [];
       const wait = later.some(x => x.sets.length > sIdx);
-      if (!wait) startTimer(it.rest || S.settings.restI);
+      if (!wait) { if (pref('autoRest')) startTimer(it.rest || S.settings.restI); }
       else { const nx = later.find(x => x.sets.length > sIdx); S._focusNext = { i: nx.id, s: nx.sets[sIdx].id }; }
     } else { s.done = false; s.pr = []; }
     let advance = null;
@@ -3451,7 +3492,7 @@ const A = {
     S.calib.push({ id: uid(), exId: it.exId, at: now(), w: sh.w, guess: sh.g, total: sh.tot, err, mode });
     persist('calib'); saveActive();
     sh.res = { err, mode }; sh.err = null; render(); renderSheet();
-    if (ex && !ex.unilateral) startTimer(it.rest || S.settings.restC);
+    if (ex && !ex.unilateral && pref('autoRest')) startTimer(it.rest || S.settings.restC);
   },
   'calib-apply': el => {
     const tp = S.active && S.templates.find(x => x.id === S.active.templateId);
@@ -3459,6 +3500,9 @@ const A = {
     if (S.active) { S.active.effort = el.dataset.v; saveActive(); }
     closeSheet(); toast(t('saved')); render();
   },
+  'view-mode': el => { Object.assign(S.settings, VIEW_PRESET[el.dataset.v]); persist('settings'); renderSheet(); render(); },
+  'view-flag': el => { const k = el.dataset.k; S.settings[k] = !pref(k); persist('settings'); renderSheet(); render(); },
+  'wk-view': () => openSheet({ type: 'wkView' }),
   'set-flag': el => { readSettingsFields(); S.settings[el.dataset.k] = el.dataset.v === '1'; document.body.classList.toggle('calm', S.settings.calm === true); persist('settings'); renderSheet(); },
   'rpe-set': el => {
     if (S.sheet.mode === 'item') {
@@ -3477,6 +3521,7 @@ const A = {
   'sub-pick': () => { const it = findItem(S.sheet.itemId); openSheet({ type: 'picker', target: { kind: 'swap', itemId: it.id }, pat: (S.ex.get(it.exId) || {}).pattern || '' }); },
   'rest-edit': el => { const it = findItem(el.dataset.i); openSheet({ type: 'rest', itemId: it.id, val: it.rest }); },
   'rest-pick': el => { S.sheet.val = +el.dataset.v; renderSheet(); },
+  'rest-start': el => { const it = findItem(el.dataset.i); if (!it) return; ensureAudio(); startTimer(it.rest || S.settings.restI); },
   'rest-save': () => { const v = num($('#rest-val').value); const it = findItem(S.sheet.itemId); if (v && v > 0) it.rest = Math.round(v); saveActive(); closeSheet(); render(); },
   'item-menu': el => {
     const it = findItem(el.dataset.i); const i = S.active.items.indexOf(it); const ref = { dataset: { i: it.id, v: it.id } };
@@ -3484,13 +3529,14 @@ const A = {
       { id: 'info', label: t('progression') },
       ...(canCalib(it) ? [{ id: 'cal', label: t('calibChip') }] : []),
       ...(isBarEx(it.exId) ? [{ id: 'plates', label: t('plateChip') }] : []),
-      { id: 'swap', label: t('subs') }, { id: 'note', label: t('note') },
+      { id: 'swap', label: t('subs') }, { id: 'note', label: t('note') }, { id: 'rest', label: t('rest') + ': ' + fmtClock(it.rest || 0) },
       { id: 'grp', label: t('supBtn') + '…' },
       ...(i > 0 ? [{ id: 'up', label: t('moveUp') }] : []), ...(i < S.active.items.length - 1 ? [{ id: 'down', label: t('moveDown') }] : []),
       { id: 'del', label: t('remove'), danger: true }],
       handlers: {
         info: () => A['scheme-info'](ref), cal: () => A['calib-open'](ref), plates: () => A['plates-open'](ref), swap: () => A.subs(ref),
         note: () => A.note({ dataset: { v: it.exId } }),
+        rest: () => A['rest-edit'](ref),
         grp: () => groupMenu(S.active.items, it, saveActive),
         up: () => { S.active.items.splice(i, 1); S.active.items.splice(i - 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
         down: () => { S.active.items.splice(i, 1); S.active.items.splice(i + 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
@@ -4064,6 +4110,12 @@ document.addEventListener('click', ev => {
   if (el.dataset.a === 'scrim') { if (ev.target === el) closeSheet(); return; }
   if (el.dataset.a === 'chart-tap') { chartTap(el, ev); return; }
   fn(el, ev);
+});
+document.addEventListener('focusin', ev => {
+  const el = ev.target;
+  if (!el || el.dataset.f !== 'set') return;
+  // the soft keyboard opens after focus: bring the edited row to the middle of what is left of the screen
+  setTimeout(() => { const r = el.closest('.set'); if (r && document.activeElement === el) r.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 320);
 });
 document.addEventListener('input', ev => {
   const el = ev.target; const f = el.dataset.f;

@@ -1,0 +1,113 @@
+"""0.17: workout view switches (auto rest, suggestions, tips, media), simple/advanced presets, set rows."""
+import os as _os, subprocess, sys, time
+from playwright.sync_api import sync_playwright
+import _nosplash  # noqa: F401
+_APP = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", ".."))
+srv = subprocess.Popen([sys.executable, "-m", "http.server", "8783", "-d", _APP], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)
+P = F = 0; errs = []
+def ok(c, m):
+    global P, F
+    if c: P += 1; print("PASS", m)
+    else: F += 1; print("FAIL", m)
+PNG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEklEQVR4nGNgYGD4z0AEYBxVSFUAAG8VAQHT8U7OAAAAAElFTkSuQmCC"
+SEED = """() => { const R = window.Repsmith, S = R.S;
+  S.sessions = [{ id: 'old', templateId: 'x', name: 'old', startedAt: Date.now() - 3*864e5, endedAt: Date.now() - 3*864e5 + 3600e3, items: [
+    { id: 'o1', exId: 'bench-press', sets: [{ id: 'a', kind: 'top', side: null, done: true, weight: '102.5', reps: '1', rpe: '7.5' }, { id: 'b', kind: 'backoff', side: null, done: true, weight: '92.5', reps: '5', rpe: '' }, { id: 'c', kind: 'backoff', side: null, done: false, weight: '95', reps: '5', rpe: '9' }] }] }];
+  S.notes['bench-press'] = { text: 'Łopatki ściągnięte' }; S.media = { 'bench-press': { imgs: [{ id: 'm1', src: '%s' }], links: [], cap: '' } };
+  R.persist('sessions', 'notes', 'media'); R.render(); }""" % PNG
+sel = lambda p, q: p.locator(q)
+def vis_sets(p): return p.evaluate("() => [...document.querySelectorAll('.ex-card')][0].querySelectorAll('.set').length")
+try:
+  with sync_playwright() as pw:
+    b = pw.chromium.launch()
+    ctx = b.new_context(viewport={"width": 360, "height": 760}, locale="pl-PL", color_scheme="dark", has_touch=True)
+    p = ctx.new_page(); p.on("pageerror", lambda e: errs.append(str(e)))
+    p.goto("http://localhost:8783/index.html"); p.wait_for_selector("text=Dziś trening")
+    ok(p.evaluate("() => ['autoRest','showSug','showCues','showMedia'].every(k => window.Repsmith.S.settings[k] === undefined)"), "existing users: no stored switches (all on = advanced, nothing changes for them)")
+    p.evaluate("() => { window.Repsmith.S.templates = []; window.Repsmith.A['plib-use']({ dataset: { v: 'BENCH-PRIO-W4' } }); }")
+    p.wait_for_selector("#wv-kg"); p.fill("#wv-kg", "120"); p.locator("button[data-a=wave-start-save]").click(); p.wait_for_timeout(300)
+    p.evaluate(SEED)
+    p.locator("button[data-a=start-day]").click(); p.wait_for_timeout(300)
+    if p.locator('button[data-a=ready-pick][data-v="4"]').count(): p.locator('button[data-a=ready-pick][data-v="4"]').click(); p.wait_for_timeout(300)
+    card = p.locator(".ex-card").first
+    # 3. previous result: recorded sets only, missing RPE shown as @-
+    prevs = card.locator(".set .prev").all_inner_texts()
+    ok(prevs[3] == "102,5×1 @7,5" and prevs[4] == "92,5×5 @–" and prevs[5] == "–", f"previous: with RPE, without RPE, unconfirmed set not used ({prevs[3:6]})")
+    ok("bez RPE" in (card.locator(".set .prev").nth(4).get_attribute("aria-label") or ""), "missing RPE is read out as 'bez RPE'")
+    ok(p.locator(".ex-card").nth(1).locator(".set .prev").first.inner_text() == "–", "no history: dash, nothing invented")
+    # advanced (default)
+    ok(card.locator(".sug").count() == 1 and card.locator(".ex-thumb img").count() == 1 and card.locator(".cues-d").count() == 1, "advanced: suggestion, thumbnail and folded tips")
+    ph = card.locator("input[data-k=weight]").nth(3).get_attribute("placeholder")
+    ok(ph == "105", f"advanced: weight field shows the suggested 105 ({ph})")
+    ok(card.locator(".cues-d").get_attribute("open") is None and card.locator(".note-d").get_attribute("open") is None, "tips and note are folded to one line")
+    ok(card.locator(".set.cur").count() == 1 and card.locator(".set").first.get_attribute("class").find("cur") >= 0, "the first open set is marked as current")
+    # 1. auto rest on
+    card.locator("button[data-a=set-done]").first.click(); p.wait_for_timeout(200)
+    ok(p.locator("#timer").count() == 1, "auto rest on: timer starts after a set")
+    p.evaluate("() => window.Repsmith.stopTimer()")
+    ok(card.locator(".set.cur").count() == 1 and "cur" in card.locator(".set").nth(1).get_attribute("class"), "current marker moves to the next set")
+    # quick switch during the workout
+    p.locator("button[data-a=wk-view]").click(); p.wait_for_timeout(150)
+    ok(p.locator("#sheet .switch").count() == 4 and "Zaawansowany" in p.locator("#sheet .chip.on").inner_text(), "workout view sheet: 4 switches, advanced selected")
+    p.locator("#sheet button.switch[data-k=autoRest]").click(); p.wait_for_timeout(150)
+    ok("Własne" in p.locator("#sheet").inner_text(), "changing one switch shows 'custom'")
+    p.locator("#sheet button[data-a=sheet-close]").first.click(); p.wait_for_timeout(150)
+    card.locator("button[data-a=set-done]").nth(1).click(); p.wait_for_timeout(200)
+    ok(p.locator("#timer").count() == 0, "auto rest off: no timer after a set")
+    ok(card.locator("button[data-a=rest-start]").count() == 1, "manual rest button shown")
+    card.locator("button[data-a=rest-start]").click(); p.wait_for_timeout(150)
+    ok(p.locator("#timer").count() == 1, "manual rest button starts the timer")
+    p.evaluate("() => window.Repsmith.stopTimer()")
+    # 2/4/5: simple preset
+    p.locator("button[data-a=wk-view]").click(); p.wait_for_timeout(150)
+    p.locator("#sheet button[data-a=view-mode][data-v=simple]").click(); p.wait_for_timeout(150)
+    ok(p.evaluate("() => ['autoRest','showSug','showCues','showMedia'].every(k => window.Repsmith.S.settings[k] === false)"), "simple preset turns the 4 switches off")
+    p.locator("#sheet button[data-a=sheet-close]").first.click(); p.wait_for_timeout(150)
+    ok(card.locator(".sug").count() == 0 and p.locator(".ex-card .sug").count() == 0, "suggestions off: no suggestion line anywhere")
+    ph = card.locator("input[data-k=weight]").nth(3).get_attribute("placeholder")
+    ok(ph == "102,5", f"suggestions off: weight field shows the previous result ({ph})")
+    ok(p.locator(".ex-thumb").count() == 0 and card.locator("h3.ex-name").count() == 1, "media off: no thumbnails, no empty tile, plain name")
+    ok(card.locator(".cues-d").count() == 0 and card.locator(".note-d").count() == 1, "tips off, note still there")
+    card.locator(".note-d summary").click(); p.wait_for_timeout(100)
+    ok(card.locator(".note-full").is_visible() and card.locator(".note-d button[data-a=note]").count() == 1, "note opens and can be edited")
+    ok(p.evaluate("() => window.Repsmith.S.templates[0].days[0].items[0].cue != null && (window.Repsmith.S.active.items[0].cues || []).length > 0"), "tips are hidden, not deleted")
+    # 8. logging: type values incl. a decimal three-digit weight
+    w = card.locator("input[data-k=weight]").nth(3); r = card.locator("input[data-k=reps]").nth(3)
+    w.fill("102.5"); r.fill("1"); w.dispatch_event("input"); r.dispatch_event("input")
+    ok(w.evaluate("e => e.scrollWidth <= e.clientWidth"), "102.5 fits in the weight field at 360 px")
+    card.locator("button[data-a=set-done]").nth(3).click(); p.wait_for_timeout(200)
+    s3 = p.evaluate("() => window.Repsmith.S.active.items[0].sets[3]")
+    ok(s3["done"] and s3["weight"] in ("102.5", "102,5") and s3["reps"] == "1", f"set saved ({s3['weight']} x {s3['reps']})")
+    card.locator("button[data-a=set-done]").nth(3).click(); p.wait_for_timeout(100)
+    w = card.locator("input[data-k=weight]").nth(3); w.fill("100"); w.dispatch_event("input"); card.locator("button[data-a=set-done]").nth(3).click(); p.wait_for_timeout(200)
+    ok(p.evaluate("() => window.Repsmith.S.active.items[0].sets[3].weight") == "100", "edited set saved")
+    # 6/7: persistence
+    p.reload(); p.wait_for_timeout(1200)
+    ok(p.evaluate("() => ['autoRest','showSug','showCues','showMedia'].every(k => window.Repsmith.S.settings[k] === false)") and p.locator(".ex-card .sug").count() == 0, "preferences survive a reload")
+    ok(p.evaluate("() => window.Repsmith.S.active.items[0].sets[3].weight") == "100", "set values survive a reload")
+    # settings sheet has the same block
+    p.evaluate("() => window.Repsmith.A.settings()"); p.wait_for_timeout(150)
+    p.evaluate("() => document.querySelectorAll('.sheet details').forEach(d => { d.open = true; })")
+    ok("Widok treningu" in p.locator("#sheet").inner_text() and p.locator("#sheet .switch").count() == 4, "settings have the workout view section")
+    p.locator("#sheet button[data-a=view-mode][data-v=advanced]").click(); p.wait_for_timeout(150)
+    ok(p.evaluate("() => ['autoRest','showSug','showCues','showMedia'].every(k => window.Repsmith.S.settings[k] === true)"), "advanced preset turns them back on")
+    p.locator("#sheet button[data-a=sheet-close]").first.click(); p.wait_for_timeout(150)
+    # 9. layout on small screens and big text
+    for W in (320, 360, 412):
+        p.set_viewport_size({"width": W, "height": 760}); p.wait_for_timeout(150)
+        bad = p.evaluate("""() => { const out = []; const vw = innerWidth;
+          if (document.documentElement.scrollWidth > vw) out.push('hscroll');
+          document.querySelectorAll('.set input, .rpe-btn, .check, .kind-btn').forEach(e => { const r = e.getBoundingClientRect(); if (r.width && r.right > vw + .5) out.push('off ' + e.className); });
+          document.querySelectorAll('.set').forEach(row => { const els = [...row.children].map(c => c.getBoundingClientRect()); for (let i = 1; i < els.length; i++) if (els[i].left < els[i-1].right - .5) out.push('overlap'); });
+          document.querySelectorAll('.check, .rpe-btn, .set input').forEach(e => { const r = e.getBoundingClientRect(); if (r.height && (r.height < 40 || r.width < 36)) out.push('small ' + e.className + ' ' + Math.round(r.width)); });
+          return out.slice(0, 5); }""")
+        ok(not bad, f"{W}px: no horizontal scroll, nothing off screen or overlapping, targets >= 40x36 ({bad})")
+    # 10. keyboard: the edited row stays visible when the viewport shrinks
+    p.set_viewport_size({"width": 360, "height": 760})
+    tgt = p.locator(".ex-card").nth(1).locator("input[data-k=weight]").first
+    tgt.scroll_into_view_if_needed(); tgt.focus(); p.set_viewport_size({"width": 360, "height": 420}); p.wait_for_timeout(900)
+    box = tgt.bounding_box()
+    ok(box and box["y"] >= 0 and box["y"] + box["height"] <= 420, f"with the keyboard open the edited set is visible (y={box and round(box['y'])})")
+    b.close()
+finally: srv.terminate()
+print("ERRORS:", errs); print(f"{P} pass, {F} fail")

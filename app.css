@@ -795,3 +795,77 @@ button.ex-name { background: none; border: 0; padding: 0; color: inherit; text-a
 .media-zoom { position: fixed; inset: 0; z-index: 90; background: #F4F5F6; border: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
 .media-zoom img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .ex-thumb svg { width: 22px; height: 22px; }
+
+/* ---------- 0.17: workout view (simple / advanced) and a calmer exercise card ---------- */
+.screen.workout { padding-left: 12px; padding-right: 12px; gap: 10px; }
+.ex-card { padding: 12px 12px 10px; gap: 8px; }
+.ex-card + .ex-card { margin-top: 2px; }
+.ex-head { display: flex; align-items: flex-start; gap: 10px; }
+.ex-titles { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ex-eb { font-size: 12px; font-weight: 600; color: var(--muted); line-height: 1.3; overflow-wrap: break-word; }
+.ex-eb::first-letter { text-transform: uppercase; }
+.ex-titles .ex-name-row { display: block; }
+.ex-name, h3.ex-name { margin: 0; font-size: 18px; line-height: 1.2; overflow-wrap: break-word; word-break: normal; hyphens: auto; -webkit-hyphens: auto; text-transform: none; }
+button.ex-name { display: block; width: 100%; padding: 2px 0; min-height: 30px; }
+.ex-tools { margin-right: -10px; margin-top: -4px; }
+.ex-thumb { width: 48px; height: 48px; }
+.ex-meta { gap: 8px; }
+
+/* folded tips and notes: one line until opened */
+.fold { background: var(--field); border-radius: 12px; font-size: 13px; }
+.fold summary { list-style: none; display: flex; align-items: center; gap: 8px; padding: 0 12px; min-height: 40px; cursor: pointer; }
+.fold summary::-webkit-details-marker { display: none; }
+.fold summary::after { content: ''; flex: none; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); margin: -3px 2px 0 auto; }
+.fold[open] summary::after { transform: rotate(-135deg); margin-top: 3px; }
+.fold .lbl { flex: none; font-weight: 600; color: var(--text); }
+.fold .peek { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+.fold[open] .peek { visibility: hidden; }
+.fold .cues, .fold .note-full { padding: 0 12px 10px; line-height: 1.45; color: var(--text); background: none; border: 0; }
+.fold .cues > div + div { margin-top: 6px; }
+.fold .btn { margin: 0 8px 8px; }
+.note-full { white-space: pre-wrap; }
+
+/* set rows: label with the previous result under it, then weight, reps, RPE, confirm */
+.set-head, .set { display: grid; grid-template-columns: minmax(78px, 1fr) minmax(68px, 1.25fr) minmax(46px, .8fr) minmax(44px, .75fr) 44px; column-gap: 5px; align-items: center; }
+.set-head { font-size: 12px; font-weight: 500; min-height: 20px; }
+.set-head span:not(:first-child) { text-align: center; }
+.set { min-height: 52px; padding: 3px 4px; }
+.kind-btn { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px; min-height: 44px; padding: 0; background: none; border: 0; text-align: left; color: inherit; min-width: 0; }
+.kind-btn .kl { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; font-size: 13px; font-weight: 600; line-height: 1.2; }
+.kind-btn .kl .side-tag, .kind-btn .kl .pr-badge { margin: 0; font-size: 10px; }
+.set .prev { display: block; font-size: 12px; font-weight: 500; color: var(--muted); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; letter-spacing: -.01em; }
+.set input { font-size: 19px; padding: 4px 2px; min-height: 44px; min-width: 0; width: 100%; letter-spacing: -.02em; }
+.set.warm input { font-size: 16px; }
+.rpe-btn { font-size: 18px; min-height: 44px; min-width: 0; width: 100%; }
+.rpe-btn.rng { font-size: 12px; }
+.set .check { width: 44px; height: 44px; }
+.set.cur:not(.done) { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.set.cur:not(.done) .kind-btn .kl { color: var(--accent); }
+.set-actions { align-items: center; gap: 8px; }
+.set-actions .grow { flex: 1; }
+.set-actions .chip { min-height: 40px; gap: 6px; }
+
+/* settings: switch rows */
+.vlist { display: flex; flex-direction: column; }
+.vrow { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.vrow:last-child { border-bottom: 0; }
+.vrow .grow { flex: 1; min-width: 0; }
+.vrow .vl { font-weight: 600; font-size: 15px; }
+.switch { flex: none; position: relative; width: 52px; height: 32px; border-radius: 16px; border: 0; padding: 0; background: var(--line); cursor: pointer; }
+.switch span { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 13px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform var(--smith-motion-standard, .2s) ease; }
+.switch.on { background: var(--accent); }
+.switch.on span { transform: translateX(20px); }
+.switch::before { content: ''; position: absolute; inset: -6px; }
+@media (max-width: 360px) {
+  .set-head, .set { grid-template-columns: minmax(72px, 1fr) minmax(64px, 1.25fr) minmax(42px, .8fr) minmax(40px, .75fr) 44px; column-gap: 4px; }
+  .set input { font-size: 18px; }
+}
+.set .prev { white-space: normal; overflow: visible; line-height: 1.15; overflow-wrap: anywhere; }
+@media (max-width: 340px) {
+  .set-head, .set { grid-template-columns: minmax(64px, 1fr) minmax(58px, 1.2fr) minmax(38px, .8fr) minmax(36px, .75fr) 40px; column-gap: 3px; }
+  .set .check { width: 40px; }
+  .set input { font-size: 17px; }
+}
+.kind-btn .kl::after { display: none; }
+.set-head span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bm-wrap.lib .bodymap { max-height: 220px; }

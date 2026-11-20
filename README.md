@@ -1,4 +1,4 @@
-# Repsmith v0.16.0
+# Repsmith v0.17.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,16 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.17.0
+
+- Widok treningu: tryb Prosty albo Zaawansowany i cztery przełączniki: przerwa startuje sama, podpowiedzi ciężaru, wskazówki i opisy, zdjęcia i wideo w treningu. Tryb to gotowy zestaw przełączników, każdy można potem zmienić osobno (wtedy widać „Własne ustawienia”). Ustawienie jest w Ustawieniach (Widok treningu) i pod ikoną suwaków w nagłówku treningu. Dotychczasowi użytkownicy zostają w trybie Zaawansowanym, czyli bez zmian.
+- Wyłączona automatyczna przerwa: pod seriami jest przycisk z czasem przerwy, który ją uruchamia. Czas przerwy zmienisz w menu ćwiczenia.
+- Wyłączone podpowiedzi: w polach jest poprzedni wynik, bez wyliczonego ciężaru.
+- Kafel ćwiczenia: jedna linia nagłówka (numer, partia, sprzęt, metoda), nazwa bez łamania słów, wskazówki i notatka zwinięte do jednej linii.
+- Wiersz serii: poprzedni wynik pod nazwą serii (np. 92,5×5 @8, bez RPE: @–), szersze pola kg, powtórzeń i RPE, aktualna seria wyróżniona ramką. Poprzedni wynik bierze tylko zatwierdzone serie.
+- Przy otwartej klawiaturze edytowana seria przesuwa się na środek widocznego ekranu.
+- Lista planów pokazuje treningi w tygodniu i długość cyklu. Sylwetka w bibliotece ćwiczeń jest mniejsza, lista zaczyna się wyżej.
 
 ## Zmiany w v0.16.0
 
