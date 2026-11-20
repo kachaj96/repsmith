@@ -113,6 +113,10 @@ Pomysły z przeglądu innej aplikacji do treningów, bez zmiany wyglądu (jeden 
 - Drop set nie liczy się do rekordów, e1RM, podpowiedzi ciężaru ani sygnału zmęczenia.
 - Ikona historii na karcie ćwiczenia: ostatnie 5 treningów z tym ćwiczeniem (serie, RPE, upadek, drop), ostatnie e1RM i skrót do pełnego postępu.
 
+## v0.18.0 – zrobione
+- Rework ekranu treningu: pasek narzędzi, zwijane kafle, tabela serii, konsola serii (A + C z prototypu redesignu).
+- Do decyzji: ekran główny i nawigacja w nowym stylu (4 zakładki, Postęp razem z Historią), wymiana ćwiczeń z miniaturami.
+
 ## v0.17.0 – zrobione
 - Widok treningu Prosty/Zaawansowany jako zestawy czterech przełączników (przerwa, podpowiedzi, wskazówki, media).
 - Przebudowa kafla ćwiczenia i wiersza serii, zachowanie przy klawiaturze i dużej czcionce.

@@ -34,7 +34,7 @@ try:
     ok(eb.count("·") >= 2, "muscle and equipment in one header line: " + eb)
     p.screenshot(path=f"{_OUT}/01-card.png")
     # history sheet
-    c1.locator("button[data-a=ex-hist]").click(); p.wait_for_timeout(200)
+    c1.locator("button[data-a=item-menu]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=hist]").click(); p.wait_for_timeout(200)
     sh = p.locator("#sheet").inner_text()
     ok("30 kg" in sh or "30×8" in sh.replace(" ", ""), "history lists the old sets: " + sh.replace("\n", " | ")[:200])
     ok("upadek" in sh and "drop" in sh, "history shows failure and drop marks")

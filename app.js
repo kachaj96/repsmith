@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.17.0';
+const VERSION = '0.18.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -258,6 +258,10 @@ Object.assign(STR.pl, {
   calibChip: 'Kalibracja RPE', calibTitle: 'Seria kalibracyjna',
   calibText: 'Po rozgrzewce weź ciężar na około 8 powtórzeń. Rób powtórzenia, aż uznasz, że zostały 2 w zapasie. Zapamiętaj tę liczbę i rób dalej, ile się da w dobrej technice. Stop przy zmianie techniki.\n\nAplikacja porówna Twój strzał z rzeczywistością.',
   calibSafety: 'Nie rób tego na ciężkim przysiadzie bez asekuracji. Wyciskanie z asekuracją, maszyna albo suwnica są bezpieczniejsze.',
+  setS: 'Seria', tagW: 'R', tagTop: 'Top', tagB: 'B', tagK: 'K', leftS: 'L', rightS: 'P', restS: 'Przerwa', platesS: 'Talerze', setsDoneOf: (a, b) => `${a}/${b} serii`,
+  tgtLbl: 'Cel', tgtShort: r => `cel ${r}`, colSum: (a, b) => `${a}/${b} serii`, expand: 'Rozwiń', collapse: 'Zwiń', exMenu: 'Menu ćwiczenia',
+  conLess: 'Mniej:', conMore: 'Więcej:', conType: 'Wpisz', conDel: 'Usuń cyfrę', conPadDone: 'Gotowe', conSame: 'Jak ostatnio', prevS: 'Poprz.', conSave: 'Zapisz zmiany', conLog: n => `Zapisz serię ${n}`,
+  feel_easy: 'Łatwo', feel_ok: 'Zgodnie z planem', feel_hard: 'Ciężko',
   viewTitle: 'Widok treningu', viewMode: 'Tryb', view_simple: 'Prosty', view_advanced: 'Zaawansowany',
   view_simpleD: 'Tylko to, co potrzebne do zapisu: ćwiczenie, seria, poprzedni wynik, pola i zatwierdzenie.', view_advancedD: 'Do tego podpowiedzi ciężaru, automatyczna przerwa, wskazówki planu i zdjęcia.',
   viewCustom: 'Własne ustawienia: wybierz tryb, żeby wrócić do zestawu.', viewWhere: 'To samo ustawienie jest w Ustawieniach, sekcja Widok treningu. Twoje treningi się nie zmieniają.',
@@ -401,6 +405,10 @@ Object.assign(STR.en, {
   calibChip: 'RPE calibration', calibTitle: 'Calibration set',
   calibText: 'After warming up, take a load you can do about 8 reps with. Do reps until you believe 2 are left. Remember that number, then keep going as long as form holds. Stop at a form change.\n\nThe app compares your call with what really happened.',
   calibSafety: 'Do not do this on a heavy squat without safeties. A bench with safeties, a machine or a leg press is safer.',
+  setS: 'Set', tagW: 'W', tagTop: 'Top', tagB: 'B', tagK: 'C', leftS: 'L', rightS: 'R', restS: 'Rest', platesS: 'Plates', setsDoneOf: (a, b) => `${a}/${b} sets`,
+  tgtLbl: 'Target', tgtShort: r => `target ${r}`, colSum: (a, b) => `${a}/${b} sets`, expand: 'Expand', collapse: 'Collapse', exMenu: 'Exercise menu',
+  conLess: 'Less:', conMore: 'More:', conType: 'Type', conDel: 'Delete digit', conPadDone: 'Done', conSame: 'Same as last', prevS: 'Prev.', conSave: 'Save changes', conLog: n => `Log set ${n}`,
+  feel_easy: 'Easy', feel_ok: 'As planned', feel_hard: 'Hard',
   viewTitle: 'Workout view', viewMode: 'Mode', view_simple: 'Simple', view_advanced: 'Advanced',
   view_simpleD: 'Only what logging needs: exercise, set, previous result, fields and confirm.', view_advancedD: 'Plus weight suggestions, automatic rest, plan tips and photos.',
   viewCustom: 'Your own settings: pick a mode to go back to a preset.', viewWhere: 'The same setting is in Settings, Workout view. Your workouts do not change.',
@@ -516,6 +524,7 @@ const I = {
   up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
   cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+  plate: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
@@ -1391,7 +1400,7 @@ function adjustTimer(d) {
   S.timer.lastTick = null;
   renderTimer();
 }
-function stopTimer() { clearTimeout(S._timerHide); S.timer = null; silentLoop(false); renderTimer(); }
+function stopTimer() { clearTimeout(S._timerHide); S.timer = null; silentLoop(false); renderTimer(); const b = $('.wk-bar .tool.on'); if (b && S.view === 'workout') render(); }
 function renderTimer() {
   let el = $('#timer');
   if (!S.timer) { if (el) el.remove(); return; }
@@ -1412,6 +1421,7 @@ function renderTimer() {
       <div class="bar"><i id="tbar"></i></div></div>`;
   }
   const secs = Math.ceil(left);
+  const pill = $('#wk-rest'); if (pill) pill.textContent = fmtClock(secs);
   $('#tlbl').textContent = done ? t('restOver') : t('restTimer');
   $('#tbig').textContent = fmtClock(secs);
   $('#tbig').classList.toggle('over', done || secs <= 5);
@@ -1428,7 +1438,7 @@ setInterval(() => {
 }, 250);
 
 /* ---------- navigation ---------- */
-function go(view, arg) { S.view = view; S.viewArg = arg ?? null; S.sheet = null; S._navAnim = true; render(); window.scrollTo(0, 0); }
+function go(view, arg) { if (view !== 'workout') { S.con = null; document.body.classList.remove('con-open'); } S.view = view; S.viewArg = arg ?? null; S.sheet = null; S._navAnim = true; render(); window.scrollTo(0, 0); }
 function openSheet(sheet) { S.sheet = sheet; renderSheet(); }
 function closeSheet() { S.sheet = null; renderSheet(); }
 function toast(msg) {
@@ -1643,48 +1653,125 @@ function setPair(it, s) {
   const i = it.sets.indexOf(s), o = it.sets[s.side === 'L' ? i + 1 : i - 1];
   return o && o.side && o.side !== s.side && o.kind === s.kind ? [s, o] : [s];
 }
-function setGrid(it) {
+/* ---------- set rows (0.18): values are buttons, the set console edits them ---------- */
+function gridCtx(it) {
   const ex = S.ex.get(it.exId) || { logging: 'W' };
-  const prevItem = previousFor(it.exId, S.active.startedAt);
-  const log = ex.logging;
-  const c2 = log === 'T' ? t('time') : log === 'BWX' ? t('plusKg') : t('kg');
-  const c3 = log === 'T' ? '' : log === 'WD' ? t('dist') : t('reps');
-  const topDone = it.sets.find(s => s.kind === 'top' && s.done && num(s.weight));
   const showSug = pref('showSug');
-  const lastE = log === 'W' && showSug ? lastE1rm(it.exId, S.active.startedAt) : null;
-  const sug = showSug && it.sug && it.sug.load != null ? it.sug : null;
+  return { ex, log: ex.logging, showSug, prevItem: previousFor(it.exId, S.active.startedAt), topDone: it.sets.find(s => s.kind === 'top' && s.done && num(s.weight)),
+    lastE: ex.logging === 'W' && showSug ? lastE1rm(it.exId, S.active.startedAt) : null, sug: showSug && it.sug && it.sug.load != null ? it.sug : null };
+}
+/* what a set shows when nothing is typed: plan target, suggestion or the previous result (same rules as before 0.18) */
+function setPh(it, idx, c = gridCtx(it)) {
+  const s = it.sets[idx]; const { prevItem, topDone, lastE, sug, showSug } = c;
+  const p = matchPrev(prevItem, it, idx);
+  let phW = p ? fmtN(num(p.weight)) : '';
+  const tgt = s.target && s.target.reps ? String(parseInt(s.target.reps, 10) || '') : '';
+  const amrap = s.target && /\+$/.test(String(s.target.reps || '')) && (s.kind === 'work' || s.kind === 'top');
+  if (lastE && s.kind !== 'warmup' && s.kind !== 'backoff' && s.target && normRpe(s.target.rpe) && rpePct(tgt, s.target.rpe)) phW = fmtN(roundLoad(it.exId, lastE * rpePct(tgt, s.target.rpe) / 100));
+  let phR = p ? (p.reps || '') : tgt;
+  if (sug && (s.kind === 'work' || s.kind === 'top')) phW = fmtN(sug.load);
+  if (sug && it.sug.reps && s.kind === 'work') { const k = it.sets.slice(0, idx + 1).filter(x => x.kind === 'work' && x.side === s.side).length - 1; if (it.sug.reps[k] != null) phR = String(it.sug.reps[k]); }
+  else if (sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
+  if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundLoad(it.exId, sug.load * (it.backoffPct || 90) / 100));
+  if (s.kind === 'backoff' && topDone && showSug) phW = fmtN(roundLoad(it.exId, num(topDone.weight) * (it.backoffPct || 90) / 100));
+  if (it.wave && s.kind !== 'warmup' && showSug) phW = fmtN((s.kind === 'backoff' && it.wave.bo ? it.wave.bo : it.wave).lo);
+  const phRpe = s.target && s.target.rpe ? (s.target.rpeMax > s.target.rpe ? `${fmtN(s.target.rpe)}-${fmtN(s.target.rpeMax)}` : fmtN(s.target.rpe)) : '';
+  return { p, weight: phW, reps: String(phR), time: p ? String(p.time || '') : tgt, dist: p ? String(p.dist || '') : tgt, rpe: phRpe, tgt, amrap };
+}
+/* fields a set logs, by how the exercise is logged */
+const setFields = log => (log === 'T' ? ['time'] : log === 'WD' ? ['weight', 'dist'] : ['weight', 'reps']);
+const fieldUnit = (k, log) => ({ weight: log === 'BWX' ? t('plusKg') : t('kg'), reps: t('reps'), time: t('time'), dist: t('dist') }[k]);
+const setNo = (it, s) => it.sets.filter((x, j) => j <= it.sets.indexOf(s) && x.kind === s.kind && x.side === s.side).length;
+function setTag(it, s) {
+  const n = setNo(it, s); const side = s.side ? (s.side === 'L' ? t('leftS') : t('rightS')) : '';
+  return ({ warmup: t('tagW') + n, top: t('tagTop'), backoff: t('tagB') + n, calib: t('tagK'), work: String(it.sets.filter((x, j) => j <= it.sets.indexOf(s) && x.kind === 'work' && x.side === s.side).length) }[s.kind] || String(n)) + side;
+}
+function setLabel(it, s) { return { warmup: t('warmup'), work: t('work') + ' ' + setNo(it, s), top: t('top'), backoff: t('backoff') + ' ' + setNo(it, s), calib: t('calib') }[s.kind] + (s.side ? ' · ' + (s.side === 'L' ? t('left') : t('right')) : ''); }
+function prevShort(p, ex, s) {
+  if (!p) return '–';
+  const log = ex.logging; const r = normRpe(p.rpe);
+  return `${fmtSet(p, ex)}${r != null ? ' @' + fmtN(r) : (log !== 'T' && s.kind !== 'warmup' ? ' @–' : '')}`;
+}
+function setGrid(it) {
+  const c = gridCtx(it), ex = c.ex, log = c.log, fields = setFields(log);
+  const con = S.con && S.con.i === it.id ? S.con : null;
   const cur = it.sets.findIndex(x => !x.done);
   const rows = it.sets.map((s, idx) => {
-    const p = matchPrev(prevItem, it, idx);
-    let phW = p ? fmtN(num(p.weight)) : '';
-    const tgt = s.target && s.target.reps ? String(parseInt(s.target.reps, 10) || '') : '';
-    const amrap = s.target && /\+$/.test(String(s.target.reps || '')) && (s.kind === 'work' || s.kind === 'top');
-    if (lastE && s.kind !== 'warmup' && s.kind !== 'backoff' && s.target && normRpe(s.target.rpe) && rpePct(tgt, s.target.rpe)) {
-      phW = fmtN(roundLoad(it.exId, lastE * rpePct(tgt, s.target.rpe) / 100));
-    }
-    let phR = p ? (p.reps || '') : tgt;
-    if (sug && (s.kind === 'work' || s.kind === 'top')) phW = fmtN(sug.load);
-    if (sug && it.sug.reps && s.kind === 'work') { const k = it.sets.slice(0, idx + 1).filter(x => x.kind === 'work' && x.side === s.side).length - 1; if (it.sug.reps[k] != null) phR = String(it.sug.reps[k]); }
-    else if (sug && it.sug.why === 'up' && it.method === 'H1' && s.kind === 'work') phR = tgt;
-    if (s.kind === 'backoff' && sug && !topDone) phW = fmtN(roundLoad(it.exId, sug.load * (it.backoffPct || 90) / 100));
-    if (s.kind === 'backoff' && topDone && showSug) phW = fmtN(roundLoad(it.exId, num(topDone.weight) * (it.backoffPct || 90) / 100));
-    if (it.wave && s.kind !== 'warmup' && showSug) phW = fmtN((s.kind === 'backoff' && it.wave.bo ? it.wave.bo : it.wave).lo);
-    const phRpe = s.target && s.target.rpe ? (s.target.rpeMax > s.target.rpe ? `${fmtN(s.target.rpe)}-${fmtN(s.target.rpeMax)}` : fmtN(s.target.rpe)) : (p && p.rpe ? fmtN(num(p.rpe)) : '');
-    const kindLbl = { warmup: t('warmupS'), work: t('work') + ' ' + (it.sets.filter((x, j) => j <= idx && x.kind === 'work' && x.side === s.side).length), top: t('top'), backoff: t('backoff'), calib: t('calib') }[s.kind];
-    const side = (s.side ? `<span class="side-tag">${esc(s.side === 'L' ? t('left') : t('right'))}</span>` : '') + (amrap ? '<span class="side-tag amrap">AMRAP</span>' : '');
-    const f = (field, val, ph, cls = '') => `<input class="${cls}" inputmode="${field === 'reps' ? 'numeric' : 'decimal'}" autocomplete="off" enterkeyhint="next" aria-label="${esc(field)}" data-f="set" data-i="${it.id}" data-s="${s.id}" data-k="${field}" value="${esc(val)}" placeholder="${esc(ph)}">`;
-    let a, b;
-    if (log === 'T') { a = f('time', s.time, p ? p.time || '' : tgt); b = '<span></span>'; }
-    else if (log === 'WD') { a = f('weight', s.weight, phW); b = f('dist', s.dist, p ? p.dist || '' : tgt); }
-    else { a = f('weight', s.weight, phW); b = f('reps', s.reps, phR); }
-    const prevTxt = !p ? '–' : (log === 'W' || log === 'BWX' || log === 'R') && s.kind !== 'warmup' && normRpe(p.rpe) == null ? `${fmtSet(p, ex)} @–` : `${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ' @' + fmtN(normRpe(p.rpe)) : ''}`;
+    const ph = setPh(it, idx, c); const p = ph.p;
+    const editing = con && con.s === s.id;
+    const val = k => (s[k] !== '' && s[k] != null ? fmtN(num(s[k])) : '');
+    const btn = k => { const v = val(k); return `<button class="fv ${v ? '' : 'ph'} ${editing && con.f === k ? 'on' : ''}" data-a="con-open" data-i="${it.id}" data-s="${s.id}" data-k="${k}" data-ph="${esc(ph[k])}" aria-label="${esc(fieldUnit(k, log) + ' ' + (v || ph[k] || ''))}">${esc(v || ph[k] || '–')}</button>`; };
+    const r = s.rpe ? fmtN(num(s.rpe)) : '';
+    const cells = fields.length === 1 ? btn(fields[0]) + '<span></span>' : btn(fields[0]) + btn(fields[1]);
     const prevAria = !p ? t('prevNone') : `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ', RPE ' + fmtN(normRpe(p.rpe)) : ', ' + t('prevNoRpe')}`;
-    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${idx === cur ? 'cur' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}">
-      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + kindLbl)}"><span class="kl">${esc(kindLbl)}${side}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}${s.fail ? `<span class="side-tag set-flag">${esc(t('failTag'))}</span>` : ''}${s.drop ? `<span class="side-tag set-flag">${esc(t('dropTag'))}</span>` : ''}${s.note ? '<span class="side-tag set-flag" aria-hidden="true">✎</span>' : ''}</span><span class="prev" aria-label="${esc(prevAria)}">${esc(prevTxt)}</span></button>
-      ${a}${b}<button class="rpe-btn ${s.rpe ? '' : 'ph'} ${!s.rpe && phRpe.includes('-') ? 'rng' : ''}" data-a="rpe-open" data-i="${it.id}" data-s="${s.id}" aria-label="RPE ${esc(s.rpe ? fmtN(num(s.rpe)) : '')}">${esc(s.rpe ? fmtN(num(s.rpe)) : phRpe)}</button>
-      <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done'))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
+    const flags = `${ph.amrap ? '<span class="side-tag amrap">AMRAP</span>' : ''}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}${s.fail ? `<span class="side-tag set-flag">${esc(t('failTag'))}</span>` : ''}${s.drop ? `<span class="side-tag set-flag">${esc(t('dropTag'))}</span>` : ''}${s.note ? '<span class="side-tag set-flag" aria-hidden="true">✎</span>' : ''}`;
+    return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${idx === cur ? 'cur' : ''} ${editing ? 'edit' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}" data-set="${s.id}">
+      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + setLabel(it, s))}"><span class="kl">${esc(setTag(it, s))}</span>${flags ? `<span class="fl">${flags}</span>` : ''}</button>
+      <button class="prev" data-a="con-open" data-i="${it.id}" data-s="${s.id}" data-k="" aria-label="${esc(prevAria)}">${esc(prevShort(p, ex, s))}</button>${cells}<button class="fv rpe ${r ? '' : 'ph'} ${!r && ph.rpe.includes('-') ? 'rng' : ''}" data-a="con-open" data-i="${it.id}" data-s="${s.id}" data-k="rpe" data-ph="${esc(ph.rpe)}" aria-label="RPE ${esc(r || ph.rpe)}">${esc(r || ph.rpe || '–')}</button>
+      <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done') + ': ' + setLabel(it, s))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
-  return `<div class="sets"><div class="set-head"><span>${esc(t('setPrevHead'))}</span><span>${esc(c2)}</span><span>${esc(c3)}</span><span>RPE</span><span></span></div>${rows}</div>`;
+  const h = fields.length === 1 ? `<span>${esc(fieldUnit(fields[0], log))}</span><span></span>` : `<span>${esc(fieldUnit(fields[0], log))}</span><span>${esc(fieldUnit(fields[1], log))}</span>`;
+  return `<div class="sets"><div class="set-head"><span aria-label="${esc(t('setS'))}">#</span><span>${esc(t('prevS'))}</span>${h}<span>RPE</span><span></span></div>${rows}</div>`;
+}
+
+/* ---------- set console (0.18): weight and reps with steps or a number pad, RPE in one tap, log ---------- */
+function conHtml() {
+  const c = S.con; const it = c && findItem(c.i); const s = it && it.sets.find(x => x.id === c.s);
+  if (!s) { S.con = null; return ''; }
+  const idx = it.sets.indexOf(s), ex = S.ex.get(it.exId) || { logging: 'W' }, log = ex.logging, ph = setPh(it, idx), fields = setFields(log);
+  const step = k => (k === 'weight' ? (S.settings.increment || 2.5) : k === 'reps' ? 1 : k === 'time' ? 5 : 5);
+  const shown = k => (c.pad && c.f === k && c.buf != null ? (c.buf || '0').replace('.', S.settings.lang === 'pl' ? ',' : '.') : s[k] !== '' && s[k] != null ? fmtN(num(s[k])) : (ph[k] || '–'));
+  const isPh = k => !(c.pad && c.f === k && c.buf != null) && !(s[k] !== '' && s[k] != null);
+  const tile = k => `<div class="ct ${c.pad && c.f === k ? 'on' : ''}"><button class="pm" data-a="con-step" data-k="${k}" data-v="${-step(k)}" aria-label="${esc(t('conLess') + ' ' + fieldUnit(k, log))}">−</button><button class="mid" data-a="con-pad" data-k="${k}" aria-label="${esc(t('conType') + ' ' + fieldUnit(k, log))}"><b class="${isPh(k) ? 'ph' : ''}">${esc(shown(k))}</b><small>${esc(fieldUnit(k, log))}</small></button><button class="pm" data-a="con-step" data-k="${k}" data-v="${step(k)}" aria-label="${esc(t('conMore') + ' ' + fieldUnit(k, log))}">+</button></div>`;
+  const feel = S.active.effort === 'fixed' && s.target && s.target.rpe != null;
+  const r = normRpe(s.rpe);
+  const rpeTile = `<div class="ct rp"><div class="mid"><b class="${r == null ? 'ph' : ''}">${r == null ? esc(ph.rpe || '–') : fmtN(r)}</b><small>RPE</small></div></div>`;
+  const pad = `<div class="con-pad" role="group" aria-label="${esc(t('conType'))}">${['7', '8', '9', 'del', '4', '5', '6', '.', '1', '2', '3', '0'].map(k => `<button data-a="con-key" data-v="${k}" ${k === 'del' ? `aria-label="${esc(t('conDel'))}"` : ''}>${k === 'del' ? '⌫' : k}</button>`).join('')}</div>`;
+  const chips = feel ? `<div class="con-chips three" role="group" aria-label="${esc(t('feelTitle'))}">${['easy', 'ok', 'hard'].map(f => `<button class="${s.feel === f ? 'on' : ''}" data-a="con-feel" data-v="${f}">${esc(t('feel_' + f))}</button>`).join('')}</div>`
+    : `<div class="con-chips" role="group" aria-label="RPE">${[6, 7, 7.5, 8, 8.5, 9, 9.5, 10].map(v => `<button class="${r === v ? 'on' : ''}" data-a="con-rpe" data-v="${v}" aria-pressed="${r === v}">${fmtN(v)}</button>`).join('')}</div>`;
+  const p = ph.p;
+  return `<div class="con" id="con" role="group" aria-label="${esc(exName(it.exId) + ', ' + setLabel(it, s))}">
+    <div class="con-ctx"><span class="grow"><b>${esc(exName(it.exId))}</b> · ${esc(setLabel(it, s))}</span><button class="icon-btn" data-a="con-close" aria-label="${esc(t('close'))}">${I.x}</button></div>
+    <div class="con-prev">${esc(p ? `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ' · RPE ' + fmtN(normRpe(p.rpe)) : ' · ' + t('prevNoRpe')}` : t('prevNone'))}${it.reps ? ` · ${esc(t('tgtShort', it.reps + targetUnit(it.exId)))}` : ''}</div>
+    <div class="con-vals ${fields.length === 1 ? 'one' : ''}">${fields.map(tile).join('')}${rpeTile}</div>
+    ${c.pad ? pad : chips}
+    <div class="con-acts"><button class="btn" data-a="${c.pad ? 'con-pad-done' : 'con-same'}" ${!c.pad && !p ? 'disabled' : ''}>${esc(c.pad ? t('conPadDone') : t('conSame'))}</button><button class="btn primary" data-a="con-log">${I.check}${esc(s.done ? t('conSave') : t('conLog', setTag(it, s)))}</button></div></div>`;
+}
+function conCommit() {
+  const c = S.con; if (!c || !c.pad || c.buf == null) return;
+  const it = findItem(c.i); const s = it && it.sets.find(x => x.id === c.s);
+  if (s && c.buf !== '') { s[c.f] = cleanField(c.f, c.buf).replace(',', '.'); if (s.done) s.pr = detectPR(it.exId, s); }
+  c.buf = null; saveActive();
+}
+/* after a set: the next open set in the superset, then in this exercise, then in the next exercise */
+function conNext(it, s) {
+  const items = S.active.items, ix = items.indexOf(it), sIdx = it.sets.indexOf(s);
+  if (it.group) { const nx = items.slice(ix + 1).find(x => x.group === it.group && x.sets[sIdx] && !x.sets[sIdx].done); if (nx) return { i: nx.id, s: nx.sets[sIdx].id }; const first = items.find(x => x.group === it.group && x.sets.some(y => !y.done)); if (first) return { i: first.id, s: first.sets.find(y => !y.done).id }; }
+  const own = it.sets.slice(sIdx + 1).find(x => !x.done) || it.sets.find(x => !x.done); if (own) return { i: it.id, s: own.id }; // forward first: a skipped warm-up does not pull the console back
+  for (const x of items.slice(ix + 1).concat(items.slice(0, ix))) { const o = x.sets.find(y => !y.done); if (o) return { i: x.id, s: o.id }; }
+  return null;
+}
+/* one place that marks a set done: empty fields take what the row shows, RPE is snapped, PRs, rest */
+function completeSet(it, s) {
+  const ph = setPh(it, it.sets.indexOf(s));
+  for (const k of ['weight', 'reps', 'time', 'dist']) if ((s[k] === '' || s[k] == null) && ph[k]) s[k] = String(ph[k]).replace(',', '.');
+  s.done = true; s.doneAt = now();
+  if (s.rpe !== '' && s.rpe != null) { const q = normRpe(s.rpe); s.rpe = q == null ? '' : String(q); }
+  s.pr = detectPR(it.exId, s); S._justDone = s.id;
+  if (s.pr.length) S._justPR = it.id;
+  buzz(s.pr.length ? [15, 60, 25] : 10);
+  ensureAudio();
+  const items = S.active.items, ix = items.indexOf(it), sIdx = it.sets.indexOf(s);
+  const later = it.group ? items.slice(ix + 1).filter(x => x.group === it.group) : [];
+  const wait = later.some(x => x.sets.length > sIdx);
+  if (!wait && pref('autoRest')) startTimer(it.rest || S.settings.restI);
+}
+function scrollToSet(setId) {
+  setTimeout(() => {
+    const r = document.querySelector(`.set[data-set="${setId}"]`), con = $('#con'); if (!r) return;
+    const top = r.getBoundingClientRect().top, bottom = r.getBoundingClientRect().bottom, limit = (con ? con.getBoundingClientRect().top : innerHeight) - 12;
+    if (bottom > limit || top < 120) window.scrollBy({ top: bottom > limit ? bottom - limit + 40 : top - 140, behavior: 'smooth' });
+  }, 30);
 }
 function waveLine(it) {
   const w = it.wave, r = (a, b) => (a === b ? fmtN(a) : `${fmtN(a)}-${fmtN(b)}`);
@@ -1804,36 +1891,49 @@ function vWorkout() {
     const prSets = it.sets.filter(x => x.pr && x.pr.length);
     const prCard = prSets.length ? `<div class="pr-card ${S._justPR === it.id ? 'pop' : ''}"><b>PR</b><span>${esc(fmtSet(prSets[prSets.length - 1], ex))} · ${esc(prLabel([...new Set(prSets.flatMap(x => x.pr))]))}</span></div>` : '';
     const med = pref('showMedia') && !L, cuesOn = pref('showCues');
-    const eyebrow = [`${n + 1} / ${a.items.length}`, g ? `<span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : '', ex && ex.primary && ex.primary[0] ? esc(muscleName(ex.primary[0])) : '', ex ? esc(equipName(ex.equipment)) : '', cuesOn && (it.method || it.scheme === 'topback') ? esc(it.method ? methodName(it.method) : t('topback')) : ''].filter(Boolean).join(' · ');
+    const col = !L && exCollapsed(it);
+    const doneN = it.sets.filter(x => x.done).length;
+    const meta = [g ? `<span class="gtag">${g.label}</span> ${esc(t('supTag'))}` : '', ex && ex.primary && ex.primary[0] ? esc(muscleName(ex.primary[0])) : '', ex ? esc(equipName(ex.equipment)) : '', cuesOn && (it.method || it.scheme === 'topback') ? esc(it.method ? methodName(it.method) : t('topback')) : ''].filter(Boolean).join(' · ');
     const nameEl = L ? `<button class="ex-name lk" data-a="link-toggle" data-i="${it.id}">${L.ids.includes(it.id) ? '✓ ' : '○ '}${esc(exName(it.exId))}</button>`
       : med ? `<button class="ex-name" data-a="${mediaOf(it.exId) ? 'media-open' : 'media-edit'}" data-v="${esc(it.exId)}">${esc(exName(it.exId))}</button>` : `<h3 class="ex-name">${esc(exName(it.exId))}</h3>`;
     const cueTxt = cuesOn && it.cues && it.cues.length ? it.cues : [];
-    const restChip = pref('autoRest') ? `<button class="chip" data-a="rest-edit" data-i="${it.id}" aria-label="${esc(t('rest'))}">${I.clock.replace('<svg ', '<svg width="16" height="16" ')} ${esc(fmtClock(it.rest || 0))}</button>`
-      : `<button class="chip" data-a="rest-start" data-i="${it.id}" aria-label="${esc(t('restStart'))}">${I.play.replace('<svg ', '<svg width="14" height="14" ')} ${esc(fmtClock(it.rest || 0))}</button>`;
-    return `<section class="ex-card ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
-      <div class="ex-head">${med ? mediaThumb(it.exId) : ''}<div class="ex-titles"><div class="eyebrow small ex-eb">${eyebrow}</div><div class="ex-name-row" data-lp="${it.id}">${nameEl}</div></div>
-        <span class="ex-tools"><button class="icon-btn" data-a="ex-hist" data-v="${esc(it.exId)}" aria-label="${esc(t('histAria'))}">${I.hist}</button><button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('edit'))}">${I.more}</button></span></div>
-      ${prCard}
+    const rpeT = it.rpe != null ? ` · RPE ${fmtN(it.rpe)}${it.rpeMax != null && it.rpeMax > it.rpe ? '–' + fmtN(it.rpeMax) : ''}` : it.pct ? ` · ${fmtN(it.pct)}% 1RM` : '';
+    const restBtn = pref('autoRest') ? '' : `<button class="chip" data-a="rest-start" data-i="${it.id}" aria-label="${esc(t('restStart'))}">${I.play.replace('<svg ', '<svg width="14" height="14" ')} ${esc(fmtClock(it.rest || 0))}</button>`;
+    const best = it.sets.filter(x => x.done && num(x.weight) != null).sort((a, b) => num(b.weight) - num(a.weight))[0];
+    return `<section class="ex-card ${col ? 'col' : ''} ${g ? 'grp' + (g.first ? ' g-first' : '') + (g.last ? ' g-last' : '') : ''} ${L && L.ids.includes(it.id) ? 'lsel' : ''}" data-item="${it.id}" aria-label="${esc(exName(it.exId))}">
+      <div class="ex-head">${med ? mediaThumb(it.exId) : `<span class="ex-ix" aria-hidden="true">${n + 1}</span>`}<div class="ex-titles"><div class="ex-name-row" data-lp="${it.id}">${nameEl}</div><div class="ex-eb">${col ? esc(t('colSum', doneN, it.sets.length)) + (best ? ' · ' + esc(fmtSet(best, ex)) : '') : meta}</div></div>
+        ${L ? '' : `<button class="icon-btn chev" data-a="ex-col" data-i="${it.id}" aria-expanded="${!col}" aria-label="${esc(col ? t('expand') : t('collapse'))}">${col ? I.down : I.up}</button>`}</div>
+      ${col ? '' : `${prCard}
       ${pref('showSug') && !it.sug && !hasHistory(it.exId, a.startedAt) ? `<div class="muted small">${esc(t('firstTime'))}</div>` : ''}
       ${sugLine(it)}
+      ${it.reps ? `<div class="ex-tgt">${esc(t('tgtLbl'))} <b>${esc(it.reps + targetUnit(it.exId))}</b>${esc(rpeT)}</div>` : ''}
       ${cueTxt.length ? `<details class="fold cues-d"><summary><span class="lbl">${esc(t('cuesLbl'))}</span><span class="peek">${esc(cueTxt[0])}</span></summary><div class="cues">${cueTxt.map(c => `<div>${esc(c)}</div>`).join('')}</div></details>` : ''}
       ${note && note.text ? `<details class="fold note-d"><summary><span class="lbl">${esc(t('note'))}</span><span class="peek">${esc(note.text)}</span></summary><div class="note-full">${esc(note.text)}</div><button class="btn small ghost" data-a="note" data-v="${esc(it.exId)}">${esc(t('edit'))}</button></details>` : ''}
       ${it.pct ? `<div class="ex-meta"><button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button></div>` : ''}
       ${setGrid(it)}
-      <div class="set-actions"><button class="btn small" data-a="add-set" data-i="${it.id}">${esc(t('addSetS'))}</button>${it.sets.length ? `<button class="btn small ghost" data-a="del-set" data-i="${it.id}">${esc(t('removeSetS'))}</button>` : ''}<span class="grow"></span>${restChip}</div>
+      <div class="set-actions"><button class="btn small ghost" data-a="add-set" data-i="${it.id}">${I.plus.replace('<svg ', '<svg width="16" height="16" ')} ${esc(t('setS'))}</button><span class="grow"></span>${restBtn}<button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('exMenu'))}">${I.more}</button></div>`}
     </section>`;
   }).join('');
-  return `<main class="screen workout">${linkBar()}
-    <div class="wk-head"><button class="icon-btn" data-a="nav" data-v="today" aria-label="${esc(t('back'))}">${I.down}</button>
-      <div class="wk-title"><button class="t" data-a="rename" style="background:none;border:0;padding:0;max-width:100%" aria-label="${esc(t('rename'))}">${esc(a.name)} <span class="muted" aria-hidden="true">✎</span></button><div class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</div></div>
-      <button class="icon-btn" data-a="wk-view" aria-label="${esc(t('viewTitle'))}">${I.gear}</button><button class="btn small ghost" data-a="finish">${esc(t('finish'))}</button></div>
+  const doneAll = a.items.reduce((x, it) => x + it.sets.filter(y => y.done).length, 0), totalAll = a.items.reduce((x, it) => x + it.sets.length, 0);
+  const curIt = (S.con && findItem(S.con.i)) || a.items.find(x => x.sets.some(y => !y.done));
+  const tl = S.timer ? Math.max(0, Math.ceil((S.timer.endAt - now()) / 1000)) : 0;
+  document.body.classList.toggle('con-open', !!S.con);
+  return `<main class="screen workout ${S.con ? 'con-on' : ''}">${linkBar()}
+    <div class="wk-bar"><button class="icon-btn" data-a="nav" data-v="today" aria-label="${esc(t('back'))}">${I.down}</button>
+      <button class="tool ${S.timer ? 'on' : ''}" data-a="wk-timer" aria-label="${esc(S.timer ? t('restTimer') : t('restStart'))}">${I.clock}<span>${S.timer ? `<b id="wk-rest">${fmtClock(tl)}</b>` : esc(t('restS'))}</span></button>
+      ${curIt && isBarEx(curIt.exId) ? `<button class="tool" data-a="plates-open" data-v="${curIt.id}" aria-label="${esc(t('plateCalc'))}">${I.plate}<span>${esc(t('platesS'))}</span></button>` : ''}
+      <span class="clock" id="wclock">${fmtDur(now() - a.startedAt)}</span>
+      <button class="btn small primary fin" data-a="finish">${esc(t('finish'))}</button></div>
+    <div class="wk-sub"><button class="wk-name" data-a="rename" aria-label="${esc(t('rename'))}">${esc(a.name)}</button><span class="num">${esc(t('setsDoneOf', doneAll, totalAll))}</span></div>
+    <div class="wk-prog" aria-hidden="true"><i style="width:${totalAll ? Math.round(doneAll / totalAll * 100) : 0}%"></i></div>
     ${a.notes && a.notes.length ? `<div class="info wk-notes">${a.notes.map(n => `<div>${esc(n)}</div>`).join('')}</div>` : ''}
     ${cards || `<div class="empty">${esc(t('addExercise'))}</div>`}
-    <div class="workout-foot"><button class="btn block" data-a="session-add-ex">${esc(t('addExercise'))}</button>
-      <button class="btn primary block" data-a="finish">${esc(t('finishWorkout'))}</button>
-      <button class="btn block ghost" data-a="discard">${esc(t('discard'))}</button></div>
+    <div class="workout-foot"><button class="btn block" data-a="session-add-ex">${I.plus.replace('<svg ', '<svg width="18" height="18" ')} ${esc(t('addExercise'))}</button>
+      <button class="btn block ghost danger-t" data-a="discard">${esc(t('discard'))}</button></div>
+    ${S.con ? conHtml() : ''}
   </main>`;
 }
+function exCollapsed(it) { const c = S.col && S.col[it.id]; if (c != null) return c; return it.sets.length > 0 && it.sets.every(x => x.done) && !(S.con && S.con.i === it.id); }
 
 /* ---------- v0.6: coach cards on Today ---------- */
 const FLAG_TYPES_DELOAD = new Set(['stall', 'regression', 'fatigue', 'readiness', 'junk']);
@@ -3338,27 +3438,70 @@ const A = {
   'session-add-ex': () => openSheet({ type: 'picker', target: { kind: 'session' } }),
   'set-done': el => {
     const it = findItem(el.dataset.i); const s = it.sets.find(x => x.id === el.dataset.s);
-    const row = el.closest('.set');
-    if (!s.done) {
-      // take placeholders as values when fields are empty
-      row.querySelectorAll('input').forEach(inp => { if (inp.dataset.k !== 'rpe' && inp.value === '' && inp.placeholder) { s[inp.dataset.k] = inp.placeholder.replace(',', '.'); } });
-      s.done = true; s.doneAt = now();
-      if (s.rpe !== '' && s.rpe != null) { const q = normRpe(s.rpe); s.rpe = q == null ? '' : String(q); }
-      s.pr = detectPR(it.exId, s); S._justDone = s.id;
-      if (s.pr.length) S._justPR = it.id;
-      buzz(s.pr.length ? [15, 60, 25] : 10);
-      ensureAudio();
-      const items = S.active.items, ix = items.indexOf(it), sIdx = it.sets.indexOf(s);
-      const later = it.group ? items.slice(ix + 1).filter(x => x.group === it.group) : [];
-      const wait = later.some(x => x.sets.length > sIdx);
-      if (!wait) { if (pref('autoRest')) startTimer(it.rest || S.settings.restI); }
-      else { const nx = later.find(x => x.sets.length > sIdx); S._focusNext = { i: nx.id, s: nx.sets[sIdx].id }; }
-    } else { s.done = false; s.pr = []; }
+    if (S.con && S.con.s === s.id) conCommit();
+    if (!s.done) completeSet(it, s); else { s.done = false; s.pr = []; }
+    if (s.done && S.con) { S.con = conNext(it, s); }
     let advance = null;
     if (S.settings.focus === true && s.done && it.sets.every(x => x.done)) { const nx = S.active.items.find(x => x !== it && x.sets.some(y => !y.done)); if (nx) { S.focusId = nx.id; advance = nx.id; } }
     saveActive(); render();
     if (advance) scrollToItem(advance);
-    if (S._focusNext) { const f = S._focusNext; S._focusNext = null; setTimeout(() => { const inp = document.querySelector(`input[data-f="set"][data-i="${f.i}"][data-s="${f.s}"]`); if (inp && !inp.value) { try { inp.focus({ preventScroll: false }); } catch (e) {} } }, 60); }
+    if (S.con) scrollToSet(S.con.s);
+  },
+  'con-open': el => {
+    conCommit();
+    const k = el.dataset.k;
+    S.con = { i: el.dataset.i, s: el.dataset.s, f: k && k !== 'rpe' ? k : null, pad: !!(k && k !== 'rpe'), buf: k && k !== 'rpe' ? '' : null };
+    if (!S.con.f) { const it = findItem(el.dataset.i); S.con.f = setFields((S.ex.get(it.exId) || {}).logging)[0]; }
+    render(); scrollToSet(el.dataset.s);
+  },
+  'con-close': () => { conCommit(); S.con = null; render(); },
+  'con-pad': el => { conCommit(); S.con.f = el.dataset.k; S.con.pad = true; S.con.buf = ''; render(); },
+  'con-pad-done': () => { conCommit(); S.con.pad = false; render(); },
+  'con-key': el => {
+    const c = S.con; let b = c.buf ?? ''; const k = el.dataset.v;
+    if (k === 'del') b = b.slice(0, -1); else if (k === '.') { if (c.f !== 'reps' && !b.includes('.')) b = (b || '0') + '.'; } else if (b.length < 6) b = b === '0' ? k : b + k;
+    c.buf = b; render();
+  },
+  'con-step': el => {
+    conCommit();
+    const it = findItem(S.con.i); const s = it.sets.find(x => x.id === S.con.s); const k = el.dataset.k;
+    const ph = setPh(it, it.sets.indexOf(s));
+    const base = num(s[k]) ?? num(String(ph[k] || '').replace(',', '.')) ?? 0;
+    let v = Math.max(0, Math.round((base + +el.dataset.v) * 100) / 100);
+    if (k === 'weight' && (S.ex.get(it.exId) || {}).logging === 'BWX') v = Math.round((base + +el.dataset.v) * 100) / 100; // added weight may go below zero (assisted)
+    s[k] = String(v); if (s.done) s.pr = detectPR(it.exId, s);
+    saveActive(); render();
+  },
+  'con-rpe': el => {
+    const it = findItem(S.con.i); const s = it.sets.find(x => x.id === S.con.s);
+    s.rpe = normRpe(s.rpe) === +el.dataset.v ? '' : String(+el.dataset.v); if (s.done) s.pr = detectPR(it.exId, s);
+    saveActive(); render();
+  },
+  'con-feel': el => {
+    const it = findItem(S.con.i); const s = it.sets.find(x => x.id === S.con.s);
+    const tg = +s.target.rpe; const v = { easy: Math.max(5, tg - 2), ok: tg, hard: Math.min(10, tg + 1.5) }[el.dataset.v];
+    s.rpe = String(normRpe(v)); s.feel = el.dataset.v; if (s.done) s.pr = detectPR(it.exId, s); saveActive(); render();
+  },
+  'con-same': () => {
+    const it = findItem(S.con.i); const s = it.sets.find(x => x.id === S.con.s); const p = setPh(it, it.sets.indexOf(s)).p; if (!p) return;
+    for (const k of ['weight', 'reps', 'time', 'dist']) if (p[k] !== '' && p[k] != null) s[k] = String(p[k]);
+    saveActive(); render();
+  },
+  'con-log': () => {
+    conCommit();
+    const it = findItem(S.con.i); const s = it && it.sets.find(x => x.id === S.con.s); if (!s) { S.con = null; render(); return; }
+    if (!s.done) completeSet(it, s); else s.pr = detectPR(it.exId, s);
+    S.con = conNext(it, s);
+    let advance = null;
+    if (S.settings.focus === true && it.sets.every(x => x.done)) { const nx = S.active.items.find(x => x !== it && x.sets.some(y => !y.done)); if (nx) { S.focusId = nx.id; advance = nx.id; } }
+    saveActive(); render();
+    if (S.con) scrollToSet(S.con.s); else if (advance) scrollToItem(advance);
+  },
+  'ex-col': el => { const it = findItem(el.dataset.i); if (!it) return; S.col = S.col || {}; S.col[it.id] = !exCollapsed(it); if (S.col[it.id] && S.con && S.con.i === it.id) S.con = null; render(); },
+  'wk-timer': () => {
+    if (S.timer) { S.con = null; render(); return; } // the full timer shows when the console is closed
+    const it = (S.con && findItem(S.con.i)) || S.active.items.find(x => x.sets.some(y => !y.done)) || S.active.items[0]; if (!it) return;
+    ensureAudio(); startTimer(it.rest || S.settings.restI); render();
   },
   'add-set': el => {
     const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId);
@@ -3529,14 +3672,16 @@ const A = {
       { id: 'info', label: t('progression') },
       ...(canCalib(it) ? [{ id: 'cal', label: t('calibChip') }] : []),
       ...(isBarEx(it.exId) ? [{ id: 'plates', label: t('plateChip') }] : []),
-      { id: 'swap', label: t('subs') }, { id: 'note', label: t('note') }, { id: 'rest', label: t('rest') + ': ' + fmtClock(it.rest || 0) },
+      { id: 'swap', label: t('subs') }, { id: 'note', label: t('note') }, { id: 'rest', label: t('rest') + ': ' + fmtClock(it.rest || 0) }, { id: 'hist', label: t('histAria') }, { id: 'view', label: t('viewTitle') + ': ' + t('view_' + viewMode()) },
+      ...(it.sets.length ? [{ id: 'delset', label: t('removeSetS') }] : []),
       { id: 'grp', label: t('supBtn') + '…' },
       ...(i > 0 ? [{ id: 'up', label: t('moveUp') }] : []), ...(i < S.active.items.length - 1 ? [{ id: 'down', label: t('moveDown') }] : []),
       { id: 'del', label: t('remove'), danger: true }],
       handlers: {
         info: () => A['scheme-info'](ref), cal: () => A['calib-open'](ref), plates: () => A['plates-open'](ref), swap: () => A.subs(ref),
         note: () => A.note({ dataset: { v: it.exId } }),
-        rest: () => A['rest-edit'](ref),
+        rest: () => A['rest-edit'](ref), hist: () => A['ex-hist']({ dataset: { v: it.exId } }), view: () => A['wk-view'](),
+        delset: () => A['del-set'](ref),
         grp: () => groupMenu(S.active.items, it, saveActive),
         up: () => { S.active.items.splice(i, 1); S.active.items.splice(i - 1, 0, it); normGroups(S.active.items); saveActive(); render(); },
         down: () => { S.active.items.splice(i, 1); S.active.items.splice(i + 1, 0, it); normGroups(S.active.items); saveActive(); render(); },

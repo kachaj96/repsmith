@@ -1,4 +1,4 @@
-# Repsmith v0.17.0
+# Repsmith v0.18.0
 
 Autor: Adrian Drożdżyński
 
@@ -52,6 +52,14 @@ Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-syste
 
 
 Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+
+## Zmiany w v0.18.0
+
+Nowy ekran treningu (kierunek A z konsolą serii z kierunku C, prototyp w `design/redesign-2026/`).
+- Stały pasek u góry: przerwa (start ręczny albo odliczanie, gdy trwa), kalkulator talerzy dla ćwiczeń ze sztangą, czas treningu, Zakończ. Pod nim nazwa treningu, liczba zapisanych serii i pasek postępu.
+- Kafel ćwiczenia: nazwa, partia i sprzęt, cel (np. 6–8 powt. · RPE 9–10) raz na kafel. Ukończone ćwiczenie zwija się do jednej linii (liczba serii i najlepsza seria), strzałką rozwijasz je z powrotem. Historia, notatka, przerwa, zamiana, widok treningu i usuwanie ostatniej serii są w menu ⋯.
+- Tabela serii: numer serii (R1 rozgrzewka, Top, B1 back-off, 1L/1P przy ćwiczeniach jednostronnych), poprzedni wynik, kg, powtórzenia, RPE i ✓. Bez systemowej klawiatury: ✓ zapisuje to, co widać w wierszu.
+- Konsola serii na dole ekranu po dotknięciu wiersza: kg i powtórzenia z −/+ (krok z ustawień, 1 powt.), dotknięcie liczby otwiera klawiaturę numeryczną, RPE jednym dotknięciem, „Jak ostatnio”, „Zapisz serię”. Po zapisie konsola przechodzi do następnej serii (w superserii do partnera z tej samej rundy). Działa też dla ćwiczeń na czas, z dystansem, z masą ciała (także z odciążeniem) i z oceną Łatwo/Zgodnie z planem/Ciężko.
 
 ## Zmiany w v0.17.0
 

@@ -141,10 +141,11 @@ try:
     ok("120 kg × 5+" in sug and "80% z 1RM 150,5 kg" in sug, f"workout suggestion from %1RM: {sug}")
     ok(c0.locator(".set.is-top, .set").filter(has_text="AMRAP").count() == 3, "3 work sets tagged AMRAP")
     w0 = c0.locator(".set").filter(has_text="AMRAP").first
-    ok(w0.locator("input[data-k=weight]").get_attribute("placeholder") == "120" and w0.locator("input[data-k=reps]").get_attribute("placeholder") == "5", "placeholders 120 kg / 5 reps (numeric, not 5+)")
+    ok(w0.locator("button.fv[data-k=weight]").get_attribute("data-ph") == "120" and w0.locator("button.fv[data-k=reps]").get_attribute("data-ph") == "5", "placeholders 120 kg / 5 reps (numeric, not 5+)")
     ok(c0.locator("button[data-a=orm-open]").inner_text().strip() == "1RM 150,5 kg", "1RM chip on workout card")
     c1 = p.locator(".ex-card").nth(1)
-    rp = c1.locator(".set").filter(has_not_text="Rozgrz").first.locator("button.rpe-btn").inner_text()
+    wi = p.evaluate("() => window.Repsmith.S.active.items[1].sets.findIndex(x => x.kind !== 'warmup')")
+    rp = c1.locator(".set").nth(wi).locator("button.fv.rpe").inner_text()
     ok(rp == "7,5-8,5", f"RPE range placeholder: {rp!r}")
     p.screenshot(path=f"{SH}/04-workout.png", full_page=True); noov(p, "workout")
     # log AMRAP set by placeholder, check stored reps numeric
@@ -181,8 +182,9 @@ try:
     click(p, "button[data-a=nav][data-v=today]"); click(p, "button[data-a=start-day]")
     if p.locator("button[data-a=ready-pick]").count(): click(p, "button[data-a=ready-pick][data-v='']")
     p.wait_for_selector(".ex-card")
-    bo = p.locator(".ex-card").first.locator(".set").filter(has_text="Backoff").first
-    ok(bo.locator("input[data-k=reps]").get_attribute("placeholder") == "6", "workout backoff placeholder = lower end (6)")
+    bi = p.evaluate("() => window.Repsmith.S.active.items[0].sets.findIndex(x => x.kind === 'backoff')")
+    bo = p.locator(".ex-card").first.locator(".set").nth(bi)
+    ok(bo.locator("button.fv[data-k=reps]").get_attribute("data-ph") == "6", "workout backoff placeholder = lower end (6)")
     tr = p.evaluate("() => window.Repsmith.S.active.items[0].sets.find(x => x.kind === 'backoff').target.reps")
     ok(tr == "6-8", f"backoff target stored as range: {tr}")
     click(p, "button[data-a=discard]"); click(p, "button[data-a=confirm-yes]")

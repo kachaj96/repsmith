@@ -52,7 +52,10 @@ try:
     p.wait_for_selector(".ex-card")
     c0 = p.locator(".ex-card").first
     for j in range(c0.locator(".set").count()):
-        s = c0.locator(".set").nth(j); s.locator("input[data-k=weight]").fill("100"); s.locator("input[data-k=reps]").fill("5"); s.locator("button.check").click(); p.wait_for_timeout(60)
+        s = c0.locator(".set").nth(j); s.locator("button.fv[data-k=weight]").click()
+        for k in "100": p.locator(f'#con button[data-a=con-key][data-v="{k}"]').click()
+        p.locator("#con button[data-a=con-pad][data-k=reps]").click(); p.locator('#con button[data-a=con-key][data-v="5"]').click()
+        p.locator("#con button[data-a=con-log]").click(); p.wait_for_timeout(60)
     click(p, "button[data-a=finish]"); click(p, "button[data-a=summary-save]"); p.wait_for_timeout(300)
     click(p, "button[data-a=nav][data-v=today]"); click(p, "button[data-a=start-day]")
     if p.locator("button[data-a=ready-pick]").count(): click(p, "button[data-a=ready-pick][data-v='']")
