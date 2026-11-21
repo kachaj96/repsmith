@@ -1206,3 +1206,4 @@ button.ct.tab { grid-template-columns: minmax(0, 1fr); border: 2px solid transpa
 button.ct.tab .mid { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .con-vals .ct { min-width: 0; }
 @media (max-width: 360px) { .ct { grid-template-columns: var(--tap) minmax(0, 1fr) var(--tap); } .ct .mid b { font-size: var(--t-title); } .ct.on .mid b { font-size: var(--t-title); } }
+.nav button.on { background: var(--field); }

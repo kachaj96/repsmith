@@ -42,8 +42,8 @@ for (const scheme of ['light', 'dark']) for (const w of WIDTHS) {
   };
   await c('button[data-a=nav][data-v=today]'); await shot('today');
   await c('button[data-a=nav][data-v=plans]'); await shot('plans');
-  await c('button[data-a=nav][data-v=progress]'); await shot('progress');
-  await c('button[data-a=nav][data-v=history]'); await shot('history');
+  await c('button[data-a=nav][data-tab=journal]'); await c('button[data-a=jr-tab][data-v=strength]'); await shot('progress');
+  await c('button[data-a=jr-tab][data-v=history]'); await shot('history');
   await c('button[data-a=nav][data-v=library]'); await shot('library');
   await c('button[data-a=settings]'); await shot('settings'); await c('button[data-a=sheet-close]');
   await c('button[data-a=nav][data-v=today]'); await c('button[data-a=start-day]'); await shot('dialog');
