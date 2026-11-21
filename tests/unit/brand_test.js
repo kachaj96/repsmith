@@ -3,12 +3,12 @@ const fs = require('fs'), path = require('path'); const A = p => path.join(__dir
 let P = 0, F = 0; const ok = (c, m) => { if (c) P++; else { F++; console.log('FAIL', m); } };
 const png = p => { const b = fs.readFileSync(A(p)); return [b.readUInt32BE(16), b.readUInt32BE(20)]; };
 const read = p => fs.readFileSync(A(p), 'utf8');
-const TILE = '#9C421D';
+const TILE = '#56692A';
 (async () => {
   const brand = await import('../../scripts/brand.mjs');
   const logo = read('design/logo.svg'), page = read('index.html'), app = read('app.js');
   ok(brand.PARTS.length === 4 && brand.PARTS.filter(p => p.id.startsWith('bar')).length === 3 && brand.PARTS[3].id === 'diag', 'three bars and one diagonal, the diagonal last');
-  ok(logo.includes(TILE) && logo === read('icons/icon.svg'), 'the master logo is the PWA icon and uses the copper tile');
+  ok(logo.includes(TILE) && logo === read('icons/icon.svg'), 'the master logo is the PWA icon and uses the olive tile');
   for (const p of brand.PARTS) { ok(logo.includes(`d="${p.d}"`), `logo has ${p.id}`); ok(page.includes(`d="${p.d}"`), `start screen draws ${p.id}`); ok(app.includes(`d="${p.d}"`), `in-app mark draws ${p.id}`); }
   for (const f of ['index.html', 'app.js', 'design/logo.svg', 'icons/icon.svg']) { const t = read(f); ok(!t.includes('skewX(-9)') && !t.includes('M38 34v52') && !t.includes('M27 75l66-30'), `${f}: no trace of the old tally`); }
   ok(!read('design/logo-background.svg').includes('rx=') && !read('design/logo-foreground.svg').includes('<rect'), 'adaptive layers: a flat full-bleed background, a foreground with no tile (no second rounding)');

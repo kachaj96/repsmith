@@ -50,13 +50,13 @@ try:
         click(p, "button[data-a=skip-undo]")
         ok(p.locator(".hero h1").inner_text() == first and p.locator(".slim:has-text('Pominięto')").count() == 0, "undo brings the skipped workout back")
         # history: no runs, calendar always reachable
-        click(p, "button[data-a=nav][data-v=history]")
+        click(p, "button[data-a=nav][data-tab=journal]"); click(p, "button[data-a=jr-tab][data-v=history]")
         ok("Biegi" not in p.locator("main").inner_text(), "no runs tab in History")
         ok(p.locator("button[data-a=hist-mode]").count() == 1, "calendar reachable even with no workouts")
         click(p, "button[data-a=hist-mode]")
         ok(p.locator(".cal-w span").first.inner_text().startswith("pon"), "calendar weekdays as in Runsmith (pon.)")
         ok(p.locator(".cal-c.today").count() == 1, "today marked in the calendar")
-        click(p, "button[data-a=nav][data-v=progress]"); ok("Biegi" not in p.locator("main").inner_text(), "no runs tab in Progress")
+        click(p, "button[data-a=nav][data-tab=journal]"); click(p, "button[data-a=jr-tab][data-v=strength]"); ok("Biegi" not in p.locator("main").inner_text(), "no runs tab in Progress")
         click(p, "button[data-a=nav][data-v=today]"); ok(p.locator("button[data-a=run-new]").count() == 0, "no 'log a run' on Today")
         # theme
         click(p, "button[data-a=settings]"); p.evaluate("() => document.querySelectorAll('.sheet details').forEach(d => { d.open = true; })")

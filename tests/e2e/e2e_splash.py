@@ -71,7 +71,7 @@ try:
         ctx, p, errs = page_for(b, color_scheme=scheme, **VP)
         p.wait_for_selector("#splash", state="attached")
         c = p.evaluate("() => ({ bg: getComputedStyle(document.getElementById('splash')).backgroundColor, tile: document.querySelector('.sp-tile rect').getAttribute('fill') })")
-        ok(c["bg"] == bg and c["tile"] == "#9C421D", f"start [{scheme}]: background and tile colours", c)
+        ok(c["bg"] == bg and c["tile"] == "#56692A", f"start [{scheme}]: background and tile colours", c)
         ctx.close()
 
     # reduced motion

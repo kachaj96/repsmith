@@ -64,7 +64,7 @@ try:
     p.screenshot(path=f"{SH}/10-today-last.png")
 
     # --- history: edit a past set
-    click(p, "button[data-a=nav][data-v=history]"); click(p, "button[data-a=open-session]")
+    click(p, "button[data-a=nav][data-tab=journal]"); click(p, "button[data-a=jr-tab][data-v=history]"); click(p, "button[data-a=open-session]")
     tags = p.locator("button.tag[data-a=es-open]").filter(has_not_text="+")
     ok(tags.count() == 2, f"history shows tappable sets: {tags.count()}")
     tags.first.click(); p.wait_for_timeout(200)

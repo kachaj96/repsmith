@@ -40,7 +40,7 @@ try:
     ok("upadek" in sh and "drop" in sh, "history shows failure and drop marks")
     p.screenshot(path=f"{_OUT}/02-hist.png")
     click(p, "button[data-a=hist-progress]"); p.wait_for_timeout(200)
-    ok("Postęp" in p.locator("main").inner_text() or "POSTĘP" in p.locator("main").inner_text().upper(), "history opens progress")
+    ok(p.locator("main button[data-a=jr-tab][data-v=strength].on").count() == 1, "history opens progress (Dziennik, tab Siła)")
     p.evaluate("() => window.Repsmith.S.view") 
     click(p, "button[data-a=nav][data-v=workout]")
     p.wait_for_timeout(300)

@@ -168,7 +168,7 @@ try:
         assert "ciężar" in toast_txt and "e1RM" not in toast_txt; ok("PR: 145x2 (no RPE = RPE10, e1RM 151.8) beats weight but not e1RM 162.2 from 140x3@8")
         assert page.locator(".ex-card").first.locator(".pr-badge").count() == 1; ok("PR badge on set")
         click(page, "button[data-a=finish] >> nth=0"); click(page, "button[data-a=summary-save]")
-        click(page, "button[data-a=nav][data-v=history]")
+        click(page, "button[data-a=nav][data-tab=journal]"); click(page, "button[data-a=jr-tab][data-v=history]")
         assert page.locator(".diff-badge").count() == 1 and page.locator(".pr-badge").count() == 1; ok("history: difficulty and PR count visible")
         click(page, "button[data-a=nav][data-v=library]")
         page.fill("#libq", "przysiad ze sztang"); page.wait_for_timeout(150)
@@ -179,7 +179,7 @@ try:
         click(page, "button[data-a=sheet-close]")
 
         # history + export/import roundtrip
-        click(page, "button[data-a=nav][data-v=history]")
+        click(page, "button[data-a=nav][data-tab=journal]"); click(page, "button[data-a=jr-tab][data-v=history]")
         assert page.locator("button[data-a=open-session]").count() == 2; ok("history list")
         backup = page.evaluate("JSON.stringify({app:'repsmith',schema:1,settings:window.Repsmith.S.settings,templates:window.Repsmith.S.templates,sessions:window.Repsmith.S.sessions,notes:window.Repsmith.S.notes,customExercises:window.Repsmith.S.customExercises,active:null})")
         click(page, "button[data-a=settings]")
@@ -210,7 +210,7 @@ try:
 
         # ---------- v0.5 ----------
         # progress: strength
-        click(page, "button[data-a=nav][data-v=progress]")
+        click(page, "button[data-a=nav][data-tab=journal]"); click(page, "button[data-a=jr-tab][data-v=strength]")
         txt = page.locator("main").inner_text()
         assert "PRZYSIAD ZE SZTANG" in txt.upper(); ok("progress opens on most-logged exercise")
         assert page.locator("svg[data-a=chart-tap]").count() == 1
@@ -222,7 +222,7 @@ try:
         assert len(vol) >= 3; ok("weekly volume per muscle")
         page.screenshot(path=f"{SHOTS}/09-progress.png", full_page=True)
         # body: two measurements
-        click(page, "button[data-a=prog-tab][data-v=body]")
+        click(page, "button[data-a=jr-tab][data-v=body]")
         click(page, "button[data-a=m-new]")
         page.fill("#m-weight", "83,4"); page.fill("#m-waist", "86")
         import datetime as _dt
@@ -272,10 +272,10 @@ try:
         click(page, "button[data-a=nav][data-v=plans] >> nth=-1")
 
         # ---------- v0.5.1 ----------
-        click(page, "button[data-a=nav][data-v=progress]"); click(page, "button[data-a=prog-tab][data-v=strength]")
+        click(page, "button[data-a=nav][data-tab=journal]"); click(page, "button[data-a=jr-tab][data-v=strength]"); click(page, "button[data-a=jr-tab][data-v=strength]")
         bb = page.locator("button[data-a=prog-week][data-v='1']").bounding_box()
         assert bb["x"] + bb["width"] <= 390, bb; ok("week chips fit on screen")
-        click(page, "button[data-a=nav][data-v=history]")
+        click(page, "button[data-a=nav][data-tab=journal]"); click(page, "button[data-a=jr-tab][data-v=history]")
         click(page, "button[data-a=open-session] >> nth=-1")
         src_n = page.locator(".card .row").count()
         click(page, "button[data-a=repeat]")
@@ -352,7 +352,7 @@ try:
         assert set(on) == {"UB", "LAT"} and set(sec) == {"BI", "RD"}; ok("exercise detail highlights primary/secondary")
         page.screenshot(path=f"{SHOTS}/13-detail-body.png")
         click(page, "button[data-a=sheet-close]")
-        click(page, "button[data-a=nav][data-v=progress]"); click(page, "button[data-a=prog-tab][data-v=strength]")
+        click(page, "button[data-a=nav][data-tab=journal]"); click(page, "button[data-a=jr-tab][data-v=strength]"); click(page, "button[data-a=jr-tab][data-v=strength]")
         heat = page.locator(".bodymap .bm-m[class*=' h']").count(); print("heat regions:", heat)
         assert heat > 0; ok("weekly volume heat map")
         page.locator(".bodymap [data-m=Q]").first.click(); page.wait_for_timeout(100)

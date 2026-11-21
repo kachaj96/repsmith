@@ -4,7 +4,7 @@
 // the reference is mapped onto it by (x - cx) * K + 512.
 export const BRAND = {
   name: 'Repsmith',
-  tile: '#9C421D',          // copper of the approved logo (the UI accent in app.css stays as it is)
+  tile: '#56692A',          // olive (0.19), the light-theme accent in app.css; white glyph on it is 6.1:1
   radius: 229,              // 22.4 % of the tile, as in Runsmith
   glyphColor: '#FFFFFF',
 };

@@ -69,8 +69,8 @@
   --smith-on-accent: #ffffff;
 }
 [data-smith-product="repsmith"] {
-  --smith-accent: #a84b24;
-  --smith-accent-soft: #fbe9e1;
+  --smith-accent: #56692a;
+  --smith-accent-soft: #e9eddd;
   --smith-on-accent: #ffffff;
 }
 [data-smith-product="runsmith"][data-smith-theme="dark"] {
@@ -79,9 +79,9 @@
   --smith-on-accent: #071a1c;
 }
 [data-smith-product="repsmith"][data-smith-theme="dark"] {
-  --smith-accent: #ff9f70;
-  --smith-accent-soft: #3a2117;
-  --smith-on-accent: #1a0e08;
+  --smith-accent: #b7c98a;
+  --smith-accent-soft: #252b1c;
+  --smith-on-accent: #171c0b;
 }
 
 @media (prefers-reduced-motion: reduce) {

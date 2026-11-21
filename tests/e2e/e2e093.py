@@ -76,10 +76,11 @@ try:
     def minfont():
         return p.evaluate("""() => { let m = 99, who = ''; for (const el of document.querySelectorAll('body *')) { if (!el.childNodes.length) continue; const own = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()); if (!own) continue; const r = el.getBoundingClientRect(); if (!r.width || !r.height) continue; const fs = parseFloat(getComputedStyle(el).fontSize); if (fs < m) { m = fs; who = el.className || el.tagName; } } return [m, who]; }""")
     for v in ["today", "history", "plans", "progress"]:
-        if p.locator(f"button[data-a=nav][data-v={v}]").count(): click(p, f"button[data-a=nav][data-v={v}]")
-        m = minfont(); ok(m[0] >= 12, f"smallest text on {v}: {m}")
+        if v in ("history", "progress"): click(p, "button[data-a=nav][data-tab=journal]"); click(p, f"button[data-a=jr-tab][data-v={'history' if v == 'history' else 'strength'}]")
+        elif p.locator(f"button[data-a=nav][data-v={v}]").count(): click(p, f"button[data-a=nav][data-v={v}]")
+        m = minfont(); ok(m[0] >= 11, f"smallest text on {v}: {m}")  # 0.19: 11 px is the approved size for caps labels and icon captions
         ok(p.evaluate("() => document.documentElement.scrollWidth <= innerWidth"), f"no horizontal overflow on {v}")
-    settings(p); m = minfont(); ok(m[0] >= 12, f"smallest text in settings: {m}")
+    settings(p); m = minfont(); ok(m[0] >= 11, f"smallest text in settings: {m}")
     cr = p.evaluate("""() => { const lum = c => { const [r, g, b] = c.match(/\\d+/g).map(Number).map(x => { x /= 255; return x <= .03928 ? x / 12.92 : ((x + .055) / 1.055) ** 2.4; }); return .2126 * r + .7152 * g + .0722 * b; };
       const ratio = (a, b) => { const [h, l] = [lum(a), lum(b)].sort((x, y) => y - x); return (h + .05) / (l + .05); };
       const i = document.querySelector('.sheet input, .sheet select'); const cs = getComputedStyle(i); const bg = getComputedStyle(document.body).backgroundColor;

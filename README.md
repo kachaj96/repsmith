@@ -1,4 +1,4 @@
-# Repsmith v0.18.1
+# Repsmith v0.19.0
 
 Autor: Adrian Drożdżyński
 
@@ -51,7 +51,20 @@ Ten sam kod jest też zwykłą aplikacją na Androida (Capacitor 8), identyfikat
 Od v0.11.1 obie aplikacje wdrażają Smith Design System v1 (`smith-design-system-v1/`, ten sam katalog w repo Runsmith): wspólne tokeny z aliasami `--smith-*`, ta sama nawigacja z pigułką aktywnej zakładki, promienie, przyciski i ruch. Test `tests/unit/smith_test.js` pilnuje zgodności wartości, `tests/visual/shots.mjs` robi zrzuty ekranów przy 320-768 px.
 
 
-Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, Manrope i Inter (pliki w `fonts/`, bez sieci), karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Akcent: miedź w jasnym, morelowy w ciemnym.
+Od v0.11.0 Repsmith jest w jednej rodzinie z Runsmith: ten sam kafel ikony i grubość linii, karty, sprężyste animacje i jasny lub ciemny motyw zgodnie z telefonem. Od v0.19.0 ma własny system: Barlow (pliki w `fonts/`, bez sieci), akcent oliwkowy.
+
+## Zmiany w v0.19.0
+
+- Własny system wyglądu. Akcent oliwkowy (#56692A w jasnym, #B7C98A w ciemnym) tylko na akcji: na treningu to Zapisz serię, znacznik bieżącej serii i czas przerwy, na Dziś Zacznij trening. Zakończ, pasek postępu, zaznaczone RPE, aktywna zakładka i ✓ zrobionej serii są neutralne. Rekordy są złote.
+- Jedna czcionka, Barlow, w dwóch grubościach (400 i 700). Zastępuje Inter i Manrope. Pliki są w aplikacji, działa bez sieci.
+- Tokeny: odstępy co 4 px, tekst 11/13/16/23/33, promienie 8 i 24, dwa cienie (mały na kartach, duży na konsoli, arkuszach i komunikatach).
+- Każdy przycisk ma co najmniej 48 px, z odstępem 8 px między małymi celami. Pola serii, ✓ i klawisze konsoli też.
+- Pod seriami są dwa przyciski: + Seria i − Seria. Minus usuwa ostatnią niezrobioną serię, a gdy wszystkie są zrobione, ostatnią. Przez 5 s można to cofnąć.
+- Menu ćwiczenia: cztery narzędzia na górze (Notatka, Zamień, Przerwa, Historia), reszta pod Więcej.
+- Nawigacja ma 4 zakładki. Historia i Postęp są razem w Dzienniku (Treningi, Siła, Ciało). Dziennik otwiera ostatnią używaną zakładkę.
+- Ćwiczenie na treningu leży na tle, bez karty. Numer serii i poprzedni wynik są w jednej komórce (dotknięcie otwiera menu serii).
+- W konsoli przyciski ± są tylko na wybranym polu, które jest szersze, więc każdy ma pełne 48 px.
+- Nowe logo: ta sama kreska, oliwkowy kafel.
 
 ## Zmiany w v0.18.1
 

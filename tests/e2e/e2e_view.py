@@ -4,6 +4,8 @@ from playwright.sync_api import sync_playwright
 import _nosplash  # noqa: F401
 _APP = _os.path.abspath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", ".."))
 srv = subprocess.Popen([sys.executable, "-m", "http.server", "8783", "-d", _APP], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)
+def tap(loc):  # 0.19: bring the field below the sticky bar and above the console first
+    loc.evaluate("e => { e.scrollIntoView({ block: 'start' }); window.scrollBy(0, -72); }"); loc.click()
 P = F = 0; errs = []
 def ok(c, m):
     global P, F
@@ -35,7 +37,7 @@ try:
     tags = card.locator(".kind-btn .kl").all_inner_texts()
     ok(tags == ["1", "2", "3", "4", "5", "6"], f"sets numbered 1..6, no set-type names ({tags})")
     ok(prevs[3] == "102,5×1 @7,5" and prevs[4] == "92,5×5 @–" and prevs[5] == "–", f"previous: with RPE, without RPE, unconfirmed set not used ({prevs[3:6]})")
-    ok("bez RPE" in (card.locator(".set .prev").nth(4).get_attribute("aria-label") or ""), "missing RPE is read out as 'bez RPE'")
+    ok("bez RPE" in (card.locator(".set .kind-btn").nth(4).get_attribute("aria-label") or ""), "missing RPE is read out as 'bez RPE'")
     ok(p.locator(".ex-card").nth(1).locator(".set .prev").first.inner_text() == "–", "no history: dash, nothing invented")
     # advanced (default)
     ok(card.locator(".sug").count() == 1 and card.locator(".ex-thumb img").count() == 1 and card.locator(".cues-d").count() == 1, "advanced: suggestion, thumbnail and folded tips")
@@ -49,7 +51,7 @@ try:
     p.evaluate("() => window.Repsmith.stopTimer()")
     ok(card.locator(".set.cur").count() == 1 and "cur" in card.locator(".set").nth(1).get_attribute("class"), "current marker moves to the next set")
     # quick switch during the workout
-    card.locator("button[data-a=item-menu]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=view]").click(); p.wait_for_timeout(150)
+    card.locator("button[data-a=item-menu]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=more]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=view]").click(); p.wait_for_timeout(150)
     ok(p.locator("#sheet .switch").count() == 4 and "Zaawansowany" in p.locator("#sheet .chip.on").inner_text(), "workout view sheet: 4 switches, advanced selected")
     p.locator("#sheet button.switch[data-k=autoRest]").click(); p.wait_for_timeout(150)
     ok("Własne" in p.locator("#sheet").inner_text(), "changing one switch shows 'custom'")
@@ -61,7 +63,7 @@ try:
     ok(p.locator("#timer").count() == 1, "manual rest button starts the timer")
     p.evaluate("() => window.Repsmith.stopTimer()")
     # 2/4/5: simple preset
-    card.locator("button[data-a=item-menu]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=view]").click(); p.wait_for_timeout(150)
+    card.locator("button[data-a=item-menu]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=more]").click(); p.wait_for_timeout(150); p.locator("#sheet button[data-v=view]").click(); p.wait_for_timeout(150)
     p.locator("#sheet button[data-a=view-mode][data-v=simple]").click(); p.wait_for_timeout(150)
     ok(p.evaluate("() => ['autoRest','showSug','showCues','showMedia'].every(k => window.Repsmith.S.settings[k] === false)"), "simple preset turns the 4 switches off")
     p.locator("#sheet button[data-a=sheet-close]").first.click(); p.wait_for_timeout(150)
@@ -74,11 +76,11 @@ try:
     ok(card.locator(".note-full").is_visible() and card.locator(".note-d button[data-a=note]").count() == 1, "note opens and can be edited")
     ok(p.evaluate("() => window.Repsmith.S.templates[0].days[0].items[0].cue != null && (window.Repsmith.S.active.items[0].cues || []).length > 0"), "tips are hidden, not deleted")
     # 8. logging: type values incl. a decimal three-digit weight
-    card.locator("button.fv[data-k=weight]").nth(3).click(); p.wait_for_timeout(100)
+    tap(card.locator("button.fv[data-k=weight]").nth(3)); p.wait_for_timeout(100)
     ok(p.locator("#con").count() == 1 and p.locator("#con .con-pad").count() == 1, "tapping the weight opens the set console with the number pad")
-    p.locator(".ex-card").first.locator("button.fv.rpe").nth(4).click(); p.wait_for_timeout(80)
+    tap(p.locator(".ex-card").first.locator("button.fv.rpe").nth(4)); p.wait_for_timeout(80)
     ok(p.locator("#con .ct").count() == 3 and p.locator("#con .con-grid").count() == 1 and p.locator("#con .ct.rp.on").count() == 1, "tapping RPE opens the same console on the RPE tab")
-    card.locator("button.fv[data-k=weight]").nth(3).click(); p.wait_for_timeout(80)
+    tap(card.locator("button.fv[data-k=weight]").nth(3)); p.wait_for_timeout(80)
     for k in "102.5": p.locator(f'#con button[data-a=con-key][data-v="{k}"]').click()
     ok(p.locator("#con .ct.on .mid b").inner_text() == "102,5", "typed value shows in the console")
     p.locator("#con button[data-a=con-pad][data-k=rpe]").click(); p.wait_for_timeout(80)
@@ -94,7 +96,7 @@ try:
     s3 = p.evaluate("() => window.Repsmith.S.active.items[0].sets[3]")
     ok(s3["done"] and s3["weight"] == "102.5" and s3["reps"] == "1" and s3["rpe"] == "8", f"set saved ({s3['weight']} x {s3['reps']} @{s3['rpe']})")
     card.locator("button[data-a=set-done]").nth(3).click(); p.wait_for_timeout(100)
-    card.locator("button.fv[data-k=weight]").nth(3).click(); p.locator("#con button[data-a=con-step][data-k=weight][data-v='-2.5']").click(); p.locator("#con button[data-a=con-log]").click(); p.wait_for_timeout(200)
+    tap(card.locator("button.fv[data-k=weight]").nth(3)); p.locator("#con button[data-a=con-step][data-k=weight][data-v='-2.5']").click(); p.locator("#con button[data-a=con-log]").click(); p.wait_for_timeout(200)
     ok(p.evaluate("() => window.Repsmith.S.active.items[0].sets[3].weight") == "100", "edited set saved (102,5 - 2,5 with the stepper)")
     # 6/7: persistence
     p.reload(); p.wait_for_timeout(1200)

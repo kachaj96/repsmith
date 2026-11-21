@@ -60,7 +60,7 @@ try:
       for (const d of [1, 2, 8, 9, 16]) { const o = JSON.parse(JSON.stringify(S.sessions[0])); o.id = 'c' + d; o.startedAt = now - d * 864e5; o.endedAt = o.startedAt + 3600e3; S.sessions.push(o); }
       R.persist('sessions'); }""")
     # --- calendar
-    click(p, "button[data-a=nav][data-v=history]")
+    click(p, "button[data-a=nav][data-tab=journal]"); click(p, "button[data-a=jr-tab][data-v=history]")
     click(p, "button[data-a=hist-mode][data-v=cal]")
     ok(p.locator(".cal-c.has").count() >= 3, f"calendar marks days: {p.locator('.cal-c.has').count()}")
     ok(p.locator(".cal-c.today").count() == 1, "today marked")

@@ -2,7 +2,7 @@
 (() => {
 'use strict';
 
-const VERSION = '0.18.1';
+const VERSION = '0.19.0';
 const SCHEMA = 1;
 
 /* ---------- i18n ---------- */
@@ -508,6 +508,8 @@ const t = (k, ...a) => { const v = (STR[S.settings.lang] || STR.pl)[k]; return t
 const L = () => (S.settings.lang === 'en' ? 1 : 0);
 
 /* ---------- icons ---------- */
+Object.assign(STR.pl, { journal: 'Dziennik', jrWorkouts: 'Treningi', setPlus: 'Seria', setMinus: 'Seria', setPlusA: 'Dodaj serię', setMinusA: 'Usuń ostatnią niezrobioną serię', setRemoved: n => `Usunięto serię ${n}`, undo: 'Cofnij', undone: 'Cofnięto', moreMenu: 'Więcej', toolNote: 'Notatka', toolSwap: 'Zamień', toolRest: 'Przerwa', toolHist: 'Historia', noSetToRemove: 'Brak serii do usunięcia' });
+Object.assign(STR.en, { journal: 'Log', jrWorkouts: 'Workouts', setPlus: 'Set', setMinus: 'Set', setPlusA: 'Add a set', setMinusA: 'Remove the last open set', setRemoved: n => `Set ${n} removed`, undo: 'Undo', undone: 'Undone', moreMenu: 'More', toolNote: 'Note', toolSwap: 'Swap', toolRest: 'Rest', toolHist: 'History', noSetToRemove: 'No set to remove' });
 const I = {
   link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
@@ -527,10 +529,11 @@ const I = {
   cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
   plate: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>',
+  minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v12l-5 5H5z"/><path d="M14 21v-5h5M8.5 9h7M8.5 13h4"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
-  tally: '<svg viewBox="0 0 1024 1024" aria-hidden="true"><rect width="1024" height="1024" rx="229" fill="#9C421D"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M414.5 291.8L293.7 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M585.6 291.8L468.6 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M758.4 291.8L641.5 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="80.5" stroke-linecap="round" d="M179.1 605.8L843.9 441.9"/></svg>',
+  tally: '<svg viewBox="0 0 1024 1024" aria-hidden="true"><rect width="1024" height="1024" rx="229" fill="#56692A"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M414.5 291.8L293.7 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M585.6 291.8L468.6 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="93.3" stroke-linecap="round" d="M758.4 291.8L641.5 732.7"/><path fill="none" stroke="#FFFFFF" stroke-width="80.5" stroke-linecap="round" d="M179.1 605.8L843.9 441.9"/></svg>',
 };
 
 /* ---------- helpers ---------- */
@@ -1443,11 +1446,14 @@ setInterval(() => {
 function go(view, arg) { if (view !== 'workout') { S.con = null; document.body.classList.remove('con-open'); } S.view = view; S.viewArg = arg ?? null; S.sheet = null; S._navAnim = true; render(); window.scrollTo(0, 0); }
 function openSheet(sheet) { S.sheet = sheet; renderSheet(); }
 function closeSheet() { S.sheet = null; renderSheet(); }
-function toast(msg) {
-  S.toast = msg; let el = $('#toast');
+function toast(msg, undo) {
+  S.toast = msg; S._toastUndo = undo || null; let el = $('#toast');
   if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
-  el.textContent = msg; el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
-  clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; el.classList.remove('show'); }, 2200);
+  el.textContent = msg;
+  if (undo) { const b = document.createElement('button'); b.className = 'toast-act'; b.dataset.a = 'toast-undo'; b.textContent = t('undo'); el.appendChild(b); }
+  el.classList.toggle('has-act', !!undo);
+  el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; el.classList.remove('show'); S._toastUndo = null; }, undo ? 5000 : 2200);
 }
 
 /* ---------- render: shell ---------- */
@@ -1481,6 +1487,7 @@ function render() {
     default: html = vToday();
   }
   app.innerHTML = html + (S.view === 'workout' || S.view === 'wizard' ? '' : nav());
+  { const con = $('#con'); if (con) document.documentElement.style.setProperty('--con-h', Math.ceil(con.getBoundingClientRect().height) + 'px'); }
   backBar(app.firstElementChild);
   if (S._navAnim && app.firstElementChild) app.firstElementChild.classList.add('enter');
   S._navAnim = false; S._justDone = null; S._justPR = null;
@@ -1500,9 +1507,14 @@ function backBar(scr) {
   back.after(h); tb.classList.add('backbar');
 }
 function nav() {
-  const tab = { today: 'today', done: 'today', plans: 'plans', plan: 'plans', wizard: 'plans', wizres: 'plans', planlib: 'plans', planprev: 'plans', history: 'history', session: 'history', library: 'library', progress: 'progress' }[S.view];
-  const b = (v, icon, label) => `<button class="${tab === v ? 'on' : ''}" data-a="nav" data-v="${v}" aria-current="${tab === v ? 'page' : 'false'}">${I[icon]}${esc(t(label))}</button>`;
-  return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'home', 'today')}${b('plans', 'list', 'plans')}${b('progress', 'chart', 'progress')}${b('history', 'hist', 'history')}${b('library', 'dumbbell', 'library')}</div></nav>`;
+  const tab = { today: 'today', done: 'today', plans: 'plans', plan: 'plans', wizard: 'plans', wizres: 'plans', planlib: 'plans', planprev: 'plans', history: 'journal', session: 'journal', library: 'library', progress: 'journal' }[S.view];
+  if (S.view === 'history' || S.view === 'progress') S.jrLast = S.view;
+  const b = (k, v, icon, label) => `<button class="${tab === k ? 'on' : ''}" data-a="nav" data-v="${v}" data-tab="${k}" aria-current="${tab === k ? 'page' : 'false'}">${I[icon]}${esc(t(label))}</button>`;
+  return `<nav class="nav" aria-label="Menu"><div class="nav-inner">${b('today', 'today', 'home', 'today')}${b('plans', 'plans', 'list', 'plans')}${b('journal', S.jrLast || 'history', 'chart', 'journal')}${b('library', 'library', 'dumbbell', 'library')}</div></nav>`;
+}
+/* Dziennik (0.19): workouts and progress under one tab, one tab bar */
+function journalTabs(cur) {
+  return tabsBar([['history', t('jrWorkouts')], ['strength', t('strength')], ['body', t('body')]], cur, 'jr-tab');
 }
 function topbar(right = '') {
   return `<div class="topbar"><div class="brand">${I.tally}<span>Repsmith</span></div><div>${right}<button class="icon-btn" data-a="settings" aria-label="${esc(t('settings'))}">${I.gear}</button></div></div>`;
@@ -1718,12 +1730,11 @@ function setGrid(it) {
     const prevAria = !p ? t('prevNone') : `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ', RPE ' + fmtN(normRpe(p.rpe)) : ', ' + t('prevNoRpe')}`;
     const flags = `${ph.amrap ? '<span class="side-tag amrap">AMRAP</span>' : ''}${s.pr && s.pr.length ? `<span class="pr-badge" title="${esc(prLabel(s.pr))}">PR</span>` : ''}${s.fail ? `<span class="side-tag set-flag">${esc(t('failTag'))}</span>` : ''}${s.drop ? `<span class="side-tag set-flag">${esc(t('dropTag'))}</span>` : ''}${s.note ? '<span class="side-tag set-flag" aria-hidden="true">✎</span>' : ''}`;
     return `<div class="set ${s.kind === 'top' ? 'is-top' : ''} ${s.kind === 'warmup' ? 'warm' : ''} ${s.done ? 'done' : ''} ${idx === cur ? 'cur' : ''} ${editing ? 'edit' : ''} ${S._justDone === s.id ? 'just' : ''} ${S._justDone === s.id && s.pr && s.pr.length ? 'just-pr' : ''}" data-set="${s.id}">
-      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + setLabel(it, s))}"><span class="kl">${esc(setTag(it, s))}</span>${flags ? `<span class="fl">${flags}</span>` : ''}</button>
-      <button class="prev" data-a="con-open" data-i="${it.id}" data-s="${s.id}" data-k="" aria-label="${esc(prevAria)}">${esc(prevShort(p, ex, s))}</button>${cells}<button class="fv rpe ${r ? '' : 'ph'} ${!r && ph.rpe.includes('-') ? 'rng' : ''}" data-a="con-open" data-i="${it.id}" data-s="${s.id}" data-k="rpe" data-ph="${esc(ph.rpe)}" aria-label="RPE ${esc(r || ph.rpe)}">${esc(r || ph.rpe || '–')}</button>
+      <button type="button" class="kind kind-btn ${s.kind === 'top' ? 'top' : ''}" data-a="set-menu" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('setMenuAria') + ': ' + setLabel(it, s) + '. ' + prevAria)}"><span class="kl">${esc(setTag(it, s))}</span><span class="prev">${esc(prevShort(p, ex, s))}</span>${flags ? `<span class="fl">${flags}</span>` : ''}</button>${cells}<button class="fv rpe ${r ? '' : 'ph'} ${!r && ph.rpe.includes('-') ? 'rng' : ''}" data-a="con-open" data-i="${it.id}" data-s="${s.id}" data-k="rpe" data-ph="${esc(ph.rpe)}" aria-label="RPE ${esc(r || ph.rpe)}">${esc(r || ph.rpe || '–')}</button>
       <button class="check" data-a="set-done" data-i="${it.id}" data-s="${s.id}" aria-label="${esc(t('done') + ': ' + setLabel(it, s))}" aria-pressed="${s.done}">${s.done ? I.check : ''}</button></div>`;
   }).join('');
   const h = fields.length === 1 ? `<span>${esc(fieldUnit(fields[0], log))}</span><span></span>` : `<span>${esc(fieldUnit(fields[0], log))}</span><span>${esc(fieldUnit(fields[1], log))}</span>`;
-  return `<div class="sets"><div class="set-head"><span aria-label="${esc(t('setS'))}">#</span><span>${esc(t('prevS'))}</span>${h}<span>RPE</span><span></span></div>${rows}</div>`;
+  return `<div class="sets"><div class="set-head"><span><span aria-label="${esc(t('setS'))}">#</span> · ${esc(t('prevS'))}</span>${h}<span>RPE</span><span></span></div>${rows}</div>`;
 }
 
 /* ---------- set console (0.18): weight and reps with steps or a number pad, RPE in one tap, log ---------- */
@@ -1735,7 +1746,9 @@ function conHtml() {
   const typing = k => c.f === k && c.buf != null && c.buf !== '';
   const shown = k => (typing(k) ? c.buf.replace('.', S.settings.lang === 'pl' ? ',' : '.') : s[k] !== '' && s[k] != null ? fmtN(num(s[k])) : (ph[k] || '–'));
   const isPh = k => !typing(k) && !(s[k] !== '' && s[k] != null);
-  const tile = k => `<div class="ct ${c.f === k ? 'on' : ''}"><button class="pm" data-a="con-step" data-k="${k}" data-v="${-step(k)}" aria-label="${esc(t('conLess') + ' ' + fieldUnit(k, log))}">−</button><button class="mid" data-a="con-pad" data-k="${k}" aria-pressed="${c.f === k}" aria-label="${esc(fieldUnit(k, log))}"><b class="${isPh(k) ? 'ph' : ''}">${esc(shown(k))}</b><small>${esc(fieldUnit(k, log))}</small></button><button class="pm" data-a="con-step" data-k="${k}" data-v="${step(k)}" aria-label="${esc(t('conMore') + ' ' + fieldUnit(k, log))}">+</button></div>`;
+  // 0.19: the steppers sit on the selected tile only, so each one keeps a full 48 px target; the other tiles are tabs
+  const tile = k => c.f === k ? `<div class="ct on"><button class="pm" data-a="con-step" data-k="${k}" data-v="${-step(k)}" aria-label="${esc(t('conLess') + ' ' + fieldUnit(k, log))}">−</button><button class="mid" data-a="con-pad" data-k="${k}" aria-pressed="true" aria-label="${esc(fieldUnit(k, log))}"><b class="${isPh(k) ? 'ph' : ''}">${esc(shown(k))}</b><small>${esc(fieldUnit(k, log))}</small></button><button class="pm" data-a="con-step" data-k="${k}" data-v="${step(k)}" aria-label="${esc(t('conMore') + ' ' + fieldUnit(k, log))}">+</button></div>`
+    : `<button class="ct tab" data-a="con-pad" data-k="${k}" aria-pressed="false" aria-label="${esc(fieldUnit(k, log))}"><span class="mid"><b class="${isPh(k) ? 'ph' : ''}">${esc(shown(k))}</b><small>${esc(fieldUnit(k, log))}</small></span></button>`;
   const feel = S.active.effort === 'fixed' && s.target && s.target.rpe != null;
   const r = normRpe(s.rpe);
   const rpeTile = `<button class="ct rp ${c.f === 'rpe' ? 'on' : ''}" data-a="con-pad" data-k="rpe" aria-pressed="${c.f === 'rpe'}"><span class="mid"><b class="${r == null ? 'ph' : ''}">${r == null ? esc(ph.rpe || '–') : fmtN(r)}</b><small>${feel ? esc(t('feelS')) : 'RPE'}</small></span></button>`;
@@ -1748,7 +1761,7 @@ function conHtml() {
   return `<div class="con" id="con" role="group" aria-label="${esc(exName(it.exId) + ', ' + setLabel(it, s))}">
     <div class="con-ctx"><span class="grow"><b>${esc(exName(it.exId))}</b> · ${esc(setLabel(it, s))}</span><button class="icon-btn" data-a="con-close" aria-label="${esc(t('close'))}">${I.x}</button></div>
     <div class="con-prev">${esc(p ? `${t('prev')}: ${fmtSet(p, ex)}${normRpe(p.rpe) != null ? ' · RPE ' + fmtN(normRpe(p.rpe)) : ' · ' + t('prevNoRpe')}` : t('prevNone'))}${s.target && s.target.reps ? ` · ${esc(t('tgtShort', s.target.reps + targetUnit(it.exId) + (s.target.rpe != null ? ' @' + fmtN(s.target.rpe) + (s.target.rpeMax > s.target.rpe ? '–' + fmtN(s.target.rpeMax) : '') : '')))}` : ''}</div>
-    <div class="con-vals ${fields.length === 1 ? 'one' : ''}">${fields.map(tile).join('')}${rpeTile}</div>
+    <div class="con-vals ${fields.length === 1 ? 'one' : ''}" style="grid-template-columns:${fields.map(k => (c.f === k ? '2fr' : '1fr')).join(' ')} ${c.f === 'rpe' ? '1.4fr' : '1fr'}">${fields.map(tile).join('')}${rpeTile}</div>
     ${body}
     <div class="con-acts"><button class="btn" data-a="con-same" ${!p ? 'disabled' : ''}>${esc(t('conSame'))}</button><button class="btn primary" data-a="con-log">${I.check}${esc(s.done ? t('conSave') : t('conLog', setTag(it, s)))}</button></div></div>`;
 }
@@ -1785,6 +1798,7 @@ function completeSet(it, s) {
 function scrollToSet(setId) {
   setTimeout(() => {
     const r = document.querySelector(`.set[data-set="${setId}"]`), con = $('#con'); if (!r) return;
+    if (con) document.documentElement.style.setProperty('--con-h', Math.ceil(con.getBoundingClientRect().height) + 'px');
     const top = r.getBoundingClientRect().top, bottom = r.getBoundingClientRect().bottom, limit = (con ? con.getBoundingClientRect().top : innerHeight) - 12;
     if (bottom > limit || top < 120) window.scrollBy({ top: bottom > limit ? bottom - limit + 40 : top - 140, behavior: 'smooth' });
   }, 30);
@@ -1927,7 +1941,7 @@ function vWorkout() {
       ${note && note.text ? `<details class="fold note-d"><summary><span class="lbl">${esc(t('note'))}</span><span class="peek">${esc(note.text)}</span></summary><div class="note-full">${esc(note.text)}</div><button class="btn small ghost" data-a="note" data-v="${esc(it.exId)}">${esc(t('edit'))}</button></details>` : ''}
       ${it.pct ? `<div class="ex-meta"><button class="chip" data-a="orm-open" data-v="${esc(it.exId)}">${(o => esc(o ? `1RM ${fmtN(o.kg)} kg` : t('ormSet')))(oneRm(it.exId))}</button></div>` : ''}
       ${setGrid(it)}
-      <div class="set-actions"><button class="btn small ghost" data-a="add-set" data-i="${it.id}">${I.plus.replace('<svg ', '<svg width="16" height="16" ')} ${esc(t('setS'))}</button><span class="grow"></span>${restBtn}<button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('exMenu'))}">${I.more}</button></div>`}
+      <div class="set-actions"><div class="pm-sets" role="group" aria-label="${esc(t('setS'))}"><button class="btn small" data-a="add-set" data-i="${it.id}" aria-label="${esc(t('setPlusA'))}">${I.plus} ${esc(t('setPlus'))}</button><button class="btn small" data-a="set-minus" data-i="${it.id}" aria-label="${esc(t('setMinusA'))}" ${it.sets.length ? '' : 'disabled'}>${I.minus} ${esc(t('setMinus'))}</button></div><span class="grow"></span>${restBtn}<button class="icon-btn" data-a="item-menu" data-i="${it.id}" aria-label="${esc(t('exMenu'))}">${I.more}</button></div>`}
     </section>`;
   }).join('');
   const doneAll = a.items.reduce((x, it) => x + it.sets.filter(y => y.done).length, 0), totalAll = a.items.reduce((x, it) => x + it.sets.length, 0);
@@ -2190,7 +2204,7 @@ function vHistory() {
     const list = [...S.sessions].sort((a, b) => b.startedAt - a.startedAt).map(histRow).join('');
     body = mode === 'cal' ? calView() : (list ? `<div class="card">${list}</div>` : `<div class="empty">${esc(t('noSessions'))}</div>`);
   }
-  return `<main class="screen">${topbar()}${resumeBanner()}<div class="head-row"><h1 class="mid">${esc(t('history'))}</h1>${tools}</div>${tabs}${body}</main>`;
+  return `<main class="screen">${topbar()}${resumeBanner()}<div class="head-row"><h1 class="mid">${esc(t('journal'))}</h1>${tools}</div>${journalTabs('history')}${body}</main>`;
 }
 /* The shareable card in Smith Design System v1: the family tile and mark, Manrope titles, soft surface cards (22 px radius at phone scale),
    sentence-case labels, a PR pill, and the colours of the current theme. */
@@ -2203,7 +2217,7 @@ function drawCard() {
   const cv = $('#card-cv'); const sh = S.sheet; if (!cv || !sh) return;
   const s = S.sessions.find(x => x.id === sh.sesId); if (!s) return;
   const cs = getComputedStyle(document.documentElement), v = (n, d) => (cs.getPropertyValue(n) || '').trim() || d;
-  const bg = v('--bg', '#0B0E11'), ac = v('--accent', '#FF9F70'), onAc = v('--on-accent', '#1a0e08'), tx = v('--text', '#E9EDF1'), mu = v('--muted', '#A3ADB8'), su = v('--surface', '#161A1F'), line = v('--line', 'rgba(255,255,255,.10)');
+  const bg = v('--bg', '#0B0E11'), ac = v('--accent', '#B7C98A'), onAc = v('--on-accent', '#171C0B'), tx = v('--text', '#E9EDF1'), mu = v('--muted', '#A3ADB8'), su = v('--surface', '#161A1F'), line = v('--line', 'rgba(255,255,255,.10)');
   const body = v('--body', 'Inter, system-ui, sans-serif'), disp = v('--display', 'Manrope, Inter, system-ui, sans-serif');
   const c = cv.getContext('2d'), W = 1080, H = 1350, lang = S.settings.lang === 'en' ? 'en-GB' : 'pl-PL';
   if (document.fonts && document.fonts.ready && !drawCard._fonts) { drawCard._fonts = true; Promise.all([document.fonts.load(`800 40px ${disp}`), document.fonts.load(`500 30px ${body}`)]).then(() => { if (S.sheet && S.sheet.type === 'card') drawCard(); }).catch(() => {}); }
@@ -2211,7 +2225,7 @@ function drawCard() {
   const g = c.createRadialGradient(W, 0, 0, W, 0, 820); g.addColorStop(0, ac + '30'); g.addColorStop(1, ac + '00'); c.fillStyle = g; c.fillRect(0, 0, W, H);
   // brand lockup: the copper tile with the white mark (scripts/brand.mjs geometry), then the name
   const tile = 96, tx0 = 60, ty0 = 56;
-  c.fillStyle = '#9C421D'; c.beginPath(); c.roundRect(tx0, ty0, tile, tile, tile * .224); c.fill();
+  c.fillStyle = '#56692A'; c.beginPath(); c.roundRect(tx0, ty0, tile, tile, tile * .224); c.fill();
   c.save(); c.translate(tx0, ty0); c.scale(tile / 1024, tile / 1024); c.strokeStyle = '#FFFFFF'; c.lineCap = 'round'; c.lineJoin = 'round';
   brandStrokes().forEach(st => { c.lineWidth = st.w; c.stroke(st.p); }); c.restore();
   c.fillStyle = tx; c.font = `800 44px ${disp}`; c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillText('Repsmith', tx0 + tile + 24, ty0 + tile / 2 + 2);
@@ -2252,7 +2266,7 @@ function drawCard() {
   c.textBaseline = 'alphabetic';
   if (rows.length > max) { c.fillStyle = mu; c.font = `500 30px ${body}`; c.fillText(`+${rows.length - max} ${t("cardMore")}`, 60, cardTop + cardH + 46); }
   // footer: the small lockup
-  const fy = H - 76, fs = 44; c.fillStyle = '#9C421D'; c.beginPath(); c.roundRect(W / 2 - 104, fy, fs, fs, fs * .224); c.fill();
+  const fy = H - 76, fs = 44; c.fillStyle = '#56692A'; c.beginPath(); c.roundRect(W / 2 - 104, fy, fs, fs, fs * .224); c.fill();
   c.save(); c.translate(W / 2 - 104, fy); c.scale(fs / 1024, fs / 1024); c.strokeStyle = '#FFFFFF'; c.lineCap = 'round'; brandStrokes().forEach(k => { c.lineWidth = k.w; c.stroke(k.p); }); c.restore();
   c.fillStyle = mu; c.font = `700 30px ${disp}`; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText('Repsmith', W / 2 - 104 + fs + 14, fy + fs / 2 + 2); c.textBaseline = 'alphabetic';
 }
@@ -2434,8 +2448,8 @@ function progressExercises() {
 function vProgress() {
   const pg = S.prog || (S.prog = { tab: 'strength', exId: null, week: 0, metric: 'weight' });
   if (pg.tab === 'runs') pg.tab = 'strength';
-  const seg = tabsBar([['strength', t('strength')], ['body', t('body')]], pg.tab, 'prog-tab');
-  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('progress'))}</h1>${seg}${pg.tab === 'body' ? vBody() : pg.tab === 'runs' ? vRuns() : vStrength()}</main>`;
+  const seg = journalTabs(pg.tab);
+  return `<main class="screen">${topbar()}${resumeBanner()}<h1 class="mid">${esc(t('journal'))}</h1>${seg}${pg.tab === 'body' ? vBody() : pg.tab === 'runs' ? vRuns() : vStrength()}</main>`;
 }
 function vStrength() {
   const pg = S.prog;
@@ -2922,7 +2936,7 @@ function renderSheet() {
   } else if (sh.type === 'rest') {
     body = `${head(t('rest'))}<div>${fld('rest-val', t('rest'), sh.val)}</div><div class="chips">${[60, 90, 120, 150, 180, 240, 300].map(v => `<button class="chip ${v === sh.val ? 'on' : ''}" data-a="rest-pick" data-v="${v}">${fmtClock(v)}</button>`).join('')}</div><button class="btn primary block" data-a="rest-save">${esc(t('save'))}</button>`;
   } else if (sh.type === 'menu') {
-    body = `${head(sh.title)}${sh.hint ? `<div class="muted small">${esc(sh.hint)}</div>` : ''}${sh.items.map(m => `<button class="btn block ${m.danger ? 'danger' : ''}" data-a="menu-pick" data-v="${m.id}">${esc(m.label)}</button>`).join('')}`;
+    body = `${head(sh.title)}${sh.sub ? `<div class="muted small menu-sub">${esc(sh.sub)}</div>` : ''}${sh.hint ? `<div class="muted small">${esc(sh.hint)}</div>` : ''}${sh.tools ? `<div class="tools4">${sh.tools.map(m => `<button data-a="menu-pick" data-v="${m.id}">${I[m.icon] || ''}<span>${esc(m.label)}</span>${m.meta ? `<small>${esc(m.meta)}</small>` : ''}</button>`).join('')}</div>` : ''}${sh.items.map(m => m.more ? `<button class="menu-more" data-a="menu-pick" data-v="${m.id}">${I.more}<span class="grow">${esc(m.label)}</span>${I.down}</button>` : `<button class="btn block ${m.danger ? 'danger' : ''}" data-a="menu-pick" data-v="${m.id}">${esc(m.label)}</button>`).join('')}`;
   } else if (sh.type === 'exDetail') {
     const e = S.ex.get(sh.exId);
     const n = S.notes[sh.exId];
@@ -3552,8 +3566,19 @@ const A = {
   'setnote-del': () => { const it = findItem(S.sheet.itemId); const s = it && it.sets.find(x => x.id === S.sheet.setId); if (s) { delete s.note; saveActive(); } closeSheet(); render(); },
   'ex-hist': el => openSheet({ type: 'exHist', exId: el.dataset.v }),
   'hist-progress': el => { const id = el.dataset.v; S.prog = S.prog || { tab: 'strength', exId: null, week: 0, metric: 'weight' }; S.prog.tab = 'strength'; S.prog.exId = id; go('progress'); },
+  'set-minus': el => {
+    const it = findItem(el.dataset.i); if (!it || !it.sets.length) { toast(t('noSetToRemove')); return; }
+    const open = [...it.sets].reverse().find(x => !x.done) || it.sets[it.sets.length - 1];
+    const pair = setPair(it, open), ids = pair.map(x => x.id), label = setTag(it, pair[0]);
+    const before = it.sets.slice();
+    if (S.con && ids.includes(S.con.s)) S.con = null;
+    it.sets = it.sets.filter(x => !ids.includes(x.id)); saveActive(); render();
+    toast(t('setRemoved', label), () => { const cur = findItem(it.id); if (!cur) return; cur.sets = before; saveActive(); render(); toast(t('undone')); });
+  },
+  'toast-undo': () => { const f = S._toastUndo; S._toastUndo = null; const el = $('#toast'); if (el) el.hidden = true; if (f) f(); },
   'del-set': el => { const it = findItem(el.dataset.i); const ex = S.ex.get(it.exId); it.sets.splice(-(ex && ex.unilateral ? 2 : 1)); saveActive(); render(); },
   'prog-tab': el => { S.prog.tab = el.dataset.v; render(); },
+  'jr-tab': el => { const v = el.dataset.v; if (v === 'history') { go('history'); return; } S.prog = S.prog || { tab: 'strength', exId: null, week: 0, metric: 'weight' }; S.prog.tab = v; if (S.view === 'progress') render(); else go('progress'); },
   'prog-ex': el => { S.prog.tab = 'strength'; S.prog.exId = el.dataset.v; render(); window.scrollTo(0, 0); },
   'prog-ex-pick': () => openSheet({ type: 'picker', target: { kind: 'progress' } }),
   'prog-week': el => { S.prog.week = +el.dataset.v; render(); },
@@ -3685,16 +3710,22 @@ const A = {
   'rest-save': () => { const v = num($('#rest-val').value); const it = findItem(S.sheet.itemId); if (v && v > 0) it.rest = Math.round(v); saveActive(); closeSheet(); render(); },
   'item-menu': el => {
     const it = findItem(el.dataset.i); const i = S.active.items.indexOf(it); const ref = { dataset: { i: it.id, v: it.id } };
-    openSheet({ type: 'menu', title: exName(it.exId), items: [
+    const ex = S.ex.get(it.exId);
+    const rest = [
       { id: 'info', label: t('progression') },
       ...(canCalib(it) ? [{ id: 'cal', label: t('calibChip') }] : []),
       ...(isBarEx(it.exId) ? [{ id: 'plates', label: t('plateChip') }] : []),
-      { id: 'swap', label: t('subs') }, { id: 'note', label: t('note') }, { id: 'rest', label: t('rest') + ': ' + fmtClock(it.rest || 0) }, { id: 'hist', label: t('histAria') }, { id: 'view', label: t('viewTitle') + ': ' + t('view_' + viewMode()) },
-      ...(it.sets.length ? [{ id: 'delset', label: t('removeSetS') }] : []),
+      { id: 'view', label: t('viewTitle') + ': ' + t('view_' + viewMode()) },
       { id: 'grp', label: t('supBtn') + '…' },
       ...(i > 0 ? [{ id: 'up', label: t('moveUp') }] : []), ...(i < S.active.items.length - 1 ? [{ id: 'down', label: t('moveDown') }] : []),
-      { id: 'del', label: t('remove'), danger: true }],
-      handlers: {
+      { id: 'del', label: t('remove'), danger: true }];
+    let handlers;
+    const more = () => openSheet({ type: 'menu', title: exName(it.exId), items: rest, handlers });
+    openSheet({ type: 'menu', title: exName(it.exId), sub: ex ? [ex.primary && ex.primary[0] ? muscleName(ex.primary[0]) : '', equipName(ex.equipment)].filter(Boolean).join(' · ') : '',
+      tools: [{ id: 'note', label: t('toolNote'), icon: 'note' }, { id: 'swap', label: t('toolSwap'), icon: 'swap' }, { id: 'rest', label: t('toolRest'), icon: 'clock', meta: fmtClock(it.rest || 0) }, { id: 'hist', label: t('toolHist'), icon: 'hist' }],
+      items: [{ id: 'more', label: t('moreMenu'), more: true }],
+      handlers: handlers = {
+        more,
         info: () => A['scheme-info'](ref), cal: () => A['calib-open'](ref), plates: () => A['plates-open'](ref), swap: () => A.subs(ref),
         note: () => A.note({ dataset: { v: it.exId } }),
         rest: () => A['rest-edit'](ref), hist: () => A['ex-hist']({ dataset: { v: it.exId } }), view: () => A['wk-view'](),
